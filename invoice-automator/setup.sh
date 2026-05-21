@@ -48,12 +48,32 @@ echo "✅ پوشه‌ها ساخته شدند"
 echo ""
 echo "📦 در حال نصب پکیج‌ها..."
 
-$PIP install pdfplumber watchdog requests pyyaml kavenegar rubpy --no-input
-if [ $? -eq 0 ]; then
+PKGS="pdfplumber watchdog requests pyyaml kavenegar rubpy"
+
+echo "   تلاش با pypi.org..."
+if $PIP install $PKGS --no-input --timeout 10 2>/dev/null; then
     echo "✅ نصب پکیج‌ها تمام شد"
 else
-    echo "❌ خطا در نصب پکیج‌ها"
-    exit 1
+    echo "   pypi.org در دسترس نیست، استفاده از میرور..."
+    MIRRORS=(
+        "https://mirror.iranserver.com/pypi/simple/"
+        "https://mirrors.aliyun.com/pypi/simple/"
+        "https://pypi.tuna.tsinghua.edu.cn/simple/"
+    )
+    SUCCESS=false
+    for MIRROR in "${MIRRORS[@]}"; do
+        echo "   میرور: $MIRROR"
+        if $PIP install $PKGS --index-url "$MIRROR" --trusted-host "$(echo $MIRROR | sed 's|https://||' | cut -d/ -f1)" --no-input 2>/dev/null; then
+            echo "✅ نصب پکیج‌ها تمام شد"
+            SUCCESS=true
+            break
+        fi
+    done
+    if [ "$SUCCESS" = false ]; then
+        echo "❌ نصب پکیج‌ها ناموفق بود."
+        echo "   VPN را روشن کنید و دوباره اجرا کنید."
+        exit 1
+    fi
 fi
 
 # ── ساخت LaunchAgent (اجرای خودکار با روشن شدن مک) ──
