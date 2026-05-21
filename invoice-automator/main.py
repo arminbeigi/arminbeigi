@@ -232,6 +232,7 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         config = load_config()
         setup_logging("INFO")
-        process_invoice(sys.argv[1], config)
+        pdf_path = str(Path(sys.argv[1]).resolve())
+        process_invoice(pdf_path, config)
     else:
         main()
