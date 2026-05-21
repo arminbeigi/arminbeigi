@@ -1,10 +1,8 @@
 #!/bin/bash
 # ╔══════════════════════════════════════════════════╗
 # ║   نصب خودکار سیستم ارسال پیش فاکتور             ║
-# ║   این اسکریپت را روی مک جدید اجرا کنید          ║
+# ║   این اسکریپت را روی مک اجرا کنید               ║
 # ╚══════════════════════════════════════════════════╝
-
-set -e
 
 echo ""
 echo "╔══════════════════════════════════════════════════╗"
@@ -16,40 +14,67 @@ echo ""
 PROJECT_DIR="$(cd "$(dirname "$0")" && pwd)"
 echo "📂 مسیر پروژه: $PROJECT_DIR"
 
-# ساخت پوشه‌ها
+# ── بررسی Python ──────────────────────────────────
+if command -v python3 &>/dev/null; then
+    PYTHON_PATH=$(which python3)
+elif command -v python &>/dev/null; then
+    PYTHON_PATH=$(which python)
+else
+    echo "❌ Python پیدا نشد!"
+    echo "   از https://www.python.org/downloads/ نصب کنید"
+    exit 1
+fi
+echo "✅ Python: $PYTHON_PATH ($($PYTHON_PATH --version 2>&1))"
+
+# ── بررسی pip ─────────────────────────────────────
+if command -v pip3 &>/dev/null; then
+    PIP="pip3"
+elif command -v pip &>/dev/null; then
+    PIP="pip"
+else
+    echo "❌ pip پیدا نشد! در حال نصب..."
+    curl https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py
+    $PYTHON_PATH /tmp/get-pip.py
+    PIP="$PYTHON_PATH -m pip"
+fi
+
+# ── ساخت پوشه‌ها ───────────────────────────────────
 mkdir -p "$PROJECT_DIR/watch_folder"
 mkdir -p "$PROJECT_DIR/processed"
 mkdir -p "$PROJECT_DIR/logs"
 echo "✅ پوشه‌ها ساخته شدند"
 
-# بررسی Python
-if ! command -v python3 &>/dev/null; then
-    echo "❌ Python3 پیدا نشد!"
-    echo "   از https://www.python.org/downloads/ نصب کنید"
-    exit 1
-fi
-PYTHON_PATH=$(which python3)
-echo "✅ Python: $PYTHON_PATH ($(python3 --version))"
-
-# نصب پکیج‌ها
+# ── نصب پکیج‌ها ────────────────────────────────────
 echo ""
-echo "📦 نصب پکیج‌های مورد نیاز..."
-pip3 install pdfplumber watchdog requests pyyaml 2>/dev/null || \
-pip3 install --index-url https://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com pdfplumber watchdog requests pyyaml
+echo "📦 در حال نصب پکیج‌ها..."
 
-# نصب rubpy (اختیاری)
-pip3 install rubpy 2>/dev/null || \
-pip3 install --index-url https://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com rubpy 2>/dev/null || \
-echo "⚠️ rubpy نصب نشد (اختیاری - برای روبیکا)"
+install_pkg() {
+    PKG=$1
+    echo -n "   $PKG ... "
+    if $PIP install "$PKG" --quiet 2>/dev/null; then
+        echo "✅"
+    else
+        echo "❌ خطا در نصب $PKG"
+    fi
+}
 
-echo "✅ پکیج‌ها نصب شدند"
+install_pkg "pdfplumber"
+install_pkg "watchdog"
+install_pkg "requests"
+install_pkg "pyyaml"
+install_pkg "kavenegar"
+install_pkg "rubpy"
 
-# تنظیم نام کاربری مک
+echo "✅ نصب پکیج‌ها تمام شد"
+
+# ── ساخت LaunchAgent (اجرای خودکار با روشن شدن مک) ──
 MAC_USER=$(whoami)
 MAC_HOME=$(eval echo ~$MAC_USER)
+PLIST_DIR="$MAC_HOME/Library/LaunchAgents"
+PLIST_PATH="$PLIST_DIR/com.shofazh.invoice-automator.plist"
 
-# ساخت LaunchAgent
-PLIST_PATH="$MAC_HOME/Library/LaunchAgents/com.shofazh.invoice-automator.plist"
+mkdir -p "$PLIST_DIR"
+
 echo ""
 echo "🔄 ساخت سرویس خودکار..."
 
@@ -79,37 +104,55 @@ cat > "$PLIST_PATH" << PLISTEOF
 </plist>
 PLISTEOF
 
-echo "✅ سرویس ساخته شد"
+echo "✅ فایل سرویس ساخته شد"
 
-# فعال‌سازی سرویس
+# ── فعال‌سازی سرویس ────────────────────────────────
+# توقف سرویس قبلی اگر در حال اجراست
 launchctl unload "$PLIST_PATH" 2>/dev/null || true
-launchctl load "$PLIST_PATH"
-echo "✅ سرویس فعال شد"
 
-# بررسی
+# macOS 13+ از bootstrap استفاده می‌کند
+OS_MAJOR=$(sw_vers -productVersion 2>/dev/null | cut -d. -f1)
+if [ -n "$OS_MAJOR" ] && [ "$OS_MAJOR" -ge 13 ] 2>/dev/null; then
+    launchctl load "$PLIST_PATH" 2>/dev/null || \
+    launchctl bootstrap "gui/$(id -u)" "$PLIST_PATH" 2>/dev/null || true
+else
+    launchctl load "$PLIST_PATH" 2>/dev/null || true
+fi
+
 sleep 2
-if launchctl list | grep -q shofazh; then
+
+# ── نتیجه نهایی ────────────────────────────────────
+if launchctl list 2>/dev/null | grep -q shofazh; then
     echo ""
     echo "╔══════════════════════════════════════════════════╗"
     echo "║  🎉 نصب با موفقیت انجام شد!                     ║"
     echo "╠══════════════════════════════════════════════════╣"
     echo "║                                                  ║"
-    echo "║  📂 پوشه PDF:  $PROJECT_DIR/watch_folder"
+    echo "║  📂 پوشه PDF:                                   ║"
+    echo "║  $PROJECT_DIR/watch_folder"
     echo "║                                                  ║"
-    echo "║  فایل PDF را با فرمت زیر بگذارید:              ║"
+    echo "║  فایل PDF را با فرمت زیر نامگذاری کنید:        ║"
+    echo "║    09xxxxxxxxx.pdf                               ║"
     echo "║    09xxxxxxxxx-شماره_فاکتور.pdf                  ║"
+    echo "║    نام-09xxxxxxxxx-شماره_فاکتور.pdf              ║"
     echo "║                                                  ║"
     echo "║  🔄 سرویس با روشن شدن مک خودکار اجراست        ║"
     echo "╚══════════════════════════════════════════════════╝"
 else
-    echo "⚠️ سرویس اجرا نشد. لاگ‌ها را بررسی کنید:"
-    echo "   cat $PROJECT_DIR/logs/service-error.log"
+    echo ""
+    echo "⚠️  سرویس خودکار فعال نشد."
+    echo "    برای اجرای دستی:"
+    echo "    $PYTHON_PATH $PROJECT_DIR/main.py"
+    echo ""
+    echo "    لاگ خطا:"
+    echo "    cat $PROJECT_DIR/logs/service-error.log"
 fi
 
 echo ""
 echo "📋 دستورات مفید:"
-echo "   وضعیت:    launchctl list | grep shofazh"
-echo "   لاگ:      tail -f $PROJECT_DIR/logs/service.log"
-echo "   توقف:     launchctl unload $PLIST_PATH"
-echo "   شروع:     launchctl load $PLIST_PATH"
+echo "   اجرای دستی:  $PYTHON_PATH $PROJECT_DIR/main.py"
+echo "   لاگ:         tail -f $PROJECT_DIR/logs/service.log"
+echo "   وضعیت:       launchctl list | grep shofazh"
+echo "   توقف:        launchctl unload $PLIST_PATH"
+echo "   شروع مجدد:   launchctl load $PLIST_PATH"
 echo ""
