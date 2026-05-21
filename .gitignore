@@ -2,3 +2,6 @@
 __pycache__/
 *.pyc
 *.pyo
+invoice-automator/logs/*.log
+invoice-automator/processed/*.pdf
+invoice-automator/watch_folder/*.pdf
