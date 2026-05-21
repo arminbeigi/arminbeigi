@@ -27,7 +27,7 @@ class RubikaSender:
         if self._client is None:
             try:
                 from rubpy import Client
-                self._client = Client(session=self.auth)
+                self._client = Client(name=self.auth)
                 await self._client.start()
             except ImportError:
                 logger.error("کتابخانه rubpy نصب نیست: pip install rubpy")
