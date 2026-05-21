@@ -48,24 +48,13 @@ echo "✅ پوشه‌ها ساخته شدند"
 echo ""
 echo "📦 در حال نصب پکیج‌ها..."
 
-install_pkg() {
-    PKG=$1
-    echo -n "   $PKG ... "
-    if $PIP install "$PKG" --quiet 2>/dev/null; then
-        echo "✅"
-    else
-        echo "❌ خطا در نصب $PKG"
-    fi
-}
-
-install_pkg "pdfplumber"
-install_pkg "watchdog"
-install_pkg "requests"
-install_pkg "pyyaml"
-install_pkg "kavenegar"
-install_pkg "rubpy"
-
-echo "✅ نصب پکیج‌ها تمام شد"
+$PIP install pdfplumber watchdog requests pyyaml kavenegar rubpy --no-input
+if [ $? -eq 0 ]; then
+    echo "✅ نصب پکیج‌ها تمام شد"
+else
+    echo "❌ خطا در نصب پکیج‌ها"
+    exit 1
+fi
 
 # ── ساخت LaunchAgent (اجرای خودکار با روشن شدن مک) ──
 MAC_USER=$(whoami)
