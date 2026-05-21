@@ -43,18 +43,41 @@ class RubikaSender:
             return "0" + phone[1:]  # روبیکا فرمت 09xx می‌خواهد
         return phone
 
+    async def _get_guid(self, client, phone: str) -> str:
+        """دریافت GUID کاربر از شماره تلفن"""
+        phone_intl = "+98" + phone[1:] if phone.startswith("0") else phone
+
+        # روش ۱: اضافه کردن به مخاطبین و دریافت GUID
+        try:
+            result = await client.add_address_book(phone=phone_intl, first_name="مشتری")
+            guid = getattr(result, "user_guid", None)
+            if guid:
+                return guid
+        except Exception as e:
+            logger.debug(f"add_address_book: {e}")
+
+        # روش ۲: جستجو در مخاطبین موجود
+        try:
+            contacts = await client.get_contacts_updates()
+            for user in getattr(contacts, "user_list", []):
+                user_phone = getattr(user, "phone", "") or ""
+                if phone in user_phone or phone_intl in user_phone:
+                    return user.user_guid
+        except Exception as e:
+            logger.debug(f"get_contacts_updates: {e}")
+
+        return None
+
     async def _send_file_async(self, phone: str, pdf_path: str, caption: str = "") -> dict:
         """ارسال فایل به صورت async"""
         try:
             client = await self._get_client()
-            formatted_phone = self._format_phone(phone)
 
-            result = await client.send_document(
-                formatted_phone,
-                pdf_path,
-                caption=caption,
-            )
+            guid = await self._get_guid(client, phone)
+            if not guid:
+                return {"success": False, "error": f"GUID برای {phone} در مخاطبین روبیکا پیدا نشد"}
 
+            result = await client.send_document(guid, pdf_path, caption=caption)
             logger.info(f"PDF به روبیکا ارسال شد: {phone}")
             return {"success": True, "data": str(result)}
 
