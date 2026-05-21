@@ -48,10 +48,12 @@ class KavenegarSMS:
         """ارسال پیامک پیش فاکتور با قالب پیش‌فرض"""
         from .pdf_parser import format_amount
 
+        link_line = link if link else "لینک متعاقباً ارسال می‌شود"
+
         message = self.template.format(
             invoice_number=invoice_data.get("serial", ""),
             total_amount=format_amount(invoice_data.get("total", "")),
-            link=link,
+            link=link_line,
         )
 
         return self.send_sms(phone, message)
