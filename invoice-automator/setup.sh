@@ -50,30 +50,34 @@ echo "📦 در حال نصب پکیج‌ها..."
 
 PKGS="pdfplumber watchdog requests pyyaml kavenegar rubpy"
 
-echo "   تلاش با pypi.org..."
-if $PIP install $PKGS --no-input --timeout 10 2>/dev/null; then
-    echo "✅ نصب پکیج‌ها تمام شد"
-else
-    echo "   pypi.org در دسترس نیست، استفاده از میرور..."
-    MIRRORS=(
-        "https://mirror.iranserver.com/pypi/simple/"
-        "https://mirrors.aliyun.com/pypi/simple/"
-        "https://pypi.tuna.tsinghua.edu.cn/simple/"
-    )
-    SUCCESS=false
-    for MIRROR in "${MIRRORS[@]}"; do
+MIRRORS=(
+    "https://mirror.iranserver.com/pypi/simple/"
+    "http://repo.iut.ac.ir/repo/pypi/simple/"
+    "https://mirrors.aliyun.com/pypi/simple/"
+    "https://pypi.tuna.tsinghua.edu.cn/simple/"
+    ""
+)
+
+SUCCESS=false
+for MIRROR in "${MIRRORS[@]}"; do
+    if [ -z "$MIRROR" ]; then
+        echo "   تلاش با pypi.org..."
+        CMD="$PIP install $PKGS --no-input"
+    else
         echo "   میرور: $MIRROR"
-        if $PIP install $PKGS --index-url "$MIRROR" --trusted-host "$(echo $MIRROR | sed 's|https://||' | cut -d/ -f1)" --no-input 2>/dev/null; then
-            echo "✅ نصب پکیج‌ها تمام شد"
-            SUCCESS=true
-            break
-        fi
-    done
-    if [ "$SUCCESS" = false ]; then
-        echo "❌ نصب پکیج‌ها ناموفق بود."
-        echo "   VPN را روشن کنید و دوباره اجرا کنید."
-        exit 1
+        HOST=$(echo "$MIRROR" | sed 's|https\?://||' | cut -d/ -f1)
+        CMD="$PIP install $PKGS --index-url $MIRROR --trusted-host $HOST --no-input"
     fi
+    if $CMD; then
+        echo "✅ نصب پکیج‌ها تمام شد"
+        SUCCESS=true
+        break
+    fi
+done
+
+if [ "$SUCCESS" = false ]; then
+    echo "❌ نصب پکیج‌ها ناموفق بود. اینترنت را بررسی کنید."
+    exit 1
 fi
 
 # ── ساخت LaunchAgent (اجرای خودکار با روشن شدن مک) ──
