@@ -48,7 +48,7 @@ echo "✅ پوشه‌ها ساخته شدند"
 echo ""
 echo "📦 در حال نصب پکیج‌ها..."
 
-PKGS="pdfplumber watchdog requests pyyaml kavenegar rubpy"
+PKGS="watchdog requests pyyaml kavenegar rubpy"
 
 MIRRORS=(
     "https://mirror.iranserver.com/pypi/simple/"
