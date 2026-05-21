@@ -49,23 +49,11 @@ class RubikaSender:
             client = await self._get_client()
             formatted_phone = self._format_phone(phone)
 
-            # دریافت اطلاعات مخاطب از روی شماره تلفن
-            user_info = await client.get_info_by_username(formatted_phone)
-
-            if not user_info:
-                # تلاش برای ارسال مستقیم با شماره تلفن
-                result = await client.send_document(
-                    formatted_phone,
-                    pdf_path,
-                    caption=caption,
-                )
-            else:
-                user_guid = user_info.get("user_guid")
-                result = await client.send_document(
-                    user_guid,
-                    pdf_path,
-                    caption=caption,
-                )
+            result = await client.send_document(
+                formatted_phone,
+                pdf_path,
+                caption=caption,
+            )
 
             logger.info(f"PDF به روبیکا ارسال شد: {phone}")
             return {"success": True, "data": str(result)}
