@@ -161,24 +161,30 @@ def process_invoice(pdf_path: str, config: dict) -> dict:
 
 
 class InvoiceHandler(FileSystemEventHandler):
-    def __init__(self, config):
+    def __init__(self, config, watch_dir):
         self.config = config
+        self.watch_dir = str(Path(watch_dir).resolve())
         self._done = set()
 
     def on_created(self, event):
         if event.is_directory or not event.src_path.lower().endswith(".pdf"):
+            return
+        if str(Path(event.src_path).parent.resolve()) != self.watch_dir:
             return
         self._process(event.src_path)
 
     def on_moved(self, event):
         if event.is_directory or not event.dest_path.lower().endswith(".pdf"):
             return
+        if str(Path(event.dest_path).parent.resolve()) != self.watch_dir:
+            return
         self._process(event.dest_path)
 
     def _process(self, path):
-        if path in self._done:
+        key = os.path.basename(path)
+        if key in self._done:
             return
-        self._done.add(path)
+        self._done.add(key)
         time.sleep(1)  # صبر تا کپی کامل شود
         if os.path.exists(path):
             try:
@@ -216,7 +222,7 @@ def main():
 
     # نظارت مداوم
     observer = Observer()
-    observer.schedule(InvoiceHandler(config), str(watch_dir), recursive=False)
+    observer.schedule(InvoiceHandler(config, watch_dir), str(watch_dir), recursive=False)
     observer.start()
 
     try:
