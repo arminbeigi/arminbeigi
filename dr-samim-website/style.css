@@ -70,6 +70,16 @@ ul { list-style: none; }
   color: #fff; font-size: 1.1rem;
   box-shadow: 0 4px 12px rgba(64,145,108,.4);
 }
+.logo-icon-svg {
+  width: 48px; height: 48px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  filter: brightness(0) invert(1);
+}
+.logo-icon-svg img {
+  width: 100%; height: 100%; object-fit: contain;
+}
+.footer-logo-svg { filter: brightness(0) invert(0.7) sepia(1) hue-rotate(80deg); }
 .logo-text { display: flex; flex-direction: column; }
 .logo-main { font-size: .95rem; font-weight: 700; color: #fff; line-height: 1.2; }
 .logo-sub { font-size: .72rem; color: var(--green-pale); }
