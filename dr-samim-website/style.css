@@ -465,6 +465,92 @@ ul { list-style: none; }
 }
 
 /* ===== PROCESS ===== */
+/* ===== CLINIC QUOTES ===== */
+.clinic-quotes {
+  padding: 5rem 0;
+  background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%);
+}
+.quotes-inner {
+  max-width: 1000px; margin: 0 auto; padding: 0 2rem;
+  display: flex; align-items: stretch; gap: 0;
+  flex-wrap: wrap;
+}
+.quote-block {
+  flex: 1; min-width: 280px;
+  padding: 2rem 3rem;
+  display: flex; flex-direction: column; align-items: center; text-align: center; gap: 1rem;
+}
+.quote-icon {
+  font-size: 5rem; line-height: 1;
+  color: var(--green-pale); opacity: .3;
+  font-family: Georgia, serif;
+  margin-bottom: -.5rem;
+}
+.quote-text {
+  font-size: 1.2rem; color: #fff;
+  font-style: italic; line-height: 1.6;
+  font-family: Georgia, serif;
+}
+.quote-text strong { font-style: normal; color: var(--green-pale); }
+.quote-fa {
+  font-size: .95rem; color: var(--green-pale);
+  line-height: 1.7; opacity: .85;
+}
+.quote-divider {
+  width: 1px; background: rgba(255,255,255,.15);
+  align-self: stretch; flex-shrink: 0;
+}
+
+/* ===== CLINIC PHOTOS GRID ===== */
+.clinic-photos { padding: 5rem 0; background: var(--off-white); }
+.clinic-photos-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 260px;
+  gap: 10px;
+}
+.clinic-photo-item {
+  position: relative; overflow: hidden; border-radius: 14px;
+  background: var(--green-bg);
+  cursor: pointer;
+}
+.clinic-photo-item.tall { grid-row: span 2; }
+.clinic-photo-item img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform .5s ease;
+  display: block;
+}
+.clinic-photo-item:hover img { transform: scale(1.06); }
+.clinic-photo-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(27,67,50,.75) 0%, transparent 55%);
+  display: flex; align-items: flex-end; padding: 1rem 1.25rem;
+  opacity: 0; transition: var(--transition);
+}
+.clinic-photo-item:hover .clinic-photo-overlay { opacity: 1; }
+.clinic-photo-overlay span { color: #fff; font-size: .88rem; font-weight: 700; }
+
+/* Placeholder while no real photo */
+.clinic-photo-item.photo-placeholder {
+  display: flex; align-items: center; justify-content: center;
+  border: 2px dashed var(--green-pale); background: var(--green-bg);
+}
+.clinic-photo-item.photo-placeholder::after {
+  content: '📷 عکس مطب';
+  color: var(--green-main); font-size: .85rem; font-weight: 600;
+}
+.clinic-photo-item.photo-placeholder img { display: none; }
+
+@media (max-width: 900px) {
+  .clinic-photos-grid { grid-template-columns: repeat(2, 1fr); }
+  .quotes-inner { flex-direction: column; }
+  .quote-divider { width: 60%; height: 1px; align-self: center; }
+}
+@media (max-width: 600px) {
+  .clinic-photos-grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* ===== PROCESS ===== */
 .process { padding: 5rem 0; background: var(--green-dark); }
 .process .section-title { color: #fff; }
 .process .section-label { color: var(--green-pale); background: rgba(255,255,255,.1); }
