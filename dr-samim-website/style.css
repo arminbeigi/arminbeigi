@@ -317,6 +317,32 @@ ul { list-style: none; }
 .feature-text strong { display: block; font-size: .82rem; font-weight: 700; color: var(--text-dark); }
 .feature-text span { font-size: .78rem; color: var(--text-light); }
 
+/* ===== HIGHLIGHTS STRIP ===== */
+.highlights-strip {
+  padding: 3rem 0 2rem;
+  background: var(--off-white);
+  border-top: 1px solid #e8f5e9;
+}
+.highlights-row {
+  display: flex; align-items: center; justify-content: center;
+  gap: 2.5rem; flex-wrap: wrap;
+}
+.hl-item {
+  display: flex; flex-direction: column; align-items: center; gap: .7rem;
+  cursor: pointer; transition: var(--transition);
+}
+.hl-item:hover { transform: translateY(-4px); }
+.hl-icon {
+  width: 72px; height: 72px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; color: #fff;
+  box-shadow: 0 4px 16px rgba(0,0,0,.18);
+  border: 3px solid #fff;
+  transition: var(--transition);
+}
+.hl-item:hover .hl-icon { box-shadow: 0 8px 24px rgba(0,0,0,.28); }
+.hl-item span { font-size: .82rem; font-weight: 700; color: var(--text-mid); }
+
 /* ===== SERVICES ===== */
 .services {
   padding: 7rem 0; background: #fff;
