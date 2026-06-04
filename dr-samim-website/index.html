@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>دکتر سید صمیم احمدی ابهری | متخصص پوست، مو و زیبایی</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+
+<!-- ===== NAVIGATION ===== -->
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <div class="nav-logo">
+      <div class="logo-icon"><i class="fas fa-leaf"></i></div>
+      <div class="logo-text">
+        <span class="logo-main">دکتر احمدی ابهری</span>
+        <span class="logo-sub">متخصص پوست و زیبایی</span>
+      </div>
+    </div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#hero" class="nav-link active">خانه</a></li>
+      <li><a href="#about" class="nav-link">درباره من</a></li>
+      <li><a href="#services" class="nav-link">خدمات</a></li>
+      <li><a href="#products" class="nav-link">محصولات</a></li>
+      <li><a href="#gallery" class="nav-link">گالری</a></li>
+      <li><a href="#contact" class="nav-link">تماس</a></li>
+    </ul>
+    <a href="tel:+982122480987" class="nav-cta">
+      <i class="fas fa-phone"></i> رزرو نوبت
+    </a>
+    <button class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ===== HERO 3D SCROLL SECTION ===== -->
+<section class="hero" id="hero">
+  <div class="hero-bg-gradient"></div>
+
+  <!-- Floating particles -->
+  <div class="particles" id="particles"></div>
+
+  <!-- Slide 1 -->
+  <div class="hero-slide active" data-slide="0">
+    <div class="slide-bg" style="background-image: url('https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=1920&q=80')"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-content">
+      <div class="slide-badge">متخصص پوست و زیبایی</div>
+      <h1 class="slide-title">
+        <span class="title-line">دکتر سید صمیم</span>
+        <span class="title-line accent">احمدی ابهری</span>
+      </h1>
+      <p class="slide-desc">فارغ‌التحصیل دانشگاه شهید بهشتی تهران | بیش از یک دهه تجربه در درمان‌های پوست و زیبایی</p>
+      <div class="slide-actions">
+        <a href="#services" class="btn-primary">مشاهده خدمات</a>
+        <a href="#contact" class="btn-outline">رزرو نوبت</a>
+      </div>
+    </div>
+    <div class="slide-number">۰۱ / ۰۵</div>
+  </div>
+
+  <!-- Slide 2 -->
+  <div class="hero-slide" data-slide="1">
+    <div class="slide-bg" style="background-image: url('https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=1920&q=80')"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-content">
+      <div class="slide-badge">تزریق زیبایی</div>
+      <h1 class="slide-title">
+        <span class="title-line">بوتاکس و فیلر</span>
+        <span class="title-line accent">با نتایج طبیعی</span>
+      </h1>
+      <p class="slide-desc">تزریق بوتاکس و فیلر با برندهای معتبر اروپایی و آمریکایی برای جوان‌سازی و شادابی پوست</p>
+      <div class="slide-actions">
+        <a href="#services" class="btn-primary">اطلاعات بیشتر</a>
+        <a href="https://www.instagram.com/dr.samimabhari" target="_blank" class="btn-outline">
+          <i class="fab fa-instagram"></i> اینستاگرام
+        </a>
+      </div>
+    </div>
+    <div class="slide-number">۰۲ / ۰۵</div>
+  </div>
+
+  <!-- Slide 3 -->
+  <div class="hero-slide" data-slide="2">
+    <div class="slide-bg" style="background-image: url('https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=1920&q=80')"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-content">
+      <div class="slide-badge">لیزر پیشرفته</div>
+      <h1 class="slide-title">
+        <span class="title-line">لیزر موهای زائد</span>
+        <span class="title-line accent">و جوان‌سازی پوست</span>
+      </h1>
+      <p class="slide-desc">جدیدترین تکنولوژی لیزر Diode و Nd:YAG برای از بین بردن موهای زائد و رفع لک‌های پوستی</p>
+      <div class="slide-actions">
+        <a href="#services" class="btn-primary">جزئیات لیزر</a>
+        <a href="#contact" class="btn-outline">مشاوره رایگان</a>
+      </div>
+    </div>
+    <div class="slide-number">۰۳ / ۰۵</div>
+  </div>
+
+  <!-- Slide 4 -->
+  <div class="hero-slide" data-slide="3">
+    <div class="slide-bg" style="background-image: url('https://images.unsplash.com/photo-1607857531023-7a5b81fe41bd?w=1920&q=80')"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-content">
+      <div class="slide-badge">درمان تخصصی</div>
+      <h1 class="slide-title">
+        <span class="title-line">آکنه، لک</span>
+        <span class="title-line accent">و مشکلات پوستی</span>
+      </h1>
+      <p class="slide-desc">درمان تخصصی آکنه، جوش‌های هورمونی، لک‌های پوستی و انواع حساسیت‌های پوستی</p>
+      <div class="slide-actions">
+        <a href="#services" class="btn-primary">روش‌های درمان</a>
+        <a href="#contact" class="btn-outline">رزرو نوبت</a>
+      </div>
+    </div>
+    <div class="slide-number">۰۴ / ۰۵</div>
+  </div>
+
+  <!-- Slide 5 -->
+  <div class="hero-slide" data-slide="4">
+    <div class="slide-bg" style="background-image: url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=1920&q=80')"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-content">
+      <div class="slide-badge">کلینیک زیبایی</div>
+      <h1 class="slide-title">
+        <span class="title-line">مراقبت از پوست</span>
+        <span class="title-line accent">با پروتکل‌های علمی</span>
+      </h1>
+      <p class="slide-desc">PRP، مزوتراپی، RF، هایفو و کربن‌تراپی برای جوان‌سازی و بازسازی پوست</p>
+      <div class="slide-actions">
+        <a href="#services" class="btn-primary">تمام خدمات</a>
+        <a href="#contact" class="btn-outline">تماس با ما</a>
+      </div>
+    </div>
+    <div class="slide-number">۰۵ / ۰۵</div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="scroll-indicator">
+    <div class="scroll-line"></div>
+    <span>اسکرول کنید</span>
+  </div>
+
+  <!-- Slide dots -->
+  <div class="slide-dots" id="slideDots">
+    <span class="dot active" data-dot="0"></span>
+    <span class="dot" data-dot="1"></span>
+    <span class="dot" data-dot="2"></span>
+    <span class="dot" data-dot="3"></span>
+    <span class="dot" data-dot="4"></span>
+  </div>
+</section>
+
+<!-- ===== STATS BAR ===== -->
+<section class="stats-bar">
+  <div class="stats-container">
+    <div class="stat-item">
+      <div class="stat-number" data-count="5000">۰</div>
+      <div class="stat-label">بیمار راضی</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <div class="stat-number" data-count="10">۰</div>
+      <div class="stat-label">سال تجربه</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <div class="stat-number" data-count="25">۰</div>
+      <div class="stat-label">نوع خدمات</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <div class="stat-number" data-count="98">۰</div>
+      <div class="stat-label">رضایت بیماران %</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ABOUT SECTION ===== -->
+<section class="about" id="about">
+  <div class="section-container">
+    <div class="about-visual">
+      <div class="about-img-wrap">
+        <div class="about-img-bg"></div>
+        <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=600&q=80" alt="دکتر احمدی ابهری" class="about-img" />
+        <div class="about-badge-card">
+          <i class="fas fa-award"></i>
+          <div>
+            <strong>فارغ‌التحصیل</strong>
+            <span>دانشگاه شهید بهشتی</span>
+          </div>
+        </div>
+        <div class="about-instagram-card">
+          <a href="https://www.instagram.com/dr.samimabhari" target="_blank">
+            <i class="fab fa-instagram"></i>
+            <span>@dr.samimabhari</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-content">
+      <div class="section-label">درباره من</div>
+      <h2 class="section-title">دکتر سید صمیم <span class="green">احمدی ابهری</span></h2>
+      <p class="about-text">
+        متخصص پوست، مو و زیبایی و داخلی، فارغ‌التحصیل از دانشگاه معتبر شهید بهشتی تهران. با بیش از یک دهه تجربه در حوزه درمان‌های پوستی و زیبایی، ارائه خدمات تخصصی با بالاترین استانداردهای بین‌المللی.
+      </p>
+      <p class="about-text">
+        رویکرد درمانی بر پایه علم روز دنیا، استفاده از محصولات اورجینال و تکنولوژی‌های پیشرفته، با هدف رسیدن به نتایج طبیعی و پایدار برای هر بیمار.
+      </p>
+
+      <div class="about-features">
+        <div class="feature-item">
+          <div class="feature-icon"><i class="fas fa-graduation-cap"></i></div>
+          <div class="feature-text">
+            <strong>تخصص</strong>
+            <span>پوست، مو، زیبایی و داخلی</span>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon"><i class="fas fa-university"></i></div>
+          <div class="feature-text">
+            <strong>دانشگاه</strong>
+            <span>شهید بهشتی تهران</span>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon"><i class="fas fa-certificate"></i></div>
+          <div class="feature-text">
+            <strong>مجوز</strong>
+            <span>سازمان نظام پزشکی ایران</span>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon"><i class="fab fa-instagram"></i></div>
+          <div class="feature-text">
+            <strong>اینستاگرام</strong>
+            <span>@dr.samimabhari</span>
+          </div>
+        </div>
+      </div>
+
+      <a href="https://www.instagram.com/dr.samimabhari" target="_blank" class="btn-primary">
+        <i class="fab fa-instagram"></i> مشاهده پیج اینستاگرام
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SERVICES SECTION ===== -->
+<section class="services" id="services">
+  <div class="services-bg-shape"></div>
+  <div class="section-container-full">
+    <div class="section-header center">
+      <div class="section-label">خدمات تخصصی</div>
+      <h2 class="section-title">درمان‌ها و خدمات <span class="green">زیبایی</span></h2>
+      <p class="section-desc">ارائه طیف کاملی از خدمات پوست، مو و زیبایی با استفاده از تکنولوژی‌های روز دنیا</p>
+    </div>
+
+    <div class="services-grid">
+
+      <div class="service-card" data-delay="0">
+        <div class="service-icon-wrap green-bg">
+          <i class="fas fa-syringe"></i>
+        </div>
+        <h3>بوتاکس</h3>
+        <p>تزریق بوتاکس اورجینال Allergan و Bocouture برای رفع چین و چروک‌های پیشانی، دور چشم و گردن با نتیجه طبیعی</p>
+        <ul class="service-list">
+          <li><i class="fas fa-check"></i> بوتاکس ابرو (Brow Lift)</li>
+          <li><i class="fas fa-check"></i> بوتاکس فک و گردن (Nefertiti)</li>
+          <li><i class="fas fa-check"></i> بوتاکس هایپرهیدروزیس</li>
+          <li><i class="fas fa-check"></i> میکروبوتاکس پوست</li>
+        </ul>
+        <a href="#contact" class="service-cta">رزرو نوبت <i class="fas fa-arrow-left"></i></a>
+      </div>
+
+      <div class="service-card featured" data-delay="100">
+        <div class="featured-badge">محبوب‌ترین</div>
+        <div class="service-icon-wrap gold-bg">
+          <i class="fas fa-magic"></i>
+        </div>
+        <h3>فیلر</h3>
+        <p>تزریق فیلر Juvederm و Restylane اورجینال برای حجم‌دهی لب، گونه، فک و رفع شیار بینی به دهان</p>
+        <ul class="service-list">
+          <li><i class="fas fa-check"></i> فیلر لب</li>
+          <li><i class="fas fa-check"></i> فیلر گونه و فک</li>
+          <li><i class="fas fa-check"></i> فیلر زیر چشم (Tear Trough)</li>
+          <li><i class="fas fa-check"></i> فیلر بینی غیرجراحی</li>
+        </ul>
+        <a href="#contact" class="service-cta">رزرو نوبت <i class="fas fa-arrow-left"></i></a>
+      </div>
+
+      <div class="service-card" data-delay="200">
+        <div class="service-icon-wrap green-bg">
+          <i class="fas fa-bolt"></i>
+        </div>
+        <h3>لیزر</h3>
+        <p>لیزر موهای زائد با دستگاه‌های Diode و Nd:YAG برای انواع پوست و مو، لیزر لک و جوان‌سازی</p>
+        <ul class="service-list">
+          <li><i class="fas fa-check"></i> لیزر موهای زائد بدن</li>
+          <li><i class="fas fa-check"></i> لیزر لک‌های پوستی</li>
+          <li><i class="fas fa-check"></i> لیزر رفع تتو</li>
+          <li><i class="fas fa-check"></i> لیزر جوان‌سازی CO2</li>
+        </ul>
+        <a href="#contact" class="service-cta">رزرو نوبت <i class="fas fa-arrow-left"></i></a>
+      </div>
+
+      <div class="service-card" data-delay="300">
+        <div class="service-icon-wrap green-bg">
+          <i class="fas fa-tint"></i>
+        </div>
+        <h3>PRP و مزوتراپی</h3>
+        <p>تزریق PRP و مزوتراپی برای تقویت مو، جوان‌سازی پوست و بهبود بافت پوست با استفاده از پلاسمای خود بیمار</p>
+        <ul class="service-list">
+          <li><i class="fas fa-check"></i> PRP مو و ریزش مو</li>
+          <li><i class="fas fa-check"></i> PRP صورت (Vampire Facial)</li>
+          <li><i class="fas fa-check"></i> مزوتراپی صورت</li>
+          <li><i class="fas fa-check"></i> مزوتراپی مو</li>
+        </ul>
+        <a href="#contact" class="service-cta">رزرو نوبت <i class="fas fa-arrow-left"></i></a>
+      </div>
+
+      <div class="service-card" data-delay="400">
+        <div class="service-icon-wrap green-bg">
+          <i class="fas fa-wave-square"></i>
+        </div>
+        <h3>RF و هایفو</h3>
+        <p>لیفت و سفت‌کننده پوست با تکنولوژی رادیوفرکوئنسی و اولتراسوند متمرکز برای جوان‌سازی بدون جراحی</p>
+        <ul class="service-list">
+          <li><i class="fas fa-check"></i> RF میکرونیدلینگ</li>
+          <li><i class="fas fa-check"></i> هایفو صورت و گردن</li>
+          <li><i class="fas fa-check"></i> RF بدن (لاغری)</li>
+          <li><i class="fas fa-check"></i> SMAS Lifting</li>
+        </ul>
+        <a href="#contact" class="service-cta">رزرو نوبت <i class="fas fa-arrow-left"></i></a>
+      </div>
+
+      <div class="service-card" data-delay="500">
+        <div class="service-icon-wrap green-bg">
+          <i class="fas fa-heartbeat"></i>
+        </div>
+        <h3>درمان آکنه و لک</h3>
+        <p>درمان تخصصی آکنه، جوش‌های هورمونی، لک‌های پوستی، ملاسما و رزاسه با پروتکل‌های علمی</p>
+        <ul class="service-list">
+          <li><i class="fas fa-check"></i> درمان آکنه ولگاریس</li>
+          <li><i class="fas fa-check"></i> کنترل ملاسما</li>
+          <li><i class="fas fa-check"></i> پیلینگ شیمیایی</li>
+          <li><i class="fas fa-check"></i> کربن‌تراپی (Carbon Peel)</li>
+        </ul>
+        <a href="#contact" class="service-cta">رزرو نوبت <i class="fas fa-arrow-left"></i></a>
+      </div>
+
+      <div class="service-card" data-delay="600">
+        <div class="service-icon-wrap green-bg">
+          <i class="fas fa-cut"></i>
+        </div>
+        <h3>کاشت و تقویت مو</h3>
+        <p>مشاوره و درمان ریزش مو، کاشت مو با روش FIT و درمان‌های نوین تقویت موی سر</p>
+        <ul class="service-list">
+          <li><i class="fas fa-check"></i> کاشت مو FIT/FUE</li>
+          <li><i class="fas fa-check"></i> درمان آلوپسی</li>
+          <li><i class="fas fa-check"></i> Minoxidil تراپی</li>
+          <li><i class="fas fa-check"></i> لیزر تقویت مو</li>
+        </ul>
+        <a href="#contact" class="service-cta">رزرو نوبت <i class="fas fa-arrow-left"></i></a>
+      </div>
+
+      <div class="service-card" data-delay="700">
+        <div class="service-icon-wrap green-bg">
+          <i class="fas fa-stethoscope"></i>
+        </div>
+        <h3>داخلی و چکاپ</h3>
+        <p>ویزیت داخلی، چکاپ کامل بدن، مشاوره بیماری‌های داخلی و رسیدگی به مشکلات سیستمیک مرتبط با پوست</p>
+        <ul class="service-list">
+          <li><i class="fas fa-check"></i> ویزیت بیماری‌های داخلی</li>
+          <li><i class="fas fa-check"></i> تشخیص بیماری‌های پوستی سیستمیک</li>
+          <li><i class="fas fa-check"></i> آزمایشات تشخیصی</li>
+          <li><i class="fas fa-check"></i> مشاوره تغذیه پوست</li>
+        </ul>
+        <a href="#contact" class="service-cta">رزرو نوبت <i class="fas fa-arrow-left"></i></a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== PRODUCTS SECTION ===== -->
+<section class="products" id="products">
+  <div class="section-container">
+    <div class="section-header center">
+      <div class="section-label">محصولات تخصصی</div>
+      <h2 class="section-title">برندهای معتبر مورد <span class="green">استفاده</span></h2>
+      <p class="section-desc">استفاده از محصولات اورجینال و معتبر اروپایی و آمریکایی برای بالاترین کیفیت درمان</p>
+    </div>
+
+    <div class="products-showcase">
+
+      <div class="product-card premium">
+        <div class="product-ribbon">اورجینال</div>
+        <div class="product-logo-area">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Juvederm_logo.svg/320px-Juvederm_logo.svg.png"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
+               alt="Juvederm" class="product-brand-img" />
+          <div class="product-brand-fallback" style="display:none">
+            <span class="brand-letter">J</span>
+          </div>
+        </div>
+        <h3>Juvéderm</h3>
+        <p class="product-maker">Allergan Aesthetics · آمریکا</p>
+        <p class="product-desc">فیلر هیالورونیک اسید اورجینال برای لب، گونه و رفع چروک با ماندگاری ۱۲ تا ۱۸ ماه</p>
+        <div class="product-tags">
+          <span>فیلر لب</span>
+          <span>فیلر گونه</span>
+          <span>جوان‌سازی</span>
+        </div>
+      </div>
+
+      <div class="product-card premium">
+        <div class="product-ribbon">اورجینال</div>
+        <div class="product-logo-area" style="background: #1a1a2e">
+          <span class="brand-text-logo" style="color:#e8c547">Allergan</span>
+        </div>
+        <h3>Botox® Allergan</h3>
+        <p class="product-maker">AbbVie / Allergan · آمریکا</p>
+        <p class="product-desc">بوتاکس اصلی و معتبر آمریکایی برای رفع خطوط صورت و درمان هایپرهیدروزیس با ایمنی بالا</p>
+        <div class="product-tags">
+          <span>بوتاکس</span>
+          <span>ضد چروک</span>
+          <span>FDA Approved</span>
+        </div>
+      </div>
+
+      <div class="product-card premium">
+        <div class="product-ribbon">اورجینال</div>
+        <div class="product-logo-area" style="background: #003366">
+          <span class="brand-text-logo" style="color:#ffffff">Restylane</span>
+        </div>
+        <h3>Restylane</h3>
+        <p class="product-maker">Galderma · سوئد</p>
+        <p class="product-desc">خط کامل فیلرهای هیالورونیک اسید اسکاندیناوی برای اصلاح فرم صورت و جوان‌سازی عمیق پوست</p>
+        <div class="product-tags">
+          <span>فیلر پوستی</span>
+          <span>هیالورونیک اسید</span>
+          <span>ماندگاری بالا</span>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-logo-area" style="background: #2d6a4f">
+          <span class="brand-text-logo" style="color:#fff">ZO®</span>
+        </div>
+        <h3>ZO Skin Health</h3>
+        <p class="product-maker">Dr. Zein Obagi · آمریکا</p>
+        <p class="product-desc">محصولات پیشرفته مراقبت از پوست ZO برای درمان لک، آکنه و ضدپیری با فرمول‌های علمی</p>
+        <div class="product-tags">
+          <span>مراقبت پوست</span>
+          <span>ضد لک</span>
+          <span>ضد آکنه</span>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-logo-area" style="background: #1b4332">
+          <span class="brand-text-logo" style="color:#95d5b2">Neostrata</span>
+        </div>
+        <h3>NeoStrata</h3>
+        <p class="product-maker">Galderma · آمریکا</p>
+        <p class="product-desc">سری محصولات AHA/BHA پیشرفته برای جوان‌سازی، لایه‌برداری شیمیایی و درمان چروک</p>
+        <div class="product-tags">
+          <span>AHA / BHA</span>
+          <span>لایه‌بردار</span>
+          <span>جوان‌سازی</span>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-logo-area" style="background: #023e8a">
+          <span class="brand-text-logo" style="color:#90e0ef">Radiesse</span>
+        </div>
+        <h3>Radiesse®</h3>
+        <p class="product-maker">Merz Aesthetics · آلمان</p>
+        <p class="product-desc">فیلر کلسیم هیدروکسی‌آپاتایت برای لیفت و حجم‌دهی صورت و دست با تحریک کلاژن‌سازی</p>
+        <div class="product-tags">
+          <span>لیفت صورت</span>
+          <span>کلاژن‌سازی</span>
+          <span>بیوستیمولاتور</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== PROCESS SECTION ===== -->
+<section class="process">
+  <div class="section-container">
+    <div class="section-header center">
+      <div class="section-label">مراحل درمان</div>
+      <h2 class="section-title">از مشاوره تا <span class="green">نتیجه نهایی</span></h2>
+    </div>
+    <div class="process-steps">
+      <div class="process-step">
+        <div class="step-num">۱</div>
+        <div class="step-icon"><i class="fas fa-comments"></i></div>
+        <h4>مشاوره اولیه</h4>
+        <p>بررسی کامل پوست و نیازهای شما توسط دکتر</p>
+      </div>
+      <div class="process-arrow"><i class="fas fa-chevron-left"></i></div>
+      <div class="process-step">
+        <div class="step-num">۲</div>
+        <div class="step-icon"><i class="fas fa-clipboard-check"></i></div>
+        <h4>برنامه درمانی</h4>
+        <p>طراحی پروتکل درمانی شخصی‌سازی شده</p>
+      </div>
+      <div class="process-arrow"><i class="fas fa-chevron-left"></i></div>
+      <div class="process-step">
+        <div class="step-num">۳</div>
+        <div class="step-icon"><i class="fas fa-procedures"></i></div>
+        <h4>اجرای درمان</h4>
+        <p>انجام درمان با بالاترین استانداردهای ایمنی</p>
+      </div>
+      <div class="process-arrow"><i class="fas fa-chevron-left"></i></div>
+      <div class="process-step">
+        <div class="step-num">۴</div>
+        <div class="step-icon"><i class="fas fa-star"></i></div>
+        <h4>نتیجه درخشان</h4>
+        <p>پیگیری و اطمینان از رضایت کامل شما</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== GALLERY SECTION ===== -->
+<section class="gallery" id="gallery">
+  <div class="section-container-full">
+    <div class="section-header center">
+      <div class="section-label">گالری</div>
+      <h2 class="section-title">نمونه کارهای <span class="green">کلینیک</span></h2>
+      <p class="section-desc">نمونه‌ای از نتایج درمان‌های انجام شده در کلینیک دکتر احمدی ابهری</p>
+    </div>
+
+    <div class="gallery-grid">
+      <div class="gallery-item large">
+        <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=800&q=80" alt="درمان پوست" />
+        <div class="gallery-overlay">
+          <span>درمان پوست</span>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=600&q=80" alt="لیزر" />
+        <div class="gallery-overlay"><span>لیزر</span></div>
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=600&q=80" alt="مراقبت پوست" />
+        <div class="gallery-overlay"><span>مراقبت پوست</span></div>
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1526045612212-70caf35c14df?w=600&q=80" alt="زیبایی" />
+        <div class="gallery-overlay"><span>زیبایی</span></div>
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1583394293214-bd95c29edd8b?w=600&q=80" alt="مراقبت" />
+        <div class="gallery-overlay"><span>مراقبت</span></div>
+      </div>
+      <div class="gallery-item large-v">
+        <img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&q=80" alt="کلینیک" />
+        <div class="gallery-overlay"><span>کلینیک</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== INSTAGRAM FEED ===== -->
+<section class="instagram-section">
+  <div class="section-container">
+    <div class="insta-header">
+      <div class="insta-icon">
+        <i class="fab fa-instagram"></i>
+      </div>
+      <div>
+        <h3>ما را در اینستاگرام دنبال کنید</h3>
+        <a href="https://www.instagram.com/dr.samimabhari" target="_blank">@dr.samimabhari</a>
+      </div>
+      <a href="https://www.instagram.com/dr.samimabhari" target="_blank" class="btn-primary insta-btn">
+        <i class="fab fa-instagram"></i> مشاهده پیج
+      </a>
+    </div>
+    <div class="insta-grid">
+      <a href="https://www.instagram.com/dr.samimabhari" target="_blank" class="insta-item">
+        <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=400&q=80" alt="اینستاگرام" />
+        <div class="insta-hover"><i class="fab fa-instagram"></i></div>
+      </a>
+      <a href="https://www.instagram.com/dr.samimabhari" target="_blank" class="insta-item">
+        <img src="https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=400&q=80" alt="اینستاگرام" />
+        <div class="insta-hover"><i class="fab fa-instagram"></i></div>
+      </a>
+      <a href="https://www.instagram.com/dr.samimabhari" target="_blank" class="insta-item">
+        <img src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=400&q=80" alt="اینستاگرام" />
+        <div class="insta-hover"><i class="fab fa-instagram"></i></div>
+      </a>
+      <a href="https://www.instagram.com/dr.samimabhari" target="_blank" class="insta-item">
+        <img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&q=80" alt="اینستاگرام" />
+        <div class="insta-hover"><i class="fab fa-instagram"></i></div>
+      </a>
+      <a href="https://www.instagram.com/dr.samimabhari" target="_blank" class="insta-item">
+        <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&q=80" alt="اینستاگرام" />
+        <div class="insta-hover"><i class="fab fa-instagram"></i></div>
+      </a>
+      <a href="https://www.instagram.com/dr.samimabhari" target="_blank" class="insta-item">
+        <img src="https://images.unsplash.com/photo-1526045612212-70caf35c14df?w=400&q=80" alt="اینستاگرام" />
+        <div class="insta-hover"><i class="fab fa-instagram"></i></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONTACT SECTION ===== -->
+<section class="contact" id="contact">
+  <div class="contact-bg"></div>
+  <div class="section-container">
+    <div class="contact-grid">
+      <div class="contact-info">
+        <div class="section-label">ارتباط با ما</div>
+        <h2 class="section-title">رزرو نوبت و <span class="green">تماس</span></h2>
+        <p class="contact-intro">برای رزرو نوبت، مشاوره رایگان یا هرگونه سوال، از طریق راه‌های زیر با ما در تماس باشید.</p>
+
+        <div class="contact-cards">
+          <div class="contact-card">
+            <div class="contact-card-icon"><i class="fas fa-phone"></i></div>
+            <div class="contact-card-text">
+              <strong>شماره تماس</strong>
+              <a href="tel:+989123456789">از طریق اینستاگرام دریافت کنید</a>
+              <a href="https://www.instagram.com/dr.samimabhari" target="_blank" class="insta-link-small">
+                <i class="fab fa-instagram"></i> @dr.samimabhari
+              </a>
+            </div>
+          </div>
+          <div class="contact-card">
+            <div class="contact-card-icon"><i class="fas fa-map-marker-alt"></i></div>
+            <div class="contact-card-text">
+              <strong>آدرس مطب</strong>
+              <span>آدرس کامل در بیو اینستاگرام</span>
+              <a href="https://www.instagram.com/dr.samimabhari" target="_blank" class="insta-link-small">
+                <i class="fab fa-instagram"></i> @dr.samimabhari
+              </a>
+            </div>
+          </div>
+          <div class="contact-card">
+            <div class="contact-card-icon"><i class="fas fa-clock"></i></div>
+            <div class="contact-card-text">
+              <strong>ساعات کاری</strong>
+              <span>شنبه تا چهارشنبه: ۱۰ - ۱۸</span>
+              <span>پنجشنبه: ۱۰ - ۱۴</span>
+            </div>
+          </div>
+          <div class="contact-card">
+            <div class="contact-card-icon"><i class="fab fa-instagram"></i></div>
+            <div class="contact-card-text">
+              <strong>اینستاگرام</strong>
+              <a href="https://www.instagram.com/dr.samimabhari" target="_blank">@dr.samimabhari</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="social-links">
+          <a href="https://www.instagram.com/dr.samimabhari" target="_blank" class="social-btn instagram">
+            <i class="fab fa-instagram"></i>
+          </a>
+          <a href="https://wa.me/989000000000" class="social-btn whatsapp">
+            <i class="fab fa-whatsapp"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="contact-form-wrap">
+        <form class="contact-form" onsubmit="handleSubmit(event)">
+          <h3>ارسال پیام</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label>نام و نام خانوادگی</label>
+              <input type="text" placeholder="نام شما" required />
+            </div>
+            <div class="form-group">
+              <label>شماره موبایل</label>
+              <input type="tel" placeholder="09XX XXX XXXX" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>نوع خدمت مورد نظر</label>
+            <select>
+              <option value="">انتخاب کنید...</option>
+              <option>بوتاکس</option>
+              <option>فیلر</option>
+              <option>لیزر موهای زائد</option>
+              <option>PRP</option>
+              <option>مزوتراپی</option>
+              <option>RF / هایفو</option>
+              <option>درمان آکنه و لک</option>
+              <option>کاشت مو</option>
+              <option>ویزیت داخلی</option>
+              <option>سایر</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>توضیحات</label>
+            <textarea rows="4" placeholder="سوال یا توضیحات خود را بنویسید..."></textarea>
+          </div>
+          <button type="submit" class="btn-primary submit-btn">
+            <i class="fas fa-paper-plane"></i> ارسال پیام
+          </button>
+          <div class="form-success" id="formSuccess">
+            <i class="fas fa-check-circle"></i> پیام شما دریافت شد. به زودی با شما تماس می‌گیریم.
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="footer-top">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <div class="logo-icon"><i class="fas fa-leaf"></i></div>
+          <div class="logo-text">
+            <span class="logo-main">دکتر احمدی ابهری</span>
+            <span class="logo-sub">متخصص پوست و زیبایی</span>
+          </div>
+        </div>
+        <p>فارغ‌التحصیل دانشگاه شهید بهشتی تهران، متخصص پوست، مو، زیبایی و داخلی با بیش از یک دهه سابقه درخشان.</p>
+        <div class="footer-social">
+          <a href="https://www.instagram.com/dr.samimabhari" target="_blank"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-whatsapp"></i></a>
+          <a href="#"><i class="fab fa-telegram"></i></a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h4>خدمات</h4>
+        <ul>
+          <li><a href="#services">بوتاکس</a></li>
+          <li><a href="#services">فیلر</a></li>
+          <li><a href="#services">لیزر</a></li>
+          <li><a href="#services">PRP و مزوتراپی</a></li>
+          <li><a href="#services">RF و هایفو</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>دسترسی سریع</h4>
+        <ul>
+          <li><a href="#about">درباره دکتر</a></li>
+          <li><a href="#products">محصولات</a></li>
+          <li><a href="#gallery">گالری</a></li>
+          <li><a href="#contact">تماس</a></li>
+          <li><a href="https://www.instagram.com/dr.samimabhari" target="_blank">اینستاگرام</a></li>
+        </ul>
+      </div>
+      <div class="footer-contact">
+        <h4>تماس با ما</h4>
+        <p><i class="fab fa-instagram"></i> <a href="https://www.instagram.com/dr.samimabhari" target="_blank">@dr.samimabhari</a></p>
+        <p><i class="fas fa-map-marker-alt"></i> آدرس مطب در بیو اینستاگرام</p>
+        <p><i class="fas fa-clock"></i> شنبه تا چهارشنبه: ۱۰ - ۱۸</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© ۱۴۰۳ دکتر سید صمیم احمدی ابهری | تمامی حقوق محفوظ است</p>
+  </div>
+</footer>
+
+<!-- ===== FLOATING WHATSAPP ===== -->
+<a href="https://www.instagram.com/dr.samimabhari" target="_blank" class="floating-instagram">
+  <i class="fab fa-instagram"></i>
+  <span>رزرو نوبت</span>
+</a>
+
+<!-- ===== SCROLL TO TOP ===== -->
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <i class="fas fa-chevron-up"></i>
+</button>
+
+<script src="app.js"></script>
+</body>
+</html>
