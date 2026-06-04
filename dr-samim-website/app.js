@@ -30,7 +30,7 @@ navLinks.querySelectorAll('a').forEach(a => {
 
 // ===== ACTIVE NAV LINK =====
 function updateActiveNav() {
-  const sections = ['hero', 'about', 'services', 'products', 'contact'];
+  const sections = ['hero', 'about', 'services', 'products', 'clinic-photos', 'contact'];
   const scrollY = window.scrollY + 120;
   sections.forEach(id => {
     const el = document.getElementById(id);
