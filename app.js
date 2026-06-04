@@ -2,6 +2,7 @@
    DR. SAMIM AHMADI ABHARI — Main JavaScript
    ============================================================ */
 
+// ===== NAVBAR SCROLL =====
 const navbar = document.getElementById('navbar');
 const scrollTopBtn = document.getElementById('scrollTop');
 
@@ -17,6 +18,7 @@ window.addEventListener('scroll', () => {
   revealElements();
 });
 
+// ===== HAMBURGER MENU =====
 const hamburger = document.getElementById('hamburger');
 const navLinks = document.getElementById('navLinks');
 hamburger.addEventListener('click', () => {
@@ -26,8 +28,9 @@ navLinks.querySelectorAll('a').forEach(a => {
   a.addEventListener('click', () => navLinks.classList.remove('open'));
 });
 
+// ===== ACTIVE NAV LINK =====
 function updateActiveNav() {
-  const sections = ['hero', 'about', 'services', 'products', 'gallery', 'contact'];
+  const sections = ['hero', 'about', 'services', 'products', 'contact'];
   const scrollY = window.scrollY + 120;
   sections.forEach(id => {
     const el = document.getElementById(id);
@@ -40,10 +43,12 @@ function updateActiveNav() {
   });
 }
 
+// ===== 3D HERO SLIDER =====
 let currentSlide = 0;
 const slides = document.querySelectorAll('.hero-slide');
 const dots = document.querySelectorAll('.dot');
 let autoSlideTimer = null;
+let isScrollSliding = false;
 let lastScrollTime = 0;
 
 function goToSlide(n) {
@@ -64,13 +69,17 @@ dots.forEach(dot => {
   dot.addEventListener('click', () => goToSlide(parseInt(dot.dataset.dot)));
 });
 
+// Scroll to change slides while in hero
 window.addEventListener('wheel', (e) => {
   const hero = document.getElementById('hero');
+  const heroBottom = hero.offsetTop + hero.offsetHeight;
   const scrollY = window.scrollY;
+
   if (scrollY < hero.offsetTop + hero.offsetHeight * 0.5) {
     const now = Date.now();
     if (now - lastScrollTime < 900) return;
     lastScrollTime = now;
+
     if (currentSlide < slides.length - 1 && e.deltaY > 0) {
       e.preventDefault();
       goToSlide(currentSlide + 1);
@@ -81,6 +90,7 @@ window.addEventListener('wheel', (e) => {
   }
 }, { passive: false });
 
+// Touch swipe for mobile
 let touchStartX = 0, touchStartY = 0;
 document.getElementById('hero').addEventListener('touchstart', e => {
   touchStartX = e.touches[0].clientX;
@@ -96,6 +106,7 @@ document.getElementById('hero').addEventListener('touchend', e => {
 
 resetAutoSlide();
 
+// ===== PARTICLES =====
 const particleContainer = document.getElementById('particles');
 for (let i = 0; i < 28; i++) {
   const p = document.createElement('div');
@@ -112,6 +123,7 @@ for (let i = 0; i < 28; i++) {
   particleContainer.appendChild(p);
 }
 
+// ===== COUNTER ANIMATION =====
 function animateCounters() {
   document.querySelectorAll('.stat-number').forEach(el => {
     const target = parseInt(el.dataset.count);
@@ -130,6 +142,7 @@ function animateCounters() {
   });
 }
 
+// ===== REVEAL ON SCROLL =====
 function revealElements() {
   document.querySelectorAll('.reveal').forEach(el => {
     const rect = el.getBoundingClientRect();
@@ -137,6 +150,7 @@ function revealElements() {
   });
 }
 
+// ===== INTERSECTION OBSERVER =====
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
@@ -151,6 +165,7 @@ document.querySelectorAll('.stats-bar, .service-card, .product-card, .process-st
   observer.observe(el);
 });
 
+// ===== STAGGERED CARDS =====
 document.querySelectorAll('.service-card').forEach((card, i) => {
   card.style.transitionDelay = `${i * 80}ms`;
 });
@@ -158,6 +173,7 @@ document.querySelectorAll('.product-card').forEach((card, i) => {
   card.style.transitionDelay = `${i * 60}ms`;
 });
 
+// ===== FORM SUBMIT =====
 function handleSubmit(e) {
   e.preventDefault();
   const success = document.getElementById('formSuccess');
@@ -166,6 +182,7 @@ function handleSubmit(e) {
   setTimeout(() => success.classList.remove('show'), 5000);
 }
 
+// ===== SMOOTH SECTION SCROLL WITH OFFSET =====
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   anchor.addEventListener('click', function(e) {
     const target = document.querySelector(this.getAttribute('href'));
@@ -176,6 +193,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   });
 });
 
+// ===== PARALLAX TILT ON HERO CONTENT =====
 document.querySelector('.hero').addEventListener('mousemove', (e) => {
   const rect = e.currentTarget.getBoundingClientRect();
   const x = (e.clientX - rect.left) / rect.width - 0.5;
@@ -190,4 +208,5 @@ document.querySelector('.hero').addEventListener('mouseleave', () => {
   if (content) content.style.transform = 'none';
 });
 
+// initial reveal
 window.dispatchEvent(new Event('scroll'));
