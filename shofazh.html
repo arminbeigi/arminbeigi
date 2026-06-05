@@ -57,7 +57,7 @@
   .pill.ice .dot{background:var(--ice);box-shadow:0 0 10px var(--ice)}
   @keyframes pulse{50%{opacity:.4;transform:scale(.85)}}
 
-  h1.display{font-family:'Vazirmatn';font-weight:900;line-height:.98;font-size:clamp(40px,6.4vw,112px);letter-spacing:-.02em;margin-top:22px}
+  h1.display{font-family:'Vazirmatn';font-weight:900;line-height:1.15;font-size:clamp(48px,8vw,140px);letter-spacing:-.02em;margin-top:22px}
   h1.display .grad{background:linear-gradient(120deg,var(--fire-3) 0%,var(--fire) 35%,var(--brand) 65%,var(--ice) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;display:inline-block}
   h2.title{font-family:'Vazirmatn';font-weight:800;line-height:1.05;font-size:clamp(34px,5vw,72px);letter-spacing:-.015em;margin-top:18px}
   h2.title .accent{color:var(--fire-2)}
@@ -87,7 +87,7 @@
   .grid-2{display:grid;grid-template-columns:1.05fr .95fr;gap:60px;align-items:start}
   @media (max-width:980px){.grid-2{grid-template-columns:1fr !important;gap:30px}}
 
-  .plate{position:relative;border-radius:22px;overflow:hidden;border:1px solid var(--line);box-shadow:0 40px 80px -20px rgba(0,0,0,.8)}
+  .plate{position:relative;border-radius:22px;overflow:hidden;border:1px solid var(--line);box-shadow:0 40px 80px -20px rgba(0,0,0,.8);transform:scale(1.12);transform-origin:center center}
   .plate img{display:block;width:100%;height:auto}
   .plate::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(7,10,18,.85) 100%)}
   .plate .tag{position:absolute;top:18px;right:18px;z-index:2}
@@ -120,19 +120,23 @@
   .flame-cnv{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:3}
 
   /* ===== LAMP effect (cleaner, focused above product) ===== */
-  .ac-stage{position:sticky;top:18vh;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;isolation:isolate}
+  .ac-stage{position:sticky;top:18vh;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;isolation:isolate;transform:perspective(900px) rotateY(12deg);transform-origin:right center}
   .ac-stage .prod-cnv{position:relative;z-index:2}
   /* Cool fresh air flowing down right below the AC louver */
-  .ac-air{position:absolute;left:50%;transform:translateX(-50%);top:54%;width:54%;height:46%;z-index:1;pointer-events:none;
-    background:linear-gradient(to bottom,
-      rgba(165,243,252,.55) 0%,
-      rgba(103,232,249,.34) 22%,
-      rgba(6,182,212,.18) 55%,
+  /* Cool air: flows diagonally right toward the text column, matching the AC tilt */
+  .ac-air{position:absolute;left:46%;top:48%;width:70%;height:58%;z-index:1;pointer-events:none;
+    background:linear-gradient(130deg,
+      rgba(165,243,252,.65) 0%,
+      rgba(103,232,249,.42) 25%,
+      rgba(6,182,212,.20) 60%,
       rgba(6,182,212,0) 100%);
-    -webkit-mask-image:radial-gradient(120% 100% at 50% 0%, #000 30%, transparent 78%);
-    mask-image:radial-gradient(120% 100% at 50% 0%, #000 30%, transparent 78%);
-    filter:blur(7px);opacity:.0;animation:acAirFlow 3.4s ease-in-out infinite}
-  @keyframes acAirFlow{0%,100%{opacity:.55;transform:translateX(-50%) scaleY(.94)}50%{opacity:.85;transform:translateX(-50%) scaleY(1.06)}}
+    -webkit-mask-image:radial-gradient(140% 100% at 30% 0%, #000 25%, transparent 75%);
+    mask-image:radial-gradient(140% 100% at 30% 0%, #000 25%, transparent 75%);
+    filter:blur(9px);animation:acAirFlow 3.4s ease-in-out infinite}
+  @keyframes acAirFlow{
+    0%,100%{opacity:.55;transform:scaleY(.93) skewX(-4deg)}
+    50%{opacity:.9;transform:scaleY(1.07) skewX(-6deg)}
+  }
   @media (max-width:980px){.ac-stage{position:relative;top:0;order:-1}}
   .lamp{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:1}
   /* Conic beams forming a cone of light from above */
@@ -574,8 +578,8 @@
         <div class="product-card fire reveal">
           <div class="label">CATEGORY HIGHLIGHTS / ویژگی‌ها</div>
           <div class="features">
-            <div class="feat fire"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> ظرفیت‌های ۱۰۷ تا ۲٬۸۰۰ هزار کیلوکالری بر ساعت</div>
-            <div class="feat fire"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 12 2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg> سری‌های <b>CKI-G</b> گازی و <b>CKI-O</b> گازوئیلی</div>
+            <div class="feat fire"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> ظرفیت از <b>۴۰ هزار</b> تا <b>۵ میلیون</b> کیلوکالری بر ساعت</div>
+            <div class="feat fire"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 12 2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg> نوع سوخت: <b>گازی</b> — <b>گازوئیلی</b> و <b>دوگانه‌سوز</b></div>
             <div class="feat fire"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> رله‌ی احتراق ایمن با تشخیص نشتی گاز</div>
           </div>
           <div class="product-actions">
@@ -596,7 +600,6 @@
       <div>
         <span class="pill reveal"><span class="dot"></span> دسته‌ی محصول</span>
         <h2 class="title reveal">پکیج‌های <span class="accent">دیواری</span></h2>
-        <span class="model-line reveal">WALL PACKAGE BOILERS · CHAUFFAGEKAR</span>
         <p class="lead reveal">
           گرمایش مرکزی و آب گرم بهداشتی، در یک دستگاهِ فشرده‌ی دیواری.
           پکیج‌های شوفاژکار با <b>محفظه‌ی احتراق بسته</b>، <b>مبدل دوگانه</b> و
@@ -605,7 +608,8 @@
         <div class="product-card fire reveal">
           <div class="label">CATEGORY HIGHLIGHTS / ویژگی‌ها</div>
           <div class="features">
-            <div class="feat fire"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 12h.01M10 12h.01M14 12h.01M18 12h.01"/></svg> سری‌های <b>Comfort</b>، <b>Elegant</b> و <b>Confident</b> ۲۴ تا ۵۰ کیلووات</div>
+            <div class="feat fire"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 12h.01M10 12h.01M14 12h.01M18 12h.01"/></svg> برندها: <b>شوفاژکار</b> — <b>یوتان</b> — <b>ایران رادیاتور</b> و ...</div>
+            <div class="feat fire"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> ظرفیت از <b>۲۰</b> تا <b>۵۰ کیلووات</b></div>
             <div class="feat fire"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> چندین لایه ایمنی + حسگر تخلیه‌ی دود</div>
             <div class="feat fire"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0-18 0"/><path d="m9 12 2 2 4-4"/></svg> نصب رایگان در تهران، گارانتی اصلی</div>
           </div>
@@ -1719,19 +1723,25 @@
     const prod = document.getElementById('prod-burner');
     if (!cnv || !prod) return;
     const ctx = cnv.getContext('2d');
-    // Nozzle opening centre as a fraction of the burner image (round vent on the left).
-    const NX = 0.305, NY = 0.515;
-    const DIRX = -1;                 // flame fires to the LEFT, away from the body
+    // Round nozzle opening — left-centre of the burner image.
+    // Tune NX/NY (0–1 fractions of image width/height) to match the actual vent circle.
+    const NX = 0.28, NY = 0.50;
+    const DIRX = -1;        // flame shoots LEFT out of the nozzle
+    // Nozzle radius as fraction of image width — draws a glowing ring first
+    const NR = 0.042;
+    const N = 60;           // fewer, subtler particles
     const parts = [];
-    const N = 110;
     function spawn(p){
-      p.t  = 0;
-      p.life = 0.45 + Math.random()*0.5;
-      p.x  = NX + (Math.random()-0.5)*0.022;
-      p.y  = NY + (Math.random()-0.5)*0.05;
-      p.vx = DIRX * (0.18 + Math.random()*0.22);
-      p.vy = (Math.random()-0.5)*0.05;
-      p.sz = 0.018 + Math.random()*0.03;
+      p.t    = 0;
+      p.life = 0.5 + Math.random()*0.55;
+      // Spawn on a tight circle matching the round nozzle opening
+      const angle = Math.random()*Math.PI*2;
+      const r = Math.random()*NR*0.5;
+      p.x  = NX + Math.cos(angle)*r;
+      p.y  = NY + Math.sin(angle)*r*0.7;   // slightly oval (vent perspective)
+      p.vx = DIRX * (0.10 + Math.random()*0.18);
+      p.vy = (Math.random()-0.5)*0.035;
+      p.sz = 0.012 + Math.random()*0.022;
       return p;
     }
     for (let i=0;i<N;i++){ const p=spawn({}); p.t = Math.random()*p.life; parts.push(p); }
@@ -1741,20 +1751,30 @@
       const W = prod.clientWidth, H = prod.clientHeight;
       if (W && H && (cnv.width!==W || cnv.height!==H)){ cnv.width=W; cnv.height=H; }
       ctx.clearRect(0,0,cnv.width,cnv.height);
+
+      // 1. Nozzle glow ring — shows the hot circular opening
+      const rx = NX*cnv.width, ry = NY*cnv.height, rr = NR*cnv.width;
+      const gRing = ctx.createRadialGradient(rx,ry,rr*0.3,rx,ry,rr*1.3);
+      gRing.addColorStop(0,   'rgba(255,200,80,.55)');
+      gRing.addColorStop(0.5, 'rgba(255,120,20,.28)');
+      gRing.addColorStop(1,   'rgba(200,40,0,0)');
       ctx.globalCompositeOperation = 'lighter';
+      ctx.fillStyle = gRing;
+      ctx.beginPath(); ctx.arc(rx,ry,rr*1.3,0,Math.PI*2); ctx.fill();
+
+      // 2. Flame jet particles
       for (const p of parts){
         p.t += dt;
         if (p.t >= p.life){ spawn(p); continue; }
         p.x += p.vx*dt; p.y += p.vy*dt;
-        const k = p.t/p.life;                 // 0→1 along its life
+        const k  = p.t/p.life;
         const px = p.x*cnv.width, py = p.y*cnv.height;
-        const r  = (p.sz + k*0.07) * cnv.width;
-        const a  = Math.sin(k*Math.PI) * 0.9; // fade in/out
-        const g = ctx.createRadialGradient(px,py,0,px,py,r);
-        // core hot near nozzle (low k), cooler/redder at the tip (high k)
-        g.addColorStop(0,    `rgba(255,${Math.round(240-90*k)},${Math.round(170-150*k)},${a})`);
-        g.addColorStop(0.4,  `rgba(255,${Math.round(150-70*k)},20,${a*0.7})`);
-        g.addColorStop(1,    `rgba(220,40,0,0)`);
+        const r  = (p.sz + k*0.04) * cnv.width;
+        const a  = Math.sin(k*Math.PI) * 0.65;   // softer, not over-bright
+        const g  = ctx.createRadialGradient(px,py,0,px,py,r);
+        g.addColorStop(0,   `rgba(255,${Math.round(220-80*k)},${Math.round(140-130*k)},${a})`);
+        g.addColorStop(0.5, `rgba(255,${Math.round(110-60*k)},10,${a*0.55})`);
+        g.addColorStop(1,   'rgba(200,30,0,0)');
         ctx.fillStyle = g;
         ctx.beginPath(); ctx.arc(px,py,r,0,Math.PI*2); ctx.fill();
       }
