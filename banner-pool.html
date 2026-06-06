@@ -7,291 +7,249 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;700;900&display=swap');
 
-  .pool-banner-wrap {
+  .pool-wrap {
     font-family: 'Vazirmatn', Tahoma, sans-serif;
     direction: rtl;
     display: block;
     width: 100%;
     max-width: 760px;
   }
+  .pool-wrap * { margin:0; padding:0; box-sizing:border-box; }
 
-  .pool-banner-wrap * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
+  /* ── Banner shell ── */
   .pool-banner {
     position: relative;
     width: 100%;
-    height: 260px;
+    min-height: 200px;
     background: linear-gradient(135deg, #daeef8 0%, #c8e8f5 40%, #b8dff0 70%, #cce9f7 100%);
-    border-radius: 22px;
+    border-radius: 18px;
     overflow: hidden;
-    box-shadow: 0 30px 80px rgba(0,120,200,0.25), 0 0 0 1px rgba(255,255,255,0.4);
+    box-shadow: 0 16px 50px rgba(0,120,200,0.22), 0 0 0 1px rgba(255,255,255,0.4);
     cursor: pointer;
   }
 
-  .pool-bg-glow {
-    position: absolute;
-    inset: 0;
+  /* ── Background effects ── */
+  .pool-glow {
+    position: absolute; inset: 0;
     background: radial-gradient(ellipse at 30% 50%, rgba(100,200,255,0.35) 0%, transparent 60%),
                 radial-gradient(ellipse at 80% 20%, rgba(0,150,220,0.15) 0%, transparent 50%);
-    animation: poolGlowPulse 4s ease-in-out infinite alternate;
+    animation: poolGlow 4s ease-in-out infinite alternate;
   }
-  @keyframes poolGlowPulse {
-    from { opacity: 0.6; }
-    to   { opacity: 1; }
-  }
-
-  .pool-bubble {
-    position: absolute;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.18);
-    backdrop-filter: blur(2px);
-    border: 1px solid rgba(255,255,255,0.4);
-    animation: poolRise linear infinite;
-  }
-  .pool-bubble:nth-child(1)  { width:14px; height:14px; left:8%;  bottom:-20px; animation-duration:5.5s; animation-delay:0s;   }
-  .pool-bubble:nth-child(2)  { width:8px;  height:8px;  left:15%; bottom:-20px; animation-duration:4.2s; animation-delay:1.1s; }
-  .pool-bubble:nth-child(3)  { width:20px; height:20px; left:23%; bottom:-20px; animation-duration:6.8s; animation-delay:0.5s; }
-  .pool-bubble:nth-child(4)  { width:6px;  height:6px;  left:30%; bottom:-20px; animation-duration:3.9s; animation-delay:2s;   }
-  .pool-bubble:nth-child(5)  { width:16px; height:16px; left:38%; bottom:-20px; animation-duration:5.1s; animation-delay:0.8s; }
-  .pool-bubble:nth-child(6)  { width:10px; height:10px; left:48%; bottom:-20px; animation-duration:4.7s; animation-delay:1.6s; }
-  .pool-bubble:nth-child(7)  { width:12px; height:12px; left:57%; bottom:-20px; animation-duration:6.2s; animation-delay:0.3s; }
-  .pool-bubble:nth-child(8)  { width:7px;  height:7px;  left:65%; bottom:-20px; animation-duration:3.5s; animation-delay:2.4s; }
-  .pool-bubble:nth-child(9)  { width:18px; height:18px; left:72%; bottom:-20px; animation-duration:5.8s; animation-delay:1s;   }
-  .pool-bubble:nth-child(10) { width:9px;  height:9px;  left:80%; bottom:-20px; animation-duration:4.4s; animation-delay:1.8s; }
-  @keyframes poolRise {
-    0%   { transform: translateY(0) translateX(0) scale(1);    opacity:0; }
-    10%  { opacity: 0.8; }
-    50%  { transform: translateY(-140px) translateX(12px) scale(1.05); }
-    90%  { opacity: 0.4; }
-    100% { transform: translateY(-280px) translateX(-8px) scale(0.85); opacity:0; }
-  }
-
-  .pool-waves {
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 55px;
-    overflow: hidden;
-  }
-  .pool-wave {
-    position: absolute;
-    bottom: 0;
-    width: 200%;
-    height: 55px;
-  }
-  .pool-wave svg { width: 100%; height: 100%; }
-  .pool-wave-1 { animation: poolWaveMove 6s linear infinite; opacity: 0.3; }
-  .pool-wave-2 { animation: poolWaveMove 9s linear infinite reverse; opacity: 0.2; bottom: 4px; }
-  @keyframes poolWaveMove {
-    0%   { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
+  @keyframes poolGlow { from{opacity:0.6} to{opacity:1} }
 
   .pool-shimmer {
-    position: absolute;
-    inset: 0;
+    position: absolute; inset: 0;
     background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.22) 50%, transparent 70%);
     background-size: 200% 100%;
     animation: poolShimmer 3s linear infinite;
   }
-  @keyframes poolShimmer {
-    0%   { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
+  @keyframes poolShimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+  /* ── Bubbles ── */
+  .pool-bubble {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.4);
+    animation: poolRise linear infinite;
+  }
+  .pool-bubble:nth-child(1) {width:12px;height:12px;left:6%;  bottom:-20px;animation-duration:5.5s;animation-delay:0s}
+  .pool-bubble:nth-child(2) {width:7px; height:7px; left:14%; bottom:-20px;animation-duration:4.2s;animation-delay:1.1s}
+  .pool-bubble:nth-child(3) {width:16px;height:16px;left:23%; bottom:-20px;animation-duration:6.8s;animation-delay:0.5s}
+  .pool-bubble:nth-child(4) {width:5px; height:5px; left:32%; bottom:-20px;animation-duration:3.9s;animation-delay:2s}
+  .pool-bubble:nth-child(5) {width:13px;height:13px;left:42%; bottom:-20px;animation-duration:5.1s;animation-delay:0.8s}
+  .pool-bubble:nth-child(6) {width:8px; height:8px; left:55%; bottom:-20px;animation-duration:4.7s;animation-delay:1.6s}
+  .pool-bubble:nth-child(7) {width:10px;height:10px;left:68%; bottom:-20px;animation-duration:6.2s;animation-delay:0.3s}
+  .pool-bubble:nth-child(8) {width:6px; height:6px; left:80%; bottom:-20px;animation-duration:3.5s;animation-delay:2.4s}
+  @keyframes poolRise {
+    0%  {transform:translateY(0) translateX(0) scale(1); opacity:0}
+    10% {opacity:0.8}
+    50% {transform:translateY(-120px) translateX(10px) scale(1.05)}
+    90% {opacity:0.3}
+    100%{transform:translateY(-240px) translateX(-8px) scale(0.8); opacity:0}
   }
 
-  .pool-content {
-    position: absolute;
-    inset: 0;
+  /* ── Waves ── */
+  .pool-waves {
+    position:absolute; bottom:0; left:0; right:0; height:44px; overflow:hidden;
+  }
+  .pool-wave { position:absolute; bottom:0; width:200%; height:44px; }
+  .pool-wave svg { width:100%; height:100%; }
+  .pool-wave-1 { animation:poolWave 6s linear infinite; opacity:0.3; }
+  .pool-wave-2 { animation:poolWave 9s linear infinite reverse; opacity:0.2; bottom:3px; }
+  @keyframes poolWave { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+  /* ── Corner deco ── */
+  .pool-corner {
+    position:absolute; top:-25px; left:-25px;
+    width:100px; height:100px; border-radius:50%;
+    border:2px solid rgba(0,150,200,0.2);
+    animation:poolCorner 15s linear infinite;
+  }
+  .pool-corner::after {
+    content:''; position:absolute; top:10px; left:10px; right:10px; bottom:10px;
+    border-radius:50%; border:1px dashed rgba(0,150,200,0.25);
+  }
+  @keyframes poolCorner { to{transform:rotate(360deg)} }
+
+  /* ── Main layout ── */
+  .pool-inner {
+    position: relative;
+    z-index: 10;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 40px 0 30px;
-    z-index: 10;
+    padding: 28px 32px;
+    gap: 16px;
+    min-height: 200px;
   }
 
-  .pool-text-side {
+  /* ── Text ── */
+  .pool-text {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    max-width: 270px;
-    animation: poolTextIn 0.9s cubic-bezier(0.22,1,0.36,1) both;
-  }
-  @keyframes poolTextIn {
-    from { opacity:0; transform: translateX(40px); }
-    to   { opacity:1; transform: translateX(0); }
+    flex: 1;
+    min-width: 0;
   }
 
-  .pool-tag-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
+  .pool-badge {
+    display: inline-flex; align-items: center; gap: 6px;
     background: rgba(0,120,200,0.15);
     border: 1px solid rgba(0,120,200,0.3);
-    border-radius: 50px;
-    padding: 4px 14px;
-    width: fit-content;
-    animation: poolBadgePop 0.6s 0.3s cubic-bezier(0.34,1.56,0.64,1) both;
+    border-radius: 50px; padding: 4px 14px; width: fit-content;
+    animation: poolPop 0.6s 0.2s cubic-bezier(0.34,1.56,0.64,1) both;
   }
-  @keyframes poolBadgePop {
-    from { opacity:0; transform:scale(0.5); }
-    to   { opacity:1; transform:scale(1); }
+  @keyframes poolPop { from{opacity:0;transform:scale(0.5)} to{opacity:1;transform:scale(1)} }
+  .pool-badge span { font-size: clamp(10px,1.5vw,12px); color:#0077b6; font-weight:700; }
+  .pool-dot {
+    width:7px; height:7px; border-radius:50%; background:#0096c7; flex-shrink:0;
+    animation:poolDot 1.5s ease-in-out infinite;
   }
-  .pool-tag-badge span { font-size:11px; color:#0077b6; font-weight:700; letter-spacing:0.5px; }
-  .pool-tag-dot { width:7px; height:7px; border-radius:50%; background:#0096c7; animation: poolDotPulse 1.5s ease-in-out infinite; }
-  @keyframes poolDotPulse {
-    0%,100% { transform:scale(1); opacity:1; }
-    50%     { transform:scale(1.4); opacity:0.7; }
-  }
+  @keyframes poolDot { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.4);opacity:0.7} }
 
-  .pool-title-main {
-    font-size: 30px;
+  .pool-title {
+    font-size: clamp(20px, 4vw, 30px);
     font-weight: 900;
     color: #023e8a;
-    line-height: 1.35;
+    line-height: 1.3;
     text-shadow: 0 2px 8px rgba(0,80,180,0.12);
-    animation: poolTextIn 0.9s 0.15s cubic-bezier(0.22,1,0.36,1) both;
   }
-  .pool-title-main span {
+  .pool-title span {
     color: #0096c7;
-    display: inline-block;
-    animation: poolColorShift 3s ease-in-out infinite alternate;
+    animation: poolColor 3s ease-in-out infinite alternate;
   }
-  @keyframes poolColorShift {
-    from { color: #0096c7; }
-    to   { color: #023e8a; }
+  @keyframes poolColor { from{color:#0096c7} to{color:#023e8a} }
+
+  .pool-sub {
+    font-size: clamp(11px, 1.8vw, 14px);
+    color: #0077b6; font-weight:500; opacity:0.85;
   }
 
-  .pool-subtitle {
-    font-size: 14px;
-    color: #0077b6;
-    font-weight: 500;
-    opacity: 0.85;
-    animation: poolTextIn 0.9s 0.25s cubic-bezier(0.22,1,0.36,1) both;
-  }
-
-  .pool-btn-buy {
+  .pool-btn {
     text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
+    display: inline-flex; align-items: center; gap: 8px;
     background: linear-gradient(135deg, #0096c7, #0077b6);
-    color: #fff;
-    border: none;
-    border-radius: 50px;
-    padding: 10px 26px;
-    font-size: 15px;
-    font-weight: 700;
+    color: #fff; border-radius: 50px;
+    padding: clamp(8px,1.5vw,10px) clamp(16px,3vw,26px);
+    font-size: clamp(12px,1.8vw,15px); font-weight:700;
     font-family: 'Vazirmatn', Tahoma, sans-serif;
-    cursor: pointer;
-    width: fit-content;
-    box-shadow: 0 6px 20px rgba(0,120,200,0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+    cursor: pointer; width: fit-content;
+    box-shadow: 0 6px 20px rgba(0,120,200,0.4);
     transition: all 0.25s ease;
-    position: relative;
-    overflow: hidden;
-    animation: poolTextIn 0.9s 0.35s cubic-bezier(0.22,1,0.36,1) both;
+    position: relative; overflow: hidden;
   }
-  .pool-btn-buy::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
-    opacity: 0;
-    transition: opacity 0.25s;
+  .pool-btn::before {
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(135deg,rgba(255,255,255,0.2),transparent);
+    opacity:0; transition:opacity 0.25s;
   }
-  .pool-btn-buy:hover { transform: translateY(-3px) scale(1.04); box-shadow: 0 12px 30px rgba(0,120,200,0.5); }
-  .pool-btn-buy:hover::before { opacity: 1; }
+  .pool-btn:hover { transform:translateY(-3px) scale(1.04); }
+  .pool-btn:hover::before { opacity:1; }
   .pool-btn-arrow {
-    width: 22px; height: 22px;
-    background: rgba(255,255,255,0.25);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 13px;
-    animation: poolArrowBounce 1.5s ease-in-out infinite;
+    width:20px; height:20px; background:rgba(255,255,255,0.25);
+    border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-size:12px; flex-shrink:0;
+    animation:poolArrow 1.5s ease-in-out infinite;
   }
-  @keyframes poolArrowBounce {
-    0%,100% { transform: translateX(0); }
-    50%     { transform: translateX(-4px); }
-  }
+  @keyframes poolArrow { 0%,100%{transform:translateX(0)} 50%{transform:translateX(-4px)} }
 
-  .pool-image-side {
+  /* ── Image side ── */
+  .pool-img-side {
     position: relative;
-    width: 360px;
-    height: 220px;
+    width: 300px;
+    height: 180px;
     flex-shrink: 0;
   }
-
   .pool-glow-ring {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 220px; height: 220px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(0,180,255,0.2) 0%, transparent 70%);
-    animation: poolRingPulse 3s ease-in-out infinite;
+    position:absolute; top:50%; left:50%;
+    transform:translate(-50%,-50%);
+    width:180px; height:180px; border-radius:50%;
+    background:radial-gradient(circle,rgba(0,180,255,0.2) 0%,transparent 70%);
+    animation:poolRing 3s ease-in-out infinite;
   }
-  @keyframes poolRingPulse {
-    0%,100% { transform: translate(-50%,-50%) scale(1);    opacity:0.6; }
-    50%     { transform: translate(-50%,-50%) scale(1.15); opacity:1; }
+  @keyframes poolRing {
+    0%,100%{transform:translate(-50%,-50%) scale(1); opacity:0.6}
+    50%{transform:translate(-50%,-50%) scale(1.15); opacity:1}
   }
-
-  .pool-product-img {
-    position: absolute;
-    animation: poolFloat 3.5s ease-in-out infinite;
-    filter: drop-shadow(0 15px 30px rgba(0,100,200,0.3));
-    transform-origin: center bottom;
-    width: 300px; height: 200px;
-    top: 10px; left: 30px;
+  .pool-product {
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    animation:poolFloat 3.5s ease-in-out infinite;
+    filter:drop-shadow(0 12px 24px rgba(0,100,200,0.3));
   }
-  .pool-product-img img {
-    width: 100%; height: 100%;
-    object-fit: contain;
-  }
+  .pool-product img { width:100%; height:100%; object-fit:contain; }
   @keyframes poolFloat {
-    0%,100% { transform: translateY(0) rotate(-1deg); }
-    50%     { transform: translateY(-14px) rotate(1deg); }
+    0%,100%{transform:translateY(0) rotate(-1deg)}
+    50%{transform:translateY(-12px) rotate(1deg)}
   }
-
   .pool-sparkle {
-    position: absolute;
-    background: rgba(255,255,255,0.9);
-    border-radius: 50%;
-    animation: poolSparkle ease-in-out infinite;
-    box-shadow: 0 0 6px 2px rgba(100,200,255,0.7);
+    position:absolute; background:rgba(255,255,255,0.9); border-radius:50%;
+    box-shadow:0 0 6px 2px rgba(100,200,255,0.7);
+    animation:poolSpark ease-in-out infinite;
   }
-  .pool-sparkle:nth-child(1) { width:6px;  height:6px;  top:20%; left:15%; animation-duration:2.1s; animation-delay:0s;   }
-  .pool-sparkle:nth-child(2) { width:10px; height:10px; top:70%; left:75%; animation-duration:2.8s; animation-delay:0.6s; }
-  .pool-sparkle:nth-child(3) { width:5px;  height:5px;  top:40%; left:88%; animation-duration:1.9s; animation-delay:1.2s; }
-  .pool-sparkle:nth-child(4) { width:7px;  height:7px;  top:80%; left:10%; animation-duration:2.5s; animation-delay:0.4s; }
-  @keyframes poolSparkle {
-    0%,100% { transform:scale(0) rotate(0deg);    opacity:0; }
-    40%     { transform:scale(1) rotate(45deg);   opacity:1; }
-    70%     { transform:scale(0.6) rotate(90deg); opacity:0.6; }
+  .pool-sparkle:nth-child(1){width:6px;height:6px;top:15%;left:10%;animation-duration:2.1s;animation-delay:0s}
+  .pool-sparkle:nth-child(2){width:9px;height:9px;top:65%;left:80%;animation-duration:2.8s;animation-delay:0.6s}
+  .pool-sparkle:nth-child(3){width:5px;height:5px;top:35%;left:90%;animation-duration:1.9s;animation-delay:1.2s}
+  .pool-sparkle:nth-child(4){width:7px;height:7px;top:80%;left:5%; animation-duration:2.5s;animation-delay:0.4s}
+  @keyframes poolSpark {
+    0%,100%{transform:scale(0) rotate(0deg); opacity:0}
+    40%{transform:scale(1) rotate(45deg); opacity:1}
+    70%{transform:scale(0.6) rotate(90deg); opacity:0.6}
   }
 
-  .pool-corner-deco {
-    position: absolute;
-    top: -30px; left: -30px;
-    width: 120px; height: 120px;
-    border-radius: 50%;
-    border: 2px solid rgba(0,150,200,0.2);
-    animation: poolCornerSpin 15s linear infinite;
+  /* ══════════════════════════════
+     RESPONSIVE — tablet (≤ 580px)
+  ══════════════════════════════ */
+  @media (max-width: 580px) {
+    .pool-inner {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 22px 20px 16px;
+      min-height: unset;
+    }
+    .pool-img-side {
+      width: 100%;
+      height: 140px;
+      order: -1;
+    }
+    .pool-glow-ring { width:130px; height:130px; }
+    .pool-text { gap: 8px; }
+    .pool-banner { border-radius: 14px; }
   }
-  .pool-corner-deco::after {
-    content:'';
-    position:absolute;
-    top:10px; left:10px; right:10px; bottom:10px;
-    border-radius:50%;
-    border: 1px dashed rgba(0,150,200,0.25);
+
+  /* ══════════════════════════════
+     RESPONSIVE — mobile (≤ 400px)
+  ══════════════════════════════ */
+  @media (max-width: 400px) {
+    .pool-inner { padding: 18px 16px 14px; }
+    .pool-img-side { height: 110px; }
+    .pool-title { font-size: 19px; }
   }
-  @keyframes poolCornerSpin { to { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
 
-<div class="pool-banner-wrap">
+<div class="pool-wrap">
   <div class="pool-banner">
 
     <div class="pool-bubble"></div>
@@ -302,51 +260,50 @@
     <div class="pool-bubble"></div>
     <div class="pool-bubble"></div>
     <div class="pool-bubble"></div>
-    <div class="pool-bubble"></div>
-    <div class="pool-bubble"></div>
 
-    <div class="pool-bg-glow"></div>
+    <div class="pool-glow"></div>
     <div class="pool-shimmer"></div>
+    <div class="pool-corner"></div>
 
     <div class="pool-waves">
       <div class="pool-wave pool-wave-1">
-        <svg viewBox="0 0 1200 55" preserveAspectRatio="none">
-          <path d="M0,30 C200,5 400,55 600,30 C800,5 1000,55 1200,30 L1200,55 L0,55 Z" fill="rgba(0,120,200,0.12)"/>
+        <svg viewBox="0 0 1200 44" preserveAspectRatio="none">
+          <path d="M0,24 C200,4 400,44 600,24 C800,4 1000,44 1200,24 L1200,44 L0,44 Z" fill="rgba(0,120,200,0.12)"/>
         </svg>
       </div>
       <div class="pool-wave pool-wave-2">
-        <svg viewBox="0 0 1200 55" preserveAspectRatio="none">
-          <path d="M0,40 C300,10 600,55 900,25 C1050,10 1150,40 1200,30 L1200,55 L0,55 Z" fill="rgba(0,150,220,0.1)"/>
+        <svg viewBox="0 0 1200 44" preserveAspectRatio="none">
+          <path d="M0,32 C300,8 600,44 900,20 C1050,8 1150,32 1200,24 L1200,44 L0,44 Z" fill="rgba(0,150,220,0.1)"/>
         </svg>
       </div>
     </div>
 
-    <div class="pool-corner-deco"></div>
-
-    <div class="pool-content">
-      <div class="pool-text-side">
-        <div class="pool-tag-badge">
-          <div class="pool-tag-dot"></div>
+    <div class="pool-inner">
+      <!-- Text -->
+      <div class="pool-text">
+        <div class="pool-badge">
+          <div class="pool-dot"></div>
           <span>تجهیزات تخصصی</span>
         </div>
-        <h2 class="pool-title-main">
+        <h2 class="pool-title">
           <span>صفر تا صد</span><br>
           تجهیزات استخری
         </h2>
-        <p class="pool-subtitle">کامل‌ترین مجموعه محصولات استخر</p>
-        <a href="https://shofazh.com/product-category/pool/" class="pool-btn-buy">
+        <p class="pool-sub">کامل‌ترین مجموعه محصولات استخر</p>
+        <a href="https://shofazh.com/product-category/pool/" class="pool-btn">
           <div class="pool-btn-arrow">←</div>
           خرید کنید
         </a>
       </div>
 
-      <div class="pool-image-side">
+      <!-- Image -->
+      <div class="pool-img-side">
         <div class="pool-glow-ring"></div>
         <div class="pool-sparkle"></div>
         <div class="pool-sparkle"></div>
         <div class="pool-sparkle"></div>
         <div class="pool-sparkle"></div>
-        <div class="pool-product-img">
+        <div class="pool-product">
           <img src="https://shofazh.com/wp-content/uploads/pool-equipment.png"
                onerror="this.onerror=null; this.parentElement.innerHTML=poolSVG()"
                alt="تجهیزات استخری">
@@ -359,22 +316,19 @@
 
 <script>
 function poolSVG() {
-  return `<svg width="300" height="200" viewBox="0 0 300 200" fill="none">
-    <ellipse cx="80" cy="140" rx="45" ry="28" fill="#4a9abe" opacity="0.9"/>
-    <rect x="50" y="115" width="60" height="30" rx="8" fill="#2980b9"/>
-    <circle cx="80" cy="130" r="14" fill="#1a6fa8" stroke="#5dade2" stroke-width="2"/>
-    <circle cx="80" cy="130" r="6" fill="#5dade2"/>
-    <rect x="115" y="125" width="35" height="10" rx="5" fill="#85c1e9"/>
-    <ellipse cx="190" cy="100" rx="32" ry="40" fill="#2e86ab" opacity="0.85"/>
-    <rect x="160" y="65" width="60" height="70" rx="15" fill="#1a6fa8"/>
-    <ellipse cx="190" cy="65" rx="30" ry="10" fill="#2e86ab"/>
-    <ellipse cx="190" cy="135" rx="30" ry="10" fill="#1e5f85"/>
-    <circle cx="260" cy="70" r="25" fill="none" stroke="#e74c3c" stroke-width="8"/>
-    <circle cx="260" cy="70" r="25" fill="none" stroke="white" stroke-width="8" stroke-dasharray="30 20"/>
-    <circle cx="130" cy="40" r="5" fill="#5dade2" opacity="0.7"/>
-    <circle cx="150" cy="25" r="3" fill="#85c1e9" opacity="0.5"/>
-    <circle cx="110" cy="55" r="4" fill="#5dade2" opacity="0.6"/>
-    <ellipse cx="175" cy="80" rx="10" ry="15" fill="rgba(255,255,255,0.15)" transform="rotate(-20 175 80)"/>
+  return `<svg width="260" height="160" viewBox="0 0 300 180" fill="none">
+    <ellipse cx="80" cy="130" rx="42" ry="26" fill="#4a9abe" opacity="0.9"/>
+    <rect x="52" y="108" width="56" height="28" rx="8" fill="#2980b9"/>
+    <circle cx="80" cy="122" r="13" fill="#1a6fa8" stroke="#5dade2" stroke-width="2"/>
+    <circle cx="80" cy="122" r="5" fill="#5dade2"/>
+    <rect x="112" y="116" width="32" height="9" rx="4" fill="#85c1e9"/>
+    <rect x="160" y="58" width="56" height="66" rx="14" fill="#1a6fa8"/>
+    <ellipse cx="188" cy="58" rx="28" ry="9" fill="#2e86ab"/>
+    <ellipse cx="188" cy="124" rx="28" ry="9" fill="#1e5f85"/>
+    <circle cx="258" cy="62" r="22" fill="none" stroke="#e74c3c" stroke-width="7"/>
+    <circle cx="258" cy="62" r="22" fill="none" stroke="white" stroke-width="7" stroke-dasharray="28 18"/>
+    <circle cx="128" cy="36" r="4" fill="#5dade2" opacity="0.7"/>
+    <circle cx="148" cy="22" r="3" fill="#85c1e9" opacity="0.5"/>
   </svg>`;
 }
 </script>
