@@ -94,7 +94,7 @@
     flex-direction: column;
     justify-content: center;
     gap: 10px;
-    padding: 24px 0 24px 30px;
+    padding: 24px 28px 24px 20px;
     animation: bbSlideRight 0.8s cubic-bezier(0.22,1,0.36,1) both;
   }
   @keyframes bbSlideRight {
@@ -219,9 +219,8 @@
     flex-shrink: 0;
     position: relative;
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     justify-content: center;
-    padding-bottom: 0;
     overflow: visible;
   }
 
@@ -270,10 +269,10 @@
   /* the product image */
   .bb-product {
     position: relative; z-index: 3;
-    width: 195px;
-    height: 260px;
+    width: 190px;
+    height: 230px;
     object-fit: contain;
-    object-position: bottom center;
+    object-position: center center;
     animation: bbFloat 3.8s ease-in-out infinite;
     filter:
       drop-shadow(-10px 20px 28px rgba(60,10,0,0.55))
