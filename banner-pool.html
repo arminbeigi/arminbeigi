@@ -20,7 +20,7 @@
   .pool-banner {
     position: relative;
     width: 100%;
-    min-height: 200px;
+    height: 260px;
     background: linear-gradient(135deg, #daeef8 0%, #c8e8f5 40%, #b8dff0 70%, #cce9f7 100%);
     border-radius: 18px;
     overflow: hidden;
@@ -101,7 +101,7 @@
     justify-content: space-between;
     padding: 28px 32px;
     gap: 16px;
-    min-height: 200px;
+    height: 100%;
   }
 
   /* ── Text ── */
@@ -221,20 +221,16 @@
      RESPONSIVE — tablet (≤ 580px)
   ══════════════════════════════ */
   @media (max-width: 580px) {
+    .pool-banner { height: auto; border-radius: 14px; }
     .pool-inner {
       flex-direction: column;
       align-items: flex-start;
-      padding: 22px 20px 16px;
-      min-height: unset;
+      padding: 20px 20px 16px;
+      height: auto;
     }
-    .pool-img-side {
-      width: 100%;
-      height: 140px;
-      order: -1;
-    }
-    .pool-glow-ring { width:130px; height:130px; }
+    .pool-img-side { width: 100%; height: 130px; order: -1; }
+    .pool-glow-ring { width: 120px; height: 120px; }
     .pool-text { gap: 8px; }
-    .pool-banner { border-radius: 14px; }
   }
 
   /* ══════════════════════════════

@@ -20,7 +20,7 @@
   .bb {
     position: relative;
     width: 100%;
-    min-height: 200px;
+    height: 260px;
     border-radius: 18px;
     overflow: hidden;
     cursor: pointer;
@@ -87,7 +87,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 0;
-    min-height: 200px;
+    height: 100%;
   }
 
   /* ── Text side ── */
@@ -258,19 +258,11 @@
      RESPONSIVE — tablet (≤ 580px)
   ══════════════════════════════ */
   @media (max-width: 580px) {
-    .bb-inner {
-      flex-direction: column;
-      align-items: stretch;
-    }
-    .bb-img-side {
-      width: 100%;
-      height: 160px;
-      order: -1;
-    }
-    .bb-divider { display: none; }
+    .bb { height: auto; border-radius: 14px; }
+    .bb-inner { flex-direction: column; align-items: stretch; height: auto; }
+    .bb-img-side { width: 100%; height: 130px; order: -1; }
     .bb-text { padding: 16px 20px 20px; }
     .bb-bottom { gap: 10px; }
-    .bb { border-radius: 14px; }
   }
 
   /* ══════════════════════════════
