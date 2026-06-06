@@ -1,421 +1,123 @@
-<!-- ============================================== -->
-<!--   بخش معرفی «طرح سبز شوفاژکار» - shofazh.com   -->
-<!--   قابل درج مستقیم در صفحه اصلی سایت             -->
-<!-- ============================================== -->
-<section class="tarh-sabz-section" dir="rtl" lang="fa">
+<!-- بخش کوتاه معرفی طرح سبز شوفاژکار -->
+<section class="ts-mini" dir="rtl" lang="fa">
   <style>
-    .tarh-sabz-section{
-      --green-1:#0f5132;
-      --green-2:#198754;
-      --green-3:#20c997;
-      --leaf:#a7f3d0;
-      --gold:#ffd166;
-      --ink:#0b2e20;
-      --paper:#f0fdf4;
+    .ts-mini{
       position:relative;
-      padding:80px 20px;
-      font-family:"IRANSans","Vazirmatn","Vazir","Tahoma",sans-serif;
-      color:var(--ink);
-      background:
-        radial-gradient(1200px 600px at 90% -10%, #d1fae5 0%, transparent 60%),
-        radial-gradient(900px 500px at -10% 110%, #bbf7d0 0%, transparent 55%),
-        linear-gradient(180deg,#ffffff 0%, #f0fdf4 100%);
-      overflow:hidden;
-      isolation:isolate;
+      margin:30px auto;max-width:1100px;
+      padding:28px 32px;
+      border-radius:22px;
+      background:linear-gradient(120deg,#0f5132 0%,#198754 55%,#20c997 100%);
+      color:#fff;overflow:hidden;
+      font-family:"IRANSans","Vazirmatn","Tahoma",sans-serif;
+      box-shadow:0 14px 40px rgba(15,81,50,.25);
+      display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;
     }
-    .tarh-sabz-section *{box-sizing:border-box}
+    .ts-mini::before,.ts-mini::after{
+      content:"";position:absolute;border-radius:50%;pointer-events:none;
+    }
+    .ts-mini::before{
+      width:260px;height:260px;background:radial-gradient(circle,#a7f3d0 0%,transparent 70%);
+      top:-120px;left:-80px;opacity:.35;animation:tsBlob 8s ease-in-out infinite;
+    }
+    .ts-mini::after{
+      width:200px;height:200px;background:radial-gradient(circle,#7CFFB2 0%,transparent 70%);
+      bottom:-100px;right:-60px;opacity:.3;animation:tsBlob 10s ease-in-out infinite reverse;
+    }
+    @keyframes tsBlob{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
 
-    /* برگ‌های شناور پس‌زمینه */
-    .ts-leaf{
-      position:absolute;
-      width:60px;height:60px;
-      opacity:.18;
-      animation: tsFloat 18s ease-in-out infinite;
-      z-index:0;
+    .ts-mini .ts-leaf{
+      position:absolute;width:34px;height:34px;opacity:.25;
+      animation:tsFloat 6s ease-in-out infinite;
     }
-    .ts-leaf.l1{top:8%;left:5%;animation-delay:0s}
-    .ts-leaf.l2{top:20%;right:8%;width:90px;height:90px;animation-delay:-4s}
-    .ts-leaf.l3{bottom:12%;left:12%;width:70px;height:70px;animation-delay:-8s}
-    .ts-leaf.l4{bottom:18%;right:15%;width:50px;height:50px;animation-delay:-12s}
+    .ts-mini .ts-leaf.a{top:14px;right:40%;animation-delay:-1s}
+    .ts-mini .ts-leaf.b{bottom:14px;left:38%;animation-delay:-3s}
     @keyframes tsFloat{
-      0%,100%{transform:translateY(0) rotate(0deg)}
-      50%{transform:translateY(-30px) rotate(15deg)}
+      0%,100%{transform:translateY(0) rotate(0)}
+      50%{transform:translateY(-10px) rotate(20deg)}
     }
 
-    .ts-container{max-width:1200px;margin:0 auto;position:relative;z-index:1}
+    .ts-mini .ts-body{position:relative;z-index:1}
+    .ts-mini .ts-tag{
+      display:inline-flex;align-items:center;gap:6px;
+      background:rgba(255,255,255,.18);backdrop-filter:blur(6px);
+      padding:5px 12px;border-radius:999px;font-size:12px;font-weight:700;
+      border:1px solid rgba(255,255,255,.3);
+    }
+    .ts-mini h3{
+      margin:10px 0 8px;font-size:clamp(20px,2.4vw,26px);font-weight:900;
+    }
+    .ts-mini p{margin:0 0 14px;font-size:14px;line-height:1.9;opacity:.95;max-width:640px}
+    .ts-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+    .ts-chip{
+      display:inline-flex;align-items:center;gap:6px;
+      background:rgba(255,255,255,.14);
+      padding:6px 12px;border-radius:999px;font-size:12.5px;font-weight:700;
+      border:1px solid rgba(255,255,255,.22);
+      transition:transform .25s ease,background .25s ease;
+    }
+    .ts-chip:hover{transform:translateY(-2px);background:rgba(255,255,255,.25)}
+    .ts-chip svg{width:14px;height:14px}
 
-    /* هدر */
-    .ts-header{text-align:center;margin-bottom:60px}
-    .ts-badge{
+    .ts-mini .ts-btn{
       display:inline-flex;align-items:center;gap:8px;
-      padding:8px 18px;border-radius:999px;
-      background:linear-gradient(90deg,var(--green-2),var(--green-3));
-      color:#fff;font-weight:700;font-size:14px;
-      box-shadow:0 8px 24px rgba(25,135,84,.35);
-      animation: tsPulse 2.5s ease-in-out infinite;
+      background:#fff;color:#0f5132;font-weight:800;font-size:14px;
+      padding:11px 22px;border-radius:999px;text-decoration:none;
+      box-shadow:0 8px 20px rgba(0,0,0,.18);
+      transition:transform .25s ease,box-shadow .25s ease;
     }
-    @keyframes tsPulse{
-      0%,100%{transform:scale(1);box-shadow:0 8px 24px rgba(25,135,84,.35)}
-      50%{transform:scale(1.04);box-shadow:0 10px 30px rgba(25,135,84,.55)}
-    }
-    .ts-title{
-      font-size:clamp(28px,4vw,46px);
-      font-weight:900;margin:18px 0 12px;
-      background:linear-gradient(90deg,var(--green-1),var(--green-3));
-      -webkit-background-clip:text;background-clip:text;color:transparent;
-    }
-    .ts-sub{font-size:clamp(15px,1.6vw,18px);color:#3f6e57;max-width:760px;margin:0 auto;line-height:1.9}
+    .ts-mini .ts-btn:hover{transform:translateY(-3px) scale(1.04);box-shadow:0 14px 28px rgba(0,0,0,.28)}
+    .ts-mini .ts-btn svg{transition:transform .25s ease}
+    .ts-mini .ts-btn:hover svg{transform:translateX(-3px)}
 
-    /* کارت اصلی هیرو */
-    .ts-hero{
-      display:grid;grid-template-columns:1.1fr .9fr;gap:36px;
-      background:rgba(255,255,255,.7);backdrop-filter:blur(10px);
-      border:1px solid rgba(25,135,84,.15);
-      border-radius:28px;padding:40px;
-      box-shadow:0 20px 60px rgba(15,81,50,.12);
-      margin-bottom:50px;
-    }
-    @media(max-width:860px){.ts-hero{grid-template-columns:1fr;padding:28px}}
+    /* آیکون دیگ + شعله */
+    .ts-art{position:relative;z-index:1;width:140px;height:140px;flex-shrink:0}
+    .ts-art .flame{transform-origin:center bottom;animation:tsFlame 1s ease-in-out infinite alternate}
+    @keyframes tsFlame{0%{transform:scaleY(1) scaleX(1)}100%{transform:scaleY(1.18) scaleX(.9)}}
 
-    .ts-hero h3{font-size:24px;margin:0 0 14px;color:var(--green-1);font-weight:800}
-    .ts-hero p{font-size:16px;line-height:2;color:#244c3a;margin:0 0 14px}
-
-    /* انیمیشن دیگ + شعله */
-    .ts-illu{
-      position:relative;display:flex;align-items:center;justify-content:center;
-      min-height:280px;
+    @media(max-width:720px){
+      .ts-mini{grid-template-columns:1fr;text-align:center;padding:24px}
+      .ts-mini p{margin-inline:auto}
+      .ts-chips{justify-content:center}
+      .ts-art{margin:0 auto}
     }
-    .ts-boiler{width:100%;max-width:340px;height:auto;filter:drop-shadow(0 18px 30px rgba(15,81,50,.25))}
-    .ts-flame{transform-origin:center bottom;animation: tsFlame 1.2s ease-in-out infinite alternate}
-    @keyframes tsFlame{
-      0%{transform:scaleY(1) scaleX(1)}
-      100%{transform:scaleY(1.15) scaleX(.92)}
-    }
-    .ts-steam{animation: tsSteam 3s ease-in-out infinite;opacity:.7}
-    @keyframes tsSteam{
-      0%{transform:translateY(0);opacity:.7}
-      100%{transform:translateY(-30px);opacity:0}
-    }
-
-    /* اعداد متحرک */
-    .ts-stats{
-      display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:50px 0;
-    }
-    @media(max-width:760px){.ts-stats{grid-template-columns:repeat(2,1fr)}}
-    .ts-stat{
-      position:relative;padding:26px 18px;border-radius:20px;text-align:center;
-      background:linear-gradient(160deg,#ffffff,#ecfdf5);
-      border:1px solid rgba(25,135,84,.18);
-      transition:transform .4s ease, box-shadow .4s ease;
-      overflow:hidden;
-    }
-    .ts-stat::before{
-      content:"";position:absolute;inset:auto -30% -60% auto;
-      width:160px;height:160px;border-radius:50%;
-      background:radial-gradient(circle,var(--leaf),transparent 70%);
-      opacity:.6;
-    }
-    .ts-stat:hover{transform:translateY(-6px) rotate(-1deg);box-shadow:0 16px 40px rgba(25,135,84,.22)}
-    .ts-num{
-      font-size:42px;font-weight:900;
-      background:linear-gradient(90deg,var(--green-1),var(--green-3));
-      -webkit-background-clip:text;background-clip:text;color:transparent;
-      display:block;line-height:1.1;
-    }
-    .ts-num .unit{font-size:20px;margin-inline-start:4px}
-    .ts-stat-label{font-size:14px;color:#3f6e57;margin-top:6px;font-weight:700}
-
-    /* مزایا */
-    .ts-features-title{text-align:center;font-size:28px;font-weight:800;color:var(--green-1);margin:20px 0 30px}
-    .ts-features{
-      display:grid;grid-template-columns:repeat(3,1fr);gap:20px;
-    }
-    @media(max-width:900px){.ts-features{grid-template-columns:repeat(2,1fr)}}
-    @media(max-width:560px){.ts-features{grid-template-columns:1fr}}
-
-    .ts-card{
-      position:relative;padding:28px 22px;border-radius:22px;
-      background:#fff;border:1px solid rgba(25,135,84,.12);
-      transition:all .45s cubic-bezier(.2,.7,.2,1);
-      transform-style:preserve-3d;
-      opacity:0;transform:translateY(30px);
-    }
-    .ts-card.is-in{opacity:1;transform:translateY(0)}
-    .ts-card:hover{
-      transform:translateY(-8px) rotateX(4deg) rotateY(-3deg);
-      box-shadow:0 26px 60px rgba(15,81,50,.18);
-      border-color:var(--green-3);
-    }
-    .ts-icon{
-      width:58px;height:58px;border-radius:16px;
-      display:flex;align-items:center;justify-content:center;
-      background:linear-gradient(135deg,var(--green-2),var(--green-3));
-      color:#fff;margin-bottom:14px;
-      box-shadow:0 10px 24px rgba(25,135,84,.35);
-    }
-    .ts-card h4{font-size:17px;margin:0 0 8px;color:var(--green-1);font-weight:800}
-    .ts-card p{font-size:14px;line-height:1.9;color:#406854;margin:0}
-
-    /* CTA */
-    .ts-cta{
-      margin-top:50px;text-align:center;padding:40px 24px;
-      background:linear-gradient(120deg,var(--green-1),var(--green-2) 50%,var(--green-3));
-      border-radius:26px;color:#fff;position:relative;overflow:hidden;
-    }
-    .ts-cta::after{
-      content:"";position:absolute;inset:0;
-      background:radial-gradient(600px 200px at 20% 0%, rgba(255,255,255,.25),transparent 60%);
-      pointer-events:none;
-    }
-    .ts-cta h3{font-size:26px;margin:0 0 10px;font-weight:900}
-    .ts-cta p{margin:0 0 22px;opacity:.95;font-size:15px}
-    .ts-btn{
-      display:inline-flex;align-items:center;gap:10px;
-      padding:14px 32px;border-radius:999px;
-      background:#fff;color:var(--green-1);font-weight:800;font-size:16px;
-      text-decoration:none;
-      box-shadow:0 14px 30px rgba(0,0,0,.18);
-      transition:transform .3s ease, box-shadow .3s ease;
-    }
-    .ts-btn:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 20px 40px rgba(0,0,0,.28)}
-    .ts-btn svg{transition:transform .3s ease}
-    .ts-btn:hover svg{transform:translateX(-4px)}
-
-    /* موج پایین */
-    .ts-wave{position:absolute;bottom:-1px;left:0;right:0;width:100%;height:60px;z-index:0}
   </style>
 
-  <!-- برگ‌های متحرک پس‌زمینه -->
-  <svg class="ts-leaf l1" viewBox="0 0 24 24" fill="#198754"><path d="M17 3c-5 0-9 4-9 9 0 1 .2 2 .5 3L3 21l1 1 6.5-5.5c1 .3 2 .5 3 .5 5 0 9-4 9-9V3h-5z"/></svg>
-  <svg class="ts-leaf l2" viewBox="0 0 24 24" fill="#20c997"><path d="M17 3c-5 0-9 4-9 9 0 1 .2 2 .5 3L3 21l1 1 6.5-5.5c1 .3 2 .5 3 .5 5 0 9-4 9-9V3h-5z"/></svg>
-  <svg class="ts-leaf l3" viewBox="0 0 24 24" fill="#0f5132"><path d="M17 3c-5 0-9 4-9 9 0 1 .2 2 .5 3L3 21l1 1 6.5-5.5c1 .3 2 .5 3 .5 5 0 9-4 9-9V3h-5z"/></svg>
-  <svg class="ts-leaf l4" viewBox="0 0 24 24" fill="#198754"><path d="M17 3c-5 0-9 4-9 9 0 1 .2 2 .5 3L3 21l1 1 6.5-5.5c1 .3 2 .5 3 .5 5 0 9-4 9-9V3h-5z"/></svg>
+  <svg class="ts-leaf a" viewBox="0 0 24 24" fill="#fff"><path d="M17 3c-5 0-9 4-9 9 0 1 .2 2 .5 3L3 21l1 1 6.5-5.5c1 .3 2 .5 3 .5 5 0 9-4 9-9V3h-5z"/></svg>
+  <svg class="ts-leaf b" viewBox="0 0 24 24" fill="#fff"><path d="M17 3c-5 0-9 4-9 9 0 1 .2 2 .5 3L3 21l1 1 6.5-5.5c1 .3 2 .5 3 .5 5 0 9-4 9-9V3h-5z"/></svg>
 
-  <div class="ts-container">
-
-    <!-- هدر -->
-    <div class="ts-header">
-      <span class="ts-badge">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4 6v6c0 5 3.5 9.5 8 10 4.5-.5 8-5 8-10V6l-8-4z"/></svg>
-        طرح ملی شوفاژکار
-      </span>
-      <h1 class="ts-title">طرح سبز شوفاژکار</h1>
-      <p class="ts-sub">
-        تعویض دیگ‌های فرسوده موتورخانه با دیگ‌های نسل جدید شوفاژکار؛
-        کاهش چشمگیر مصرف گاز، افزایش راندمان و حفظ محیط زیست — همراه با گارانتی ۱۰ ساله و خدمات مادام‌العمر.
-      </p>
+  <div class="ts-body">
+    <span class="ts-tag">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4 6v6c0 5 3.5 9.5 8 10 4.5-.5 8-5 8-10V6l-8-4z"/></svg>
+      طرح ویژه شوفاژکار
+    </span>
+    <h3>طرح سبز شوفاژکار؛ تعویض دیگ فرسوده، صرفه‌جویی تا ۶۰٪!</h3>
+    <p>با تعویض دیگ موتورخانه فرسوده‌تان و نصب دیگ نسل جدید شوفاژکار، مصرف گاز را به‌شدت کاهش دهید و از گارانتی ۱۰ ساله و خدمات مادام‌العمر بهره‌مند شوید.</p>
+    <div class="ts-chips">
+      <span class="ts-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>صرفه‌جویی ۲۰ تا ۶۰٪</span>
+      <span class="ts-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2L4 6v6c0 5 3.5 9.5 8 10 4.5-.5 8-5 8-10V6l-8-4z"/></svg>گارانتی ۱۰ ساله</span>
+      <span class="ts-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>اجرای سریع</span>
+      <span class="ts-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M3 12l2-2 4 4 8-8 4 4"/></svg>بازگشت سرمایه</span>
     </div>
-
-    <!-- هیرو -->
-    <div class="ts-hero">
-      <div>
-        <h3>چرا طرح سبز؟</h3>
-        <p>
-          سیستم‌های حرارتی قدیمی موتورخانه‌ها به دلیل افت راندمان و فرسودگی، تا
-          <b>۴۰٪ سوخت بیشتر</b> مصرف می‌کنند. طرح سبز شوفاژکار با ظرفیت‌سنجی مهندسی،
-          دیگ نو، مشعل بهینه و عایق‌بندی استاندارد، موتورخانه شما را به یک سیستم
-          کم‌مصرف و سازگار با محیط زیست تبدیل می‌کند.
-        </p>
-        <p>
-          هزینه اجرای طرح، از محل صرفه‌جویی در مصرف سوخت بازگشت پیدا می‌کند و
-          عمر مفید سیستم گرمایش شما چندین برابر می‌شود.
-        </p>
-      </div>
-      <div class="ts-illu">
-        <!-- SVG دیگ + شعله متحرک -->
-        <svg class="ts-boiler" viewBox="0 0 300 280" xmlns="http://www.w3.org/2000/svg">
-          <!-- بخار -->
-          <g class="ts-steam">
-            <circle cx="120" cy="40" r="6" fill="#cfe9dc"/>
-            <circle cx="140" cy="25" r="8" fill="#cfe9dc"/>
-            <circle cx="160" cy="40" r="6" fill="#cfe9dc"/>
-          </g>
-          <!-- بدنه دیگ -->
-          <rect x="70" y="70" width="160" height="160" rx="18" fill="url(#bGrad)" stroke="#0f5132" stroke-width="3"/>
-          <rect x="85" y="85" width="130" height="80" rx="10" fill="#0b2e20"/>
-          <!-- شعله -->
-          <g class="ts-flame" transform="translate(150 145)">
-            <path d="M0 0 C -20 -25 -10 -45 0 -60 C 12 -45 22 -22 0 0 Z" fill="#ffb703"/>
-            <path d="M0 -5 C -10 -20 -5 -35 0 -45 C 8 -33 14 -20 0 -5 Z" fill="#ff6b00"/>
-            <path d="M0 -8 C -4 -16 -2 -24 0 -30 C 4 -22 6 -16 0 -8 Z" fill="#fff3b0"/>
-          </g>
-          <!-- صفحه نمایش -->
-          <rect x="100" y="180" width="100" height="34" rx="6" fill="#062f1d"/>
-          <text x="150" y="202" text-anchor="middle" fill="#7CFFB2" font-size="14" font-family="monospace" font-weight="bold">ECO 96%</text>
-          <!-- پایه -->
-          <rect x="90" y="230" width="20" height="30" fill="#0f5132"/>
-          <rect x="190" y="230" width="20" height="30" fill="#0f5132"/>
-          <!-- لوله ها -->
-          <rect x="40" y="100" width="30" height="14" fill="#198754"/>
-          <rect x="230" y="100" width="30" height="14" fill="#198754"/>
-          <circle cx="40" cy="107" r="10" fill="#20c997"/>
-          <circle cx="260" cy="107" r="10" fill="#20c997"/>
-          <!-- برگ نشان سبز -->
-          <g transform="translate(210 60)">
-            <circle r="22" fill="#20c997"/>
-            <path d="M-8 4 C -10 -6 -2 -12 8 -10 C 8 0 2 8 -8 4 Z" fill="#fff"/>
-          </g>
-          <defs>
-            <linearGradient id="bGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#e6fff4"/>
-              <stop offset="100%" stop-color="#a7f3d0"/>
-            </linearGradient>
-          </defs>
-        </svg>
-      </div>
-    </div>
-
-    <!-- آمار و ارقام -->
-    <div class="ts-stats">
-      <div class="ts-stat">
-        <span class="ts-num" data-count="60">0<span class="unit">٪</span></span>
-        <div class="ts-stat-label">صرفه‌جویی در مصرف گاز</div>
-      </div>
-      <div class="ts-stat">
-        <span class="ts-num" data-count="96">0<span class="unit">٪</span></span>
-        <div class="ts-stat-label">راندمان حرارتی</div>
-      </div>
-      <div class="ts-stat">
-        <span class="ts-num" data-count="10">0<span class="unit">سال</span></span>
-        <div class="ts-stat-label">گارانتی دیگ</div>
-      </div>
-      <div class="ts-stat">
-        <span class="ts-num" data-count="100">0<span class="unit">٪</span></span>
-        <div class="ts-stat-label">خدمات مادام‌العمر</div>
-      </div>
-    </div>
-
-    <!-- مزایا -->
-    <h2 class="ts-features-title">ویژگی‌ها و مزایای طرح سبز</h2>
-    <div class="ts-features">
-      <div class="ts-card">
-        <div class="ts-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>
-        </div>
-        <h4>کاهش ۲۰ تا ۶۰٪ مصرف سوخت</h4>
-        <p>افزایش راندمان دیگ و کاهش هدررفت انرژی، مستقیماً قبض گاز موتورخانه را پایین می‌آورد.</p>
-      </div>
-
-      <div class="ts-card">
-        <div class="ts-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l2-2 4 4 8-8 4 4"/><path d="M3 19h18"/></svg>
-        </div>
-        <h4>بازگشت سرمایه از صرفه‌جویی</h4>
-        <p>هزینه طرح از محل صرفه‌جویی در مصرف گاز در کوتاه‌مدت بازمی‌گردد و سود خالص پدید می‌آورد.</p>
-      </div>
-
-      <div class="ts-card">
-        <div class="ts-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
-        </div>
-        <h4>اجرا در حداقل زمان</h4>
-        <p>تیم تکنسین‌های مجاز شوفاژکار، طرح را در سریع‌ترین زمان و بدون اختلال در گرمایش انجام می‌دهند.</p>
-      </div>
-
-      <div class="ts-card">
-        <div class="ts-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L4 6v6c0 5 3.5 9.5 8 10 4.5-.5 8-5 8-10V6l-8-4z"/><path d="M9 12l2 2 4-4"/></svg>
-        </div>
-        <h4>گارانتی ۱۰ ساله دیگ</h4>
-        <p>تضمین کیفیت ساخت دیگ‌های نسل جدید شوفاژکار با گارانتی ۱۰ ساله و خدمات پس از فروش مادام‌العمر.</p>
-      </div>
-
-      <div class="ts-card">
-        <div class="ts-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M6 21V9l6-5 6 5v12"/><path d="M10 21v-6h4v6"/></svg>
-        </div>
-        <h4>ظرفیت‌سنجی مهندسی</h4>
-        <p>محاسبه دقیق بار حرارتی ساختمان و انتخاب بهینه‌ترین دیگ، مشعل و تجهیزات جانبی متناسب با موتورخانه.</p>
-      </div>
-
-      <div class="ts-card">
-        <div class="ts-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3c-5 0-9 4-9 9 0 1 .2 2 .5 3L3 21l1 1 6.5-5.5c1 .3 2 .5 3 .5 5 0 9-4 9-9V3h-5z"/></svg>
-        </div>
-        <h4>سازگار با محیط زیست</h4>
-        <p>کاهش انتشار گازهای گلخانه‌ای و آلاینده‌ها؛ سهم شما در حفظ هوای پاک و آینده‌ی سبزتر.</p>
-      </div>
-
-      <div class="ts-card">
-        <div class="ts-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/><path d="M8 15h3"/></svg>
-        </div>
-        <h4>قیمت مصوب کارخانه</h4>
-        <p>تأمین تجهیزات اصلی موتورخانه با قیمت‌های مصوب شرکت صنعتی شوفاژکار، بدون واسطه.</p>
-      </div>
-
-      <div class="ts-card">
-        <div class="ts-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7L9 18l-5-5"/></svg>
-        </div>
-        <h4>افزایش عمر مفید سیستم</h4>
-        <p>با نوسازی تجهیزات، عمر مفید موتورخانه چندین برابر می‌شود و خرابی‌های متعدد به حداقل می‌رسد.</p>
-      </div>
-
-      <div class="ts-card">
-        <div class="ts-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-12V5l-8-3-8 3v5c0 8 8 12 8 12z"/></svg>
-        </div>
-        <h4>تکنسین‌های مجاز</h4>
-        <p>اجرای طرح توسط تیم رسمی و آموزش‌دیده شوفاژکار با تضمین کیفیت نصب و راه‌اندازی.</p>
-      </div>
-    </div>
-
-    <!-- CTA -->
-    <div class="ts-cta">
-      <h3>همین امروز موتورخانه‌ی خود را سبز کنید</h3>
-      <p>کارشناسان ما برای بازدید رایگان و ارائه طرح اختصاصی، در خدمت شما هستند.</p>
-      <a class="ts-btn" href="/tarh-sabz-shofazhkar/">
-        ثبت درخواست بازدید رایگان
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
-      </a>
-    </div>
-
+    <a class="ts-btn" href="/tarh-sabz-shofazhkar/">
+      درخواست بازدید رایگان
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+    </a>
   </div>
 
-  <!-- موج پایین -->
-  <svg class="ts-wave" viewBox="0 0 1440 60" preserveAspectRatio="none">
-    <path d="M0 30 C 240 60 480 0 720 20 C 960 40 1200 10 1440 30 L1440 60 L0 60 Z" fill="#d1fae5"/>
+  <svg class="ts-art" viewBox="0 0 160 160">
+    <rect x="35" y="40" width="90" height="90" rx="12" fill="#e6fff4" stroke="#0f5132" stroke-width="2.5"/>
+    <rect x="45" y="50" width="70" height="42" rx="6" fill="#062f1d"/>
+    <g class="flame" transform="translate(80 82)">
+      <path d="M0 0 C -12 -16 -6 -28 0 -36 C 8 -28 14 -14 0 0 Z" fill="#ffb703"/>
+      <path d="M0 -4 C -6 -12 -3 -22 0 -28 C 5 -20 9 -12 0 -4 Z" fill="#ff6b00"/>
+    </g>
+    <rect x="55" y="100" width="50" height="18" rx="3" fill="#062f1d"/>
+    <text x="80" y="113" text-anchor="middle" fill="#7CFFB2" font-size="9" font-family="monospace" font-weight="bold">ECO 96%</text>
+    <rect x="42" y="130" width="12" height="16" fill="#0f5132"/>
+    <rect x="106" y="130" width="12" height="16" fill="#0f5132"/>
+    <g transform="translate(115 40)">
+      <circle r="14" fill="#20c997" stroke="#fff" stroke-width="2"/>
+      <path d="M-5 3 C -6 -4 -1 -8 5 -7 C 5 0 1 5 -5 3 Z" fill="#fff"/>
+    </g>
   </svg>
-
-  <script>
-    (function(){
-      var section = document.currentScript.closest('.tarh-sabz-section');
-      if(!section) return;
-
-      // ظاهر شدن کارت‌ها هنگام اسکرول
-      var cards = section.querySelectorAll('.ts-card');
-      var io = new IntersectionObserver(function(entries){
-        entries.forEach(function(e, i){
-          if(e.isIntersecting){
-            setTimeout(function(){ e.target.classList.add('is-in'); }, i*80);
-            io.unobserve(e.target);
-          }
-        });
-      },{threshold:.15});
-      cards.forEach(function(c){io.observe(c)});
-
-      // شمارنده اعداد
-      var nums = section.querySelectorAll('.ts-num');
-      var nio = new IntersectionObserver(function(entries){
-        entries.forEach(function(e){
-          if(!e.isIntersecting) return;
-          var el = e.target;
-          var target = parseInt(el.getAttribute('data-count'),10) || 0;
-          var unit = el.querySelector('.unit') ? el.querySelector('.unit').outerHTML : '';
-          var dur = 1600, start = performance.now();
-          function tick(now){
-            var p = Math.min(1,(now-start)/dur);
-            var val = Math.floor(target * (1 - Math.pow(1-p,3)));
-            el.innerHTML = val.toLocaleString('fa-IR') + unit;
-            if(p<1) requestAnimationFrame(tick);
-          }
-          requestAnimationFrame(tick);
-          nio.unobserve(el);
-        });
-      },{threshold:.4});
-      nums.forEach(function(n){nio.observe(n)});
-    })();
-  </script>
 </section>
-<!-- ============== پایان بخش طرح سبز ============== -->
