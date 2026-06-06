@@ -5,478 +5,316 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>بنر پکیج دیواری شوفاژکار</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;700;900&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background: #0f172a;
+  .banner-boiler {
     font-family: 'Vazirmatn', Tahoma, sans-serif;
-  }
-
-  .banner {
     position: relative;
-    width: 760px;
+    width: 100%;
+    max-width: 760px;
     height: 260px;
-    background: linear-gradient(140deg, #f4a460 0%, #e8855a 30%, #d4654a 60%, #c85a3d 100%);
-    border-radius: 22px;
+    background: linear-gradient(135deg, #f5a97f 0%, #ed7f5a 35%, #d95f3b 65%, #c44a28 100%);
+    border-radius: 20px;
     overflow: hidden;
-    box-shadow: 0 30px 80px rgba(200,80,40,0.35), 0 0 0 1px rgba(255,255,255,0.2);
+    box-shadow: 0 16px 50px rgba(190,70,30,0.35);
     cursor: pointer;
+    display: block;
   }
 
-  /* ========= BACKGROUND LAYERS ========= */
-  .bg-texture {
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(ellipse at 70% 40%, rgba(255,220,150,0.25) 0%, transparent 55%),
-      radial-gradient(ellipse at 20% 80%, rgba(180,40,20,0.2)   0%, transparent 45%);
-    animation: texturePulse 5s ease-in-out infinite alternate;
-  }
-  @keyframes texturePulse {
-    from { opacity: 0.7; }
-    to   { opacity: 1; }
+  /* grid texture */
+  .banner-boiler::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+    background-size: 32px 32px;
+    z-index: 0;
   }
 
-  /* ========= HEAT PARTICLES ========= */
-  .heat-particle {
+  /* top-right glow */
+  .b-glow {
+    position: absolute; top:-40px; right:-40px;
+    width: 260px; height: 260px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,210,140,0.35) 0%, transparent 65%);
+    animation: bGlowPulse 4s ease-in-out infinite alternate;
+    z-index: 0;
+  }
+  @keyframes bGlowPulse { from{opacity:0.6} to{opacity:1} }
+
+  /* shimmer sweep */
+  .b-shimmer {
+    position: absolute; inset: 0;
+    background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.16) 50%, transparent 70%);
+    background-size: 200% 100%;
+    animation: bShimmer 3s linear infinite;
+    z-index: 1;
+  }
+  @keyframes bShimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+  /* heat particles */
+  .b-heat {
     position: absolute;
     border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-    animation: heatRise linear infinite;
-    filter: blur(1px);
+    filter: blur(1.5px);
+    animation: bHeat linear infinite;
+    z-index: 1;
   }
-  .heat-particle:nth-child(1)  { width:12px; height:16px; left:12%; bottom:0; background:rgba(255,160,60,0.5);  animation-duration:3.2s; animation-delay:0s; }
-  .heat-particle:nth-child(2)  { width:8px;  height:11px; left:22%; bottom:0; background:rgba(255,120,40,0.4);  animation-duration:2.8s; animation-delay:0.8s; }
-  .heat-particle:nth-child(3)  { width:15px; height:20px; left:33%; bottom:0; background:rgba(255,180,80,0.45); animation-duration:4s;   animation-delay:0.3s; }
-  .heat-particle:nth-child(4)  { width:7px;  height:10px; left:45%; bottom:0; background:rgba(255,100,30,0.35); animation-duration:2.5s; animation-delay:1.5s; }
-  .heat-particle:nth-child(5)  { width:10px; height:14px; left:58%; bottom:0; background:rgba(255,150,50,0.4);  animation-duration:3.5s; animation-delay:0.6s; }
-  .heat-particle:nth-child(6)  { width:13px; height:17px; left:70%; bottom:0; background:rgba(255,200,100,0.5); animation-duration:3s;   animation-delay:1.1s; }
-  .heat-particle:nth-child(7)  { width:9px;  height:12px; left:80%; bottom:0; background:rgba(255,130,50,0.4);  animation-duration:2.7s; animation-delay:1.9s; }
-  .heat-particle:nth-child(8)  { width:11px; height:15px; left:90%; bottom:0; background:rgba(255,160,60,0.45); animation-duration:3.8s; animation-delay:0.4s; }
-  @keyframes heatRise {
-    0%   { transform:translateY(0) scaleX(1) rotate(0deg);        opacity:0; }
-    15%  { opacity:0.8; }
-    50%  { transform:translateY(-120px) scaleX(0.7) rotate(8deg); opacity:0.5; }
-    85%  { opacity:0.2; }
-    100% { transform:translateY(-260px) scaleX(0.3) rotate(-5deg); opacity:0; }
-  }
-
-  /* ========= SHIMMER ========= */
-  .shimmer {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(110deg, transparent 25%, rgba(255,255,255,0.18) 50%, transparent 75%);
-    background-size: 200% 100%;
-    animation: shimmer 2.8s linear infinite;
-  }
-  @keyframes shimmer {
-    0%   { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
+  .b-heat:nth-child(1){width:10px;height:14px;left:8%; bottom:0;background:rgba(255,150,60,0.55);animation-duration:3.0s;animation-delay:0.0s}
+  .b-heat:nth-child(2){width:7px; height:10px;left:18%;bottom:0;background:rgba(255,110,40,0.45);animation-duration:2.5s;animation-delay:0.7s}
+  .b-heat:nth-child(3){width:13px;height:18px;left:29%;bottom:0;background:rgba(255,180,80,0.50);animation-duration:3.8s;animation-delay:0.2s}
+  .b-heat:nth-child(4){width:8px; height:11px;left:42%;bottom:0;background:rgba(255,100,30,0.40);animation-duration:2.3s;animation-delay:1.4s}
+  .b-heat:nth-child(5){width:11px;height:15px;left:54%;bottom:0;background:rgba(255,160,60,0.45);animation-duration:3.3s;animation-delay:0.5s}
+  .b-heat:nth-child(6){width:9px; height:13px;left:65%;bottom:0;background:rgba(255,190,90,0.50);animation-duration:2.8s;animation-delay:1.0s}
+  .b-heat:nth-child(7){width:14px;height:19px;left:75%;bottom:0;background:rgba(255,140,50,0.45);animation-duration:3.5s;animation-delay:0.3s}
+  .b-heat:nth-child(8){width:7px; height:10px;left:86%;bottom:0;background:rgba(255,120,40,0.40);animation-duration:2.6s;animation-delay:1.8s}
+  @keyframes bHeat {
+    0%  {transform:translateY(0)    scaleX(1);    opacity:0}
+    12% {opacity:0.85}
+    55% {transform:translateY(-130px) scaleX(0.65) rotate(6deg);  opacity:0.45}
+    88% {opacity:0.15}
+    100%{transform:translateY(-265px) scaleX(0.25) rotate(-4deg); opacity:0}
   }
 
-  /* ========= DECORATIVE RINGS ========= */
-  .deco-ring {
-    position: absolute;
-    border-radius: 50%;
-    border: 1.5px solid rgba(255,255,255,0.12);
-    animation: ringExpand ease-out infinite;
+  /* expanding rings bottom-left */
+  .b-ring {
+    position: absolute; border-radius: 50%;
+    border: 1.5px solid rgba(255,255,255,0.13);
+    animation: bRing ease-out infinite; z-index: 0;
   }
-  .deco-ring:nth-child(1) { width:160px; height:160px; bottom:-60px; right:-40px; animation-duration:4s; animation-delay:0s; }
-  .deco-ring:nth-child(2) { width:220px; height:220px; bottom:-90px; right:-70px; animation-duration:4s; animation-delay:0.8s; }
-  .deco-ring:nth-child(3) { width:280px; height:280px; bottom:-120px; right:-100px; animation-duration:4s; animation-delay:1.6s; }
-  @keyframes ringExpand {
-    0%   { opacity:0.5; transform:scale(0.95); }
-    50%  { opacity:0.2; transform:scale(1); }
-    100% { opacity:0; transform:scale(1.1); }
-  }
-
-  /* ========= GRID PATTERN ========= */
-  .grid-pattern {
-    position: absolute;
-    inset: 0;
-    background-image: linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
-                      linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
-    background-size: 35px 35px;
+  .b-ring:nth-child(1){width:150px;height:150px;bottom:-55px;left:-35px;animation-duration:4s;animation-delay:0.0s}
+  .b-ring:nth-child(2){width:210px;height:210px;bottom:-80px;left:-60px;animation-duration:4s;animation-delay:0.9s}
+  .b-ring:nth-child(3){width:270px;height:270px;bottom:-110px;left:-85px;animation-duration:4s;animation-delay:1.8s}
+  @keyframes bRing {
+    0%  {opacity:0.45; transform:scale(0.93)}
+    50% {opacity:0.18; transform:scale(1.00)}
+    100%{opacity:0;    transform:scale(1.12)}
   }
 
-  /* ========= CONTENT ========= */
-  .content {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 38px 0 28px;
+  /* main layout */
+  .b-inner {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 36px;
     z-index: 10;
   }
 
-  /* ========= IMAGE SIDE (left in RTL = right physically) ========= */
-  .image-side {
+  /* ── image column ── */
+  .b-img-col {
     position: relative;
-    width: 200px;
-    height: 230px;
+    width: 170px; height: 240px;
     flex-shrink: 0;
-    order: 1;
-  }
-  .product-float {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 170px;
-    animation: boilerFloat 3.5s ease-in-out infinite;
-    filter: drop-shadow(0 20px 40px rgba(100,30,10,0.4));
-  }
-  @keyframes boilerFloat {
-    0%,100% { transform: translateX(-50%) translateY(0) rotate(-0.5deg); }
-    50%      { transform: translateX(-50%) translateY(-16px) rotate(0.5deg); }
-  }
-  .product-float img { width:100%; object-fit:contain; }
-
-  /* Heat shimmer behind product */
-  .heat-shimmer {
-    position: absolute;
-    bottom: 15px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 140px; height: 140px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(255,180,60,0.3) 0%, rgba(255,100,30,0.15) 40%, transparent 70%);
-    animation: heatGlow 2s ease-in-out infinite alternate;
-    filter: blur(8px);
-  }
-  @keyframes heatGlow {
-    from { transform: translateX(-50%) scale(0.9); opacity:0.6; }
-    to   { transform: translateX(-50%) scale(1.1); opacity:1; }
+    display: flex; align-items: flex-end; justify-content: center;
   }
 
-  /* Logo area */
-  .brand-logo {
-    position: absolute;
-    top: 18px; left: 50%;
-    transform: translateX(-50%);
-    background: rgba(255,255,255,0.92);
-    border-radius: 10px;
-    padding: 5px 12px;
-    font-size: 11px;
-    font-weight: 900;
-    color: #c0392b;
-    white-space: nowrap;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-    animation: logoPop 0.6s 0.2s cubic-bezier(0.34,1.56,0.64,1) both;
+  .b-product {
+    width: 148px;
+    height: 218px;
+    object-fit: contain;
+    animation: bFloat 3.6s ease-in-out infinite;
+    filter:
+      drop-shadow(-6px 18px 22px rgba(80,20,0,0.50))
+      drop-shadow(0 4px 8px rgba(0,0,0,0.18));
+    position: relative; z-index: 2;
   }
-  @keyframes logoPop {
-    from { opacity:0; transform:translateX(-50%) scale(0.5); }
-    to   { opacity:1; transform:translateX(-50%) scale(1); }
+  @keyframes bFloat {
+    0%,100%{ transform:translateY(0)     rotate(-0.5deg) }
+    50%    { transform:translateY(-13px)  rotate( 0.5deg) }
   }
 
-  /* Sparkles around product */
-  .sparkle {
-    position: absolute;
-    border-radius: 50%;
-    background: rgba(255,240,180,0.95);
-    animation: sparkle ease-in-out infinite;
-    box-shadow: 0 0 8px 3px rgba(255,180,60,0.6);
+  /* orange halo behind product */
+  .b-halo {
+    position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
+    width: 130px; height: 130px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,180,80,0.32) 0%, rgba(255,100,30,0.12) 45%, transparent 70%);
+    filter: blur(12px);
+    animation: bHaloPulse 2.2s ease-in-out infinite alternate;
+    z-index: 1;
   }
-  .sparkle:nth-child(1) { width:8px;  height:8px;  top:20%; left:5%;  animation-duration:2s;   animation-delay:0s; }
-  .sparkle:nth-child(2) { width:6px;  height:6px;  top:55%; right:5%; animation-duration:2.5s; animation-delay:0.7s; }
-  .sparkle:nth-child(3) { width:10px; height:10px; top:75%; left:20%; animation-duration:1.8s; animation-delay:1.2s; }
-  @keyframes sparkle {
-    0%,100% { transform:scale(0) rotate(0deg);    opacity:0; }
-    40%      { transform:scale(1) rotate(45deg);   opacity:1; }
-    70%      { transform:scale(0.7) rotate(90deg); opacity:0.5; }
+  @keyframes bHaloPulse {
+    from{ transform:translateX(-50%) scale(0.88); opacity:0.55 }
+    to  { transform:translateX(-50%) scale(1.12); opacity:1.00 }
   }
 
-  /* ========= TEXT SIDE ========= */
-  .text-side {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    max-width: 310px;
-    order: 2;
-    animation: textSlideIn 1s cubic-bezier(0.22,1,0.36,1) both;
+  /* brand badge above product */
+  .b-logo-badge {
+    position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+    background: rgba(255,255,255,0.93); border-radius: 9px; padding: 4px 11px;
+    font-size: 10px; font-weight: 900; color: #be1e11; white-space: nowrap;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.18); z-index: 3;
+    animation: bLogoPop 0.7s 0.2s cubic-bezier(0.34,1.56,0.64,1) both;
   }
-  @keyframes textSlideIn {
-    from { opacity:0; transform:translateX(-40px); }
-    to   { opacity:1; transform:translateX(0); }
-  }
-
-  .brand-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(255,255,255,0.18);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255,255,255,0.35);
-    border-radius: 50px;
-    padding: 5px 16px;
-    width: fit-content;
-    animation: chipEntrance 0.7s 0.2s cubic-bezier(0.34,1.56,0.64,1) both;
-  }
-  @keyframes chipEntrance {
-    from { opacity:0; transform:scale(0.5); }
-    to   { opacity:1; transform:scale(1); }
-  }
-  .brand-chip span { font-size: 11px; color: #fff; font-weight: 700; letter-spacing: 0.5px; }
-  .fire-icon { font-size: 14px; animation: fireFlicker 0.8s ease-in-out infinite alternate; }
-  @keyframes fireFlicker {
-    from { transform: scale(1) rotate(-5deg); }
-    to   { transform: scale(1.2) rotate(5deg); }
+  @keyframes bLogoPop {
+    from{ opacity:0; transform:translateX(-50%) scale(0.4) }
+    to  { opacity:1; transform:translateX(-50%) scale(1)   }
   }
 
-  .title-main {
-    font-size: 26px;
-    font-weight: 900;
-    color: #fff;
-    line-height: 1.4;
-    text-shadow: 0 2px 12px rgba(100,20,0,0.3);
-    animation: textSlideIn 1s 0.1s cubic-bezier(0.22,1,0.36,1) both;
+  /* sparkles */
+  .b-sp {
+    position: absolute; border-radius: 50%;
+    background: rgba(255,240,160,0.95);
+    box-shadow: 0 0 7px 3px rgba(255,180,60,0.6);
+    animation: bSp ease-in-out infinite; z-index: 3;
+  }
+  .b-sp:nth-child(1){width:7px; height:7px; top:22%; left:5%;   animation-duration:2.0s; animation-delay:0.0s}
+  .b-sp:nth-child(2){width:5px; height:5px; top:60%; right:6%;  animation-duration:2.5s; animation-delay:0.8s}
+  .b-sp:nth-child(3){width:9px; height:9px; top:80%; left:20%;  animation-duration:1.7s; animation-delay:1.3s}
+  @keyframes bSp {
+    0%,100%{ transform:scale(0) rotate(0deg);   opacity:0 }
+    40%    { transform:scale(1) rotate(45deg);   opacity:1 }
+    70%    { transform:scale(0.6) rotate(90deg); opacity:0.5 }
   }
 
-  .features {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    animation: textSlideIn 1s 0.2s cubic-bezier(0.22,1,0.36,1) both;
+  /* ── text column ── */
+  .b-text-col {
+    display: flex; flex-direction: column; gap: 11px; max-width: 310px;
+    animation: bTextIn 0.9s cubic-bezier(0.22,1,0.36,1) both;
   }
-  .feature-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: rgba(255,255,255,0.92);
-    font-size: 14px;
-    font-weight: 600;
+  @keyframes bTextIn { from{opacity:0;transform:translateX(-35px)} to{opacity:1;transform:translateX(0)} }
+
+  .b-chip {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: rgba(255,255,255,0.17); backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.35); border-radius: 50px;
+    padding: 5px 15px; width: fit-content;
+    animation: bChipPop 0.7s 0.2s cubic-bezier(0.34,1.56,0.64,1) both;
   }
-  .feature-icon {
-    width: 24px; height: 24px;
-    background: rgba(255,255,255,0.2);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 12px;
-    flex-shrink: 0;
-    backdrop-filter: blur(4px);
-    border: 1px solid rgba(255,255,255,0.3);
-  }
-  .feature-item:nth-child(1) { animation: featureSlide 0.6s 0.3s both; }
-  .feature-item:nth-child(2) { animation: featureSlide 0.6s 0.45s both; }
-  @keyframes featureSlide {
-    from { opacity:0; transform:translateX(-20px); }
-    to   { opacity:1; transform:translateX(0); }
+  @keyframes bChipPop { from{opacity:0;transform:scale(0.4)} to{opacity:1;transform:scale(1)} }
+  .b-chip span { font-size:11px; color:#fff; font-weight:700 }
+  .b-fire { font-size:13px; animation:bFire 0.9s ease-in-out infinite alternate }
+  @keyframes bFire { from{transform:scale(1) rotate(-5deg)} to{transform:scale(1.25) rotate(5deg)} }
+
+  .b-title {
+    font-size: 27px; font-weight: 900; color: #fff; line-height: 1.45;
+    text-shadow: 0 2px 14px rgba(90,20,0,0.3);
+    animation: bTextIn 0.9s 0.1s cubic-bezier(0.22,1,0.36,1) both;
   }
 
-  /* Guarantee badge */
-  .guarantee-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    background: rgba(255,255,255,0.15);
-    backdrop-filter: blur(10px);
-    border: 1.5px solid rgba(255,255,255,0.4);
-    border-radius: 14px;
-    padding: 8px 18px;
-    width: fit-content;
-    animation: textSlideIn 1s 0.3s cubic-bezier(0.22,1,0.36,1) both;
+  .b-features {
+    display: flex; flex-direction: column; gap: 6px;
+    animation: bTextIn 0.9s 0.2s cubic-bezier(0.22,1,0.36,1) both;
   }
-  .guarantee-num {
-    font-size: 28px;
-    font-weight: 900;
-    color: #fff;
-    line-height: 1;
-    text-shadow: 0 0 20px rgba(255,220,100,0.5);
-    animation: numGlow 2s ease-in-out infinite alternate;
+  .b-feat {
+    display: flex; align-items: center; gap: 8px;
+    color: rgba(255,255,255,0.93); font-size: 13.5px; font-weight: 600;
   }
-  @keyframes numGlow {
-    from { text-shadow: 0 0 10px rgba(255,220,100,0.3); }
-    to   { text-shadow: 0 0 25px rgba(255,220,100,0.8); }
+  .b-feat-icon {
+    width: 23px; height: 23px;
+    background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.32);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 11px; flex-shrink: 0;
   }
-  .guarantee-text { display:flex; flex-direction:column; }
-  .guarantee-text span:first-child { font-size:13px; color:rgba(255,255,255,0.9); font-weight:700; }
-  .guarantee-text span:last-child  { font-size:11px; color:rgba(255,255,255,0.7); }
+  .b-feat:nth-child(1){ animation:bFeatIn 0.6s 0.30s both }
+  .b-feat:nth-child(2){ animation:bFeatIn 0.6s 0.45s both }
+  @keyframes bFeatIn { from{opacity:0;transform:translateX(-18px)} to{opacity:1;transform:translateX(0)} }
 
-  .btn-buy {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(255,255,255,0.95);
-    color: #c0392b;
-    border: none;
-    border-radius: 50px;
-    padding: 11px 28px;
-    font-size: 15px;
-    font-weight: 800;
-    font-family: inherit;
-    cursor: pointer;
-    width: fit-content;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.8);
+  .b-guarantee {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: rgba(255,255,255,0.14); backdrop-filter: blur(10px);
+    border: 1.5px solid rgba(255,255,255,0.42); border-radius: 13px;
+    padding: 8px 16px; width: fit-content;
+    animation: bTextIn 0.9s 0.3s cubic-bezier(0.22,1,0.36,1) both;
+  }
+  .b-gnum {
+    font-size: 30px; font-weight: 900; color: #fff; line-height: 1;
+    animation: bGlow 2s ease-in-out infinite alternate;
+  }
+  @keyframes bGlow {
+    from{ text-shadow:0 0  8px rgba(255,220,100,0.25) }
+    to  { text-shadow:0 0 22px rgba(255,220,100,0.85) }
+  }
+  .b-gtxt { display:flex; flex-direction:column }
+  .b-gtxt span:first-child { font-size:12.5px; color:rgba(255,255,255,0.92); font-weight:700 }
+  .b-gtxt span:last-child  { font-size:10.5px; color:rgba(255,255,255,0.68) }
+
+  .b-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.95); color: #be1e11;
+    border: none; border-radius: 50px; padding: 10px 24px;
+    font-size: 14.5px; font-weight: 800;
+    font-family: 'Vazirmatn', Tahoma, sans-serif;
+    cursor: pointer; width: fit-content;
+    box-shadow: 0 7px 22px rgba(0,0,0,0.2);
     transition: all 0.25s ease;
-    position: relative;
-    overflow: hidden;
-    animation: textSlideIn 1s 0.4s cubic-bezier(0.22,1,0.36,1) both;
+    animation: bTextIn 0.9s 0.4s cubic-bezier(0.22,1,0.36,1) both;
   }
-  .btn-buy::before {
-    content:'';
-    position:absolute;
-    inset:0;
-    background: linear-gradient(135deg, rgba(255,80,40,0.1), transparent);
-    opacity:0;
-    transition:opacity 0.25s;
+  .b-btn:hover { transform:translateY(-3px) scale(1.05); box-shadow:0 14px 32px rgba(0,0,0,0.28) }
+  .b-arrow {
+    width: 21px; height: 21px;
+    background: linear-gradient(135deg, #e83a1f, #be1e11);
+    border-radius: 50%; display: flex; align-items: center;
+    justify-content: center; color: #fff; font-size: 11px;
+    animation: bArrow 1.6s ease-in-out infinite;
   }
-  .btn-buy:hover { transform:translateY(-3px) scale(1.04); box-shadow:0 14px 35px rgba(0,0,0,0.3); }
-  .btn-buy:hover::before { opacity:1; }
-  .btn-arrow {
-    width:22px; height:22px;
-    background: linear-gradient(135deg, #e74c3c, #c0392b);
-    border-radius:50%;
-    display:flex; align-items:center; justify-content:center;
-    color:#fff;
-    font-size:12px;
-    animation: arrowBounce 1.5s ease-in-out infinite;
-  }
-  @keyframes arrowBounce {
-    0%,100% { transform:translateX(0); }
-    50%      { transform:translateX(-4px); }
-  }
-
+  @keyframes bArrow { 0%,100%{transform:translateX(0)} 50%{transform:translateX(-4px)} }
 </style>
 </head>
-<body>
+<body style="margin:0; padding:24px; background:#f0f0f0;">
 
-<div class="banner">
-  <!-- Background layers -->
-  <div class="bg-texture"></div>
-  <div class="grid-pattern"></div>
-  <div class="shimmer"></div>
+<div class="banner-boiler">
+  <div class="b-glow"></div>
+  <div class="b-shimmer"></div>
 
-  <!-- Heat particles -->
-  <div class="heat-particle"></div>
-  <div class="heat-particle"></div>
-  <div class="heat-particle"></div>
-  <div class="heat-particle"></div>
-  <div class="heat-particle"></div>
-  <div class="heat-particle"></div>
-  <div class="heat-particle"></div>
-  <div class="heat-particle"></div>
+  <div class="b-heat"></div><div class="b-heat"></div>
+  <div class="b-heat"></div><div class="b-heat"></div>
+  <div class="b-heat"></div><div class="b-heat"></div>
+  <div class="b-heat"></div><div class="b-heat"></div>
 
-  <!-- Decorative rings -->
-  <div class="deco-ring"></div>
-  <div class="deco-ring"></div>
-  <div class="deco-ring"></div>
+  <div class="b-ring"></div>
+  <div class="b-ring"></div>
+  <div class="b-ring"></div>
 
-  <!-- Main content -->
-  <div class="content">
+  <div class="b-inner">
 
-    <!-- Product image (right side in RTL) -->
-    <div class="image-side">
-      <div class="brand-logo">شوفاژکار</div>
-      <div class="heat-shimmer"></div>
-
-      <div class="sparkle"></div>
-      <div class="sparkle"></div>
-      <div class="sparkle"></div>
-
-      <div class="product-float">
-        <!-- Replace src with actual product image URL -->
-        <img src="https://shofazh.com/wp-content/uploads/boiler.png"
-             onerror="this.onerror=null; this.parentElement.innerHTML=boilerSVG()"
-             alt="پکیج دیواری شوفاژکار">
-      </div>
+    <!-- image -->
+    <div class="b-img-col">
+      <div class="b-logo-badge">شوفاژکار</div>
+      <div class="b-halo"></div>
+      <div class="b-sp"></div>
+      <div class="b-sp"></div>
+      <div class="b-sp"></div>
+      <img class="b-product"
+           src="https://shofazh.com/wp-content/uploads/2026/06/boiler.webp"
+           alt="پکیج دیواری کامفورت شوفاژکار">
     </div>
 
-    <!-- Text side -->
-    <div class="text-side">
-      <div class="brand-chip">
-        <div class="fire-icon">🔥</div>
-        <span>محصول برتر</span>
+    <!-- text -->
+    <div class="b-text-col">
+      <div class="b-chip">
+        <div class="b-fire">🔥</div>
+        <span>محصول برتر ایران</span>
       </div>
 
-      <h2 class="title-main">
-        پکیج دیواری<br>شوفاژکار
-      </h2>
+      <h2 class="b-title">پکیج دیواری<br>شوفاژکار</h2>
 
-      <div class="features">
-        <div class="feature-item">
-          <div class="feature-icon">🎛️</div>
+      <div class="b-features">
+        <div class="b-feat">
+          <div class="b-feat-icon">🎛️</div>
           <span>کنترل هوشمند</span>
         </div>
-        <div class="feature-item">
-          <div class="feature-icon">⚡</div>
+        <div class="b-feat">
+          <div class="b-feat-icon">⚡</div>
           <span>راندمان بالا — کم‌مصرف</span>
         </div>
       </div>
 
-      <div class="guarantee-badge">
-        <div class="guarantee-num">۲۴</div>
-        <div class="guarantee-text">
+      <div class="b-guarantee">
+        <div class="b-gnum">۲۴</div>
+        <div class="b-gtxt">
           <span>ماه گارانتی</span>
           <span>خدمات پس از فروش</span>
         </div>
       </div>
 
-      <button class="btn-buy">
-        <div class="btn-arrow">←</div>
+      <button class="b-btn">
+        <div class="b-arrow">←</div>
         خرید کنید
       </button>
     </div>
 
   </div>
 </div>
-
-<script>
-function boilerSVG() {
-  return `<svg width="170" height="230" viewBox="0 0 170 230" fill="none">
-    <!-- Wall mount bracket -->
-    <rect x="55" y="5" width="60" height="10" rx="3" fill="#8a9ba8"/>
-    <rect x="70" y="12" width="30" height="8" rx="2" fill="#6b7d8a"/>
-    <!-- Main body -->
-    <rect x="20" y="18" width="130" height="175" rx="18" fill="#f0f4f8"/>
-    <rect x="20" y="18" width="130" height="175" rx="18" fill="url(#bodyGrad)"/>
-    <defs>
-      <linearGradient id="bodyGrad" x1="20" y1="18" x2="150" y2="193" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#ffffff"/>
-        <stop offset="100%" stop-color="#d8e4ec"/>
-      </linearGradient>
-    </defs>
-    <!-- Front panel -->
-    <rect x="30" y="28" width="110" height="155" rx="12" fill="#e8f0f5" stroke="#c8d8e4" stroke-width="1"/>
-    <!-- Display screen -->
-    <rect x="48" y="38" width="74" height="55" rx="8" fill="#1a2a3a"/>
-    <rect x="52" y="42" width="66" height="47" rx="6" fill="#0d2137"/>
-    <!-- Display content: temperature -->
-    <text x="85" y="62" text-anchor="middle" font-size="20" font-weight="bold" fill="#00d4ff" font-family="monospace">۶۵°</text>
-    <text x="85" y="76" text-anchor="middle" font-size="9" fill="#4a9abb" font-family="sans-serif">دما</text>
-    <!-- Status dots -->
-    <circle cx="62" cy="82" r="3" fill="#00ff88"/>
-    <circle cx="73" cy="82" r="3" fill="#ffaa00"/>
-    <circle cx="84" cy="82" r="3" fill="#ff4444" opacity="0.3"/>
-    <!-- Control knobs -->
-    <circle cx="55" cy="115" r="13" fill="#c8d8e4" stroke="#a0b8c8" stroke-width="1.5"/>
-    <circle cx="55" cy="115" r="8"  fill="#d8e8f0"/>
-    <line x1="55" y1="106" x2="55" y2="111" stroke="#6a8a9a" stroke-width="2" stroke-linecap="round"/>
-    <circle cx="115" cy="115" r="13" fill="#c8d8e4" stroke="#a0b8c8" stroke-width="1.5"/>
-    <circle cx="115" cy="115" r="8"  fill="#d8e8f0"/>
-    <line x1="115" y1="106" x2="115" y2="111" stroke="#6a8a9a" stroke-width="2" stroke-linecap="round"/>
-    <!-- Brand label -->
-    <rect x="60" y="140" width="50" height="16" rx="4" fill="#c0392b" opacity="0.9"/>
-    <text x="85" y="152" text-anchor="middle" font-size="8" fill="white" font-weight="bold" font-family="sans-serif">SHOFAZKAR</text>
-    <!-- Bottom pipes -->
-    <rect x="55" y="188" width="14" height="30" rx="5" fill="#8a9ba8"/>
-    <rect x="101" y="188" width="14" height="30" rx="5" fill="#8a9ba8"/>
-    <rect x="52" y="212" width="20" height="8" rx="3" fill="#6b7d8a"/>
-    <rect x="98" y="212" width="20" height="8" rx="3" fill="#6b7d8a"/>
-    <!-- Highlight -->
-    <rect x="30" y="28" width="30" height="155" rx="12" fill="rgba(255,255,255,0.2)"/>
-    <!-- Status LED -->
-    <circle cx="128" cy="38" r="5" fill="#00ff88">
-      <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/>
-    </circle>
-  </svg>`;
-}
-</script>
 
 </body>
 </html>
