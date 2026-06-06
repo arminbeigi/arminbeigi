@@ -399,10 +399,10 @@
      RESPONSIVE
   ══════════════════════════════ */
   @media (max-width: 580px) {
-    .pool-banner { height: auto; border-radius: 14px; }
-    .pool-inner  { flex-direction: column; min-height: unset; }
-    .pool-scene  { width: 100%; height: 150px; order: -1; flex-shrink: 0; }
-    .pool-text   { padding: 16px 20px 20px; gap: 8px; }
+    .pool-banner { height: 300px; border-radius: 14px; }
+    .pool-inner  { flex-direction: column; min-height: unset; height: 100%; }
+    .pool-scene  { width: 100%; height: 120px; order: -1; flex-shrink: 0; }
+    .pool-text   { flex: 1; padding: 14px 20px 18px; gap: 8px; }
     /* reposition scene items for shorter height */
     .ps-filter   { bottom: 22px; left:50%; transform:translateX(-30%); }
     .ps-filter-pipe-t { top:-10px; }
@@ -416,8 +416,9 @@
     .ps-robot    { bottom:5px; }
   }
   @media (max-width: 400px) {
-    .pool-scene { height: 130px; }
-    .pool-text  { padding: 14px 16px 18px; gap: 7px; }
+    .pool-banner { height: 300px; }
+    .pool-scene { height: 120px; }
+    .pool-text  { padding: 12px 16px 16px; gap: 7px; }
     .pool-title { font-size: 18px; }
     .ps-filter  { bottom:16px; }
     .ps-pump    { bottom:22px; }
