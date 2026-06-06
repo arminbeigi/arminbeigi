@@ -6,13 +6,24 @@
 <title>بنر پکیج دیواری شوفاژکار</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;700;900&display=swap');
-  * { margin:0; padding:0; box-sizing:border-box; }
 
-  .bb {
+  .bb-wrap {
     font-family: 'Vazirmatn', Tahoma, sans-serif;
-    position: relative;
+    direction: rtl;
+    display: block;
     width: 100%;
     max-width: 760px;
+  }
+
+  .bb-wrap * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  .bb {
+    position: relative;
+    width: 100%;
     height: 260px;
     border-radius: 22px;
     overflow: hidden;
@@ -22,7 +33,6 @@
     box-shadow: 0 20px 60px rgba(180,60,20,0.4), 0 0 0 1px rgba(255,200,150,0.15);
   }
 
-  /* ─── background decorations ─── */
   .bb-bg-circle-1 {
     position: absolute;
     width: 380px; height: 380px;
@@ -41,7 +51,6 @@
   }
   @keyframes bbPulse { from{opacity:0.6; transform:scale(0.95)} to{opacity:1; transform:scale(1.05)} }
 
-  /* shimmer */
   .bb-shimmer {
     position: absolute; inset: 0; z-index: 1;
     background: linear-gradient(108deg, transparent 28%, rgba(255,255,255,0.12) 50%, transparent 72%);
@@ -50,14 +59,12 @@
   }
   @keyframes bbShimmer { 0%{background-position:220% 0} 100%{background-position:-220% 0} }
 
-  /* subtle dot pattern */
   .bb-dots {
     position: absolute; inset: 0; z-index: 1;
     background-image: radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px);
     background-size: 22px 22px;
   }
 
-  /* heat particles */
   .bb-heat {
     position: absolute; z-index: 2;
     border-radius: 50% 50% 50% 50% / 65% 65% 35% 35%;
@@ -80,14 +87,12 @@
     100%{transform:translateY(-260px) scaleX(0.2) rotate(-4deg);opacity:0}
   }
 
-  /* ─── main layout ─── */
   .bb-layout {
     position: absolute; inset: 0; z-index: 10;
     display: flex;
     align-items: stretch;
   }
 
-  /* ─── TEXT SIDE ─── */
   .bb-text {
     flex: 1;
     display: flex;
@@ -102,7 +107,6 @@
     to  {opacity:1; transform:translateX(0)}
   }
 
-  /* brand row */
   .bb-brand-row {
     display: flex; align-items: center; gap: 8px;
     animation: bbSlideRight 0.7s 0.05s cubic-bezier(0.22,1,0.36,1) both;
@@ -126,7 +130,6 @@
     font-size: 11px; color: rgba(255,255,255,0.85); font-weight: 600;
   }
 
-  /* main title */
   .bb-title {
     font-size: 32px;
     font-weight: 900;
@@ -136,7 +139,6 @@
     animation: bbSlideRight 0.7s 0.1s cubic-bezier(0.22,1,0.36,1) both;
   }
 
-  /* feature pills */
   .bb-features {
     display: flex;
     flex-direction: column;
@@ -157,7 +159,6 @@
   .bb-feat:nth-child(2) .bb-feat-dot { animation-delay: 0.5s; }
   @keyframes bbDot { 0%,100%{opacity:0.5;transform:scale(1)} 50%{opacity:1;transform:scale(1.4)} }
 
-  /* bottom row: guarantee + button */
   .bb-bottom {
     display: flex;
     align-items: center;
@@ -182,7 +183,7 @@
     to  {text-shadow:0 0 20px rgba(255,230,120,0.9)}
   }
   .bb-gtxt { display:flex; flex-direction:column; }
-  .bb-gtxt span:first-child { font-size:11.5px; color:rgba(255,255,255,0.9);  font-weight:700 }
+  .bb-gtxt span:first-child { font-size:11.5px; color:rgba(255,255,255,0.9); font-weight:700 }
   .bb-gtxt span:last-child  { font-size:10px;   color:rgba(255,255,255,0.6) }
 
   .bb-btn {
@@ -214,7 +215,6 @@
   }
   @keyframes bbArrow { 0%,100%{transform:translateX(0)} 50%{transform:translateX(-4px)} }
 
-  /* ─── IMAGE SIDE ─── */
   .bb-img-side {
     width: 248px;
     flex-shrink: 0;
@@ -225,7 +225,6 @@
     overflow: visible;
   }
 
-  /* large warm glow under product */
   .bb-img-glow {
     position: absolute;
     bottom: -20px; left: 50%;
@@ -242,7 +241,6 @@
     to  {transform:translateX(-50%) scale(1.15); opacity:1}
   }
 
-  /* decorative arc behind product */
   .bb-img-arc {
     position: absolute;
     bottom: 0; left: 50%;
@@ -263,11 +261,8 @@
     z-index: 1;
     animation: bbArcPulse 4s 0.7s ease-in-out infinite;
   }
-  @keyframes bbArcPulse {
-    0%,100%{opacity:0.6} 50%{opacity:1}
-  }
+  @keyframes bbArcPulse { 0%,100%{opacity:0.6} 50%{opacity:1} }
 
-  /* the product image */
   .bb-product {
     position: relative; z-index: 3;
     width: 190px;
@@ -281,11 +276,10 @@
     transform-origin: center bottom;
   }
   @keyframes bbFloat {
-    0%,100%{ transform:translateY(0)     rotate(-0.6deg) }
-    50%    { transform:translateY(-14px)  rotate( 0.6deg) }
+    0%,100%{ transform:translateY(0)    rotate(-0.6deg) }
+    50%    { transform:translateY(-14px) rotate( 0.6deg) }
   }
 
-  /* sparkles */
   .bb-sp {
     position: absolute; border-radius: 50%; z-index: 4;
     background: rgba(255,245,170,0.95);
@@ -296,12 +290,11 @@
   .bb-sp-2{width:5px; height:5px; top:35%; right:8%; animation-duration:1.8s; animation-delay:0.9s}
   .bb-sp-3{width:10px;height:10px;top:70%; left:5%;  animation-duration:2.6s; animation-delay:0.4s}
   @keyframes bbSp {
-    0%,100%{transform:scale(0) rotate(0deg);  opacity:0}
-    40%    {transform:scale(1) rotate(45deg);  opacity:1}
+    0%,100%{transform:scale(0) rotate(0deg);   opacity:0}
+    40%    {transform:scale(1) rotate(45deg);   opacity:1}
     70%    {transform:scale(0.65) rotate(90deg);opacity:0.55}
   }
 
-  /* vertical divider line */
   .bb-divider {
     position: absolute; top: 20px; bottom: 20px;
     width: 1px; right: 248px;
@@ -310,77 +303,72 @@
   }
 </style>
 </head>
-<body style="margin:0; padding:30px; background:#e8e8e8;">
+<body>
 
-<div class="bb">
-  <!-- backgrounds -->
-  <div class="bb-bg-circle-1"></div>
-  <div class="bb-bg-circle-2"></div>
-  <div class="bb-dots"></div>
-  <div class="bb-shimmer"></div>
+<div class="bb-wrap">
+  <div class="bb">
+    <div class="bb-bg-circle-1"></div>
+    <div class="bb-bg-circle-2"></div>
+    <div class="bb-dots"></div>
+    <div class="bb-shimmer"></div>
 
-  <!-- heat -->
-  <div class="bb-heat"></div><div class="bb-heat"></div>
-  <div class="bb-heat"></div><div class="bb-heat"></div>
-  <div class="bb-heat"></div><div class="bb-heat"></div>
-  <div class="bb-heat"></div><div class="bb-heat"></div>
+    <div class="bb-heat"></div><div class="bb-heat"></div>
+    <div class="bb-heat"></div><div class="bb-heat"></div>
+    <div class="bb-heat"></div><div class="bb-heat"></div>
+    <div class="bb-heat"></div><div class="bb-heat"></div>
 
-  <!-- divider -->
-  <div class="bb-divider"></div>
+    <div class="bb-divider"></div>
 
-  <div class="bb-layout">
+    <div class="bb-layout">
 
-    <!-- TEXT -->
-    <div class="bb-text">
-
-      <div class="bb-brand-row">
-        <div class="bb-logo">شوفاژکار</div>
-        <div class="bb-fire">🔥</div>
-        <span class="bb-badge-text">محصول برتر ایران</span>
-      </div>
-
-      <h2 class="bb-title">پکیج دیواری<br>شوفاژکار</h2>
-
-      <div class="bb-features">
-        <div class="bb-feat">
-          <div class="bb-feat-dot"></div>
-          کنترل هوشمند
+      <div class="bb-text">
+        <div class="bb-brand-row">
+          <div class="bb-logo">شوفاژکار</div>
+          <div class="bb-fire">🔥</div>
+          <span class="bb-badge-text">محصول برتر ایران</span>
         </div>
-        <div class="bb-feat">
-          <div class="bb-feat-dot"></div>
-          راندمان بالا — کم‌مصرف
-        </div>
-      </div>
 
-      <div class="bb-bottom">
-        <div class="bb-guarantee">
-          <div class="bb-gnum">۲۴</div>
-          <div class="bb-gtxt">
-            <span>ماه گارانتی</span>
-            <span>خدمات پس از فروش</span>
+        <h2 class="bb-title">پکیج دیواری<br>شوفاژکار</h2>
+
+        <div class="bb-features">
+          <div class="bb-feat">
+            <div class="bb-feat-dot"></div>
+            کنترل هوشمند
+          </div>
+          <div class="bb-feat">
+            <div class="bb-feat-dot"></div>
+            راندمان بالا — کم‌مصرف
           </div>
         </div>
-        <a href="https://shofazh.com/product-category/garmayesh/packages/chauffagekar-package/" class="bb-btn">
-          <div class="bb-arrow">←</div>
-          خرید کنید
-        </a>
+
+        <div class="bb-bottom">
+          <div class="bb-guarantee">
+            <div class="bb-gnum">۲۴</div>
+            <div class="bb-gtxt">
+              <span>ماه گارانتی</span>
+              <span>خدمات پس از فروش</span>
+            </div>
+          </div>
+          <a href="https://shofazh.com/product-category/garmayesh/packages/chauffagekar-package/" class="bb-btn">
+            <div class="bb-arrow">←</div>
+            خرید کنید
+          </a>
+        </div>
+      </div>
+
+      <div class="bb-img-side">
+        <div class="bb-img-glow"></div>
+        <div class="bb-img-arc"></div>
+        <div class="bb-img-arc-2"></div>
+        <div class="bb-sp bb-sp-1"></div>
+        <div class="bb-sp bb-sp-2"></div>
+        <div class="bb-sp bb-sp-3"></div>
+        <img class="bb-product"
+             src="https://shofazh.com/wp-content/uploads/2026/06/boiler.webp"
+             alt="پکیج دیواری کامفورت شوفاژکار">
       </div>
 
     </div>
-
-    <!-- IMAGE -->
-    <div class="bb-img-side">
-      <div class="bb-img-glow"></div>
-      <div class="bb-img-arc"></div>
-      <div class="bb-img-arc-2"></div>
-      <div class="bb-sp bb-sp-1"></div>
-      <div class="bb-sp bb-sp-2"></div>
-      <div class="bb-sp bb-sp-3"></div>
-      <img class="bb-product"
-           src="https://shofazh.com/wp-content/uploads/2026/06/boiler.webp"
-           alt="پکیج دیواری کامفورت شوفاژکار">
-    </div>
-
   </div>
 </div>
 
