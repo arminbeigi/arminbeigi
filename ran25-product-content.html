@@ -270,10 +270,10 @@
   background-image:radial-gradient(circle at 20% 30%,rgba(255,255,255,.08) 1px,transparent 2px),
     radial-gradient(circle at 70% 70%,rgba(255,255,255,.06) 1px,transparent 2px);
   background-size:60px 60px,40px 40px}
-.ran25-ticker::after{content:"";position:absolute;top:0;bottom:0;left:0;width:80px;z-index:3;
+.ran25-ticker::after{content:"";position:absolute;top:0;bottom:0;left:0;width:50px;z-index:3;
   background:linear-gradient(90deg,#0B3D11,transparent);pointer-events:none}
 .ran25-ticker.blue::after{background:linear-gradient(90deg,#0A2F6B,transparent)}
-.ran25-ticker .fade-r{content:"";position:absolute;top:0;bottom:0;right:0;width:80px;z-index:3;
+.ran25-ticker .fade-r{position:absolute;top:0;bottom:0;right:0;width:50px;z-index:3;
   background:linear-gradient(-90deg,#0B3D11,transparent);pointer-events:none}
 .ran25-ticker.blue .fade-r{background:linear-gradient(-90deg,#0A2F6B,transparent)}
 .ran25-ticker-track{display:flex;align-items:center;gap:48px;padding:18px 0;width:max-content;
@@ -320,7 +320,8 @@
 
 /* ---------- WordPress theme conflict fixes ---------- */
 .ran25-wrap{max-width:100%!important;overflow-x:hidden!important;contain:layout paint!important;isolation:isolate!important}
-.ran25-wrap *{max-width:100%}
+.ran25-wrap > *:not(.ran25-ticker-track){max-width:100%}
+.ran25-ticker-track{max-width:none!important;width:max-content!important}
 .ran25-machine,.ran25-ticker{position:relative!important;width:100%!important;max-width:100%!important;
   overflow:hidden!important;contain:layout paint!important;isolation:isolate!important;box-sizing:border-box!important}
 .ran25-machine{height:96px!important}
