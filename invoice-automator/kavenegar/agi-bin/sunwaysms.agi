@@ -1,0 +1,130 @@
+#!/usr/bin/env php
+<?php
+
+require_once "phpagi.php";
+
+function sunwaysms_send_sms($number, $destcallerid, $numlocal = null) {
+	$numlocal = $numlocal ? $numlocal : '';
+	shell_exec("/var/lib/asterisk/bin/sendsms.php {$number} {$destcallerid} {$numlocal} 2>/dev/null &");
+}
+
+function sunwaysms_numlocal_last_send($numlocal) {
+	$ret = shell_exec("/var/lib/asterisk/bin/sunwaysmstools.php numlocal {$numlocal}");
+	return trim($ret);
+}
+
+/**
+ * 09103637891
+ * 9809103637891
+ * 989103637891
+ * 9103637891
+ *
+ * 2191001022
+ * 91001022
+ * 2634233045
+ */
+function sunwaysms_mobile_validate($number) {
+	if (strlen($number) < 10) {
+		return false;
+	}
+
+	$num = substr("{$number}", -10);
+	if ($num[0] != '9') {
+		return false;
+	}
+
+	return "{$num}";
+}
+
+$agi = new AGI();
+
+$last = $agi->get_variable('SUNWAYSMSRUNNED');
+if ($last && isset($last['data']) && $last['data'] == 'yes') {
+	$agi->verbose("LastRunned the send sms, ignore the call!");
+	exit(0);
+}
+
+$agi->exec('Set', 'SUNWAYSMSRUNNED=yes');
+$loop = true;
+
+$callerid = substr($agi->request['agi_callerid'], -10);
+$destcallerid = trim($agi->request['agi_arg_1']);
+
+$logfile = '/var/log/asterisk/kavenegar_sms.log';
+if (!file_exists('/etc/asterisk/sunwaysms.conf')) {
+	file_put_contents($logfile, date('Y-m-d H:i:s') . " ERROR: /etc/asterisk/sunwaysms.conf not found. Go to Kavenegar panel and click Apply Config.\n", FILE_APPEND);
+	exit(0);
+}
+$conf = parse_ini_file('/etc/asterisk/sunwaysms.conf', true);
+if (!$conf || !isset($conf['sunwaysms'])) {
+	file_put_contents($logfile, date('Y-m-d H:i:s') . " ERROR: sunwaysms.conf is empty or invalid.\n", FILE_APPEND);
+	exit(0);
+}
+
+$citynumber = (int) $conf['sunwaysms']['citynumber'];
+$citynumbersaved = (int) $conf['sunwaysms']['citynumbersaved'];
+$retrycount = (int) $conf['sunwaysms']['retrycount'];
+$reactiontype = (int) $conf['sunwaysms']['reactiontype'];
+
+$agi->verbose("citynumber={$citynumber},citynumbersaved={$citynumbersaved},retrycount={$retrycount},reactiontype={$reactiontype}");
+
+if ($reactiontype == 3) {
+	$agi->verbose("Service Disabled and ignore continue process!\n");
+	exit(0);
+}
+
+if (strlen($destcallerid) == 0) {
+	$destcallerid = trim($agi->request['agi_dnid']);
+}
+
+if (!is_numeric($destcallerid)) {
+	$de = $agi->get_variable('CDR(dst)');
+	if ($de && isset($de['data']) && is_numeric($de['data'])) {
+		$destcallerid = $de['data'];
+	}
+}
+
+$agi->verbose("Parameters: Callerid:{$callerid}, dest:{$destcallerid}");
+
+if (sunwaysms_mobile_validate($callerid) === false) {
+
+	if ($citynumber != 1) {
+		$agi->verbose("The city number working is disabled!, GodBy!");
+		exit(0);
+	}
+
+	if ($citynumbersaved == 1) {
+		$num_valid = sunwaysms_numlocal_last_send($callerid);
+		if ($num_valid != null && strlen($num_valid) > 1) {
+			$agi->verbose("Call from City, Find on logs mobile:{$num_valid}, send sms");
+			sunwaysms_send_sms($num_valid, $destcallerid, $callerid);
+			exit(0);
+		}
+	}
+
+	$agi->answer();
+	$failed_count = 0;
+
+	while ($loop == true) {
+		$agi->stream_file('please-enter-your-mobile-num-then-press-pound', '#');
+		$res_inp = $agi->get_data("beep", 100000, 12);
+		$mobile_num = trim($res_inp['result']);
+		$num_valid = sunwaysms_mobile_validate($mobile_num);
+		if ($num_valid == false) {
+			$agi->stream_file('wrong-mobile-number');
+			$failed_count += 1;
+		} else {
+			$agi->verbose("Call from mobile send sms, GetMobileNumber:{$mobile_num}, dest:{$destcallerid}");
+			sunwaysms_send_sms($num_valid, $destcallerid, $callerid);
+			$loop = false;
+		}
+
+		if ($failed_count >= $retrycount) {
+			$loop = false;
+		}
+	}
+
+} else {
+	$agi->verbose("Call from mobile send sms, Callerid:{$callerid}, dest:{$destcallerid}");
+	sunwaysms_send_sms($callerid, $destcallerid, null);
+}
