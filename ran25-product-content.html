@@ -5,12 +5,54 @@
   direction:rtl; text-align:right; background:var(--bg); color:var(--text);
   font-family:Tahoma,"IRANSans","Vazirmatn",sans-serif; line-height:2;
   padding:18px; border-radius:18px; font-size:16px;
+  counter-reset:sec;
 }
 .ran25-wrap *{box-sizing:border-box}
-.ran25-wrap h2{
-  color:var(--blue); font-size:24px; margin:38px 0 18px; padding-right:16px;
-  border-right:6px solid var(--orange); line-height:1.6;
+
+/* ---------- Section header cards (H2 redesign) ---------- */
+.ran25-wrap > h2{
+  counter-increment:sec; position:relative;
+  background:linear-gradient(135deg,#fff 0%,#EAF2FF 100%);
+  border:none; border-top:5px solid var(--blue);
+  border-radius:18px; padding:26px 96px 26px 24px;
+  margin:70px 0 24px; font-size:22px; color:var(--blue);
+  box-shadow:0 12px 32px rgba(20,40,70,.09);
+  line-height:1.5;
 }
+.ran25-wrap > h2::before{
+  content:counter(sec,decimal-leading-zero);
+  position:absolute; right:22px; top:50%; transform:translateY(-50%);
+  width:56px; height:56px; border-radius:50%;
+  background:linear-gradient(135deg,var(--orange),#FFA000); color:#fff;
+  text-align:center; line-height:56px; font-size:20px; font-weight:bold;
+  box-shadow:0 8px 22px rgba(255,111,0,.45);
+  letter-spacing:1px;
+}
+.ran25-wrap > h2::after{
+  content:""; position:absolute; top:-40px; right:50%;
+  transform:translateX(50%); width:140px; height:5px; border-radius:3px;
+  background:linear-gradient(90deg,transparent,var(--orange) 50%,transparent);
+  opacity:.7;
+}
+.ran25-wrap > h2:first-of-type::after{display:none}
+/* Alternating accent colors */
+.ran25-wrap > h2:nth-of-type(3n+2){border-top-color:var(--orange)}
+.ran25-wrap > h2:nth-of-type(3n+2)::before{background:linear-gradient(135deg,var(--blue),#1E88E5);box-shadow:0 8px 22px rgba(21,101,192,.45)}
+.ran25-wrap > h2:nth-of-type(3n+2)::after{background:linear-gradient(90deg,transparent,var(--blue) 50%,transparent)}
+.ran25-wrap > h2:nth-of-type(3n){border-top-color:var(--green)}
+.ran25-wrap > h2:nth-of-type(3n)::before{background:linear-gradient(135deg,var(--green),#43A047);box-shadow:0 8px 22px rgba(46,125,50,.45)}
+.ran25-wrap > h2:nth-of-type(3n)::after{background:linear-gradient(90deg,transparent,var(--green) 50%,transparent)}
+/* Reset for special boxes (summary + CTA) */
+.ran25-summary h2,.ran25-cta h2{
+  counter-increment:none; background:none; border:none; border-radius:0;
+  padding:0; margin:0 0 10px; color:#fff; box-shadow:none;
+}
+.ran25-summary h2::before,.ran25-summary h2::after,
+.ran25-cta h2::before,.ran25-cta h2::after{display:none}
+
+/* Content sections background zones - subtle alternating bands */
+.ran25-wrap > h2:nth-of-type(2n+1) ~ *:not(h2):not(h3):not(h4){}
+
 .ran25-wrap h3{color:var(--blue); font-size:20px; margin:26px 0 12px}
 .ran25-wrap h4{color:var(--orange); font-size:18px; margin:20px 0 10px}
 .ran25-wrap p{margin:12px 0; color:var(--text)}
@@ -140,9 +182,20 @@
   background:linear-gradient(120deg,transparent,rgba(255,255,255,.55),transparent);
   transform:skewX(-20deg);animation:shimmer 2.6s infinite}
 
+/* Decorative section ornament */
+.ran25-ornament{display:flex;align-items:center;justify-content:center;gap:10px;margin:50px 0 20px;opacity:.6}
+.ran25-ornament span{display:block;width:8px;height:8px;border-radius:50%;background:var(--orange);animation:fadeInUp .8s ease both}
+.ran25-ornament span:nth-child(1){animation-delay:.1s}
+.ran25-ornament span:nth-child(2){animation-delay:.2s;background:var(--blue);width:12px;height:12px}
+.ran25-ornament span:nth-child(3){animation-delay:.3s;background:var(--green);width:16px;height:16px}
+.ran25-ornament span:nth-child(4){animation-delay:.4s;background:var(--blue);width:12px;height:12px}
+.ran25-ornament span:nth-child(5){animation-delay:.5s}
+
 @media(max-width:600px){
   .ran25-wrap{padding:12px;font-size:15px}
-  .ran25-wrap h2{font-size:21px}
+  .ran25-wrap > h2{font-size:19px;padding:22px 80px 22px 18px;margin-top:50px}
+  .ran25-wrap > h2::before{width:48px;height:48px;line-height:48px;font-size:17px;right:16px}
+  .ran25-wrap > h2::after{top:-28px;width:100px}
   .ran25-summary,.ran25-cta{padding:22px 18px}
   .ran25-btn{width:100%}
 }
