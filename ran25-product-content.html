@@ -16,13 +16,13 @@
 .ran25-wrap p{margin:12px 0; color:var(--text)}
 
 /* ---------- Animations ---------- */
-@keyframes fadeInUp{from{opacity:0;transform:translateY(34px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeInUp{from{opacity:.01;transform:translateY(34px)}to{opacity:1;transform:translateY(0)}}
 @keyframes pulseBorder{0%,100%{box-shadow:-5px 0 0 0 currentColor inset}50%{box-shadow:-11px 0 0 0 currentColor inset}}
 @keyframes pop{0%{transform:scale(0) rotate(-45deg);opacity:0}60%{transform:scale(1.25) rotate(0)}100%{transform:scale(1) rotate(0);opacity:1}}
 @keyframes fillBar{from{width:0}to{width:var(--w,100%)}}
 @keyframes shimmer{0%{left:-60%}100%{left:130%}}
 
-.ran25-wrap .anim{opacity:0;animation:fadeInUp .7s ease forwards}
+.ran25-wrap .anim{animation:fadeInUp .7s ease both}
 .ran25-wrap .d1{animation-delay:.05s}.ran25-wrap .d2{animation-delay:.15s}
 .ran25-wrap .d3{animation-delay:.25s}.ran25-wrap .d4{animation-delay:.35s}
 .ran25-wrap .d5{animation-delay:.45s}.ran25-wrap .d6{animation-delay:.55s}
@@ -56,8 +56,8 @@
 /* ---------- Lists ---------- */
 .ran25-list{list-style:none;padding:0;margin:14px 0}
 .ran25-list li{position:relative;padding:8px 38px 8px 8px;margin:8px 0;background:var(--card);
-  border-radius:12px;box-shadow:0 4px 14px rgba(20,40,70,.06);opacity:0;
-  animation:fadeInUp .55s ease forwards;transition:transform .25s ease}
+  border-radius:12px;box-shadow:0 4px 14px rgba(20,40,70,.06);
+  animation:fadeInUp .55s ease both;transition:transform .25s ease}
 .ran25-list li:hover{transform:translateX(-6px)}
 .ran25-list li:nth-child(1){animation-delay:.05s}.ran25-list li:nth-child(2){animation-delay:.12s}
 .ran25-list li:nth-child(3){animation-delay:.19s}.ran25-list li:nth-child(4){animation-delay:.26s}
