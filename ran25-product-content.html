@@ -2,10 +2,16 @@
 .ran25-wrap{
   --blue:#1565C0; --orange:#FF6F00; --green:#2E7D32; --warning:#F57F17;
   --danger:#C62828; --bg:#F8FAFF; --card:#FFFFFF; --text:#243447; --muted:#5b6b7d;
+  --steel:#455A64; --steel-light:#607D8B;
   direction:rtl; text-align:right; background:var(--bg); color:var(--text);
   font-family:Tahoma,"IRANSans","Vazirmatn",sans-serif; line-height:2;
   padding:18px; border-radius:18px; font-size:16px;
-  counter-reset:sec;
+  counter-reset:sec; position:relative; overflow:hidden;
+  background-image:
+    radial-gradient(circle at 20% 30%,rgba(21,101,192,.05) 1px,transparent 2px),
+    radial-gradient(circle at 80% 70%,rgba(255,111,0,.04) 1px,transparent 2px),
+    linear-gradient(var(--bg),var(--bg));
+  background-size:50px 50px,70px 70px,100% 100%;
 }
 .ran25-wrap *{box-sizing:border-box}
 
@@ -22,10 +28,11 @@
 .ran25-wrap > h2::before{
   content:counter(sec,decimal-leading-zero);
   position:absolute; right:22px; top:50%; transform:translateY(-50%);
-  width:56px; height:56px; border-radius:50%;
-  background:linear-gradient(135deg,var(--orange),#FFA000); color:#fff;
-  text-align:center; line-height:56px; font-size:20px; font-weight:bold;
-  box-shadow:0 8px 22px rgba(255,111,0,.45);
+  width:62px; height:68px;
+  clip-path:polygon(25% 5%,75% 5%,100% 50%,75% 95%,25% 95%,0 50%);
+  background:linear-gradient(135deg,var(--orange) 0%,#E65100 60%,#FF8F00 100%);
+  color:#fff; text-align:center; line-height:68px; font-size:19px; font-weight:bold;
+  filter:drop-shadow(0 6px 14px rgba(255,111,0,.5));
   letter-spacing:1px;
 }
 .ran25-wrap > h2::after{
@@ -37,10 +44,10 @@
 .ran25-wrap > h2:first-of-type::after{display:none}
 /* Alternating accent colors */
 .ran25-wrap > h2:nth-of-type(3n+2){border-top-color:var(--orange)}
-.ran25-wrap > h2:nth-of-type(3n+2)::before{background:linear-gradient(135deg,var(--blue),#1E88E5);box-shadow:0 8px 22px rgba(21,101,192,.45)}
+.ran25-wrap > h2:nth-of-type(3n+2)::before{background:linear-gradient(135deg,var(--blue) 0%,#0D47A1 60%,#1E88E5 100%);filter:drop-shadow(0 6px 14px rgba(21,101,192,.5))}
 .ran25-wrap > h2:nth-of-type(3n+2)::after{background:linear-gradient(90deg,transparent,var(--blue) 50%,transparent)}
 .ran25-wrap > h2:nth-of-type(3n){border-top-color:var(--green)}
-.ran25-wrap > h2:nth-of-type(3n)::before{background:linear-gradient(135deg,var(--green),#43A047);box-shadow:0 8px 22px rgba(46,125,50,.45)}
+.ran25-wrap > h2:nth-of-type(3n)::before{background:linear-gradient(135deg,var(--green) 0%,#1B5E20 60%,#43A047 100%);filter:drop-shadow(0 6px 14px rgba(46,125,50,.5))}
 .ran25-wrap > h2:nth-of-type(3n)::after{background:linear-gradient(90deg,transparent,var(--green) 50%,transparent)}
 /* Reset for special boxes (summary + CTA) */
 .ran25-summary h2,.ran25-cta h2{
@@ -63,6 +70,8 @@
 @keyframes pop{0%{transform:scale(0) rotate(-45deg);opacity:0}60%{transform:scale(1.25) rotate(0)}100%{transform:scale(1) rotate(0);opacity:1}}
 @keyframes fillBar{from{width:0}to{width:var(--w,100%)}}
 @keyframes shimmer{0%{left:-60%}100%{left:130%}}
+@keyframes rotate{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@keyframes flicker{0%,100%{transform:scale(1) rotate(-2deg);opacity:.9}50%{transform:scale(1.08) rotate(2deg);opacity:1}}
 
 .ran25-wrap .anim{animation:fadeInUp .7s ease both}
 .ran25-wrap .d1{animation-delay:.05s}.ran25-wrap .d2{animation-delay:.15s}
@@ -77,12 +86,21 @@
 }
 .ran25-summary::after{content:"";position:absolute;top:-40px;left:-40px;width:160px;height:160px;
   background:rgba(255,255,255,.12);border-radius:50%}
+.ran25-summary::before{content:"";position:absolute;top:18px;left:24px;width:64px;height:80px;z-index:2;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 80' fill='none'><path d='M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z' fill='%23FFB300'/><path d='M32 24 C34 32 44 38 42 50 C40 60 36 68 32 70 C28 68 24 60 22 50 C20 38 30 32 32 24 Z' fill='%23FF6F00'/><path d='M32 42 C33 48 38 52 36 60 C35 64 33 67 32 68 C31 67 29 64 28 60 C26 52 31 48 32 42 Z' fill='%23FFEB3B'/></svg>");
+  background-repeat:no-repeat;background-size:contain;
+  animation:flicker 1.6s ease-in-out infinite;
+  filter:drop-shadow(0 0 12px rgba(255,179,0,.6))}
 .ran25-summary h2{color:#fff;border:none;padding:0;margin:0 0 10px}
 .ran25-summary p{color:#eaf4ff;position:relative;z-index:1}
 
 /* ---------- Cards / boxes ---------- */
 .ran25-card{background:var(--card);border-radius:16px;padding:20px 24px;margin:18px 0;
-  box-shadow:0 8px 24px rgba(20,40,70,.07);transition:transform .3s ease,box-shadow .3s ease}
+  box-shadow:0 8px 24px rgba(20,40,70,.07);transition:transform .3s ease,box-shadow .3s ease;
+  position:relative;overflow:hidden}
+.ran25-card::before{content:"";position:absolute;top:-20px;left:-20px;width:80px;height:80px;opacity:.08;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='%231565C0'><path d='M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z'/></svg>");
+  background-repeat:no-repeat;background-size:contain;animation:rotate 28s linear infinite;pointer-events:none}
 .ran25-card:hover{transform:translateY(-6px) scale(1.012);box-shadow:0 18px 40px rgba(20,40,70,.16)}
 
 .ran25-box{border-radius:14px;padding:16px 20px 16px 24px;margin:18px 0;position:relative;
@@ -166,7 +184,13 @@
 .ran25-cta{background:linear-gradient(135deg,#0D2B52 0%,#0D47A1 55%,#1565C0 100%);
   color:#fff;border-radius:20px;padding:34px 28px;margin:34px 0 10px;text-align:center;
   box-shadow:0 18px 44px rgba(13,43,82,.4);position:relative;overflow:hidden}
-.ran25-cta h2{color:#fff;border:none;padding:0;justify-content:center}
+.ran25-cta::before,.ran25-cta::after{content:"";position:absolute;width:120px;height:120px;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='rgba(255,255,255,0.08)'><path d='M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z'/></svg>");
+  background-repeat:no-repeat;background-size:contain;animation:rotate 18s linear infinite}
+.ran25-cta::before{top:-30px;right:-30px}
+.ran25-cta::after{bottom:-40px;left:-40px;width:160px;height:160px;animation-duration:24s;animation-direction:reverse}
+.ran25-cta h2{color:#fff;border:none;padding:0;justify-content:center;position:relative;z-index:2}
+.ran25-cta p,.ran25-cta ul{position:relative;z-index:2}
 .ran25-cta p{color:#cfe2ff}
 .ran25-cta-feats{list-style:none;padding:0;margin:16px 0;display:flex;flex-wrap:wrap;
   justify-content:center;gap:10px 22px}
@@ -531,7 +555,6 @@
       <li>خدمات ۱۰ ساله</li>
       <li>ارسال سریع</li>
     </ul>
-    <a href="#" class="ran25-btn">افزودن به سبد خرید</a>
   </div>
 
 </div>
