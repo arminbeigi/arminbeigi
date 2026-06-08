@@ -1,0 +1,458 @@
+<style>
+.ran25-wrap{
+  --blue:#1565C0; --orange:#FF6F00; --green:#2E7D32; --warning:#F57F17;
+  --danger:#C62828; --bg:#F8FAFF; --card:#FFFFFF; --text:#243447; --muted:#5b6b7d;
+  direction:rtl; text-align:right; background:var(--bg); color:var(--text);
+  font-family:Tahoma,"IRANSans","Vazirmatn",sans-serif; line-height:2;
+  padding:18px; border-radius:18px; font-size:16px;
+}
+.ran25-wrap *{box-sizing:border-box}
+.ran25-wrap h2{
+  color:var(--blue); font-size:24px; margin:38px 0 18px; padding-right:16px;
+  border-right:6px solid var(--orange); line-height:1.6;
+}
+.ran25-wrap h3{color:var(--blue); font-size:20px; margin:26px 0 12px}
+.ran25-wrap h4{color:var(--orange); font-size:18px; margin:20px 0 10px}
+.ran25-wrap p{margin:12px 0; color:var(--text)}
+
+/* ---------- Animations ---------- */
+@keyframes fadeInUp{from{opacity:0;transform:translateY(34px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulseBorder{0%,100%{box-shadow:-5px 0 0 0 currentColor inset}50%{box-shadow:-11px 0 0 0 currentColor inset}}
+@keyframes pop{0%{transform:scale(0) rotate(-45deg);opacity:0}60%{transform:scale(1.25) rotate(0)}100%{transform:scale(1) rotate(0);opacity:1}}
+@keyframes fillBar{from{width:0}to{width:var(--w,100%)}}
+@keyframes shimmer{0%{left:-60%}100%{left:130%}}
+
+.ran25-wrap .anim{opacity:0;animation:fadeInUp .7s ease forwards}
+.ran25-wrap .d1{animation-delay:.05s}.ran25-wrap .d2{animation-delay:.15s}
+.ran25-wrap .d3{animation-delay:.25s}.ran25-wrap .d4{animation-delay:.35s}
+.ran25-wrap .d5{animation-delay:.45s}.ran25-wrap .d6{animation-delay:.55s}
+
+/* ---------- Summary box ---------- */
+.ran25-summary{
+  background:linear-gradient(135deg,#1565C0 0%,#1E88E5 60%,#42A5F5 100%);
+  color:#fff;border-radius:18px;padding:26px 28px;margin-bottom:8px;
+  box-shadow:0 14px 34px rgba(21,101,192,.28);position:relative;overflow:hidden;
+}
+.ran25-summary::after{content:"";position:absolute;top:-40px;left:-40px;width:160px;height:160px;
+  background:rgba(255,255,255,.12);border-radius:50%}
+.ran25-summary h2{color:#fff;border:none;padding:0;margin:0 0 10px}
+.ran25-summary p{color:#eaf4ff;position:relative;z-index:1}
+
+/* ---------- Cards / boxes ---------- */
+.ran25-card{background:var(--card);border-radius:16px;padding:20px 24px;margin:18px 0;
+  box-shadow:0 8px 24px rgba(20,40,70,.07);transition:transform .3s ease,box-shadow .3s ease}
+.ran25-card:hover{transform:translateY(-6px) scale(1.012);box-shadow:0 18px 40px rgba(20,40,70,.16)}
+
+.ran25-box{border-radius:14px;padding:16px 20px 16px 24px;margin:18px 0;position:relative;
+  border-right:6px solid;animation:pulseBorder 2.4s ease-in-out infinite}
+.ran25-tip{background:#FFF8E1;border-color:var(--warning);color:var(--warning)}
+.ran25-tip *{color:#7a5b00}
+.ran25-warn{background:#FDECEA;border-color:var(--danger);color:var(--danger)}
+.ran25-warn *{color:#8c1d18}
+.ran25-good{background:#E8F5E9;border-color:var(--green);color:var(--green)}
+.ran25-good *{color:#1b5e20}
+.ran25-box strong{display:block;margin-bottom:4px}
+
+/* ---------- Lists ---------- */
+.ran25-list{list-style:none;padding:0;margin:14px 0}
+.ran25-list li{position:relative;padding:8px 38px 8px 8px;margin:8px 0;background:var(--card);
+  border-radius:12px;box-shadow:0 4px 14px rgba(20,40,70,.06);opacity:0;
+  animation:fadeInUp .55s ease forwards;transition:transform .25s ease}
+.ran25-list li:hover{transform:translateX(-6px)}
+.ran25-list li:nth-child(1){animation-delay:.05s}.ran25-list li:nth-child(2){animation-delay:.12s}
+.ran25-list li:nth-child(3){animation-delay:.19s}.ran25-list li:nth-child(4){animation-delay:.26s}
+.ran25-list li:nth-child(5){animation-delay:.33s}.ran25-list li:nth-child(6){animation-delay:.40s}
+.ran25-list li:nth-child(7){animation-delay:.47s}.ran25-list li:nth-child(8){animation-delay:.54s}
+.ran25-list li:nth-child(9){animation-delay:.61s}.ran25-list li:nth-child(10){animation-delay:.68s}
+.ran25-list li::before{content:"✓";position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  width:24px;height:24px;border-radius:50%;background:var(--blue);color:#fff;text-align:center;
+  line-height:24px;font-size:14px;font-weight:bold;animation:pop .5s ease forwards}
+.ran25-pros li::before{background:var(--green)}
+.ran25-cons li::before{content:"✕";background:var(--danger)}
+.ran25-num{list-style:none;counter-reset:n;padding:0}
+.ran25-num li{counter-increment:n;position:relative;padding:8px 46px 8px 8px;margin:8px 0;
+  background:var(--card);border-radius:12px;box-shadow:0 4px 14px rgba(20,40,70,.06)}
+.ran25-num li::before{content:counter(n);position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--orange),#FFA000);
+  color:#fff;text-align:center;line-height:28px;font-weight:bold;font-size:14px}
+
+/* ---------- Specs animated bars ---------- */
+.ran25-bars{margin:16px 0}
+.ran25-bar{margin:14px 0}
+.ran25-bar .lbl{display:flex;justify-content:space-between;font-size:14px;margin-bottom:6px;color:var(--muted)}
+.ran25-bar .track{background:#E3ECF7;border-radius:20px;height:14px;overflow:hidden}
+.ran25-bar .fill{height:100%;border-radius:20px;
+  background:linear-gradient(90deg,var(--blue),var(--orange));
+  animation:fillBar 1.6s cubic-bezier(.2,.8,.3,1) forwards}
+
+/* ---------- Tables ---------- */
+.ran25-tablewrap{overflow-x:auto;margin:16px 0;border-radius:14px;box-shadow:0 8px 24px rgba(20,40,70,.08)}
+.ran25-wrap table{width:100%;border-collapse:collapse;background:var(--card);min-width:340px}
+.ran25-wrap th{background:linear-gradient(135deg,var(--blue),#1E88E5);color:#fff;padding:13px 14px;
+  font-size:15px;text-align:right}
+.ran25-wrap td{padding:12px 14px;border-bottom:1px solid #eef2f8;font-size:15px}
+.ran25-wrap tr:nth-child(even) td{background:#F5F9FF}
+.ran25-wrap tr:hover td{background:#EAF2FF}
+.ran25-wrap td:first-child{font-weight:bold;color:var(--blue)}
+
+/* ---------- FAQ ---------- */
+.ran25-faq details{background:var(--card);border-radius:12px;margin:10px 0;padding:0;
+  box-shadow:0 4px 14px rgba(20,40,70,.06);overflow:hidden;border-right:5px solid var(--blue);
+  transition:box-shadow .3s ease}
+.ran25-faq details[open]{box-shadow:0 12px 30px rgba(21,101,192,.16)}
+.ran25-faq summary{cursor:pointer;padding:15px 18px;font-weight:bold;color:var(--blue);
+  list-style:none;position:relative;padding-left:44px;transition:background .25s ease}
+.ran25-faq summary:hover{background:#F0F6FF}
+.ran25-faq summary::-webkit-details-marker{display:none}
+.ran25-faq summary::after{content:"+";position:absolute;left:16px;top:50%;transform:translateY(-50%);
+  width:26px;height:26px;border-radius:50%;background:var(--orange);color:#fff;text-align:center;
+  line-height:26px;font-size:18px;transition:transform .3s ease}
+.ran25-faq details[open] summary::after{content:"−";transform:translateY(-50%) rotate(180deg)}
+.ran25-faq .ans{padding:4px 18px 18px;color:var(--muted)}
+
+/* ---------- CTA ---------- */
+.ran25-cta{background:linear-gradient(135deg,#0D2B52 0%,#0D47A1 55%,#1565C0 100%);
+  color:#fff;border-radius:20px;padding:34px 28px;margin:34px 0 10px;text-align:center;
+  box-shadow:0 18px 44px rgba(13,43,82,.4);position:relative;overflow:hidden}
+.ran25-cta h2{color:#fff;border:none;padding:0;justify-content:center}
+.ran25-cta p{color:#cfe2ff}
+.ran25-cta-feats{list-style:none;padding:0;margin:16px 0;display:flex;flex-wrap:wrap;
+  justify-content:center;gap:10px 22px}
+.ran25-cta-feats li{position:relative;padding-right:26px;color:#eaf4ff;font-size:15px}
+.ran25-cta-feats li::before{content:"✓";position:absolute;right:0;top:0;width:20px;height:20px;
+  border-radius:50%;background:var(--green);color:#fff;text-align:center;line-height:20px;font-size:12px}
+.ran25-btn{display:inline-block;margin-top:14px;padding:16px 46px;border-radius:50px;
+  background:linear-gradient(135deg,var(--orange),#FFA000);color:#fff;font-weight:bold;font-size:18px;
+  text-decoration:none;position:relative;overflow:hidden;box-shadow:0 10px 26px rgba(255,111,0,.45);
+  transition:transform .25s ease}
+.ran25-btn:hover{transform:scale(1.06)}
+.ran25-btn::after{content:"";position:absolute;top:0;left:-60%;width:50%;height:100%;
+  background:linear-gradient(120deg,transparent,rgba(255,255,255,.55),transparent);
+  transform:skewX(-20deg);animation:shimmer 2.6s infinite}
+
+@media(max-width:600px){
+  .ran25-wrap{padding:12px;font-size:15px}
+  .ran25-wrap h2{font-size:21px}
+  .ran25-summary,.ran25-cta{padding:22px 18px}
+  .ran25-btn{width:100%}
+}
+@media(prefers-reduced-motion:reduce){
+  .ran25-wrap *{animation:none!important;opacity:1!important}
+}
+</style>
+
+<div class="ran25-wrap">
+
+  <!-- 1. SUMMARY -->
+  <div class="ran25-summary anim d1">
+    <h2>خلاصه سریع</h2>
+    <p>مشعل گازسوز ایران رادیاتور RAN25 یک مشعل تک‌مرحله‌ای با گاز طبیعی شهری، دارای ظرفیت حرارتی ۳۷٬۰۰۰ تا ۱۰۲٬۰۰۰ کیلوکالری بر ساعت است که برای دیگ‌های چدنی و فولادی ساختمان‌های مسکونی و تجاری متوسط طراحی شده است. این مشعل با شیر برقی سولنوئیدی، فلو سوئیچ هوا و پرشر سوئیچ گاز، احتراق ایمن و پایدار را تضمین می‌کند و با ۱۲ ماه گارانتی و ۱۰ سال خدمات پس از فروش عرضه می‌شود.</p>
+  </div>
+
+  <!-- 2. KEY SPECS -->
+  <div class="ran25-card anim d2">
+    <h3>مشخصات کلیدی در یک نگاه</h3>
+    <ul class="ran25-list">
+      <li>ظرفیت حرارتی ۳۷٬۰۰۰ تا ۱۰۲٬۰۰۰ کیلوکالری بر ساعت</li>
+      <li>سوخت: گاز طبیعی شهری</li>
+      <li>مصرف گاز ۴٫۵ تا ۱۲٫۵ مترمکعب در ساعت</li>
+      <li>توان الکتروموتور: ۹۰ وات</li>
+      <li>نوع احتراق: تک‌مرحله‌ای</li>
+      <li>ابعاد فشرده: ۴۱۷×۴۵۳×۹۷ میلی‌متر</li>
+      <li>مجهز به سیستم‌های ایمنی هوا و گاز</li>
+      <li>گارانتی ۱۲ ماهه و خدمات ۱۰ ساله</li>
+    </ul>
+  </div>
+
+  <!-- 3. WHAT IS -->
+  <h2 class="anim d1">مشعل گازسوز ایران رادیاتور RAN25 چیست؟</h2>
+  <p>RAN25 یکی از پرفروش‌ترین مشعل‌های گازسوز خانگی و نیمه‌صنعتی برند ایران رادیاتور است. این مشعل وظیفه دارد گاز طبیعی شهری را با هوای احتراق ترکیب کرده و با شعله‌ای پایدار، حرارت لازم برای گرمایش آب دیگ موتورخانه را تأمین کند. ساختار تک‌مرحله‌ای آن یعنی شعله تنها در یک سطح روشن یا خاموش می‌شود که این موضوع کارکرد را ساده، قابل اعتماد و کم‌هزینه نگه می‌دارد.</p>
+  <p>RAN25 برای دیگ‌های با ظرفیت متوسط مناسب است و به‌خاطر ابعاد جمع‌وجور، نصب آسان و قطعات در دسترس، گزینه‌ای محبوب در بازار گرمایش ایران به‌شمار می‌رود.</p>
+  <div class="ran25-box ran25-tip anim d2">
+    <strong>نکته</strong>
+    پیش از خرید حتماً ظرفیت حرارتی دیگ موتورخانه خود را با محدوده RAN25 (۳۷ تا ۱۰۲ هزار کیلوکالری) تطبیق دهید تا بازدهی و عمر مشعل بیشینه شود.
+  </div>
+
+  <!-- 4. HEAT CAPACITY -->
+  <h2 class="anim d1">ظرفیت حرارتی RAN25</h2>
+  <p>ظرفیت حرارتی تعیین می‌کند که مشعل برای چه حجمی از فضا و چه اندازه دیگی مناسب است. محدوده کاری RAN25 به شرح زیر است:</p>
+  <div class="ran25-tablewrap anim d2">
+    <table>
+      <tr><th>پارامتر</th><th>حداقل</th><th>حداکثر</th></tr>
+      <tr><td>ظرفیت حرارتی (kcal/hr)</td><td>۳۷٬۰۰۰</td><td>۱۰۲٬۰۰۰</td></tr>
+      <tr><td>مصرف گاز (m³/h)</td><td>۴٫۵</td><td>۱۲٫۵</td></tr>
+      <tr><td>فشار گاز ورودی</td><td colspan="2">حداقل ۱۷٫۵ میلی‌بار</td></tr>
+    </table>
+  </div>
+  <div class="ran25-bars ran25-card anim d3">
+    <div class="ran25-bar"><div class="lbl"><span>پوشش ظرفیت حرارتی</span><span>۱۰۲٬۰۰۰ kcal/hr</span></div><div class="track"><div class="fill" style="--w:100%"></div></div></div>
+    <div class="ran25-bar"><div class="lbl"><span>بازه مصرف گاز</span><span>تا ۱۲٫۵ m³/h</span></div><div class="track"><div class="fill" style="--w:84%"></div></div></div>
+    <div class="ran25-bar"><div class="lbl"><span>بازدهی احتراق</span><span>عالی</span></div><div class="track"><div class="fill" style="--w:92%"></div></div></div>
+  </div>
+  <div class="ran25-box ran25-warn anim d4">
+    <strong>هشدار</strong>
+    استفاده از مشعل با ظرفیت بالاتر یا پایین‌تر از نیاز واقعی دیگ، باعث افت بازدهی، دودزایی، مصرف بی‌رویه گاز و آسیب به مبدل می‌شود.
+  </div>
+
+  <!-- 5. FULL SPECS -->
+  <h2 class="anim d1">مشخصات فنی کامل</h2>
+  <div class="ran25-tablewrap anim d2">
+    <table>
+      <tr><th>مشخصه</th><th>مقدار</th></tr>
+      <tr><td>مدل</td><td>RAN25</td></tr>
+      <tr><td>برند</td><td>ایران رادیاتور</td></tr>
+      <tr><td>نوع سوخت</td><td>گاز طبیعی شهری</td></tr>
+      <tr><td>حداقل ظرفیت حرارتی</td><td>۳۷٬۰۰۰ kcal/hr</td></tr>
+      <tr><td>حداکثر ظرفیت حرارتی</td><td>۱۰۲٬۰۰۰ kcal/hr</td></tr>
+      <tr><td>حداقل مصرف گاز</td><td>۴٫۵ m³/h</td></tr>
+      <tr><td>حداکثر مصرف گاز</td><td>۱۲٫۵ m³/h</td></tr>
+      <tr><td>فشار گاز ورودی</td><td>حداقل ۱۷٫۵ میلی‌بار</td></tr>
+      <tr><td>سایز ورودی گاز</td><td>۱/۲ اینچ</td></tr>
+      <tr><td>توان الکتروموتور</td><td>۹۰ وات</td></tr>
+      <tr><td>نوع احتراق</td><td>تک‌مرحله‌ای</td></tr>
+      <tr><td>ابعاد (D×H×W)</td><td>۴۱۷×۴۵۳×۹۷ میلی‌متر</td></tr>
+      <tr><td>شیر گاز</td><td>شیر برقی (سولنوئید)</td></tr>
+      <tr><td>سنسور ایمنی هوا</td><td>فلو سوئیچ هوا</td></tr>
+      <tr><td>سنسور ایمنی گاز</td><td>پرشر سوئیچ گاز</td></tr>
+      <tr><td>استاندارد</td><td>استاندارد ملی ایران</td></tr>
+      <tr><td>گارانتی</td><td>۱۲ ماه ایران رادیاتور</td></tr>
+      <tr><td>خدمات پس از فروش</td><td>۱۰ سال</td></tr>
+    </table>
+  </div>
+  <h3 class="anim d3">اجزای اصلی RAN25</h3>
+  <ul class="ran25-list anim d3">
+    <li>الکتروموتور و فن دمنده هوا</li>
+    <li>شیر برقی (سولنوئید) گاز</li>
+    <li>شعله‌پوش (دیفیوزر) و لوله شعله</li>
+    <li>ترانس جرقه و الکترود آتش‌زنه</li>
+    <li>چشم الکترونیکی (سنسور یونیزاسیون)</li>
+    <li>فلو سوئیچ هوا و پرشر سوئیچ گاز</li>
+    <li>رله کنترل (آنتی‌فلیم) و ترمینال برق</li>
+  </ul>
+  <div class="ran25-box ran25-tip anim d4">
+    <strong>نکته</strong>
+    تنظیم درست فاصله الکترودها و موقعیت شعله‌پوش، نقش مستقیمی در جرقه‌زنی سریع و پایداری شعله دارد و باید توسط تکنسین مجرب انجام شود.
+  </div>
+
+  <!-- 6. PROS / CONS -->
+  <h2 class="anim d1">مزایا و معایب</h2>
+  <h3 class="anim d2">مزایا</h3>
+  <ul class="ran25-list ran25-pros anim d2">
+    <li>برند معتبر و شناخته‌شده ایران رادیاتور</li>
+    <li>قیمت اقتصادی نسبت به مدل‌های مشابه</li>
+    <li>قطعات یدکی فراوان و در دسترس در سراسر کشور</li>
+    <li>نصب و راه‌اندازی ساده و سریع</li>
+    <li>ابعاد جمع‌وجور و مناسب موتورخانه‌های کوچک</li>
+    <li>مجهز به سیستم‌های ایمنی هوا و گاز</li>
+    <li>احتراق تک‌مرحله‌ای ساده و کم‌خرابی</li>
+    <li>بازدهی حرارتی مناسب و مصرف بهینه گاز</li>
+    <li>دارای استاندارد ملی ایران</li>
+    <li>گارانتی ۱۲ ماهه و خدمات پس از فروش ۱۰ ساله</li>
+  </ul>
+  <h3 class="anim d3">معایب</h3>
+  <ul class="ran25-list ran25-cons anim d3">
+    <li>احتراق تک‌مرحله‌ای و نبود قابلیت دومرحله‌ای</li>
+    <li>صدای کارکرد فن نسبتاً محسوس</li>
+    <li>مناسب نبودن برای ظرفیت‌های بسیار بالا و صنعتی</li>
+    <li>نیاز به سرویس دوره‌ای برای حفظ بازدهی</li>
+  </ul>
+
+  <!-- 7. COMPARISON -->
+  <h2 class="anim d1">مقایسه با مشعل‌های F55 و F88</h2>
+  <div class="ran25-tablewrap anim d2">
+    <table>
+      <tr><th>ویژگی</th><th>RAN25</th><th>F55</th><th>F88</th></tr>
+      <tr><td>حداکثر ظرفیت (kcal/hr)</td><td>۱۰۲٬۰۰۰</td><td>۵۵٬۰۰۰</td><td>۸۸٬۰۰۰</td></tr>
+      <tr><td>نوع احتراق</td><td>تک‌مرحله‌ای</td><td>تک‌مرحله‌ای</td><td>تک‌مرحله‌ای</td></tr>
+      <tr><td>کاربری</td><td>مسکونی/تجاری متوسط</td><td>مسکونی کوچک</td><td>مسکونی متوسط</td></tr>
+      <tr><td>توان موتور</td><td>۹۰ وات</td><td>۷۵ وات</td><td>۸۵ وات</td></tr>
+    </table>
+  </div>
+  <div class="ran25-box ran25-good anim d3">
+    <strong>جمع‌بندی مقایسه</strong>
+    اگر دیگ شما ظرفیت بالاتری دارد، RAN25 با حداکثر ۱۰۲ هزار کیلوکالری انتخابی منطقی‌تر از F55 و F88 است؛ اما برای موتورخانه‌های کوچک‌تر، مدل‌های پایین‌تر اقتصادی‌تر خواهند بود.
+  </div>
+  <h3 class="anim d1">مقایسه با شوفاژکار G120</h3>
+  <div class="ran25-tablewrap anim d2">
+    <table>
+      <tr><th>ویژگی</th><th>RAN25</th><th>شوفاژکار G120</th></tr>
+      <tr><td>حداکثر ظرفیت (kcal/hr)</td><td>۱۰۲٬۰۰۰</td><td>۱۲۰٬۰۰۰</td></tr>
+      <tr><td>نوع احتراق</td><td>تک‌مرحله‌ای</td><td>تک‌مرحله‌ای</td></tr>
+      <tr><td>قیمت نسبی</td><td>اقتصادی‌تر</td><td>بالاتر</td></tr>
+      <tr><td>در دسترس بودن قطعات</td><td>بسیار بالا</td><td>بالا</td></tr>
+    </table>
+  </div>
+  <h4 class="anim d3">راهنمای انتخاب</h4>
+  <ul class="ran25-list anim d3">
+    <li>برای دیگ تا ۱۰۲ هزار کیلوکالری: RAN25 مقرون‌به‌صرفه است</li>
+    <li>برای دیگ‌های بزرگ‌تر تا ۱۲۰ هزار کیلوکالری: G120 مناسب‌تر است</li>
+    <li>اولویت با قطعات ارزان و در دسترس: RAN25</li>
+    <li>اولویت با ظرفیت بیشتر: G120</li>
+  </ul>
+
+  <!-- 8. SUITABLE FOR -->
+  <h2 class="anim d1">مناسب چه کسانی است و برای چه کسانی نیست؟</h2>
+  <h3 class="anim d2">مناسب برای</h3>
+  <ul class="ran25-list ran25-pros anim d2">
+    <li>آپارتمان‌ها و ساختمان‌های مسکونی متوسط</li>
+    <li>واحدهای تجاری کوچک و مغازه‌های بزرگ</li>
+    <li>موتورخانه‌هایی با دیگ ۳۷ تا ۱۰۲ هزار کیلوکالری</li>
+    <li>کسانی که به‌دنبال گزینه‌ای اقتصادی و کم‌دردسر هستند</li>
+  </ul>
+  <h3 class="anim d3">نامناسب برای</h3>
+  <ul class="ran25-list ran25-cons anim d3">
+    <li>مجتمع‌های بزرگ با دیگ‌های پرظرفیت صنعتی</li>
+    <li>کاربردهایی که نیاز به احتراق دومرحله‌ای دارند</li>
+    <li>محیط‌هایی با محدودیت شدید صدا</li>
+    <li>سیستم‌هایی که سوخت آن‌ها گازوئیل است</li>
+  </ul>
+
+  <!-- 9. BUYING GUIDE -->
+  <h2 class="anim d1">راهنمای خرید RAN25</h2>
+  <p>پیش از خرید، موارد زیر را بررسی کنید تا انتخابی مطمئن داشته باشید:</p>
+  <ul class="ran25-list anim d2">
+    <li>تطبیق ظرفیت حرارتی مشعل با دیگ موتورخانه</li>
+    <li>اطمینان از اصالت کالا و وجود برچسب گارانتی</li>
+    <li>بررسی سالم بودن فن، شیر برقی و چشم الکترونیکی</li>
+    <li>تأیید فشار گاز شهری (حداقل ۱۷٫۵ میلی‌بار)</li>
+    <li>بررسی هماهنگی سایز ورودی گاز ۱/۲ اینچ</li>
+  </ul>
+  <div class="ran25-box ran25-good anim d3">
+    <strong>پیشنهاد</strong>
+    خرید از نمایندگی رسمی ایران رادیاتور یا فروشگاه‌های معتبر، تضمین‌کننده گارانتی واقعی و دسترسی به خدمات ۱۰ ساله است.
+  </div>
+  <h3 class="anim d4">تطبیق شعله‌پوش با دیگ</h3>
+  <ol class="ran25-num anim d4">
+    <li>نوع و ظرفیت دیگ موتورخانه را مشخص کنید</li>
+    <li>قطر و طول لوله شعله مورد نیاز دیگ را اندازه بگیرید</li>
+    <li>شعله‌پوش متناسب با عمق محفظه احتراق را انتخاب کنید</li>
+    <li>موقعیت شعله‌پوش را برای شعله یکنواخت تنظیم کنید</li>
+    <li>پس از نصب، پایداری شعله را با تست راه‌اندازی بررسی کنید</li>
+  </ol>
+
+  <!-- 10. INSTALL -->
+  <h2 class="anim d1">راهنمای نصب RAN25</h2>
+  <div class="ran25-box ran25-warn anim d2">
+    <strong>هشدار ایمنی</strong>
+    نصب و راه‌اندازی مشعل گاز باید فقط توسط تکنسین دارای صلاحیت و با قطع کامل گاز و برق انجام شود. هرگونه نشتی گاز خطر انفجار دارد.
+  </div>
+  <h3 class="anim d3">پیش‌نیازها</h3>
+  <ul class="ran25-list anim d3">
+    <li>لوله‌کشی گاز استاندارد با فشار مناسب</li>
+    <li>برق تک‌فاز پایدار و سیم ارت مطمئن</li>
+    <li>دودکش با کشش کافی و بدون نشتی</li>
+    <li>تهویه مناسب موتورخانه</li>
+    <li>کیت اتصالات و واشرهای آب‌بندی</li>
+  </ul>
+  <h3 class="anim d4">مراحل نصب</h3>
+  <ol class="ran25-num anim d4">
+    <li>قطع کامل گاز و برق موتورخانه</li>
+    <li>نصب فلنج مشعل روی درب دیگ و آب‌بندی</li>
+    <li>اتصال لوله گاز ۱/۲ اینچ به شیر برقی و تست نشتی</li>
+    <li>اتصال برق و سیم ارت به ترمینال مشعل</li>
+    <li>تنظیم فاصله الکترودها و موقعیت شعله‌پوش</li>
+    <li>راه‌اندازی، تنظیم نسبت هوا به گاز و تست احتراق</li>
+  </ol>
+  <div class="ran25-box ran25-tip anim d5">
+    <strong>نکته</strong>
+    پس از نصب، حتماً با دستگاه آنالایزر، احتراق و میزان دی‌اکسید کربن خروجی را بررسی کنید تا بازدهی بهینه تضمین شود.
+  </div>
+
+  <!-- 11. MAINTENANCE -->
+  <h2 class="anim d1">نگهداری و سرویس</h2>
+  <h3 class="anim d2">برنامه سرویس دوره‌ای</h3>
+  <div class="ran25-tablewrap anim d2">
+    <table>
+      <tr><th>عملیات</th><th>دوره زمانی</th></tr>
+      <tr><td>تمیزکاری فن و مجرای هوا</td><td>هر ۶ ماه</td></tr>
+      <tr><td>بررسی الکترودها و چشم الکترونیکی</td><td>سالانه</td></tr>
+      <tr><td>تست شیر برقی و سنسورهای ایمنی</td><td>سالانه</td></tr>
+      <tr><td>سرویس کامل و تنظیم احتراق</td><td>ابتدای هر فصل سرما</td></tr>
+    </table>
+  </div>
+  <h3 class="anim d3">خرابی‌های رایج و علت</h3>
+  <div class="ran25-tablewrap anim d3">
+    <table>
+      <tr><th>علامت خرابی</th><th>علت احتمالی</th></tr>
+      <tr><td>روشن نشدن شعله</td><td>قطع گاز، خرابی شیر برقی یا الکترود</td></tr>
+      <tr><td>خاموش شدن ناگهانی</td><td>کثیفی چشم الکترونیکی یا افت فشار گاز</td></tr>
+      <tr><td>دودزایی و شعله زرد</td><td>تنظیم نبودن نسبت هوا به گاز</td></tr>
+      <tr><td>صدای غیرعادی فن</td><td>فرسودگی بلبرینگ یا نامیزانی پروانه</td></tr>
+    </table>
+  </div>
+  <div class="ran25-box ran25-warn anim d4">
+    <strong>هشدار</strong>
+    در صورت استشمام بوی گاز، فوراً شیر اصلی را ببندید، محیط را تهویه کنید و از روشن کردن هرگونه کلید برق خودداری کنید.
+  </div>
+  <h3 class="anim d5">لوازم یدکی پرمصرف</h3>
+  <ul class="ran25-list anim d5">
+    <li>چشم الکترونیکی (سنسور یونیزاسیون)</li>
+    <li>شیر برقی (سولنوئید) گاز</li>
+    <li>الکترود جرقه و آتش‌زنه</li>
+    <li>ترانس جرقه و رله کنترل</li>
+    <li>الکتروموتور و پروانه فن</li>
+  </ul>
+
+  <!-- 12. WARRANTY -->
+  <h2 class="anim d1">گارانتی و خدمات پس از فروش</h2>
+  <h3 class="anim d2">گارانتی</h3>
+  <ul class="ran25-list ran25-pros anim d2">
+    <li>۱۲ ماه گارانتی رسمی ایران رادیاتور</li>
+    <li>پوشش ایرادات فنی و قطعات معیوب</li>
+    <li>برچسب اصالت و کد رهگیری معتبر</li>
+  </ul>
+  <h3 class="anim d3">خدمات ۱۰ ساله</h3>
+  <ul class="ran25-list ran25-pros anim d3">
+    <li>تأمین قطعات یدکی تا ۱۰ سال</li>
+    <li>شبکه گسترده نمایندگان مجاز در سراسر کشور</li>
+    <li>پشتیبانی فنی و مشاوره نصب</li>
+  </ul>
+  <div class="ran25-box ran25-tip anim d4">
+    <strong>نکته</strong>
+    برای حفظ اعتبار گارانتی، نصب و سرویس مشعل را به افراد دارای صلاحیت بسپارید و فاکتور خرید را نگه دارید.
+  </div>
+
+  <!-- 13. GAS SAVING -->
+  <h2 class="anim d1">صرفه‌جویی در مصرف گاز</h2>
+  <ul class="ran25-list ran25-pros anim d2">
+    <li>تنظیم دقیق نسبت هوا به گاز برای احتراق کامل</li>
+    <li>سرویس دوره‌ای و تمیز نگه‌داشتن شعله‌پوش و دودکش</li>
+    <li>عایق‌کاری مناسب دیگ و لوله‌های موتورخانه</li>
+    <li>استفاده از ترموستات و کنترل دمای آب گرم</li>
+    <li>انتخاب مشعل متناسب با ظرفیت واقعی دیگ</li>
+  </ul>
+
+  <!-- 14. FAQ -->
+  <h2 class="anim d1">سوالات متداول</h2>
+  <div class="ran25-faq anim d2">
+    <details><summary>RAN25 برای چه ظرفیتی مناسب است؟</summary><div class="ans">برای دیگ‌های با ظرفیت حرارتی ۳۷٬۰۰۰ تا ۱۰۲٬۰۰۰ کیلوکالری بر ساعت مناسب است.</div></details>
+    <details><summary>سوخت این مشعل چیست؟</summary><div class="ans">RAN25 فقط با گاز طبیعی شهری کار می‌کند و برای گازوئیل طراحی نشده است.</div></details>
+    <details><summary>مصرف گاز RAN25 چقدر است؟</summary><div class="ans">مصرف گاز آن بین ۴٫۵ تا ۱۲٫۵ مترمکعب در ساعت متغیر است.</div></details>
+    <details><summary>حداقل فشار گاز ورودی چقدر باید باشد؟</summary><div class="ans">حداقل فشار گاز ورودی موردنیاز ۱۷٫۵ میلی‌بار است.</div></details>
+    <details><summary>این مشعل تک‌مرحله‌ای است یا دومرحله‌ای؟</summary><div class="ans">RAN25 یک مشعل تک‌مرحله‌ای است؛ یعنی شعله فقط در یک سطح روشن یا خاموش می‌شود.</div></details>
+    <details><summary>توان الکتروموتور آن چقدر است؟</summary><div class="ans">الکتروموتور فن این مشعل ۹۰ وات توان دارد.</div></details>
+    <details><summary>چه سیستم‌های ایمنی دارد؟</summary><div class="ans">مجهز به شیر برقی سولنوئید، فلو سوئیچ هوا و پرشر سوئیچ گاز برای ایمنی احتراق است.</div></details>
+    <details><summary>گارانتی و خدمات آن چگونه است؟</summary><div class="ans">دارای ۱۲ ماه گارانتی ایران رادیاتور و ۱۰ سال خدمات پس از فروش است.</div></details>
+    <details><summary>سرویس دوره‌ای هر چند وقت لازم است؟</summary><div class="ans">سرویس کامل و تنظیم احتراق توصیه می‌شود ابتدای هر فصل سرما انجام شود.</div></details>
+    <details><summary>آیا قطعات یدکی آن در دسترس است؟</summary><div class="ans">بله، قطعات یدکی RAN25 در سراسر کشور فراوان و به‌راحتی در دسترس است.</div></details>
+  </div>
+
+  <!-- 15. CONCLUSION -->
+  <h2 class="anim d1">جمع‌بندی نهایی</h2>
+  <p>مشعل گازسوز ایران رادیاتور RAN25 با ترکیبی از قیمت اقتصادی، بازدهی مناسب، نصب آسان و قطعات در دسترس، یکی از بهترین انتخاب‌ها برای موتورخانه‌های مسکونی و تجاری متوسط است. محدوده ظرفیت حرارتی ۳۷ تا ۱۰۲ هزار کیلوکالری و سیستم‌های ایمنی هوا و گاز، کارکردی مطمئن و کم‌دردسر را فراهم می‌کنند.</p>
+  <p>اگر به‌دنبال مشعلی پایدار با پشتیبانی برند معتبر، گارانتی ۱۲ ماهه و خدمات ۱۰ ساله هستید، RAN25 گزینه‌ای ارزشمند و مقرون‌به‌صرفه خواهد بود؛ به‌شرط آنکه ظرفیت آن را با دیگ خود تطبیق داده و سرویس دوره‌ای را جدی بگیرید.</p>
+
+  <!-- 16. CTA -->
+  <div class="ran25-cta anim d1">
+    <h2>همین حالا مشعل RAN25 را تهیه کنید</h2>
+    <p>کیفیت ایران رادیاتور با ضمانت اصالت و خدمات پس از فروش گسترده</p>
+    <ul class="ran25-cta-feats">
+      <li>ضمانت اصالت کالا</li>
+      <li>گارانتی ۱۲ ماهه</li>
+      <li>خدمات ۱۰ ساله</li>
+      <li>ارسال سریع</li>
+    </ul>
+    <a href="#" class="ran25-btn">افزودن به سبد خرید</a>
+  </div>
+
+</div>
