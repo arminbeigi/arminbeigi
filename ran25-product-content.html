@@ -215,8 +215,9 @@
   background-size:30px 30px}
 .ran25-photo-title{text-align:center;font-weight:bold;color:var(--blue);font-size:17px;margin-bottom:12px;position:relative;z-index:1}
 .ran25-photo-hint{text-align:center;font-size:13px;color:var(--muted);margin-top:14px;position:relative;z-index:1}
-.ran25-photo-stage{position:relative;max-width:760px;margin:0 auto;display:block;z-index:1}
-.ran25-photo-stage img{width:100%;height:auto;display:block;border-radius:12px;box-shadow:0 8px 24px rgba(20,40,70,.18);background:#fff}
+.ran25-photo-stage{position:relative!important;max-width:760px;margin:0 auto;display:block;z-index:1;overflow:visible}
+.ran25-photo-stage img{width:100%;height:auto;display:block;border-radius:12px;box-shadow:0 8px 24px rgba(20,40,70,.18);background:#fff;position:relative;z-index:1}
+.ran25-photo-stage .ran25-spot,.ran25-photo-stage .ran25-callout{position:absolute!important}
 .ran25-spot{position:absolute;width:22px;height:22px;border-radius:50%;
   background:radial-gradient(circle,#FF6F00 0%,#FF6F00 40%,transparent 70%);transform:translate(50%,-50%);z-index:3}
 .ran25-spot::before,.ran25-spot::after{content:"";position:absolute;inset:0;border-radius:50%;border:3px solid #FF6F00}
@@ -288,7 +289,8 @@
 /* ---------- Industrial decorative bands ---------- */
 .ran25-machine{position:relative;height:96px;margin:36px 0;border-radius:16px;overflow:hidden;
   background:linear-gradient(135deg,#0D2B52 0%,#1565C0 100%);
-  box-shadow:0 10px 28px rgba(13,43,82,.25);display:flex;align-items:center;justify-content:space-around;padding:0 20px}
+  box-shadow:0 10px 28px rgba(13,43,82,.25);display:flex;align-items:center;justify-content:space-around;padding:0 20px;
+  direction:ltr;flex-wrap:nowrap}
 .ran25-machine::before{content:"";position:absolute;inset:0;opacity:.12;
   background-image:repeating-linear-gradient(45deg,#fff 0 2px,transparent 2px 14px)}
 .ran25-machine svg{position:relative;z-index:2;flex-shrink:0}
@@ -327,7 +329,8 @@
 .ran25-machine{height:96px!important}
 .ran25-machine::before,.ran25-ticker::before{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:100%!important}
 .ran25-ticker-track{max-width:none!important;width:max-content!important;position:relative!important}
-.ran25-summary,.ran25-cta,.ran25-card,.ran25-photo,.ran25-related,.ran25-diagram{max-width:100%!important;box-sizing:border-box!important;contain:layout paint!important}
+.ran25-summary,.ran25-cta,.ran25-card,.ran25-related{max-width:100%!important;box-sizing:border-box!important;contain:layout paint!important}
+.ran25-photo{max-width:100%!important;box-sizing:border-box!important;contain:layout!important;overflow:visible!important}
 .ran25-summary::before,.ran25-summary::after,.ran25-cta::before,.ran25-cta::after,.ran25-card::before{contain:strict!important;max-width:100%!important}
 
 @media(max-width:600px){
