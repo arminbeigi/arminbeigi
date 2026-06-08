@@ -206,6 +206,33 @@
   background:linear-gradient(120deg,transparent,rgba(255,255,255,.55),transparent);
   transform:skewX(-20deg);animation:shimmer 2.6s infinite}
 
+/* ---------- Interactive burner diagram ---------- */
+.ran25-diagram{position:relative;background:linear-gradient(135deg,#F0F6FF 0%,#E1ECFE 100%);
+  border-radius:18px;padding:24px;margin:24px 0;box-shadow:0 12px 32px rgba(20,40,70,.1);overflow:hidden}
+.ran25-diagram::before{content:"";position:absolute;inset:0;opacity:.5;pointer-events:none;
+  background-image:linear-gradient(rgba(21,101,192,.06) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(21,101,192,.06) 1px,transparent 1px);
+  background-size:30px 30px}
+.ran25-diagram svg{position:relative;z-index:1;width:100%;height:auto;max-width:900px;margin:0 auto;display:block}
+.ran25-diagram-title{text-align:center;font-weight:bold;color:var(--blue);font-size:17px;margin-bottom:12px;position:relative;z-index:1}
+.ran25-diagram-hint{text-align:center;font-size:13px;color:var(--muted);margin-top:8px;position:relative;z-index:1}
+@keyframes spinFan{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@keyframes hotspot{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.4);opacity:.2}}
+@keyframes drawLine{from{stroke-dashoffset:200}to{stroke-dashoffset:0}}
+@keyframes labelIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes flameDance{0%,100%{transform:scaleY(1) scaleX(1)}50%{transform:scaleY(1.15) scaleX(.92)}}
+.ran25-fan{transform-origin:200px 200px;animation:spinFan 3s linear infinite}
+.ran25-hot{transform-origin:center;animation:hotspot 2s ease-in-out infinite}
+.ran25-line{stroke-dasharray:200;stroke-dashoffset:200;animation:drawLine 1s ease-out forwards}
+.ran25-label{opacity:0;animation:labelIn .6s ease forwards}
+.ran25-flame-svg{transform-origin:620px 200px;animation:flameDance 1.2s ease-in-out infinite}
+.ran25-l1{animation-delay:.5s}.ran25-l2{animation-delay:1s}.ran25-l3{animation-delay:1.5s}
+.ran25-l4{animation-delay:2s}.ran25-l5{animation-delay:2.5s}.ran25-l6{animation-delay:3s}
+.ran25-l7{animation-delay:3.5s}
+.ran25-hot.h2x{animation-delay:.3s}.ran25-hot.h3x{animation-delay:.6s}
+.ran25-hot.h4x{animation-delay:.9s}.ran25-hot.h5x{animation-delay:1.2s}
+.ran25-hot.h6x{animation-delay:1.5s}.ran25-hot.h7x{animation-delay:1.8s}
+
 /* ---------- Marquee ticker bar ---------- */
 .ran25-ticker{position:relative;overflow:hidden;border-radius:14px;padding:0;margin:28px 0;
   background:radial-gradient(ellipse at center,#1B5E20 0%,#0B3D11 100%);
@@ -373,6 +400,166 @@
       <tr><td>خدمات پس از فروش</td><td>۱۰ سال</td></tr>
     </table>
   </div>
+  <div class="ran25-diagram anim d2">
+    <div class="ran25-diagram-title">نمای فنی مشعل RAN25 — اجزای اصلی و عملکرد</div>
+    <svg viewBox="0 0 900 480" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#90A4AE"/>
+          <stop offset="50%" stop-color="#455A64"/>
+          <stop offset="100%" stop-color="#263238"/>
+        </linearGradient>
+        <linearGradient id="metalLight" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#CFD8DC"/>
+          <stop offset="100%" stop-color="#78909C"/>
+        </linearGradient>
+        <linearGradient id="ctrlBox" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#1565C0"/>
+          <stop offset="100%" stop-color="#0D47A1"/>
+        </linearGradient>
+        <radialGradient id="flameG" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#FFEB3B"/>
+          <stop offset="50%" stop-color="#FF6F00"/>
+          <stop offset="100%" stop-color="#BF360C" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+
+      <!-- Base mounting plate -->
+      <rect x="60" y="340" width="540" height="14" rx="3" fill="url(#metal)"/>
+      <rect x="60" y="354" width="540" height="6" fill="#263238"/>
+
+      <!-- Motor housing -->
+      <circle cx="200" cy="200" r="125" fill="url(#metal)"/>
+      <circle cx="200" cy="200" r="115" fill="#37474F"/>
+      <circle cx="200" cy="200" r="95" fill="#263238"/>
+      <!-- Fan blades (rotating) -->
+      <g class="ran25-fan">
+        <ellipse cx="200" cy="200" rx="85" ry="14" fill="#546E7A" opacity=".7"/>
+        <ellipse cx="200" cy="200" rx="14" ry="85" fill="#546E7A" opacity=".7"/>
+        <ellipse cx="200" cy="200" rx="60" ry="10" fill="#78909C" opacity=".6" transform="rotate(45 200 200)"/>
+        <ellipse cx="200" cy="200" rx="60" ry="10" fill="#78909C" opacity=".6" transform="rotate(-45 200 200)"/>
+        <circle cx="200" cy="200" r="18" fill="#90A4AE"/>
+        <circle cx="200" cy="200" r="8" fill="#37474F"/>
+      </g>
+      <!-- Bolts on motor housing -->
+      <circle cx="200" cy="85" r="5" fill="#FFB300"/>
+      <circle cx="315" cy="200" r="5" fill="#FFB300"/>
+      <circle cx="200" cy="315" r="5" fill="#FFB300"/>
+      <circle cx="85" cy="200" r="5" fill="#FFB300"/>
+
+      <!-- Control box (top) -->
+      <rect x="150" y="50" width="170" height="50" rx="6" fill="url(#ctrlBox)"/>
+      <rect x="160" y="60" width="40" height="14" rx="2" fill="#FFB300"/>
+      <circle cx="220" cy="67" r="5" fill="#4CAF50"/>
+      <circle cx="240" cy="67" r="5" fill="#F44336"/>
+      <rect x="260" y="60" width="50" height="6" rx="2" fill="#FFEB3B"/>
+      <rect x="260" y="70" width="50" height="6" rx="2" fill="#FFEB3B"/>
+      <rect x="260" y="80" width="50" height="6" rx="2" fill="#FFEB3B"/>
+      <line x1="200" y1="100" x2="200" y2="120" stroke="#263238" stroke-width="6"/>
+
+      <!-- Gas inlet pipe (bottom) -->
+      <rect x="180" y="360" width="50" height="60" rx="4" fill="url(#metalLight)"/>
+      <rect x="170" y="380" width="70" height="20" rx="3" fill="#FF6F00"/>
+      <text x="205" y="395" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">GAS</text>
+      <rect x="195" y="320" width="20" height="40" fill="url(#metal)"/>
+
+      <!-- Combustion head / flame tube -->
+      <rect x="320" y="170" width="280" height="60" rx="8" fill="url(#metalLight)"/>
+      <rect x="320" y="170" width="280" height="8" fill="#90A4AE"/>
+      <rect x="320" y="222" width="280" height="8" fill="#37474F"/>
+      <!-- Cooling fins -->
+      <line x1="340" y1="170" x2="340" y2="230" stroke="#37474F" stroke-width="2"/>
+      <line x1="360" y1="170" x2="360" y2="230" stroke="#37474F" stroke-width="2"/>
+      <line x1="380" y1="170" x2="380" y2="230" stroke="#37474F" stroke-width="2"/>
+      <line x1="400" y1="170" x2="400" y2="230" stroke="#37474F" stroke-width="2"/>
+      <line x1="420" y1="170" x2="420" y2="230" stroke="#37474F" stroke-width="2"/>
+      <line x1="440" y1="170" x2="440" y2="230" stroke="#37474F" stroke-width="2"/>
+      <!-- Flame tube end ring -->
+      <ellipse cx="600" cy="200" rx="8" ry="32" fill="#37474F"/>
+      <ellipse cx="600" cy="200" rx="5" ry="28" fill="#212121"/>
+
+      <!-- Electrodes -->
+      <line x1="595" y1="178" x2="640" y2="195" stroke="#B0BEC5" stroke-width="3" stroke-linecap="round"/>
+      <line x1="595" y1="222" x2="640" y2="205" stroke="#B0BEC5" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="640" cy="195" r="3" fill="#FFEB3B"/>
+      <circle cx="640" cy="205" r="3" fill="#FFEB3B"/>
+
+      <!-- Flame -->
+      <g class="ran25-flame-svg">
+        <ellipse cx="700" cy="200" rx="100" ry="35" fill="url(#flameG)"/>
+        <ellipse cx="680" cy="200" rx="50" ry="22" fill="#FFB300" opacity=".8"/>
+        <ellipse cx="660" cy="200" rx="25" ry="15" fill="#FFEB3B" opacity=".9"/>
+      </g>
+
+      <!-- HOTSPOTS (pulsing circles on parts) -->
+      <circle cx="200" cy="200" r="10" fill="none" stroke="#FF6F00" stroke-width="3" class="ran25-hot"/>
+      <circle cx="235" cy="75" r="10" fill="none" stroke="#FF6F00" stroke-width="3" class="ran25-hot h2x"/>
+      <circle cx="205" cy="390" r="10" fill="none" stroke="#FF6F00" stroke-width="3" class="ran25-hot h3x"/>
+      <circle cx="460" cy="200" r="10" fill="none" stroke="#FF6F00" stroke-width="3" class="ran25-hot h4x"/>
+      <circle cx="600" cy="200" r="10" fill="none" stroke="#FF6F00" stroke-width="3" class="ran25-hot h5x"/>
+      <circle cx="640" cy="200" r="10" fill="none" stroke="#FFEB3B" stroke-width="3" class="ran25-hot h6x"/>
+      <circle cx="720" cy="200" r="14" fill="none" stroke="#FF6F00" stroke-width="3" class="ran25-hot h7x"/>
+
+      <!-- CONNECTION LINES + LABELS -->
+      <!-- 1. Motor -->
+      <line x1="200" y1="200" x2="80" y2="100" stroke="#1565C0" stroke-width="2" stroke-dasharray="5 4" class="ran25-line ran25-l1"/>
+      <g class="ran25-label ran25-l1">
+        <rect x="20" y="78" width="160" height="36" rx="8" fill="#fff" stroke="#1565C0" stroke-width="2"/>
+        <text x="100" y="95" text-anchor="middle" fill="#1565C0" font-size="13" font-weight="bold">الکتروموتور و فن</text>
+        <text x="100" y="108" text-anchor="middle" fill="#5b6b7d" font-size="10">۹۰ وات</text>
+      </g>
+
+      <!-- 2. Control box -->
+      <line x1="235" y1="75" x2="380" y2="40" stroke="#1565C0" stroke-width="2" stroke-dasharray="5 4" class="ran25-line ran25-l2"/>
+      <g class="ran25-label ran25-l2">
+        <rect x="320" y="20" width="170" height="36" rx="8" fill="#fff" stroke="#1565C0" stroke-width="2"/>
+        <text x="405" y="37" text-anchor="middle" fill="#1565C0" font-size="13" font-weight="bold">جعبه کنترل و رله</text>
+        <text x="405" y="50" text-anchor="middle" fill="#5b6b7d" font-size="10">مدیریت توالی احتراق</text>
+      </g>
+
+      <!-- 3. Solenoid valve -->
+      <line x1="205" y1="390" x2="100" y2="440" stroke="#2E7D32" stroke-width="2" stroke-dasharray="5 4" class="ran25-line ran25-l3"/>
+      <g class="ran25-label ran25-l3">
+        <rect x="20" y="424" width="170" height="36" rx="8" fill="#fff" stroke="#2E7D32" stroke-width="2"/>
+        <text x="105" y="441" text-anchor="middle" fill="#2E7D32" font-size="13" font-weight="bold">شیر برقی (سولنوئید)</text>
+        <text x="105" y="454" text-anchor="middle" fill="#5b6b7d" font-size="10">ورودی گاز ۱/۲ اینچ</text>
+      </g>
+
+      <!-- 4. Cooling fins / combustion head body -->
+      <line x1="460" y1="200" x2="490" y2="135" stroke="#FF6F00" stroke-width="2" stroke-dasharray="5 4" class="ran25-line ran25-l4"/>
+      <g class="ran25-label ran25-l4">
+        <rect x="430" y="105" width="170" height="36" rx="8" fill="#fff" stroke="#FF6F00" stroke-width="2"/>
+        <text x="515" y="122" text-anchor="middle" fill="#FF6F00" font-size="13" font-weight="bold">بدنه و پره‌های خنک‌کننده</text>
+        <text x="515" y="135" text-anchor="middle" fill="#5b6b7d" font-size="10">جنس فلز مقاوم حرارتی</text>
+      </g>
+
+      <!-- 5. Flame tube end -->
+      <line x1="600" y1="200" x2="620" y2="395" stroke="#1565C0" stroke-width="2" stroke-dasharray="5 4" class="ran25-line ran25-l5"/>
+      <g class="ran25-label ran25-l5">
+        <rect x="540" y="395" width="170" height="36" rx="8" fill="#fff" stroke="#1565C0" stroke-width="2"/>
+        <text x="625" y="412" text-anchor="middle" fill="#1565C0" font-size="13" font-weight="bold">شعله‌پوش (دیفیوزر)</text>
+        <text x="625" y="425" text-anchor="middle" fill="#5b6b7d" font-size="10">پایداری شعله</text>
+      </g>
+
+      <!-- 6. Electrodes -->
+      <line x1="640" y1="200" x2="750" y2="115" stroke="#F57F17" stroke-width="2" stroke-dasharray="5 4" class="ran25-line ran25-l6"/>
+      <g class="ran25-label ran25-l6">
+        <rect x="700" y="85" width="180" height="36" rx="8" fill="#fff" stroke="#F57F17" stroke-width="2"/>
+        <text x="790" y="102" text-anchor="middle" fill="#F57F17" font-size="13" font-weight="bold">الکترود + سنسور یون</text>
+        <text x="790" y="115" text-anchor="middle" fill="#5b6b7d" font-size="10">جرقه و تشخیص شعله</text>
+      </g>
+
+      <!-- 7. Flame output -->
+      <line x1="720" y1="200" x2="800" y2="320" stroke="#C62828" stroke-width="2" stroke-dasharray="5 4" class="ran25-line ran25-l7"/>
+      <g class="ran25-label ran25-l7">
+        <rect x="710" y="320" width="180" height="36" rx="8" fill="#fff" stroke="#C62828" stroke-width="2"/>
+        <text x="800" y="337" text-anchor="middle" fill="#C62828" font-size="13" font-weight="bold">شعله احتراق</text>
+        <text x="800" y="350" text-anchor="middle" fill="#5b6b7d" font-size="10">گاز طبیعی شهری</text>
+      </g>
+    </svg>
+    <div class="ran25-diagram-hint">برچسب‌ها یکی پس از دیگری ظاهر می‌شوند — هر برچسب یک جزء از مشعل را نشان می‌دهد</div>
+  </div>
+
   <h3 class="anim d3">اجزای اصلی RAN25</h3>
   <ul class="ran25-list anim d3">
     <li>الکتروموتور و فن دمنده هوا</li>
