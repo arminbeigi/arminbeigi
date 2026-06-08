@@ -206,6 +206,30 @@
   background:linear-gradient(120deg,transparent,rgba(255,255,255,.55),transparent);
   transform:skewX(-20deg);animation:shimmer 2.6s infinite}
 
+/* ---------- Industrial decorative bands ---------- */
+.ran25-machine{position:relative;height:96px;margin:36px 0;border-radius:16px;overflow:hidden;
+  background:linear-gradient(135deg,#0D2B52 0%,#1565C0 100%);
+  box-shadow:0 10px 28px rgba(13,43,82,.25);display:flex;align-items:center;justify-content:space-around;padding:0 20px}
+.ran25-machine::before{content:"";position:absolute;inset:0;opacity:.12;
+  background-image:repeating-linear-gradient(45deg,#fff 0 2px,transparent 2px 14px)}
+.ran25-machine svg{position:relative;z-index:2;flex-shrink:0}
+.ran25-gear{animation:rotate 10s linear infinite;color:#FFB300}
+.ran25-gear.rev{animation-direction:reverse;animation-duration:14s;color:#42A5F5}
+.ran25-gear.slow{animation-duration:22s;color:#A5D6A7}
+.ran25-pipe{stroke:#90CAF9;fill:none;stroke-width:3}
+.ran25-pipe-flow{stroke:#FFB300;stroke-width:3;fill:none;stroke-dasharray:6 10;animation:flow 1.5s linear infinite}
+@keyframes flow{from{stroke-dashoffset:32}to{stroke-dashoffset:0}}
+.ran25-needle{transform-origin:50% 50%;animation:swing 3.5s ease-in-out infinite;color:#FF6F00}
+@keyframes swing{0%,100%{transform:rotate(-50deg)}50%{transform:rotate(50deg)}}
+.ran25-flame-band{animation:flicker 1.4s ease-in-out infinite;transform-origin:50% 100%;color:#FFB300}
+.ran25-flame-band.b{animation-delay:.2s;color:#FF6F00}
+.ran25-flame-band.c{animation-delay:.4s;color:#FFEB3B}
+
+/* variant 2: machine bar with valves */
+.ran25-machine.valve-bar{background:linear-gradient(135deg,#1B5E20 0%,#2E7D32 100%);box-shadow:0 10px 28px rgba(27,94,32,.25)}
+/* variant 3: machine bar with flames */
+.ran25-machine.flame-bar{background:linear-gradient(135deg,#BF360C 0%,#E65100 100%);box-shadow:0 10px 28px rgba(191,54,12,.25)}
+
 /* Decorative section ornament */
 .ran25-ornament{display:flex;align-items:center;justify-content:center;gap:10px;margin:50px 0 20px;opacity:.6}
 .ran25-ornament span{display:block;width:8px;height:8px;border-radius:50%;background:var(--orange);animation:fadeInUp .8s ease both}
@@ -322,6 +346,24 @@
   </div>
 
   <!-- 6. PROS / CONS -->
+  <div class="ran25-machine anim d1" aria-hidden="true">
+    <svg class="ran25-gear" width="50" height="50" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+    <svg width="180" height="50" viewBox="0 0 180 50" aria-hidden="true">
+      <path class="ran25-pipe" d="M0 25 H180" />
+      <path class="ran25-pipe-flow" d="M0 25 H180" />
+      <circle cx="45" cy="25" r="6" fill="#FFB300"/>
+      <circle cx="135" cy="25" r="6" fill="#FFB300"/>
+    </svg>
+    <svg class="ran25-gear rev" width="68" height="68" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+    <svg width="180" height="50" viewBox="0 0 180 50" aria-hidden="true">
+      <path class="ran25-pipe" d="M0 25 H180" />
+      <path class="ran25-pipe-flow" d="M0 25 H180" />
+      <circle cx="45" cy="25" r="6" fill="#FFB300"/>
+      <circle cx="135" cy="25" r="6" fill="#FFB300"/>
+    </svg>
+    <svg class="ran25-gear slow" width="42" height="42" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+  </div>
+
   <h2 class="anim d1">مزایا و معایب</h2>
   <h3 class="anim d2">مزایا</h3>
   <ul class="ran25-list ran25-pros anim d2">
@@ -378,6 +420,42 @@
   </ul>
 
   <!-- 8. SUITABLE FOR -->
+  <div class="ran25-machine flame-bar anim d1" aria-hidden="true">
+    <svg width="60" height="76" viewBox="0 0 64 80">
+      <path class="ran25-flame-band c" d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z" fill="currentColor"/>
+      <path class="ran25-flame-band b" d="M32 24 C34 32 44 38 42 50 C40 60 36 68 32 70 C28 68 24 60 22 50 C20 38 30 32 32 24 Z" fill="currentColor"/>
+      <path class="ran25-flame-band" d="M32 42 C33 48 38 52 36 60 C35 64 33 67 32 68 C31 67 29 64 28 60 C26 52 31 48 32 42 Z" fill="currentColor"/>
+    </svg>
+    <svg width="84" height="84" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="42" fill="#fff" stroke="#0D2B52" stroke-width="3"/>
+      <circle cx="50" cy="50" r="38" fill="none" stroke="#FF6F00" stroke-width="2" stroke-dasharray="3 5"/>
+      <text x="22" y="56" fill="#0D2B52" font-size="9" font-weight="bold">0</text>
+      <text x="70" y="56" fill="#C62828" font-size="9" font-weight="bold">MAX</text>
+      <text x="44" y="28" fill="#0D2B52" font-size="9" font-weight="bold">bar</text>
+      <line class="ran25-needle" x1="50" y1="50" x2="50" y2="20" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="50" cy="50" r="5" fill="#0D2B52"/>
+    </svg>
+    <svg width="60" height="76" viewBox="0 0 64 80">
+      <path class="ran25-flame-band b" d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z" fill="currentColor"/>
+      <path class="ran25-flame-band c" d="M32 24 C34 32 44 38 42 50 C40 60 36 68 32 70 C28 68 24 60 22 50 C20 38 30 32 32 24 Z" fill="currentColor"/>
+      <path class="ran25-flame-band" d="M32 42 C33 48 38 52 36 60 C35 64 33 67 32 68 C31 67 29 64 28 60 C26 52 31 48 32 42 Z" fill="currentColor"/>
+    </svg>
+    <svg width="84" height="84" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="42" fill="#fff" stroke="#0D2B52" stroke-width="3"/>
+      <circle cx="50" cy="50" r="38" fill="none" stroke="#FF6F00" stroke-width="2" stroke-dasharray="3 5"/>
+      <text x="22" y="56" fill="#0D2B52" font-size="9" font-weight="bold">0</text>
+      <text x="70" y="56" fill="#C62828" font-size="9" font-weight="bold">MAX</text>
+      <text x="40" y="28" fill="#0D2B52" font-size="9" font-weight="bold">kPa</text>
+      <line class="ran25-needle" x1="50" y1="50" x2="50" y2="20" stroke="currentColor" stroke-width="3" stroke-linecap="round" style="animation-delay:.6s"/>
+      <circle cx="50" cy="50" r="5" fill="#0D2B52"/>
+    </svg>
+    <svg width="60" height="76" viewBox="0 0 64 80">
+      <path class="ran25-flame-band" d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z" fill="currentColor"/>
+      <path class="ran25-flame-band c" d="M32 24 C34 32 44 38 42 50 C40 60 36 68 32 70 C28 68 24 60 22 50 C20 38 30 32 32 24 Z" fill="currentColor"/>
+      <path class="ran25-flame-band b" d="M32 42 C33 48 38 52 36 60 C35 64 33 67 32 68 C31 67 29 64 28 60 C26 52 31 48 32 42 Z" fill="currentColor"/>
+    </svg>
+  </div>
+
   <h2 class="anim d1">مناسب چه کسانی است و برای چه کسانی نیست؟</h2>
   <h3 class="anim d2">مناسب برای</h3>
   <ul class="ran25-list ran25-pros anim d2">
@@ -481,6 +559,28 @@
   </ul>
 
   <!-- 12. WARRANTY -->
+  <div class="ran25-machine valve-bar anim d1" aria-hidden="true">
+    <svg class="ran25-gear" width="56" height="56" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+    <svg width="200" height="60" viewBox="0 0 200 60" aria-hidden="true">
+      <path class="ran25-pipe" d="M0 30 H75 M125 30 H200" stroke="#C8E6C9" stroke-width="5"/>
+      <path class="ran25-pipe-flow" d="M0 30 H75 M125 30 H200" stroke="#FFEB3B" stroke-width="3"/>
+      <circle cx="100" cy="30" r="20" fill="#fff" stroke="#FFB300" stroke-width="3"/>
+      <line x1="100" y1="10" x2="100" y2="50" stroke="#0D2B52" stroke-width="3" stroke-linecap="round"/>
+      <line x1="80" y1="30" x2="120" y2="30" stroke="#0D2B52" stroke-width="3" stroke-linecap="round"/>
+      <line x1="100" y1="6" x2="100" y2="2" stroke="#0D2B52" stroke-width="4" stroke-linecap="round"/>
+    </svg>
+    <svg class="ran25-gear rev" width="74" height="74" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+    <svg width="200" height="60" viewBox="0 0 200 60" aria-hidden="true">
+      <path class="ran25-pipe" d="M0 30 H75 M125 30 H200" stroke="#C8E6C9" stroke-width="5"/>
+      <path class="ran25-pipe-flow" d="M0 30 H75 M125 30 H200" stroke="#FFEB3B" stroke-width="3"/>
+      <circle cx="100" cy="30" r="20" fill="#fff" stroke="#FFB300" stroke-width="3"/>
+      <line x1="100" y1="10" x2="100" y2="50" stroke="#0D2B52" stroke-width="3" stroke-linecap="round"/>
+      <line x1="80" y1="30" x2="120" y2="30" stroke="#0D2B52" stroke-width="3" stroke-linecap="round"/>
+      <line x1="100" y1="6" x2="100" y2="2" stroke="#0D2B52" stroke-width="4" stroke-linecap="round"/>
+    </svg>
+    <svg class="ran25-gear slow" width="48" height="48" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+  </div>
+
   <h2 class="anim d1">گارانتی و خدمات پس از فروش</h2>
   <h3 class="anim d2">گارانتی</h3>
   <ul class="ran25-list ran25-pros anim d2">
