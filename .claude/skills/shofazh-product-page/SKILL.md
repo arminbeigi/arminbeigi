@@ -55,9 +55,9 @@ Ask in this exact order:
   - "صنعتی و کارخانه"
   - "بدون تاکید خاص"
 
-After all 6 answers are collected, summarize them in one short Persian message and start executing Steps 1-7 below without further confirmation.
+After all 6 answers are collected, summarize them in one short Persian message, then begin the workflow: run Steps 1–2 automatically, then PAUSE at Step 2b to hand the image prompt(s) to the user. After the user delivers the images, run the remaining steps without further confirmation.
 
-## Workflow (Execute All Steps Without Pausing for Approval)
+## Workflow (Execute Without Pausing for Approval — except the Step 2b image handoff)
 
 ### Step 1: Read Template
 Read `ran25-product-content.html` from the repo root to load the exact CSS framework, structure, and animation standards. The `.ran25-wrap` CSS is the immutable shell — only content, image, and hotspot positions change per product.
@@ -70,6 +70,20 @@ Read `ran25-product-content.html` from the repo root to load the exact CSS frame
   - دوگانه‌سوز → orange (#FF6F00)
   - سایر → keep blue
 - Identify target audience (موتورخانه خانگی / تجاری / صنعتی)
+
+### Step 2b: Image Prompt Handoff (MANDATORY PAUSE)
+After the product analysis — and BEFORE generating content or building the file — hand the image-generation prompt(s) to the user and **wait for them to deliver the finished images**. The user prepares the images in their own tool and sends the URLs/files back; you then place them in the correct positions during the build. This is the one approved pause in the workflow.
+
+1. Using the product analysis (Step 2) and the template's image slots (Step 1), write a prompt for **every image the page needs**:
+   - The main hero product photo is REQUIRED — it fills `.ran25-photo-stage img` and is the single most important image, since all hotspots and callouts are positioned on top of it.
+   - Add a prompt for an extra image only if the layout you plan genuinely needs one; otherwise the main photo is enough.
+2. Present the prompt(s) to the user in a copy-paste-friendly block. For each image include:
+   - **Purpose / placement** (e.g. "main product photo with hotspots")
+   - **Prompt text in English** (image models perform best in English)
+   - **Reference image**: the product image URL from Question 5
+   - **Recommended orientation / aspect ratio** (the main photo works best square-to-landscape, product centered with clear empty margins so the callouts have room)
+   - A reminder: **clean white or transparent background**, **remove all logos, text, watermarks and branding**, keep only the product — industrial product photography
+3. **STOP and wait.** Do NOT proceed to Step 3 until the user replies with the prepared image(s). When they arrive, map each image to its slot, then continue the workflow without further confirmation.
 
 ### Step 3: Content Generation (~3500 Persian words)
 Sections (numbered with CSS counter via h2):
@@ -112,19 +126,17 @@ Embed inside `<script type="application/ld+json">` blocks:
 - `FAQPage` (mirror all FAQs from accordion)
 - `BreadcrumbList` (Home > Category > Subcategory > Product)
 
-### Step 5: Photo Cleanup with Higgsfield
-Use `mcp__higgsfield__generate_image` with model `flux_kontext`:
-- Reference: user-provided image URL
-- Prompt: "Remove all logos, text, watermarks, and branding from this product. Keep only the product itself on a clean white background. Industrial product photography."
-- Wait for job completion via `job_display`
-- Use the returned CloudFront URL in the HTML
+### Step 5: Place the User-Supplied Images
+The user already prepared and delivered the image(s) in Step 2b — do NOT auto-generate images here.
+- Use the exact image URL(s) the user provided (main product photo, plus any extra images).
+- Only if the user explicitly asks you to generate or clean an image instead: fall back to `mcp__higgsfield__generate_image` (model `flux_kontext`, reference = their image URL, prompt: "Remove all logos, text, watermarks, and branding from this product. Keep only the product itself on a clean white background. Industrial product photography."), wait for completion via `job_display`, then use the returned CloudFront URL.
 
 ### Step 6: Build HTML
 - Copy `.ran25-wrap` CSS framework exactly as-is from RAN25 template
 - Only modify:
   - Product content
-  - Photo URL (cleaned version from Step 5)
-  - Hotspot positions on photo (4-5 callouts on actual product parts)
+  - Photo URL(s) — the user-supplied image(s) from Step 2b
+  - Hotspot positions on photo (4–6 callouts on the product parts actually visible in the supplied photo)
   - Ticker bar items (product-specific features)
   - Schema JSON-LD values
   - Accent color if category requires it
@@ -147,7 +159,7 @@ Use `mcp__higgsfield__generate_image` with model `flux_kontext`:
 
 After push, reply with:
 1. Filename and repo path (both the HTML page and the `[product-slug]-seo.md` SEO file)
-2. Three-line summary of what was generated (word count, schema types, photo cleanup status)
+2. Three-line summary of what was generated (word count, schema types, image source)
 3. Confirmation that the SEO metadata file was already sent to the user in Step 3b
 4. Note about hotspot positions needing visual verification in browser
 
