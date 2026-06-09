@@ -5,41 +5,84 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>پیش فاکتور</title>
     <style>
-        @page {
-            size: A4 portrait;
-            margin: 0;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        @page { size: A4 portrait; margin: 0; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'B Nazanin', 'IRANSans', 'Tahoma', 'Arial', sans-serif;
-            background: #bbb;
-            direction: rtl;
-            color: #333;
+            font-family: 'B Nazanin', 'IRANSans', 'Tahoma', sans-serif;
+            background: #999;
+            color: #2C2C2C;
         }
 
         .page {
             width: 210mm;
             min-height: 297mm;
-            margin: 10mm auto;
+            margin: 8mm auto;
             background: #fff;
             position: relative;
             overflow: hidden;
         }
 
-        /* ══════════════════════════════════════════
-           HEADER SECTION
-           ══════════════════════════════════════════ */
+        /* ═══════ GEOMETRIC ACCENTS ═══════ */
+        .geo-top {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 52mm;
+            background: #2C2C2C;
+            clip-path: polygon(0 0, 100% 0, 100% 75%, 0 100%);
+        }
+
+        .geo-accent-1 {
+            position: absolute;
+            top: 0; left: 0;
+            width: 40mm; height: 52mm;
+            background: #C62828;
+            clip-path: polygon(0 0, 100% 0, 60% 100%, 0 100%);
+            opacity: 0.12;
+        }
+
+        .geo-accent-2 {
+            position: absolute;
+            top: 38mm; right: 0;
+            width: 100%; height: 18mm;
+            background: #C62828;
+            clip-path: polygon(70% 0, 100% 0, 100% 100%, 60% 100%);
+            opacity: 0.15;
+        }
+
+        .geo-line-1 {
+            position: absolute;
+            top: 45mm; left: 0;
+            width: 100%; height: 2px;
+            background: #C62828;
+            transform: rotate(-2deg);
+            opacity: 0.3;
+        }
+
+        .geo-corner-bottom {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 8mm;
+            background: #2C2C2C;
+            clip-path: polygon(0 40%, 100% 0, 100% 100%, 0 100%);
+        }
+
+        .geo-corner-red {
+            position: absolute;
+            bottom: 0; right: 0;
+            width: 60mm; height: 8mm;
+            background: #C62828;
+            clip-path: polygon(30% 0, 100% 0, 100% 100%, 0 100%);
+        }
+
+        /* ═══════ HEADER ON DARK BG ═══════ */
         .header {
+            position: relative;
+            z-index: 2;
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            padding: 8mm 10mm 6mm 10mm;
+            padding: 8mm 10mm 0 10mm;
         }
 
         .header-right {
@@ -48,385 +91,293 @@
             gap: 4mm;
         }
 
-        .logo-container {
-            width: 32mm;
-            height: 18mm;
-            background: #2C2C2C;
-            border-radius: 2mm;
+        .logo-wrap {
+            width: 38mm;
+            height: 16mm;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 2mm;
-            overflow: hidden;
         }
 
-        .logo-container img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
+        .logo-wrap svg {
+            width: 100%;
+            height: 100%;
         }
 
-        .logo-placeholder-text {
-            color: #C62828;
-            font-size: 16pt;
-            font-weight: bold;
-            letter-spacing: 2px;
-        }
-
-        .company-info-header {
+        .company-info-h {
             text-align: right;
         }
 
         .company-name {
-            font-size: 18pt;
+            font-size: 17pt;
             font-weight: bold;
-            color: #2C2C2C;
-            line-height: 1.4;
+            color: #fff;
+            line-height: 1.3;
         }
 
-        .company-slogan {
-            font-size: 9pt;
-            color: #888;
-            margin-top: 1mm;
+        .company-sub {
+            font-size: 8.5pt;
+            color: #999;
+            margin-top: 0.5mm;
         }
 
-        .header-left {
+        .badge-area {
             text-align: left;
             direction: ltr;
         }
 
-        .invoice-badge {
+        .badge {
+            display: inline-block;
             background: #C62828;
             color: #fff;
-            font-size: 16pt;
+            font-size: 15pt;
             font-weight: bold;
-            padding: 2.5mm 10mm;
-            letter-spacing: 2px;
-            display: inline-block;
+            padding: 2mm 7mm;
+            clip-path: polygon(8% 0, 100% 0, 92% 100%, 0 100%);
+            letter-spacing: 1px;
         }
 
-        /* ══════════════════════════════════════════
-           CONTACT INFO BARS
-           ══════════════════════════════════════════ */
-        .contact-bar {
+        /* ═══════ META ROW ═══════ */
+        .meta-row {
+            position: relative;
+            z-index: 2;
             display: flex;
-            gap: 0;
-            padding: 0 10mm;
-            margin-bottom: 4mm;
+            gap: 3mm;
+            padding: 4mm 10mm 0 10mm;
         }
 
-        .contact-item {
-            flex: 1;
+        .meta-chip {
             display: flex;
             align-items: center;
             gap: 2mm;
-            padding: 2mm 3mm;
-            font-size: 9pt;
-            color: #555;
-            border-bottom: 1px solid #eee;
+            background: rgba(255,255,255,0.1);
+            border-right: 2px solid #C62828;
+            padding: 1.5mm 4mm;
         }
 
-        .contact-icon {
-            width: 4mm;
-            height: 4mm;
-            background: #C62828;
-            border-radius: 50%;
-            flex-shrink: 0;
-        }
+        .meta-chip .ml { font-size: 9pt; color: #aaa; }
+        .meta-chip .mv { font-size: 11pt; color: #fff; font-weight: bold; }
 
-        /* ══════════════════════════════════════════
-           INFO SECTIONS (Customer & Seller)
-           ══════════════════════════════════════════ */
-        .info-sections {
+        /* ═══════ INFO CARDS ═══════ */
+        .cards {
+            position: relative;
+            z-index: 2;
             display: flex;
             gap: 4mm;
-            padding: 0 10mm;
-            margin-top: 3mm;
+            padding: 10mm 10mm 0 10mm;
         }
 
-        .info-box {
+        .card {
             flex: 1;
-            border: 1px solid #e0e0e0;
+            background: #fff;
+            border: 1px solid #e6e6e6;
+            overflow: hidden;
         }
 
-        .info-box-title {
+        .card-head {
+            display: flex;
+            align-items: center;
+            gap: 2mm;
+            padding: 2.5mm 4mm;
+            background: #f7f7f7;
+            border-bottom: 1px solid #e6e6e6;
+        }
+
+        .card-head .red-bar {
+            width: 3px;
+            height: 12px;
             background: #C62828;
-            color: #fff;
-            font-size: 11pt;
+        }
+
+        .card-head span {
+            font-size: 10pt;
             font-weight: bold;
-            padding: 2mm 4mm;
-            text-align: right;
+            color: #2C2C2C;
         }
 
-        .info-box-content {
-            padding: 3mm 4mm;
-        }
+        .card-body { padding: 3mm 4mm; }
 
-        .info-row {
+        .c-row {
             display: flex;
             align-items: baseline;
             gap: 2mm;
             padding: 1.5mm 0;
-            border-bottom: 1px dotted #e8e8e8;
-            min-height: 7mm;
+            border-bottom: 1px solid #f0f0f0;
         }
+        .c-row:last-child { border-bottom: none; }
 
-        .info-row:last-child {
-            border-bottom: none;
-        }
-
-        .info-label {
-            font-size: 10pt;
-            color: #777;
+        .c-lbl {
+            font-size: 9.5pt;
+            color: #888;
+            min-width: 18mm;
             white-space: nowrap;
-            min-width: 20mm;
         }
 
-        .info-value {
-            font-size: 11pt;
+        .c-val {
+            font-size: 10.5pt;
             font-weight: bold;
             color: #2C2C2C;
             flex: 1;
         }
 
-        /* ══════════════════════════════════════════
-           INVOICE META (Number, Date)
-           ══════════════════════════════════════════ */
-        .invoice-meta-section {
-            display: flex;
-            gap: 4mm;
-            padding: 4mm 10mm 0 10mm;
-        }
-
-        .meta-box {
-            display: flex;
-            align-items: center;
-            gap: 2mm;
-            background: #f5f5f5;
-            border-right: 3px solid #C62828;
-            padding: 2mm 5mm;
-            flex: 1;
-        }
-
-        .meta-box .meta-lbl {
-            font-size: 10pt;
-            color: #777;
-        }
-
-        .meta-box .meta-val {
-            font-size: 12pt;
-            font-weight: bold;
-            color: #2C2C2C;
-        }
-
-        /* ══════════════════════════════════════════
-           ITEMS TABLE
-           ══════════════════════════════════════════ */
-        .table-section {
+        /* ═══════ TABLE ═══════ */
+        .tbl-wrap {
+            position: relative;
+            z-index: 2;
             padding: 5mm 10mm 0 10mm;
         }
 
-        .items-table {
+        /* angular top line above table */
+        .tbl-accent {
+            height: 3px;
+            background: linear-gradient(90deg, #C62828 0%, #C62828 30%, #2C2C2C 30%, #2C2C2C 100%);
+            margin-bottom: 0;
+        }
+
+        table.items {
             width: 100%;
             border-collapse: collapse;
         }
 
-        .items-table thead th {
-            padding: 3mm 3mm;
+        table.items thead th {
+            background: #2C2C2C;
+            color: #fff;
             font-size: 10pt;
             font-weight: bold;
+            padding: 3mm 2mm;
             text-align: center;
-            border: none;
         }
 
-        .items-table thead th.col-desc {
-            background: #3C3C3C;
-            color: #fff;
+        table.items thead th.th-desc {
             text-align: right;
-            padding-right: 5mm;
+            padding-right: 4mm;
         }
 
-        .items-table thead th.col-num {
+        table.items thead th.th-red {
             background: #C62828;
-            color: #fff;
         }
 
-        .items-table thead th.col-row {
-            background: #3C3C3C;
-            color: #fff;
-            width: 8%;
-        }
-
-        .items-table tbody td {
-            padding: 3mm 3mm;
+        table.items tbody td {
+            padding: 3mm 2mm;
             text-align: center;
-            font-size: 10pt;
-            border-bottom: 1px solid #e8e8e8;
+            font-size: 10.5pt;
             color: #333;
-        }
-
-        .items-table tbody td.td-desc {
-            text-align: right;
-            padding-right: 5mm;
-            font-size: 11pt;
-        }
-
-        .items-table tbody td.td-num {
-            font-family: 'Tahoma', 'Arial', monospace;
-            direction: ltr;
-            font-size: 10pt;
-        }
-
-        .items-table tbody tr:nth-child(even) {
-            background: #f9f9f9;
-        }
-
-        .items-table tbody tr.empty-row td {
-            height: 8mm;
             border-bottom: 1px solid #eee;
         }
 
-        /* ══════════════════════════════════════════
-           DARK FOOTER SECTION
-           ══════════════════════════════════════════ */
-        .dark-footer {
-            background: #2C2C2C;
-            margin: 5mm 10mm 0 10mm;
-            padding: 5mm;
-            display: flex;
-            gap: 4mm;
-            position: relative;
-        }
-
-        .footer-block {
-            flex: 1;
-        }
-
-        .footer-block-title {
-            color: #C62828;
-            font-size: 10pt;
-            font-weight: bold;
-            padding-bottom: 2mm;
-            border-bottom: 1px solid #444;
-            margin-bottom: 3mm;
-        }
-
-        .footer-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5mm 0;
-            border-bottom: 1px solid #3a3a3a;
-        }
-
-        .footer-row:last-child {
-            border-bottom: none;
-        }
-
-        .footer-label {
-            color: #aaa;
-            font-size: 10pt;
-        }
-
-        .footer-value {
-            color: #fff;
+        table.items tbody td.td-d {
+            text-align: right;
+            padding-right: 4mm;
             font-size: 11pt;
-            font-weight: bold;
+        }
+
+        table.items tbody td.td-n {
             font-family: 'Tahoma', monospace;
             direction: ltr;
         }
 
-        /* Total row inside footer */
-        .total-stripe {
+        table.items tbody tr:nth-child(even) { background: #fafafa; }
+        table.items tbody tr.empty td { height: 7mm; }
+
+        /* ═══════ SUMMARY FOOTER ═══════ */
+        .summary {
+            position: relative;
+            z-index: 2;
+            margin: 5mm 10mm 0 10mm;
+            display: flex;
+            gap: 0;
+        }
+
+        .sum-left {
+            flex: 1;
+            background: #2C2C2C;
+            padding: 4mm 5mm;
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 3% 50%);
+        }
+
+        .sum-right {
+            width: 70mm;
+            background: #363636;
+            padding: 4mm 5mm;
+        }
+
+        .s-title {
+            color: #C62828;
+            font-size: 9.5pt;
+            font-weight: bold;
+            padding-bottom: 2mm;
+            border-bottom: 1px solid #444;
+            margin-bottom: 2mm;
+        }
+
+        .s-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 1.5mm 0;
+        }
+
+        .s-row .sl { color: #aaa; font-size: 10pt; }
+        .s-row .sv { color: #fff; font-size: 11pt; font-weight: bold; font-family: 'Tahoma', monospace; direction: ltr; }
+
+        .grand-total {
             background: #C62828;
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 3mm 5mm;
             margin-top: 3mm;
+            clip-path: polygon(0 0, 100% 0, 97% 100%, 3% 100%);
         }
 
-        .total-stripe .total-lbl {
-            color: #fff;
-            font-size: 12pt;
-            font-weight: bold;
+        .grand-total .gt-l { color: #fff; font-size: 11pt; font-weight: bold; }
+        .grand-total .gt-v { color: #fff; font-size: 14pt; font-weight: bold; font-family: 'Tahoma', monospace; direction: ltr; }
+
+        /* ═══════ DESCRIPTION ═══════ */
+        .desc {
+            position: relative;
+            z-index: 2;
+            padding: 3mm 10mm 0 10mm;
         }
 
-        .total-stripe .total-val {
-            color: #fff;
-            font-size: 14pt;
-            font-weight: bold;
-            font-family: 'Tahoma', monospace;
-            direction: ltr;
+        .desc-inner {
+            border-right: 3px solid #C62828;
+            padding: 2mm 4mm;
+            font-size: 10pt;
+            color: #666;
+            line-height: 1.7;
+            background: #fafafa;
         }
 
-        /* ══════════════════════════════════════════
-           SIGNATURES
-           ══════════════════════════════════════════ */
-        .signatures {
+        /* ═══════ SIGNATURES ═══════ */
+        .sigs {
+            position: relative;
+            z-index: 2;
             display: flex;
             justify-content: space-between;
-            padding: 6mm 10mm 4mm 10mm;
+            padding: 7mm 10mm 12mm 10mm;
         }
 
-        .sig-box {
+        .sig {
             text-align: center;
             width: 28%;
         }
 
-        .sig-title {
+        .sig-t {
             font-size: 10pt;
-            color: #777;
-            margin-bottom: 14mm;
+            color: #888;
+            margin-bottom: 15mm;
         }
 
-        .sig-line {
-            border-top: 1px solid #aaa;
-            width: 85%;
+        .sig-l {
+            width: 80%;
             margin: 0 auto;
+            border-top: 1px solid #bbb;
         }
 
-        /* ══════════════════════════════════════════
-           BOTTOM RED STRIPE
-           ══════════════════════════════════════════ */
-        .bottom-stripe {
-            height: 3mm;
-            background: #C62828;
-            margin: 0 10mm;
-        }
-
-        /* ══════════════════════════════════════════
-           DESCRIPTION BOX
-           ══════════════════════════════════════════ */
-        .desc-section {
-            padding: 0 10mm;
-            margin-top: 3mm;
-        }
-
-        .desc-box {
-            border: 1px solid #e0e0e0;
-            padding: 3mm 4mm;
-            min-height: 12mm;
-        }
-
-        .desc-box-title {
-            font-size: 9pt;
-            color: #777;
-            margin-bottom: 1mm;
-        }
-
-        .desc-box-text {
-            font-size: 10pt;
-            color: #444;
-            line-height: 1.8;
-        }
-
-        /* ══════════════════════════════════════════
-           PRINT
-           ══════════════════════════════════════════ */
+        /* ═══════ PRINT ═══════ */
         @media print {
             body { background: none; }
-            .page { margin: 0; box-shadow: none; }
+            .page { margin: 0; }
         }
     </style>
 </head>
@@ -434,257 +385,270 @@
 
 <div class="page">
 
+    <!-- Geometric shapes -->
+    <div class="geo-top"></div>
+    <div class="geo-accent-1"></div>
+    <div class="geo-accent-2"></div>
+    <div class="geo-line-1"></div>
+    <div class="geo-corner-bottom"></div>
+    <div class="geo-corner-red"></div>
+
     <!-- ═══ HEADER ═══ -->
     <div class="header">
         <div class="header-right">
-            <div class="logo-container">
-                <!-- لوگوی شرکت - مسیر فایل لوگو را جایگزین کنید -->
-                <span class="logo-placeholder-text">LOGO</span>
-                <!-- <img src="logo.png" alt="لوگو"> -->
-            </div>
-            <div class="company-info-header">
-                <div class="company-name">نام شرکت شما</div>
-                <div class="company-slogan">شعار یا توضیح شرکت</div>
+            <div class="logo-wrap">
+                <svg viewBox="0 0 260 70" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Stylized CS mark -->
+                    <path d="M8,52 C8,52 8,18 28,18 C42,18 42,34 32,34 C22,34 22,18 36,18 C50,18 50,52 50,52"
+                          stroke="#C62828" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M38,18 C38,18 58,18 58,34 C58,50 38,50 38,50 C38,50 52,50 52,38"
+                          stroke="#C62828" stroke-width="8" fill="none" stroke-linecap="round"/>
+                    <!-- Top red line -->
+                    <line x1="28" y1="10" x2="240" y2="10" stroke="#C62828" stroke-width="5" stroke-linecap="round"/>
+                    <!-- Company text -->
+                    <text x="70" y="45" font-family="Arial, sans-serif" font-size="30" font-weight="bold" fill="#ffffff" letter-spacing="3">STOREAL</text>
+                    <!-- .COM -->
+                    <text x="210" y="60" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#C62828">.COM</text>
+                </svg>
             </div>
         </div>
 
-        <div class="header-left">
-            <div class="invoice-badge">پیش فاکتور</div>
+        <div class="badge-area">
+            <div class="badge">پیش فاکتور</div>
         </div>
     </div>
 
-    <!-- ═══ INVOICE META ═══ -->
-    <div class="invoice-meta-section">
-        <div class="meta-box">
-            <span class="meta-lbl">شماره:</span>
-            <span class="meta-val">{Number}</span>
+    <!-- ═══ META ═══ -->
+    <div class="meta-row">
+        <div class="meta-chip">
+            <span class="ml">شماره:</span>
+            <span class="mv">{Number}</span>
         </div>
-        <div class="meta-box">
-            <span class="meta-lbl">تاریخ:</span>
-            <span class="meta-val">{Date}</span>
+        <div class="meta-chip">
+            <span class="ml">تاریخ:</span>
+            <span class="mv">{Date}</span>
         </div>
-        <div class="meta-box">
-            <span class="meta-lbl">اعتبار تا:</span>
-            <span class="meta-val">{ExpirationDate}</span>
-        </div>
-    </div>
-
-    <!-- ═══ CLIENT & SELLER INFO ═══ -->
-    <div class="info-sections">
-        <div class="info-box">
-            <div class="info-box-title">اطلاعات مشتری</div>
-            <div class="info-box-content">
-                <div class="info-row">
-                    <span class="info-label">نام:</span>
-                    <span class="info-value">{PartyTitle}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">کد مشتری:</span>
-                    <span class="info-value">{PartyCode}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">کد ملی:</span>
-                    <span class="info-value">{PartyIdentificationCode}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">تلفن:</span>
-                    <span class="info-value">{PartyPhone}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">آدرس:</span>
-                    <span class="info-value">{PartyAddress}</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="info-box">
-            <div class="info-box-title">اطلاعات فروشنده</div>
-            <div class="info-box-content">
-                <div class="info-row">
-                    <span class="info-label">نام:</span>
-                    <span class="info-value">{SellerPartyName}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">کد فروشنده:</span>
-                    <span class="info-value">{SellerPartyCode}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">کد اقتصادی:</span>
-                    <span class="info-value">{PartyEconomicCode}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">صادر کننده:</span>
-                    <span class="info-value">{IssuerQuotation}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">&nbsp;</span>
-                    <span class="info-value">&nbsp;</span>
-                </div>
-            </div>
+        <div class="meta-chip">
+            <span class="ml">اعتبار تا:</span>
+            <span class="mv">{ExpirationDate}</span>
         </div>
     </div>
 
-    <!-- ═══ ITEMS TABLE ═══ -->
-    <div class="table-section">
-        <table class="items-table">
+    <!-- ═══ INFO CARDS ═══ -->
+    <div class="cards">
+        <div class="card">
+            <div class="card-head">
+                <div class="red-bar"></div>
+                <span>اطلاعات خریدار</span>
+            </div>
+            <div class="card-body">
+                <div class="c-row">
+                    <span class="c-lbl">نام:</span>
+                    <span class="c-val">{PartyTitle}</span>
+                </div>
+                <div class="c-row">
+                    <span class="c-lbl">کد مشتری:</span>
+                    <span class="c-val">{PartyCode}</span>
+                </div>
+                <div class="c-row">
+                    <span class="c-lbl">کد ملی:</span>
+                    <span class="c-val">{PartyIdentificationCode}</span>
+                </div>
+                <div class="c-row">
+                    <span class="c-lbl">تلفن:</span>
+                    <span class="c-val">{PartyPhone}</span>
+                </div>
+                <div class="c-row">
+                    <span class="c-lbl">آدرس:</span>
+                    <span class="c-val">{PartyAddress}</span>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-head">
+                <div class="red-bar"></div>
+                <span>اطلاعات فروشنده</span>
+            </div>
+            <div class="card-body">
+                <div class="c-row">
+                    <span class="c-lbl">نام:</span>
+                    <span class="c-val">{SellerPartyName}</span>
+                </div>
+                <div class="c-row">
+                    <span class="c-lbl">کد فروشنده:</span>
+                    <span class="c-val">{SellerPartyCode}</span>
+                </div>
+                <div class="c-row">
+                    <span class="c-lbl">کد اقتصادی:</span>
+                    <span class="c-val">{PartyEconomicCode}</span>
+                </div>
+                <div class="c-row">
+                    <span class="c-lbl">صادر کننده:</span>
+                    <span class="c-val">{IssuerQuotation}</span>
+                </div>
+                <div class="c-row">
+                    <span class="c-lbl">&nbsp;</span>
+                    <span class="c-val">&nbsp;</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ TABLE ═══ -->
+    <div class="tbl-wrap">
+        <div class="tbl-accent"></div>
+        <table class="items">
             <thead>
                 <tr>
-                    <th class="col-row">ردیف</th>
-                    <th class="col-desc" style="width: 38%;">شرح کالا / خدمات</th>
-                    <th class="col-num" style="width: 10%;">تعداد</th>
-                    <th class="col-num" style="width: 10%;">واحد</th>
-                    <th class="col-num" style="width: 14%;">فی (ریال)</th>
-                    <th class="col-num" style="width: 10%;">تخفیف</th>
-                    <th class="col-num" style="width: 14%;">مبلغ کل</th>
+                    <th style="width:7%">ردیف</th>
+                    <th class="th-desc" style="width:37%">شرح کالا / خدمات</th>
+                    <th style="width:9%">تعداد</th>
+                    <th style="width:9%">واحد</th>
+                    <th class="th-red" style="width:15%">فی (ریال)</th>
+                    <th style="width:11%">تخفیف</th>
+                    <th class="th-red" style="width:15%">مبلغ کل</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>۱</td>
-                    <td class="td-desc">محصول نمونه شماره یک</td>
-                    <td class="td-num">5</td>
+                    <td class="td-d">محصول نمونه شماره یک</td>
+                    <td class="td-n">5</td>
                     <td>عدد</td>
-                    <td class="td-num">1,500,000</td>
-                    <td class="td-num">375,000</td>
-                    <td class="td-num">7,125,000</td>
+                    <td class="td-n">1,500,000</td>
+                    <td class="td-n">375,000</td>
+                    <td class="td-n">7,125,000</td>
                 </tr>
                 <tr>
                     <td>۲</td>
-                    <td class="td-desc">محصول نمونه شماره دو</td>
-                    <td class="td-num">10</td>
+                    <td class="td-d">محصول نمونه شماره دو</td>
+                    <td class="td-n">10</td>
                     <td>بسته</td>
-                    <td class="td-num">850,000</td>
-                    <td class="td-num">0</td>
-                    <td class="td-num">8,500,000</td>
+                    <td class="td-n">850,000</td>
+                    <td class="td-n">0</td>
+                    <td class="td-n">8,500,000</td>
                 </tr>
                 <tr>
                     <td>۳</td>
-                    <td class="td-desc">خدمات نصب و راه‌اندازی</td>
-                    <td class="td-num">1</td>
+                    <td class="td-d">خدمات نصب و راه‌اندازی</td>
+                    <td class="td-n">1</td>
                     <td>مورد</td>
-                    <td class="td-num">3,200,000</td>
-                    <td class="td-num">320,000</td>
-                    <td class="td-num">2,880,000</td>
+                    <td class="td-n">3,200,000</td>
+                    <td class="td-n">320,000</td>
+                    <td class="td-n">2,880,000</td>
                 </tr>
                 <tr>
                     <td>۴</td>
-                    <td class="td-desc">لوازم جانبی مدل A</td>
-                    <td class="td-num">3</td>
+                    <td class="td-d">لوازم جانبی مدل A</td>
+                    <td class="td-n">3</td>
                     <td>عدد</td>
-                    <td class="td-num">420,000</td>
-                    <td class="td-num">0</td>
-                    <td class="td-num">1,260,000</td>
+                    <td class="td-n">420,000</td>
+                    <td class="td-n">0</td>
+                    <td class="td-n">1,260,000</td>
                 </tr>
                 <tr>
                     <td>۵</td>
-                    <td class="td-desc">بسته گارانتی تمدید شده</td>
-                    <td class="td-num">2</td>
+                    <td class="td-d">بسته گارانتی تمدید شده</td>
+                    <td class="td-n">2</td>
                     <td>مورد</td>
-                    <td class="td-num">1,800,000</td>
-                    <td class="td-num">180,000</td>
-                    <td class="td-num">3,420,000</td>
+                    <td class="td-n">1,800,000</td>
+                    <td class="td-n">180,000</td>
+                    <td class="td-n">3,420,000</td>
                 </tr>
                 <tr>
                     <td>۶</td>
-                    <td class="td-desc">کابل شبکه Cat6 - ۳ متری</td>
-                    <td class="td-num">20</td>
+                    <td class="td-d">کابل شبکه Cat6 - ۳ متری</td>
+                    <td class="td-n">20</td>
                     <td>عدد</td>
-                    <td class="td-num">85,000</td>
-                    <td class="td-num">0</td>
-                    <td class="td-num">1,700,000</td>
+                    <td class="td-n">85,000</td>
+                    <td class="td-n">0</td>
+                    <td class="td-n">1,700,000</td>
                 </tr>
                 <tr>
                     <td>۷</td>
-                    <td class="td-desc">سرویس پشتیبانی ماهانه</td>
-                    <td class="td-num">1</td>
+                    <td class="td-d">سرویس پشتیبانی ماهانه</td>
+                    <td class="td-n">1</td>
                     <td>مورد</td>
-                    <td class="td-num">2,500,000</td>
-                    <td class="td-num">250,000</td>
-                    <td class="td-num">2,250,000</td>
+                    <td class="td-n">2,500,000</td>
+                    <td class="td-n">250,000</td>
+                    <td class="td-n">2,250,000</td>
                 </tr>
                 <tr>
                     <td>۸</td>
-                    <td class="td-desc">هارد SSD 500GB</td>
-                    <td class="td-num">2</td>
+                    <td class="td-d">هارد SSD 500GB</td>
+                    <td class="td-n">2</td>
                     <td>عدد</td>
-                    <td class="td-num">4,200,000</td>
-                    <td class="td-num">420,000</td>
-                    <td class="td-num">7,980,000</td>
+                    <td class="td-n">4,200,000</td>
+                    <td class="td-n">420,000</td>
+                    <td class="td-n">7,980,000</td>
                 </tr>
-                <tr class="empty-row"><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-                <tr class="empty-row"><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                <tr class="empty"><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                <tr class="empty"><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
             </tbody>
         </table>
     </div>
 
     <!-- ═══ DESCRIPTION ═══ -->
-    <div class="desc-section">
-        <div class="desc-box">
-            <div class="desc-box-title">توضیحات:</div>
-            <div class="desc-box-text">{Description} — این پیش فاکتور صرفاً جهت اعلام قیمت بوده و فاکتور رسمی محسوب نمی‌شود.</div>
+    <div class="desc">
+        <div class="desc-inner">
+            {Description} — این پیش فاکتور صرفاً جهت اعلام قیمت بوده و فاکتور رسمی محسوب نمی‌شود.
         </div>
     </div>
 
-    <!-- ═══ DARK FOOTER WITH TOTALS ═══ -->
-    <div class="dark-footer">
-        <div class="footer-block">
-            <div class="footer-block-title">شرایط پرداخت</div>
-            <div class="footer-row">
-                <span class="footer-label">نحوه پرداخت:</span>
-                <span class="footer-value" style="direction: rtl;">نقدی / چک</span>
+    <!-- ═══ SUMMARY ═══ -->
+    <div class="summary">
+        <div class="sum-left">
+            <div class="s-title">شرایط</div>
+            <div class="s-row">
+                <span class="sl">نحوه پرداخت:</span>
+                <span class="sv" style="direction:rtl">نقدی / چک</span>
             </div>
-            <div class="footer-row">
-                <span class="footer-label">مهلت پرداخت:</span>
-                <span class="footer-value" style="direction: rtl;">۱۵ روز</span>
+            <div class="s-row">
+                <span class="sl">مهلت:</span>
+                <span class="sv" style="direction:rtl">۱۵ روز</span>
             </div>
-            <div class="footer-row">
-                <span class="footer-label">نوع فروش:</span>
-                <span class="footer-value" style="direction: rtl;">{SaleType}</span>
+            <div class="s-row">
+                <span class="sl">نوع فروش:</span>
+                <span class="sv" style="direction:rtl">{SaleType}</span>
             </div>
         </div>
-
-        <div class="footer-block">
-            <div class="footer-block-title">خلاصه مالی</div>
-            <div class="footer-row">
-                <span class="footer-label">جمع مبلغ:</span>
-                <span class="footer-value">{TotalPrice}</span>
+        <div class="sum-right">
+            <div class="s-title">جمع‌بندی مالی</div>
+            <div class="s-row">
+                <span class="sl">جمع مبلغ:</span>
+                <span class="sv">{TotalPrice}</span>
             </div>
-            <div class="footer-row">
-                <span class="footer-label">جمع تخفیف:</span>
-                <span class="footer-value">{TotalDiscount}</span>
+            <div class="s-row">
+                <span class="sl">جمع تخفیف:</span>
+                <span class="sv">{TotalDiscount}</span>
             </div>
-            <div class="footer-row">
-                <span class="footer-label">کسر خرده:</span>
-                <span class="footer-value">{ChangeReduction}</span>
+            <div class="s-row">
+                <span class="sl">کسر خرده:</span>
+                <span class="sv">{ChangeReduction}</span>
             </div>
-
-            <div class="total-stripe">
-                <span class="total-lbl">مبلغ قابل پرداخت (ریال):</span>
-                <span class="total-val">{TotalNetPrice}</span>
+            <div class="grand-total">
+                <span class="gt-l">مبلغ قابل پرداخت (ریال)</span>
+                <span class="gt-v">{TotalNetPrice}</span>
             </div>
         </div>
     </div>
 
     <!-- ═══ SIGNATURES ═══ -->
-    <div class="signatures">
-        <div class="sig-box">
-            <div class="sig-title">مهر و امضاء فروشنده</div>
-            <div class="sig-line"></div>
+    <div class="sigs">
+        <div class="sig">
+            <div class="sig-t">مهر و امضاء فروشنده</div>
+            <div class="sig-l"></div>
         </div>
-        <div class="sig-box">
-            <div class="sig-title">تأیید مدیر فروش</div>
-            <div class="sig-line"></div>
+        <div class="sig">
+            <div class="sig-t">تأیید مدیر فروش</div>
+            <div class="sig-l"></div>
         </div>
-        <div class="sig-box">
-            <div class="sig-title">مهر و امضاء خریدار</div>
-            <div class="sig-line"></div>
+        <div class="sig">
+            <div class="sig-t">مهر و امضاء خریدار</div>
+            <div class="sig-l"></div>
         </div>
     </div>
 
-    <!-- ═══ BOTTOM RED STRIPE ═══ -->
-    <div class="bottom-stripe"></div>
-
 </div>
-
 </body>
 </html>
