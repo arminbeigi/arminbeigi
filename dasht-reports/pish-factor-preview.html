@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پیش فاکتور - طرح عمودی A4</title>
+    <style>
+        @page {
+            size: A4 portrait;
+            margin: 0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'B Nazanin', 'IRANSans', 'Tahoma', 'Arial', sans-serif;
+            background: #e8e8e8;
+            direction: rtl;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            margin: 10mm auto;
+            background: #fff;
+            padding: 8mm 10mm;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* ─── Decorative top bar ─── */
+        .top-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6mm;
+            background: linear-gradient(90deg, #C62828, #EF5350, #C62828);
+        }
+
+        /* ─── Header Section ─── */
+        .header {
+            margin-top: 8mm;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 4mm;
+            border-bottom: 2px solid #C62828;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 4mm;
+        }
+
+        .logo-placeholder {
+            width: 20mm;
+            height: 20mm;
+            border: 2px solid #9E9E9E;
+            border-radius: 3mm;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9E9E9E;
+            font-size: 7pt;
+            text-align: center;
+        }
+
+        .company-info {
+            text-align: right;
+        }
+
+        .company-name {
+            font-size: 14pt;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .company-detail {
+            font-size: 8pt;
+            color: #757575;
+            margin-top: 1mm;
+        }
+
+        .header-center {
+            text-align: center;
+        }
+
+        .invoice-title {
+            font-size: 18pt;
+            font-weight: bold;
+            color: #C62828;
+            background: linear-gradient(135deg, #FAFAFA, #F0F0F0);
+            border: 2px solid #C62828;
+            border-radius: 3mm;
+            padding: 2mm 8mm;
+            letter-spacing: 1px;
+        }
+
+        .header-left {
+            text-align: left;
+            direction: ltr;
+        }
+
+        .invoice-meta {
+            background: #F5F5F5;
+            border: 1px solid #E0E0E0;
+            border-radius: 2mm;
+            padding: 2mm 4mm;
+            font-size: 9pt;
+        }
+
+        .invoice-meta-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 3mm;
+            padding: 1mm 0;
+        }
+
+        .meta-label {
+            color: #757575;
+            font-size: 8pt;
+        }
+
+        .meta-value {
+            font-weight: bold;
+            color: #333;
+            font-size: 9pt;
+            direction: rtl;
+        }
+
+        /* ─── Customer Info Section ─── */
+        .customer-section {
+            margin-top: 4mm;
+            background: #FAFAFA;
+            border: 1px solid #E0E0E0;
+            border-radius: 2mm;
+            padding: 3mm 4mm;
+        }
+
+        .section-title {
+            font-size: 10pt;
+            font-weight: bold;
+            color: #fff;
+            background: #6B6B6B;
+            padding: 1.5mm 4mm;
+            border-radius: 2mm;
+            display: inline-block;
+            margin-bottom: 2mm;
+        }
+
+        .customer-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5mm 6mm;
+        }
+
+        .customer-row {
+            display: flex;
+            align-items: baseline;
+            gap: 2mm;
+            padding: 1mm 0;
+            border-bottom: 1px dotted #E0E0E0;
+        }
+
+        .customer-row:last-child {
+            border-bottom: none;
+        }
+
+        .customer-row.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .field-label {
+            font-size: 8pt;
+            color: #757575;
+            white-space: nowrap;
+            min-width: 22mm;
+        }
+
+        .field-value {
+            font-size: 9pt;
+            font-weight: bold;
+            color: #333;
+            flex: 1;
+        }
+
+        /* ─── Items Table ─── */
+        .items-section {
+            margin-top: 4mm;
+        }
+
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 8pt;
+        }
+
+        .items-table thead th {
+            background: linear-gradient(180deg, #6B6B6B, #5A5A5A);
+            color: #fff;
+            padding: 2.5mm 2mm;
+            text-align: center;
+            font-weight: bold;
+            font-size: 7.5pt;
+            border: 0.5px solid #4A4A4A;
+        }
+
+        .items-table thead th:first-child {
+            border-radius: 0 2mm 0 0;
+        }
+
+        .items-table thead th:last-child {
+            border-radius: 2mm 0 0 0;
+        }
+
+        .items-table tbody td {
+            padding: 2mm 2mm;
+            text-align: center;
+            border: 0.5px solid #E0E0E0;
+            font-size: 8pt;
+        }
+
+        .items-table tbody tr:nth-child(even) {
+            background: #F8F8F8;
+        }
+
+        .items-table tbody tr:hover {
+            background: #FFF3F3;
+        }
+
+        .items-table tbody td.text-right {
+            text-align: right;
+            padding-right: 3mm;
+        }
+
+        .items-table tbody td.text-left {
+            text-align: left;
+            padding-left: 3mm;
+            direction: ltr;
+        }
+
+        .items-table tbody td.number {
+            font-family: 'Tahoma', monospace;
+            direction: ltr;
+            text-align: center;
+        }
+
+        /* ─── Summary Section ─── */
+        .summary-section {
+            margin-top: 4mm;
+            display: flex;
+            justify-content: space-between;
+            gap: 4mm;
+        }
+
+        .summary-right {
+            flex: 1;
+        }
+
+        .description-box {
+            background: #FAFAFA;
+            border: 1px solid #E0E0E0;
+            border-radius: 2mm;
+            padding: 3mm 4mm;
+            min-height: 20mm;
+        }
+
+        .description-box .section-title {
+            font-size: 8pt;
+            padding: 1mm 3mm;
+            margin-bottom: 1.5mm;
+        }
+
+        .description-text {
+            font-size: 8pt;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        .summary-left {
+            width: 65mm;
+        }
+
+        .totals-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .totals-table tr td {
+            padding: 1.5mm 3mm;
+            font-size: 8.5pt;
+            border-bottom: 1px solid #E0E0E0;
+        }
+
+        .totals-table tr td:first-child {
+            color: #555;
+            text-align: right;
+        }
+
+        .totals-table tr td:last-child {
+            text-align: left;
+            direction: ltr;
+            font-family: 'Tahoma', monospace;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .totals-table tr.total-row {
+            background: linear-gradient(135deg, #C62828, #D32F2F);
+        }
+
+        .totals-table tr.total-row td {
+            color: #fff !important;
+            font-size: 10pt;
+            font-weight: bold;
+            padding: 2.5mm 3mm;
+            border-bottom: none;
+        }
+
+        .amount-words {
+            margin-top: 2mm;
+            background: #FFF8F8;
+            border: 1px solid #FFCDD2;
+            border-radius: 2mm;
+            padding: 2mm 3mm;
+            font-size: 8pt;
+            color: #C62828;
+            text-align: center;
+        }
+
+        /* ─── Signature Section ─── */
+        .signature-section {
+            margin-top: 6mm;
+            display: flex;
+            justify-content: space-between;
+            padding-top: 3mm;
+            border-top: 1px solid #E0E0E0;
+        }
+
+        .signature-box {
+            text-align: center;
+            width: 30%;
+        }
+
+        .signature-title {
+            font-size: 8pt;
+            color: #757575;
+            margin-bottom: 12mm;
+        }
+
+        .signature-line {
+            border-top: 1px solid #999;
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        .signature-name {
+            font-size: 7pt;
+            color: #999;
+            margin-top: 1mm;
+        }
+
+        /* ─── Footer ─── */
+        .footer {
+            margin-top: 4mm;
+            padding-top: 2mm;
+            border-top: 2px solid #C62828;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-text {
+            font-size: 7pt;
+            color: #999;
+        }
+
+        .footer-barcode {
+            font-family: monospace;
+            font-size: 7pt;
+            color: #666;
+            direction: ltr;
+        }
+
+        /* ─── Decorative side accent ─── */
+        .side-accent {
+            position: absolute;
+            left: 0;
+            top: 6mm;
+            bottom: 0;
+            width: 2mm;
+            background: linear-gradient(180deg, #C62828 0%, #EF5350 30%, #E0E0E0 60%, #9E9E9E 100%);
+        }
+
+        /* ─── Print styles ─── */
+        @media print {
+            body {
+                background: none;
+            }
+            .page {
+                margin: 0;
+                box-shadow: none;
+                padding: 8mm 10mm;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="page">
+    <div class="top-bar"></div>
+    <div class="side-accent"></div>
+
+    <!-- ─── Header ─── -->
+    <div class="header">
+        <div class="header-right">
+            <div class="logo-placeholder">
+                لوگوی<br>شرکت
+            </div>
+            <div class="company-info">
+                <div class="company-name">نام شرکت / فروشگاه</div>
+                <div class="company-detail">آدرس: تهران، خیابان نمونه، پلاک ۱۲۳</div>
+                <div class="company-detail">تلفن: ۰۲۱-۱۲۳۴۵۶۷۸ | فکس: ۰۲۱-۸۷۶۵۴۳۲۱</div>
+            </div>
+        </div>
+
+        <div class="header-center">
+            <div class="invoice-title">پیش فاکتور فروش</div>
+        </div>
+
+        <div class="header-left">
+            <div class="invoice-meta">
+                <div class="invoice-meta-row">
+                    <span class="meta-label">شماره:</span>
+                    <span class="meta-value">{Number}</span>
+                </div>
+                <div class="invoice-meta-row">
+                    <span class="meta-label">تاریخ:</span>
+                    <span class="meta-value">{Date}</span>
+                </div>
+                <div class="invoice-meta-row">
+                    <span class="meta-label">اعتبار تا:</span>
+                    <span class="meta-value">{ExpirationDate}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── Customer Info ─── -->
+    <div class="customer-section">
+        <div class="section-title">اطلاعات مشتری</div>
+        <div class="customer-grid">
+            <div class="customer-row">
+                <span class="field-label">نام مشتری:</span>
+                <span class="field-value">{PartyTitle}</span>
+            </div>
+            <div class="customer-row">
+                <span class="field-label">کد مشتری:</span>
+                <span class="field-value">{PartyCode}</span>
+            </div>
+            <div class="customer-row">
+                <span class="field-label">کد اقتصادی:</span>
+                <span class="field-value">{PartyEconomicCode}</span>
+            </div>
+            <div class="customer-row">
+                <span class="field-label">کد ملی:</span>
+                <span class="field-value">{PartyIdentificationCode}</span>
+            </div>
+            <div class="customer-row full-width">
+                <span class="field-label">آدرس:</span>
+                <span class="field-value">{PartyAddress}</span>
+            </div>
+            <div class="customer-row">
+                <span class="field-label">تلفن:</span>
+                <span class="field-value">{PartyPhone}</span>
+            </div>
+            <div class="customer-row">
+                <span class="field-label">صادر کننده:</span>
+                <span class="field-value">{IssuerQuotation}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── Items Table ─── -->
+    <div class="items-section">
+        <table class="items-table">
+            <thead>
+                <tr>
+                    <th style="width: 7%;">ردیف</th>
+                    <th style="width: 10%;">کد کالا</th>
+                    <th style="width: 25%;">شرح کالا / خدمات</th>
+                    <th style="width: 8%;">واحد</th>
+                    <th style="width: 8%;">تعداد</th>
+                    <th style="width: 12%;">فی (ریال)</th>
+                    <th style="width: 10%;">تخفیف</th>
+                    <th style="width: 10%;">مالیات</th>
+                    <th style="width: 10%;">مبلغ کل</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>۱</td>
+                    <td class="number">1001</td>
+                    <td class="text-right">محصول نمونه شماره یک</td>
+                    <td>عدد</td>
+                    <td class="number">5</td>
+                    <td class="number">1,500,000</td>
+                    <td class="number">375,000</td>
+                    <td class="number">712,500</td>
+                    <td class="number">7,837,500</td>
+                </tr>
+                <tr>
+                    <td>۲</td>
+                    <td class="number">1002</td>
+                    <td class="text-right">محصول نمونه شماره دو</td>
+                    <td>بسته</td>
+                    <td class="number">10</td>
+                    <td class="number">850,000</td>
+                    <td class="number">0</td>
+                    <td class="number">765,000</td>
+                    <td class="number">9,265,000</td>
+                </tr>
+                <tr>
+                    <td>۳</td>
+                    <td class="number">1003</td>
+                    <td class="text-right">خدمات نصب و راه‌اندازی</td>
+                    <td>مورد</td>
+                    <td class="number">1</td>
+                    <td class="number">3,200,000</td>
+                    <td class="number">320,000</td>
+                    <td class="number">259,200</td>
+                    <td class="number">3,139,200</td>
+                </tr>
+                <tr>
+                    <td>۴</td>
+                    <td class="number">1004</td>
+                    <td class="text-right">لوازم جانبی مدل A</td>
+                    <td>عدد</td>
+                    <td class="number">3</td>
+                    <td class="number">420,000</td>
+                    <td class="number">0</td>
+                    <td class="number">113,400</td>
+                    <td class="number">1,373,400</td>
+                </tr>
+                <tr>
+                    <td>۵</td>
+                    <td class="number">1005</td>
+                    <td class="text-right">بسته گارانتی تمدید شده</td>
+                    <td>مورد</td>
+                    <td class="number">2</td>
+                    <td class="number">1,800,000</td>
+                    <td class="number">180,000</td>
+                    <td class="number">307,800</td>
+                    <td class="number">3,727,800</td>
+                </tr>
+                <!-- Empty rows for template -->
+                <tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                <tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                <tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                <tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                <tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ─── Summary & Description ─── -->
+    <div class="summary-section">
+        <div class="summary-right">
+            <div class="description-box">
+                <div class="section-title">توضیحات</div>
+                <div class="description-text">
+                    {Description}
+                    <br>
+                    این پیش فاکتور صرفاً جهت اعلام قیمت بوده و فاکتور رسمی محسوب نمی‌شود.
+                    قیمت‌ها تا تاریخ اعتبار مندرج معتبر می‌باشند.
+                </div>
+            </div>
+        </div>
+
+        <div class="summary-left">
+            <table class="totals-table">
+                <tr>
+                    <td>جمع مبلغ:</td>
+                    <td>{TotalPrice}</td>
+                </tr>
+                <tr>
+                    <td>جمع تخفیف:</td>
+                    <td>{TotalDiscount}</td>
+                </tr>
+                <tr>
+                    <td>جمع مالیات:</td>
+                    <td>{TotalTax}</td>
+                </tr>
+                <tr>
+                    <td>جمع عوارض:</td>
+                    <td>{TotalDuty}</td>
+                </tr>
+                <tr>
+                    <td>کسر خرده:</td>
+                    <td>{ChangeReduction}</td>
+                </tr>
+                <tr class="total-row">
+                    <td>مبلغ کل (ریال):</td>
+                    <td>{TotalNetPrice}</td>
+                </tr>
+            </table>
+            <div class="amount-words">
+                مبلغ به حروف: {مبلغ به حروف}
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── Signatures ─── -->
+    <div class="signature-section">
+        <div class="signature-box">
+            <div class="signature-title">مهر و امضاء فروشنده</div>
+            <div class="signature-line"></div>
+            <div class="signature-name">{SellerPartyName}</div>
+        </div>
+        <div class="signature-box">
+            <div class="signature-title">تأیید مدیر فروش</div>
+            <div class="signature-line"></div>
+            <div class="signature-name"></div>
+        </div>
+        <div class="signature-box">
+            <div class="signature-title">مهر و امضاء خریدار</div>
+            <div class="signature-line"></div>
+            <div class="signature-name">{PartyTitle}</div>
+        </div>
+    </div>
+
+    <!-- ─── Footer ─── -->
+    <div class="footer">
+        <div class="footer-text">
+            این پیش فاکتور توسط نرم‌افزار حسابداری دشت همکاران سیستم صادر شده است.
+        </div>
+        <div class="footer-barcode">
+            {VoucherBarcode}
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
