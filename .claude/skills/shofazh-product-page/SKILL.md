@@ -87,6 +87,45 @@ Sections (numbered with CSS counter via h2):
 **Internal linking**: 3-5 contextual links to related shofazh.com categories.
 **Entity SEO**: Use named entities (manufacturer, standards, certifications).
 
+### Step 3.5: Mid-Content Image Prompts & Collection (MANDATORY — before building HTML)
+
+After generating the content outline but BEFORE building the final HTML, you MUST:
+
+1. **Generate image prompts**: Based on the content sections, create 3-5 image generation prompts for contextual images to be placed between content sections. Each prompt must:
+   - Be a detailed, professional image-generation prompt in English
+   - Describe a realistic, relevant visual for the product's context (e.g., installation scene, comparison diagram, usage environment, technical close-up)
+   - Specify style: "Professional industrial photography, clean, high-quality, no text or watermarks"
+   - Include the exact placement location (which section it goes after)
+
+2. **Present prompts to user**: Use `AskUserQuestion` to show ALL image prompts in a single message in Persian, formatted like:
+
+   ```
+   header: "تصاویر محتوا"
+   question: |
+     برای قرار دادن تصاویر مرتبط در بین محتوا، پرامپت‌های زیر رو آماده کردم.
+     لطفاً تصاویر رو تولید کنید و لینک یا فایلشون رو بدید:
+
+     🖼 تصویر ۱ — بعد از بخش «معرفی محصول»:
+     [prompt in English]
+
+     🖼 تصویر ۲ — بعد از بخش «کاربردها و موارد استفاده»:
+     [prompt in English]
+
+     🖼 تصویر ۳ — بعد از بخش «مقایسه با ...»:
+     [prompt in English]
+
+     (و الی آخر)
+
+     لینک یا مسیر تصاویر رو به ترتیب بدید (هر خط یک تصویر).
+   ```
+   - Provide two placeholder options like "تصاویر آماده‌ست" / "تصاویر رو بعداً اضافه می‌کنم" so user can type via Other.
+
+3. **Collect image URLs/paths**: Parse the user's response to extract image URLs or file paths. Map each image to its designated content section.
+
+4. **If user chooses "بعداً اضافه می‌کنم"**: Skip image insertion and proceed with HTML generation without mid-content images (leave commented HTML placeholders like `<!-- IMAGE PLACEHOLDER: [section name] -->` so user can add later).
+
+5. **If user provides images**: Store the URLs/paths and use them in Step 6 (Build HTML) to insert `<img>` tags with proper `alt` text, `loading="lazy"`, and responsive styling within the `.ran25-wrap` framework at the designated positions.
+
 ### Step 4: Schema JSON-LD
 Embed inside `<script type="application/ld+json">` blocks:
 - `Product` (with offers, aggregateRating, brand)
@@ -109,6 +148,12 @@ Use `mcp__higgsfield__generate_image` with model `flux_kontext`:
   - Ticker bar items (product-specific features)
   - Schema JSON-LD values
   - Accent color if category requires it
+  - **Mid-content images** (from Step 3.5): Insert collected images at their designated positions between sections. Each image must:
+    - Use `<figure>` with `<img>` inside, styled consistently with `.ran25-wrap`
+    - Include descriptive Persian `alt` text for SEO
+    - Use `loading="lazy"` and `width="100%"` for performance
+    - Have a subtle `<figcaption>` in Persian if appropriate
+    - If no images were provided, insert `<!-- IMAGE PLACEHOLDER: [section name] -->` comments instead
 - Keep ALL animations, industrial bars, gear SVGs, counter system unchanged
 - Include the WordPress override block (`!important` rules) at the end
 
