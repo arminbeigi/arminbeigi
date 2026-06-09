@@ -87,6 +87,25 @@ Sections (numbered with CSS counter via h2):
 **Internal linking**: 3-5 contextual links to related shofazh.com categories.
 **Entity SEO**: Use named entities (manufacturer, standards, certifications).
 
+#### Step 3b: SEO Metadata File (generate and send to the user immediately)
+As soon as the content above is written — and BEFORE building the HTML — produce a standalone SEO metadata file, save it to disk, and **send it to the user right away** with `SendUserFile` (status: `normal`). This lets the user review and approve the SEO fields while the rest of the page is being built.
+
+- File path: `[product-slug]-seo.md` (same slug as Step 7, e.g. `pgn0-seo.md`)
+- Written in Persian — it feeds WordPress SEO plugins (Rank Math / Yoast)
+
+The file MUST contain these fields (Persian labels):
+- **عنوان سئو (SEO Title)** — ≤ 60 characters, leads with the primary keyword, includes brand + model
+- **توضیحات متا (Meta Description)** — 150–160 characters, contains the focus keyphrase and a clear CTA
+- **کلمه کلیدی کانونی (Focus Keyphrase)** — the single primary keyword
+- **کلمات کلیدی ثانویه (Secondary Keywords)** — 4–6 related / LSI keywords as a list
+- **نامک پیشنهادی URL (URL Slug)** — lowercase Latin transliteration, matches the product slug
+- **متن جایگزین تصویر (Image Alt Text)** — descriptive alt for the product photo, includes brand + model
+- **عنوان شبکه‌های اجتماعی (Open Graph / Twitter Title)** — social-optimized title
+- **توضیحات شبکه‌های اجتماعی (Open Graph / Twitter Description)** — social-optimized description
+- **عنوان نان‌مایه (Breadcrumb Title)** — short breadcrumb label
+
+Keep titles and descriptions within their character limits, write them to read naturally in Persian, and avoid keyword stuffing.
+
 ### Step 4: Schema JSON-LD
 Embed inside `<script type="application/ld+json">` blocks:
 - `Product` (with offers, aggregateRating, brand)
@@ -114,6 +133,7 @@ Use `mcp__higgsfield__generate_image` with model `flux_kontext`:
 
 ### Step 7: Save, Commit, Push
 - File path: `[product-slug]-product-content.html` (e.g. `pgn0-product-content.html`)
+- Also commit the SEO metadata file created in Step 3b: `[product-slug]-seo.md`
 - Slug: lowercase Latin transliteration of product model
 - Commit message format:
   ```
@@ -126,9 +146,10 @@ Use `mcp__higgsfield__generate_image` with model `flux_kontext`:
 ## Output to User
 
 After push, reply with:
-1. Filename and repo path
+1. Filename and repo path (both the HTML page and the `[product-slug]-seo.md` SEO file)
 2. Three-line summary of what was generated (word count, schema types, photo cleanup status)
-3. Note about hotspot positions needing visual verification in browser
+3. Confirmation that the SEO metadata file was already sent to the user in Step 3b
+4. Note about hotspot positions needing visual verification in browser
 
 Do NOT paste the full HTML in chat — the file in the repo IS the deliverable.
 
