@@ -7,18 +7,55 @@ description: Build a complete SEO + GEO product page (Persian) for shofazh.com p
 
 You are building a complete, WordPress-ready Persian product page for shofazh.com (heating equipment e-commerce) following the exact standard established in `ran25-product-content.html`.
 
-## Required Inputs
+## Interactive Intake (MANDATORY)
 
-The user will provide:
-- **نام محصول** (Product name)
-- **لینک صفحه محصول** (Product page URL on shofazh.com)
-- **برند رقیب** (Competitor brand for comparison)
-- **لینک عکس محصول** (Product image URL)
-- **دسته‌بندی** (Category for breadcrumb)
-- **ویژگی خاص** (Optional: special emphasis)
-- **لینک سایت سازنده** (Optional: manufacturer site)
+When this skill is invoked, you MUST collect inputs from the user through a series of `AskUserQuestion` calls — one question at a time, in Persian. Do NOT ask all at once, and do NOT proceed to Step 1 of the workflow until all required answers are collected.
 
-If any required input is missing, ask once for all missing items at once — do not ask one by one.
+Ask in this exact order:
+
+**Question 1 — نام محصول**
+- header: "نام محصول"
+- question: "نام کامل محصول چیه؟ (مثلاً: مشعل گازوئیلی ایران رادیاتور PGN0)"
+- Free text via "Other" option only — provide 2 placeholder options like "مشعل گازسوز" / "مشعل گازوئیلی" so user can pick Other to type.
+
+**Question 2 — لینک صفحه محصول**
+- header: "لینک محصول"
+- question: "لینک صفحه محصول در shofazh.com چیه؟"
+- Same pattern — user types via Other.
+
+**Question 3 — دسته‌بندی محصول**
+- header: "دسته‌بندی"
+- question: "محصول در کدوم دسته‌بندی قرار می‌گیره؟"
+- options:
+  - "مشعل گازسوز" (accent: blue)
+  - "مشعل گازوئیلی" (accent: red)
+  - "مشعل دوگانه‌سوز" (accent: orange)
+  - "سایر" (user types via Other)
+
+**Question 4 — برند رقیب برای مقایسه**
+- header: "برند رقیب"
+- question: "با کدوم برند مقایسه بشه؟"
+- options:
+  - "شوفاژکار"
+  - "گرم ایران"
+  - "ایران رادیاتور" (اگه محصول از برند دیگه‌ست)
+  - "بدون مقایسه برند خاص"
+
+**Question 5 — لینک عکس محصول**
+- header: "عکس محصول"
+- question: "لینک عکس محصول رو بده (برای پاکسازی با AI)"
+- User types URL via Other.
+
+**Question 6 — تاکید ویژه (اختیاری)**
+- header: "تاکید ویژه"
+- question: "ویژگی خاص یا مخاطب هدف ویژه‌ای داری که در محتوا تاکید بشه؟"
+- options:
+  - "موتورخانه خانگی"
+  - "موتورخانه تجاری و اداری"
+  - "صنعتی و کارخانه"
+  - "بدون تاکید خاص"
+
+After all 6 answers are collected, summarize them in one short Persian message and start executing Steps 1-7 below without further confirmation.
 
 ## Workflow (Execute All Steps Without Pausing for Approval)
 
