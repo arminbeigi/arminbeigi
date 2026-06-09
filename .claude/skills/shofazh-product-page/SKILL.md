@@ -1,6 +1,6 @@
 ---
 name: shofazh-product-page
-description: Build a complete SEO + GEO product page (Persian) for shofazh.com products using the established RAN25 template. Use when user provides product name, URL, competitor brand, image, and category. Produces WordPress-ready HTML with animations, schema markup, and cleaned product photo.
+description: Build a complete SEO + GEO product page (Persian) for shofazh.com products using the established RAN25 template. Use when user provides product name, URL, competitor brand, image, and category. Hands the user an image-generation prompt and pauses for them to supply the photo, then produces WordPress-ready HTML with animations, schema markup, and a separate SEO metadata file.
 ---
 
 # Shofazh.com Product Page Builder
@@ -41,10 +41,11 @@ Ask in this exact order:
   - "ایران رادیاتور" (اگه محصول از برند دیگه‌ست)
   - "بدون مقایسه برند خاص"
 
-**Question 5 — لینک عکس محصول**
+**Question 5 — لینک عکس محصول (مرجع برای پرامپت)**
 - header: "عکس محصول"
-- question: "لینک عکس محصول رو بده"
+- question: "لینک عکس محصول رو بده (به‌عنوان مرجع برای پرامپت تصویر)"
 - User types URL via Other.
+- NOTE: This URL is ONLY a reference for writing the image prompt in Step 2b. It is NOT the final image. Never treat it as the finished product photo, and never skip the Step 2b pause just because this URL exists — the final image always comes from the user after Step 2b.
 
 **Question 6 — تاکید ویژه (اختیاری)**
 - header: "تاکید ویژه"
@@ -55,9 +56,15 @@ Ask in this exact order:
   - "صنعتی و کارخانه"
   - "بدون تاکید خاص"
 
-After all 6 answers are collected, summarize them in one short Persian message and start executing Steps 1-7 below without further confirmation.
+After all 6 answers are collected, summarize them in one short Persian message, then begin the workflow. Run Steps 1–2 automatically, then **STOP at Step 2b**: present the image prompt(s) as the final message of that turn and end the turn. Do NOT generate content, build the file, or call any further tools until the user replies with the finished images. After the images arrive, run the remaining steps without further confirmation.
 
-## Workflow (Execute All Steps Without Pausing for Approval)
+## Workflow (Execute Without Pausing for Approval — except the Step 2b image handoff)
+
+> ⛔ **HARD GATE — Step 2b is a mandatory stop.** This skill has exactly one pause. After Steps 1–2 you MUST present the image prompt(s) and **end your turn**, then wait for the user to send back the finished images. You must NEVER:
+> - auto-generate or auto-clean the product photo yourself — there is no automatic image step;
+> - treat the Question 5 reference URL as the final image;
+> - generate content, build the HTML, or run any of Steps 3–7 before the user has delivered the images.
+> The product photo always comes from the user, after Step 2b. If you find yourself building the page without it, you skipped the gate.
 
 ### Step 1: Read Template
 Read `ran25-product-content.html` from the repo root to load the exact CSS framework, structure, and animation standards. The `.ran25-wrap` CSS is the immutable shell — only content, image, and hotspot positions change per product.
@@ -71,6 +78,20 @@ Read `ran25-product-content.html` from the repo root to load the exact CSS frame
   - دوگانه‌سوز → orange (#FF6F00)
   - سایر → keep blue
 - Identify target audience (موتورخانه خانگی / تجاری / صنعتی)
+
+### Step 2b: Image Prompt Handoff (MANDATORY PAUSE)
+After the product analysis — and BEFORE generating content or building the file — hand the image-generation prompt(s) to the user and **wait for them to deliver the finished images**. The user prepares the images in their own tool and sends the URLs/files back; you then place them in the correct positions during the build. This is the one approved pause in the workflow.
+
+1. Using the product analysis (Step 2) and the template's image slots (Step 1), write a prompt for **every image the page needs**:
+   - The main hero product photo is REQUIRED — it fills `.ran25-photo-stage img` and is the single most important image, since all hotspots and callouts are positioned on top of it.
+   - Add a prompt for an extra image only if the layout you plan genuinely needs one; otherwise the main photo is enough.
+2. Present the prompt(s) to the user in a copy-paste-friendly block. For each image include:
+   - **Purpose / placement** (e.g. "main product photo with hotspots")
+   - **Prompt text in English** (image models perform best in English)
+   - **Reference image**: the product image URL from Question 5
+   - **Recommended orientation / aspect ratio** (the main photo works best square-to-landscape, product centered with clear empty margins so the callouts have room)
+   - A reminder: **clean white or transparent background**, **remove all logos, text, watermarks and branding**, keep only the product — industrial product photography
+3. **STOP — end your turn here.** Send the prompt(s) as your final message and do NOT call any more tools, do NOT generate content, and do NOT build the file in this turn. This is a hard gate, not a soft suggestion: even though Question 5 already gave you a reference URL, you must still pause and wait. Only after the user's NEXT message delivers the finished image(s) do you map each image to its slot and continue the workflow without further confirmation.
 
 ### Step 3: Content Generation (~3500 Persian words)
 Sections (numbered with CSS counter via h2):
@@ -159,7 +180,24 @@ After generating the content outline but BEFORE building the final HTML, you MUS
 
 4. **If user chooses "بعداً اضافه می‌کنم"**: Skip image insertion and proceed with HTML generation without mid-content images (leave commented HTML placeholders like `<!-- IMAGE PLACEHOLDER: [section name] -->` so user can add later).
 
-5. **If user provides images**: Store the URLs/paths and use them in Step 6 (Build HTML) to insert `<img>` tags with proper `alt` text, `loading="lazy"`, and responsive styling within the `.ran25-wrap` framework at the designated positions.
+5. **If user provides images**: Store the URLs/paths and use them in Step 5 (Build HTML) to insert `<img>` tags with proper `alt` text, `loading="lazy"`, and responsive styling within the `.ran25-wrap` framework at the designated positions.
+
+#### Step 3c: SEO Metadata File (generate and send to the user immediately)
+As soon as the content above is written — and BEFORE building the HTML — produce a standalone SEO metadata file, save it to disk, and **send it to the user right away** with `SendUserFile` (status: `normal`).
+
+- File path: `[product-slug]-seo.md` (same slug as Step 6, e.g. `pgn0-seo.md`)
+- Written in Persian — it feeds WordPress SEO plugins (Rank Math / Yoast)
+
+The file MUST contain these fields (Persian labels):
+- **عنوان سئو (SEO Title)** — ≤ 60 characters, leads with the primary keyword, includes brand + model
+- **توضیحات متا (Meta Description)** — 150–160 characters, contains the focus keyphrase and a clear CTA
+- **کلمه کلیدی کانونی (Focus Keyphrase)** — the single primary keyword
+- **کلمات کلیدی ثانویه (Secondary Keywords)** — 4–6 related / LSI keywords as a list
+- **نامک پیشنهادی URL (URL Slug)** — lowercase Latin transliteration, matches the product slug
+- **متن جایگزین تصویر (Image Alt Text)** — descriptive alt for the product photo, includes brand + model
+- **عنوان شبکه‌های اجتماعی (Open Graph / Twitter Title)** — social-optimized title
+- **توضیحات شبکه‌های اجتماعی (Open Graph / Twitter Description)** — social-optimized description
+- **عنوان نان‌مایه (Breadcrumb Title)** — short breadcrumb label
 
 ### Step 4: Schema JSON-LD
 Embed inside `<script type="application/ld+json">` blocks:
@@ -171,8 +209,8 @@ Embed inside `<script type="application/ld+json">` blocks:
 - Copy `.ran25-wrap` CSS framework exactly as-is from RAN25 template
 - Only modify:
   - Product content
-  - Photo URL (user-provided image URL, as-is)
-  - Hotspot positions on photo (4-5 callouts on actual product parts)
+  - Photo URL(s) — the user-supplied image(s) from Step 2b
+  - Hotspot positions on photo (4-6 callouts on actual product parts)
   - Ticker bar items (product-specific features)
   - Schema JSON-LD values
   - Accent color if category requires it
@@ -187,6 +225,7 @@ Embed inside `<script type="application/ld+json">` blocks:
 
 ### Step 6: Save, Commit, Push
 - File path: `[product-slug]-product-content.html` (e.g. `pgn0-product-content.html`)
+- Also commit the SEO metadata file created in Step 3b: `[product-slug]-seo.md`
 - Slug: lowercase Latin transliteration of product model
 - Commit message format:
   ```
@@ -199,10 +238,11 @@ Embed inside `<script type="application/ld+json">` blocks:
 ## Output to User
 
 After push, reply with:
-1. Filename and repo path
+1. Filename and repo path (both the HTML page and the `[product-slug]-seo.md` SEO file)
 2. Three-line summary of what was generated (word count, schema types, image count)
-3. Note about hotspot positions needing visual verification in browser
-4. **Schema JSON-LD preview**: Display the full generated Schema JSON-LD code blocks (Product, FAQPage, BreadcrumbList) in the chat so the user can review and verify them before publishing
+3. Confirmation that the SEO metadata file was already sent to the user in Step 3c
+4. Note about hotspot positions needing visual verification in browser
+5. **Schema JSON-LD preview**: Display the full generated Schema JSON-LD code blocks (Product, FAQPage, BreadcrumbList) in the chat so the user can review and verify them before publishing
 
 Do NOT paste the full HTML in chat — the file in the repo IS the deliverable. But DO show the Schema JSON-LD separately.
 
