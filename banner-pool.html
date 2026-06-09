@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>بنر تجهیزات استخری</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;700;900&display=swap');
+
+  .pool-wrap {
+    font-family: 'Vazirmatn', Tahoma, sans-serif;
+    direction: rtl; display: block; width: 100%; max-width: 760px;
+  }
+  .pool-wrap * { margin:0; padding:0; box-sizing:border-box; }
+
+  /* ── Banner shell ── */
+  .pool-banner {
+    position: relative;
+    width: 100%;
+    background: linear-gradient(135deg, #daeef8 0%, #c8e8f5 40%, #b8dff0 70%, #cce9f7 100%);
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 16px 50px rgba(0,120,200,0.22), 0 0 0 1px rgba(255,255,255,0.4);
+    cursor: pointer;
+  }
+
+  /* ── BG effects ── */
+  .pool-glow {
+    position:absolute; inset:0;
+    background: radial-gradient(ellipse at 20% 50%, rgba(100,200,255,0.28) 0%, transparent 55%),
+                radial-gradient(ellipse at 85% 20%, rgba(0,150,220,0.12) 0%, transparent 50%);
+    animation: poolGlow 4s ease-in-out infinite alternate;
+  }
+  @keyframes poolGlow { from{opacity:0.6} to{opacity:1} }
+
+  .pool-shimmer {
+    position:absolute; inset:0; z-index:1;
+    background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.18) 50%, transparent 70%);
+    background-size:200% 100%;
+    animation: poolShimmer 3s linear infinite;
+  }
+  @keyframes poolShimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+  /* background bubbles */
+  .pool-bub-bg {
+    position:absolute; border-radius:50%;
+    background:rgba(255,255,255,0.14); border:1px solid rgba(255,255,255,0.35);
+    animation: poolBubBg linear infinite;
+  }
+  .pool-bub-bg:nth-child(1){width:9px; height:9px; left:5%;  bottom:-12px; animation-duration:5s;   animation-delay:0s}
+  .pool-bub-bg:nth-child(2){width:5px; height:5px; left:12%; bottom:-12px; animation-duration:4s;   animation-delay:0.8s}
+  .pool-bub-bg:nth-child(3){width:13px;height:13px;left:21%; bottom:-12px; animation-duration:6.5s; animation-delay:0.3s}
+  .pool-bub-bg:nth-child(4){width:4px; height:4px; left:30%; bottom:-12px; animation-duration:3.8s; animation-delay:1.5s}
+  .pool-bub-bg:nth-child(5){width:10px;height:10px;left:42%; bottom:-12px; animation-duration:5.2s; animation-delay:0.7s}
+  .pool-bub-bg:nth-child(6){width:6px; height:6px; left:54%; bottom:-12px; animation-duration:4.5s; animation-delay:1.3s}
+  @keyframes poolBubBg {
+    0%  {transform:translateY(0) scale(1); opacity:0}
+    10% {opacity:0.55}
+    90% {opacity:0.15}
+    100%{transform:translateY(-275px) scale(0.7); opacity:0}
+  }
+
+  .pool-waves { position:absolute; bottom:0; left:0; right:0; height:38px; overflow:hidden; }
+  .pool-wave  { position:absolute; bottom:0; width:200%; height:38px; }
+  .pool-wave svg { width:100%; height:100%; }
+  .pool-wave-1 { animation:poolWave 6s linear infinite; opacity:0.28; }
+  .pool-wave-2 { animation:poolWave 9s linear infinite reverse; opacity:0.16; bottom:2px; }
+  @keyframes poolWave { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+  .pool-corner {
+    position:absolute; top:-20px; left:-20px;
+    width:88px; height:88px; border-radius:50%;
+    border:2px solid rgba(0,150,200,0.18);
+    animation:poolCorner 18s linear infinite;
+  }
+  .pool-corner::after {
+    content:''; position:absolute; top:10px; left:10px; right:10px; bottom:10px;
+    border-radius:50%; border:1px dashed rgba(0,150,200,0.2);
+  }
+  @keyframes poolCorner { to{transform:rotate(360deg)} }
+
+  /* ── MAIN LAYOUT ── */
+  .pool-inner {
+    position: relative; z-index: 10;
+    display: flex; align-items: stretch;
+    min-height: 260px;
+  }
+
+  /* ── TEXT SIDE ── */
+  .pool-text {
+    flex: 1; display: flex; flex-direction: column;
+    justify-content: center; gap: 9px;
+    padding: 20px 26px 20px 10px;
+    min-width: 0;
+  }
+
+  .pool-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(0,120,200,0.14); border: 1px solid rgba(0,120,200,0.28);
+    border-radius: 50px; padding: 4px 14px; width: fit-content;
+  }
+  .pool-badge span { font-size:11px; color:#0077b6; font-weight:700; letter-spacing:0.3px; }
+  .pool-dot {
+    width:6px; height:6px; border-radius:50%; background:#0096c7; flex-shrink:0;
+    animation: poolDot 1.5s ease-in-out infinite;
+  }
+  @keyframes poolDot { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.4);opacity:0.7} }
+
+  .pool-title {
+    font-size: clamp(18px, 3.2vw, 27px); font-weight:900; color:#023e8a; line-height:1.3;
+    text-shadow:0 2px 8px rgba(0,80,180,0.1);
+  }
+  .pool-title span { color:#0096c7; animation:poolColor 3s ease-in-out infinite alternate; }
+  @keyframes poolColor { from{color:#0096c7} to{color:#023e8a} }
+
+  .pool-sub { font-size:clamp(10px,1.5vw,13px); color:#0077b6; font-weight:500; opacity:0.85; }
+
+  .pool-btn {
+    text-decoration:none; display:inline-flex; align-items:center; gap:7px;
+    background:linear-gradient(135deg,#0096c7,#0077b6); color:#fff; border-radius:50px;
+    padding:9px 22px; font-size:clamp(12px,1.5vw,14px); font-weight:700;
+    font-family:'Vazirmatn',Tahoma,sans-serif; cursor:pointer; width:fit-content;
+    box-shadow:0 6px 20px rgba(0,120,200,0.36); transition:all 0.25s ease;
+    position:relative; overflow:hidden; white-space:nowrap;
+  }
+  .pool-btn::before {
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(135deg,rgba(255,255,255,0.2),transparent); opacity:0; transition:opacity 0.25s;
+  }
+  .pool-btn:hover{transform:translateY(-2px) scale(1.03);}
+  .pool-btn:hover::before{opacity:1;}
+  .pool-btn-arrow {
+    width:19px; height:19px; background:rgba(255,255,255,0.22); border-radius:50%;
+    display:flex; align-items:center; justify-content:center; font-size:11px; flex-shrink:0;
+    animation:poolArrow 1.5s ease-in-out infinite;
+  }
+  @keyframes poolArrow { 0%,100%{transform:translateX(0)} 50%{transform:translateX(-3px)} }
+
+  /* ══════════════════════════════════════
+     POOL SCENE
+  ══════════════════════════════════════ */
+  .pool-scene {
+    width: clamp(200px, 42%, 310px);
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(180deg,
+      rgba(180,225,250,0.18) 0%,
+      rgba(120,190,240,0.32) 55%,
+      rgba(80,155,228,0.45) 100%
+    );
+  }
+
+  /* water shimmer surface line */
+  .ps-surface {
+    position:absolute; left:0; right:0; height:2px;
+    top: 54%; background:rgba(0,150,220,0.28);
+    animation: psSurface 3.5s ease-in-out infinite;
+  }
+  @keyframes psSurface { 0%,100%{opacity:0.3;transform:scaleX(1)} 50%{opacity:0.7;transform:scaleX(1.04)} }
+
+  /* shared float */
+  @keyframes psFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-9px)} }
+  @keyframes psFloatSlow { 0%,100%{transform:translateY(0) rotate(0deg)} 50%{transform:translateY(-11px) rotate(4deg)} }
+
+  /* ─── Sand Filter ─── */
+  .ps-filter {
+    position:absolute; bottom:44px;
+    left:50%; transform:translateX(-20%);
+    width:44px;
+    animation: psFloat 4.5s ease-in-out infinite;
+  }
+  .ps-filter-pipe-t {
+    position:absolute; top:-13px; left:50%; transform:translateX(-50%);
+    width:9px; height:15px; background:#85c1e9; border-radius:3px;
+  }
+  .ps-filter-dome {
+    width:44px; height:17px; border-radius:50% 50% 0 0;
+    background:linear-gradient(135deg,#1a6fa8,#2e86ab);
+  }
+  .ps-filter-body {
+    width:44px; height:84px;
+    background:linear-gradient(135deg,#2980b9 0%,#2e86ab 50%,#2471a3 100%);
+    border-left:2px solid rgba(255,255,255,0.14);
+    border-right:2px solid rgba(0,0,0,0.08);
+    position:relative;
+  }
+  .ps-filter-gauge {
+    position:absolute; top:26px; left:50%; transform:translateX(-50%);
+    width:16px; height:16px; border-radius:50%;
+    background:#1a5c8a; border:2.5px solid #5dade2;
+  }
+  .ps-filter-gauge::after {
+    content:''; position:absolute; top:50%; left:50%;
+    width:5px; height:2px; background:#5dade2; transform-origin:0% 50%;
+    transform:translate(0,-50%) rotate(30deg);
+    animation:psGauge 2.8s linear infinite;
+  }
+  @keyframes psGauge { to{transform:translate(0,-50%) rotate(390deg)} }
+  .ps-filter-shine {
+    position:absolute; top:10px; left:6px;
+    width:7px; height:55px; border-radius:4px;
+    background:rgba(255,255,255,0.13); transform:rotate(-12deg);
+  }
+  .ps-filter-base {
+    width:44px; height:13px; border-radius:0 0 50% 50%;
+    background:linear-gradient(135deg,#1a6fa8,#2e86ab);
+  }
+  .ps-filter-pipe-b {
+    position:absolute; bottom:-14px; left:50%; transform:translateX(-50%);
+    width:9px; height:15px; background:#85c1e9; border-radius:3px;
+  }
+
+  /* ─── Pump ─── */
+  .ps-pump {
+    position:absolute; bottom:50px; left:14px;
+    animation: psFloat 3.8s 0.7s ease-in-out infinite;
+  }
+  .ps-pump-body {
+    width:54px; height:28px; border-radius:6px;
+    background:linear-gradient(135deg,#1a6fa8,#2980b9);
+    border-top:2px solid rgba(255,255,255,0.18);
+    position:relative;
+  }
+  .ps-pump-motor {
+    position:absolute; right:-16px; top:50%; transform:translateY(-50%);
+    width:30px; height:30px; border-radius:50%;
+    background:linear-gradient(135deg,#2e86ab,#1a6fa8);
+    border:2.5px solid rgba(255,255,255,0.18);
+    box-shadow:0 2px 8px rgba(0,0,0,0.2);
+  }
+  .ps-pump-motor::after {
+    content:''; position:absolute; top:50%; left:50%;
+    width:12px; height:12px; border-radius:50%; background:#0096c7;
+    transform:translate(-50%,-50%);
+    animation:psImpeller 1.6s linear infinite;
+  }
+  @keyframes psImpeller { to{transform:translate(-50%,-50%) rotate(360deg)} }
+  .ps-pump-led {
+    position:absolute; top:7px; left:8px;
+    width:6px; height:6px; border-radius:50%;
+    background:#00e676; box-shadow:0 0 7px #00e676;
+    animation:psLed 1.3s ease-in-out infinite;
+  }
+  @keyframes psLed { 0%,100%{opacity:1} 50%{opacity:0.25} }
+  /* pipe from pump to filter */
+  .ps-pipe-h {
+    position:absolute; bottom:62px; left:62px;
+    width:38px; height:7px;
+    background:linear-gradient(90deg,#85c1e9,#5dade2); border-radius:3px;
+  }
+
+  /* ─── Life Ring ─── */
+  .ps-ring {
+    position:absolute; top:16px; right:22px;
+    width:56px; height:56px; border-radius:50%;
+    background:conic-gradient(
+      #e74c3c 0deg 90deg, #fff 90deg 180deg,
+      #e74c3c 180deg 270deg, #fff 270deg 360deg
+    );
+    box-shadow:0 4px 14px rgba(0,100,200,0.18);
+    animation: psFloatSlow 3.2s ease-in-out infinite;
+  }
+  .ps-ring::before { /* inner hole */
+    content:''; position:absolute; top:14px; left:14px; right:14px; bottom:14px;
+    border-radius:50%; background:rgba(170,218,252,0.75);
+  }
+  .ps-ring::after { /* shine */
+    content:''; position:absolute; top:4px; left:4px; right:4px; bottom:4px;
+    border-radius:50%;
+    background:linear-gradient(135deg,rgba(255,255,255,0.3) 0%,transparent 50%);
+    pointer-events:none;
+  }
+
+  /* ─── Pool Float (inflatable ring / شناور) ─── */
+  .ps-float {
+    position:absolute; top:18px; left:12px;
+    width:60px; height:26px; border-radius:50%;
+    background:linear-gradient(135deg,#f39c12,#e67e22);
+    border:3px solid rgba(255,255,255,0.45);
+    box-shadow:0 4px 14px rgba(200,100,0,0.25);
+    animation: psFloat 4s 0.4s ease-in-out infinite;
+  }
+  .ps-float::after {
+    content:''; position:absolute; top:5px; left:12px; right:12px; bottom:5px;
+    border-radius:50%; background:rgba(170,218,252,0.7);
+  }
+
+  /* ─── Goggles (عینک شنا) ─── */
+  .ps-goggles {
+    position:absolute; top:88px; right:16px;
+    width:60px; height:22px;
+    animation: psFloat 4.2s 1s ease-in-out infinite;
+  }
+  .ps-gog-l, .ps-gog-r {
+    position:absolute; top:0;
+    width:24px; height:18px; border-radius:6px;
+    background:linear-gradient(135deg,rgba(0,155,225,0.72),rgba(0,100,185,0.8));
+    border:2px solid rgba(255,255,255,0.42);
+    box-shadow:inset 0 1px 4px rgba(0,0,0,0.18);
+  }
+  .ps-gog-l { left:10px; }
+  .ps-gog-r { right:10px; }
+  .ps-gog-bridge {
+    position:absolute; left:33px; top:7px;
+    width:6px; height:4px; background:rgba(255,255,255,0.6); border-radius:2px;
+  }
+  .ps-gog-sl {
+    position:absolute; left:0; top:5px;
+    width:11px; height:5px; background:rgba(0,100,185,0.5); border-radius:3px 0 0 3px;
+  }
+  .ps-gog-sr {
+    position:absolute; right:0; top:5px;
+    width:11px; height:5px; background:rgba(0,100,185,0.5); border-radius:0 3px 3px 0;
+  }
+
+  /* ─── Chemical bottle (کلر / شیمی) ─── */
+  .ps-chem {
+    position:absolute; bottom:58px; right:16px;
+    width:18px; height:32px;
+    background:linear-gradient(135deg,#27ae60,#2ecc71);
+    border-radius:3px 3px 5px 5px;
+    box-shadow:0 3px 10px rgba(0,100,0,0.2);
+    animation: psFloat 5.2s 1.4s ease-in-out infinite;
+  }
+  .ps-chem::before {
+    content:''; position:absolute; top:-8px; left:3px;
+    width:12px; height:10px; background:#1e8449; border-radius:3px 3px 0 0;
+  }
+  .ps-chem::after {
+    content:''; position:absolute; top:8px; left:3px;
+    width:12px; height:11px; background:rgba(255,255,255,0.28); border-radius:2px;
+  }
+
+  /* ─── Pool Vacuum Robot (ربات جارو) ─── */
+  .ps-robot {
+    position:absolute; bottom:7px; left:10px;
+    animation: psRobotMove 7s ease-in-out infinite;
+  }
+  .ps-robot-body {
+    width:52px; height:18px; border-radius:50%;
+    background:linear-gradient(135deg,#2c3e50,#34495e);
+    border-top:3px solid #4a6275;
+    position:relative;
+    box-shadow:0 2px 10px rgba(0,0,0,0.3);
+  }
+  .ps-robot-eye {
+    position:absolute; top:2px; left:50%; transform:translateX(-50%);
+    width:9px; height:7px; border-radius:50%;
+    background:#0096c7; box-shadow:0 0 7px rgba(0,150,220,0.9);
+    animation: psRobotEye 2s ease-in-out infinite;
+  }
+  @keyframes psRobotEye { 0%,100%{opacity:1} 50%{opacity:0.35} }
+  .ps-robot-brush {
+    position:absolute; bottom:-3px; left:6px; right:6px;
+    height:4px; border-radius:2px; background:rgba(52,152,219,0.55);
+  }
+  @keyframes psRobotMove {
+    0%,100% { transform:translateX(0); }
+    50% { transform:translateX(155px); }
+  }
+
+  /* ─── Scene bubbles ─── */
+  .ps-bub {
+    position:absolute; border-radius:50%;
+    background:rgba(255,255,255,0.22); border:1px solid rgba(255,255,255,0.45);
+    animation: psBub linear infinite;
+  }
+  .ps-bub-1{width:7px; height:7px; left:12%;bottom:8px;animation-duration:4s;  animation-delay:0s}
+  .ps-bub-2{width:5px; height:5px; left:28%;bottom:8px;animation-duration:3.2s;animation-delay:0.6s}
+  .ps-bub-3{width:9px; height:9px; left:42%;bottom:8px;animation-duration:5s;  animation-delay:0.2s}
+  .ps-bub-4{width:4px; height:4px; left:58%;bottom:8px;animation-duration:3.8s;animation-delay:1.1s}
+  .ps-bub-5{width:8px; height:8px; left:70%;bottom:8px;animation-duration:4.4s;animation-delay:0.5s}
+  .ps-bub-6{width:5px; height:5px; left:84%;bottom:8px;animation-duration:3s;  animation-delay:1.7s}
+  @keyframes psBub {
+    0%  {transform:translateY(0) translateX(0); opacity:0}
+    10% {opacity:0.7}
+    90% {opacity:0.2}
+    100%{transform:translateY(-265px) translateX(6px); opacity:0}
+  }
+
+  /* ─── Sparkles ─── */
+  .ps-spark {
+    position:absolute; border-radius:50%;
+    background:rgba(255,255,255,0.85);
+    box-shadow:0 0 6px 2px rgba(150,220,255,0.7);
+    animation: psSpark ease-in-out infinite;
+  }
+  .ps-spark-1{width:5px;height:5px;top:32%;left:22%;animation-duration:2.3s;animation-delay:0s}
+  .ps-spark-2{width:4px;height:4px;top:58%;left:65%;animation-duration:1.9s;animation-delay:0.7s}
+  .ps-spark-3{width:6px;height:6px;top:22%;left:52%;animation-duration:2.6s;animation-delay:0.3s}
+  @keyframes psSpark {
+    0%,100%{transform:scale(0);opacity:0}
+    40%{transform:scale(1);opacity:1}
+    70%{transform:scale(0.5);opacity:0.5}
+  }
+
+  /* ══════════════════════════════
+     RESPONSIVE
+  ══════════════════════════════ */
+  @media (max-width: 580px) {
+    .pool-banner { height: auto; border-radius: 14px; }
+    .pool-inner  { flex-direction: column; min-height: unset; height: auto; }
+    .pool-scene  { width: 100%; height: 120px; order: -1; flex-shrink: 0; }
+    .pool-text   { padding: 14px 18px 18px; gap: 7px; }
+    /* reposition scene items for shorter height */
+    .ps-filter   { bottom: 22px; left:50%; transform:translateX(-30%); }
+    .ps-filter-pipe-t { top:-10px; }
+    .ps-pump     { bottom: 28px; left:10px; }
+    .ps-pipe-h   { bottom:39px; left:58px; }
+    .ps-ring     { top:10px; right:14px; width:48px; height:48px; }
+    .ps-ring::before { top:12px; left:12px; right:12px; bottom:12px; }
+    .ps-float    { top:12px; left:8px; width:52px; height:22px; }
+    .ps-goggles  { top:68px; right:12px; }
+    .ps-chem     { bottom:36px; right:12px; }
+    .ps-robot    { bottom:5px; }
+  }
+  @media (max-width: 400px) {
+    .pool-scene { height: 110px; }
+    .pool-text  { padding: 12px 14px 16px; gap: 6px; }
+    .pool-title { font-size: 17px; }
+    .ps-filter  { bottom:16px; }
+    .ps-pump    { bottom:22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="pool-wrap">
+  <div class="pool-banner">
+
+    <!-- BG -->
+    <div class="pool-bub-bg"></div><div class="pool-bub-bg"></div><div class="pool-bub-bg"></div>
+    <div class="pool-bub-bg"></div><div class="pool-bub-bg"></div><div class="pool-bub-bg"></div>
+    <div class="pool-glow"></div>
+    <div class="pool-shimmer"></div>
+    <div class="pool-corner"></div>
+    <div class="pool-waves">
+      <div class="pool-wave pool-wave-1">
+        <svg viewBox="0 0 1200 38" preserveAspectRatio="none">
+          <path d="M0,20 C200,3 400,38 600,20 C800,3 1000,38 1200,20 L1200,38 L0,38 Z" fill="rgba(0,120,200,0.12)"/>
+        </svg>
+      </div>
+      <div class="pool-wave pool-wave-2">
+        <svg viewBox="0 0 1200 38" preserveAspectRatio="none">
+          <path d="M0,28 C300,7 600,38 900,17 C1050,7 1150,28 1200,20 L1200,38 L0,38 Z" fill="rgba(0,150,220,0.09)"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="pool-inner">
+
+      <!-- TEXT (right in RTL) -->
+      <div class="pool-text">
+        <div class="pool-badge">
+          <div class="pool-dot"></div>
+          <span>تجهیزات تخصصی</span>
+        </div>
+        <h2 class="pool-title">
+          <span>صفر تا صد</span><br>
+          تجهیزات استخری
+        </h2>
+        <p class="pool-sub">کامل‌ترین مجموعه محصولات استخر</p>
+        <a href="https://shofazh.com/product-category/pool/" class="pool-btn">
+          <div class="pool-btn-arrow">←</div>
+          خرید کنید
+        </a>
+      </div>
+
+      <!-- POOL SCENE (left in RTL) -->
+      <div class="pool-scene">
+        <div class="ps-surface"></div>
+
+        <!-- Sand Filter فیلتر شنی -->
+        <div class="ps-filter">
+          <div class="ps-filter-pipe-t"></div>
+          <div class="ps-filter-dome"></div>
+          <div class="ps-filter-body">
+            <div class="ps-filter-gauge"></div>
+            <div class="ps-filter-shine"></div>
+          </div>
+          <div class="ps-filter-base"></div>
+          <div class="ps-filter-pipe-b"></div>
+        </div>
+
+        <!-- Pump پمپ -->
+        <div class="ps-pump">
+          <div class="ps-pump-body">
+            <div class="ps-pump-led"></div>
+          </div>
+          <div class="ps-pump-motor"></div>
+          <div class="ps-pipe-h"></div>
+        </div>
+
+        <!-- Life Ring حلقه نجات -->
+        <div class="ps-ring"></div>
+
+        <!-- Pool Float شناور -->
+        <div class="ps-float"></div>
+
+        <!-- Goggles عینک شنا -->
+        <div class="ps-goggles">
+          <div class="ps-gog-sl"></div>
+          <div class="ps-gog-l"></div>
+          <div class="ps-gog-bridge"></div>
+          <div class="ps-gog-r"></div>
+          <div class="ps-gog-sr"></div>
+        </div>
+
+        <!-- Chemical bottle کلر -->
+        <div class="ps-chem"></div>
+
+        <!-- Vacuum Robot ربات جارو -->
+        <div class="ps-robot">
+          <div class="ps-robot-body">
+            <div class="ps-robot-eye"></div>
+            <div class="ps-robot-brush"></div>
+          </div>
+        </div>
+
+        <!-- Bubbles -->
+        <div class="ps-bub ps-bub-1"></div>
+        <div class="ps-bub ps-bub-2"></div>
+        <div class="ps-bub ps-bub-3"></div>
+        <div class="ps-bub ps-bub-4"></div>
+        <div class="ps-bub ps-bub-5"></div>
+        <div class="ps-bub ps-bub-6"></div>
+
+        <!-- Sparkles -->
+        <div class="ps-spark ps-spark-1"></div>
+        <div class="ps-spark ps-spark-2"></div>
+        <div class="ps-spark ps-spark-3"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
