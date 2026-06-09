@@ -1,6 +1,6 @@
 ---
 name: shofazh-product-page
-description: Build a complete SEO + GEO product page (Persian) for shofazh.com products using the established RAN25 template. Use when user provides product name, URL, competitor brand, image, and category. Produces WordPress-ready HTML with animations, schema markup, and cleaned product photo.
+description: Build a complete SEO + GEO product page (Persian) for shofazh.com products using the established RAN25 template. Use when user provides product name, URL, competitor brand, image, and category. Hands the user an image-generation prompt and pauses for them to supply the photo, then produces WordPress-ready HTML with animations, schema markup, and a separate SEO metadata file.
 ---
 
 # Shofazh.com Product Page Builder
@@ -41,10 +41,11 @@ Ask in this exact order:
   - "ایران رادیاتور" (اگه محصول از برند دیگه‌ست)
   - "بدون مقایسه برند خاص"
 
-**Question 5 — لینک عکس محصول**
+**Question 5 — لینک عکس محصول (مرجع برای پرامپت)**
 - header: "عکس محصول"
-- question: "لینک عکس محصول رو بده (برای پاکسازی با AI)"
+- question: "لینک عکس فعلی محصول رو بده (فقط به‌عنوان مرجع برای ساختن پرامپت — عکس نهایی رو خودت در مرحله ۲b تولید می‌کنی و بهم می‌دی)"
 - User types URL via Other.
+- NOTE: This URL is ONLY a reference for writing the image prompt in Step 2b. It is NOT the final image. Never treat it as the finished product photo, and never skip the Step 2b pause just because this URL exists — the final image always comes from the user after Step 2b.
 
 **Question 6 — تاکید ویژه (اختیاری)**
 - header: "تاکید ویژه"
@@ -55,9 +56,15 @@ Ask in this exact order:
   - "صنعتی و کارخانه"
   - "بدون تاکید خاص"
 
-After all 6 answers are collected, summarize them in one short Persian message, then begin the workflow: run Steps 1–2 automatically, then PAUSE at Step 2b to hand the image prompt(s) to the user. After the user delivers the images, run the remaining steps without further confirmation.
+After all 6 answers are collected, summarize them in one short Persian message, then begin the workflow. Run Steps 1–2 automatically, then **STOP at Step 2b**: present the image prompt(s) as the final message of that turn and end the turn. Do NOT generate content, build the file, or call any further tools until the user replies with the finished images. After the images arrive, run the remaining steps without further confirmation.
 
 ## Workflow (Execute Without Pausing for Approval — except the Step 2b image handoff)
+
+> ⛔ **HARD GATE — Step 2b is a mandatory stop.** This skill has exactly one pause. After Steps 1–2 you MUST present the image prompt(s) and **end your turn**, then wait for the user to send back the finished images. You must NEVER:
+> - auto-generate or auto-clean the product photo yourself — there is no automatic image step;
+> - treat the Question 5 reference URL as the final image;
+> - generate content, build the HTML, or run any of Steps 3–7 before the user has delivered the images.
+> The product photo always comes from the user, after Step 2b. If you find yourself building the page without it, you skipped the gate.
 
 ### Step 1: Read Template
 Read `ran25-product-content.html` from the repo root to load the exact CSS framework, structure, and animation standards. The `.ran25-wrap` CSS is the immutable shell — only content, image, and hotspot positions change per product.
@@ -83,7 +90,7 @@ After the product analysis — and BEFORE generating content or building the fil
    - **Reference image**: the product image URL from Question 5
    - **Recommended orientation / aspect ratio** (the main photo works best square-to-landscape, product centered with clear empty margins so the callouts have room)
    - A reminder: **clean white or transparent background**, **remove all logos, text, watermarks and branding**, keep only the product — industrial product photography
-3. **STOP and wait.** Do NOT proceed to Step 3 until the user replies with the prepared image(s). When they arrive, map each image to its slot, then continue the workflow without further confirmation.
+3. **STOP — end your turn here.** Send the prompt(s) as your final message and do NOT call any more tools, do NOT generate content, and do NOT build the file in this turn. This is a hard gate, not a soft suggestion: even though Question 5 already gave you a reference URL, you must still pause and wait. Only after the user's NEXT message delivers the finished image(s) do you map each image to its slot and continue the workflow without further confirmation.
 
 ### Step 3: Content Generation (~3500 Persian words)
 Sections (numbered with CSS counter via h2):
@@ -127,9 +134,10 @@ Embed inside `<script type="application/ld+json">` blocks:
 - `BreadcrumbList` (Home > Category > Subcategory > Product)
 
 ### Step 5: Place the User-Supplied Images
-The user already prepared and delivered the image(s) in Step 2b — do NOT auto-generate images here.
-- Use the exact image URL(s) the user provided (main product photo, plus any extra images).
-- Only if the user explicitly asks you to generate or clean an image instead: fall back to `mcp__higgsfield__generate_image` (model `flux_kontext`, reference = their image URL, prompt: "Remove all logos, text, watermarks, and branding from this product. Keep only the product itself on a clean white background. Industrial product photography."), wait for completion via `job_display`, then use the returned CloudFront URL.
+By this point the user has ALREADY prepared and delivered the image(s) in Step 2b. There is no automatic image-generation step — do NOT generate or clean images yourself.
+- Use the exact image URL(s)/file(s) the user delivered after the Step 2b pause (main product photo, plus any extra images).
+- If you somehow reached here without the user's images, you skipped the Step 2b gate — go back, present the prompt(s), and wait.
+- (Optional fallback, ONLY when the user themselves explicitly says "you generate the image for me": `mcp__higgsfield__generate_image`, model `flux_kontext`, reference = their Question 5 URL, prompt: "Remove all logos, text, watermarks, and branding from this product. Keep only the product itself on a clean white background. Industrial product photography." — wait for completion via `job_display`, then use the returned CloudFront URL. Never take this path by default.)
 
 ### Step 6: Build HTML
 - Copy `.ran25-wrap` CSS framework exactly as-is from RAN25 template
