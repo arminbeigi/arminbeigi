@@ -1,0 +1,774 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<StiSerializer version="1.02" type="Net" application="StiReport">
+  <StiReport Ref="0" type="Stimulsoft.Report.StiReport" isKey="true">
+    <CacheAllData>true</CacheAllData>
+    <Culture>fa-IR</Culture>
+    <ReportAlias>پیش فاکتور A4 عمودی</ReportAlias>
+    <ReportAuthor>Dasht Report Designer</ReportAuthor>
+    <ReportDescription>پیش فاکتور فروش - طرح عمودی A4 با رنگ طوسی و قرمز</ReportDescription>
+    <ReportGuid>e5ca9b05-ac02-4306-abc6-2740f9431eda</ReportGuid>
+    <ReportName>QuotationPortraitA4</ReportName>
+    <ReportUnit>Centimeters</ReportUnit>
+    <ScriptLanguage>CSharp</ScriptLanguage>
+    <Dictionary Ref="1" type="Stimulsoft.Report.Dictionary.StiDictionary" isKey="true">
+      <Databases isList="true" count="0" />
+      <DataSources isList="true" count="2">
+        <Quotation Ref="2" type="Stimulsoft.Report.Dictionary.StiDataTableSource" isKey="true">
+          <Alias>پیش فاکتور</Alias>
+          <Columns isList="true" count="38">
+            <value>QuotationID,System.Int32</value>
+            <value>Date,System.DateTime</value>
+            <value>Number,System.Int32</value>
+            <value>ExpirationDate,System.DateTime</value>
+            <value>PartyRef,System.Int32</value>
+            <value>PartyCode,System.String</value>
+            <value>PartyTitle,System.String</value>
+            <value>PartyEconomicCode,System.String</value>
+            <value>PartyIdentificationCode,System.String</value>
+            <value>PartyAddress,System.String</value>
+            <value>PartyPhone,System.String</value>
+            <value>StockRef,System.Int32</value>
+            <value>SaleType,System.Int32</value>
+            <value>TotalPrice,System.Decimal</value>
+            <value>TotalDiscount,System.Decimal</value>
+            <value>TotalTax,System.Decimal</value>
+            <value>TotalDuty,System.Decimal</value>
+            <value>TotalNetPrice,System.Decimal</value>
+            <value>State,System.Int32</value>
+            <value>StateTitle,System.String</value>
+            <value>FiscalPeriodRef,System.Int32</value>
+            <value>Creator,System.Int32</value>
+            <value>CreationDate,System.DateTime</value>
+            <value>LastModifier,System.Int32</value>
+            <value>LastModificationDate,System.DateTime</value>
+            <value>Version,System.Int32</value>
+            <value>IssuerQuotation,System.String</value>
+            <value>SellerPartyRef,System.Int32</value>
+            <value>SellerPartyCode,System.String</value>
+            <value>SellerPartyName,System.String</value>
+            <value>SellerPartyLastName,System.String</value>
+            <value>SellerPartyFullName,System.String</value>
+            <value>Description,System.String</value>
+            <value>ChangeReduction,System.Decimal</value>
+            <value>VoucherBarcode,System.String</value>
+            <value>AddressRef,System.Int32</value>
+            <value>OriginalQuotationRef,System.Int32</value>
+            <value>Guid,System.String</value>
+          </Columns>
+          <Name>Quotation</Name>
+          <NameInSource>DsQuotation.Quotation</NameInSource>
+        </Quotation>
+        <QuotationItem Ref="3" type="Stimulsoft.Report.Dictionary.StiDataTableSource" isKey="true">
+          <Alias>قلم پیش فاکتور</Alias>
+          <Columns isList="true" count="30">
+            <value>QuotationItemID,System.Int32</value>
+            <value>QuotationRef,System.Int32</value>
+            <value>QuotationNumber,System.Int32</value>
+            <value>QuotationDate,System.DateTime</value>
+            <value>RowNumber,System.Int32</value>
+            <value>ItemRef,System.Int32</value>
+            <value>ItemCode,System.String</value>
+            <value>ItemTitle,System.String</value>
+            <value>ItemBarCode,System.String</value>
+            <value>ItemType,System.Int32</value>
+            <value>ItemTypeTitle,System.String</value>
+            <value>ItemUnitRef,System.Int32</value>
+            <value>ItemUnitTitle,System.String</value>
+            <value>ItemTaxPercent,System.Decimal</value>
+            <value>StockRef,System.Int32</value>
+            <value>StockCode,System.String</value>
+            <value>StockTitle,System.String</value>
+            <value>ItemSubUnitRef,System.Int32</value>
+            <value>UnitsRatio,System.Double</value>
+            <value>VoucherItemQuantity,System.Decimal</value>
+            <value>VoucherItemUnitRef,System.Int32</value>
+            <value>VoucherItemUnitTitle,System.String</value>
+            <value>IsMainUnit,System.Boolean</value>
+            <value>MainUnitFee,System.Decimal</value>
+            <value>NotInvoicedQuantity,System.Decimal</value>
+            <value>ItemPropertyValues,System.String</value>
+            <value>ItemGroupHierarchyTitle,System.String</value>
+            <value>DiscountDefinitionAmount,System.Decimal</value>
+            <value>PercentageDiscount,System.Decimal</value>
+            <value>IsUnitRatioConstant,System.Boolean</value>
+          </Columns>
+          <Name>QuotationItem</Name>
+          <NameInSource>DsQuotation.QuotationItem</NameInSource>
+        </QuotationItem>
+      </DataSources>
+      <Relations isList="true" count="1">
+        <QuotationToItems Ref="4" type="Stimulsoft.Report.Dictionary.StiDataRelation" isKey="true">
+          <Alias>QuotationToItems</Alias>
+          <ChildColumns isList="true" count="1">
+            <value>QuotationRef</value>
+          </ChildColumns>
+          <ChildSource isRef="3" />
+          <Name>QuotationToItems</Name>
+          <ParentColumns isList="true" count="1">
+            <value>QuotationID</value>
+          </ParentColumns>
+          <ParentSource isRef="2" />
+        </QuotationToItems>
+      </Relations>
+      <Variables isList="true" count="1">
+        <RePrint Ref="5" type="Stimulsoft.Report.Dictionary.StiVariable" isKey="true">
+          <Alias>چاپ مجدد</Alias>
+          <Name>RePrint</Name>
+          <Type>System.Boolean</Type>
+          <Value>False</Value>
+        </RePrint>
+      </Variables>
+    </Dictionary>
+    <Pages isList="true" count="1">
+      <Page1 Ref="10" type="Stimulsoft.Report.Components.StiPage" isKey="true">
+        <Border>None;[0:0:0];1;Solid;False;4;[0:0:0]</Border>
+        <Brush>Transparent</Brush>
+        <Columns>1</Columns>
+        <Guid>page1guid0001</Guid>
+        <Margins>1,1,1,1</Margins>
+        <Name>Page1</Name>
+        <Orientation>Portrait</Orientation>
+        <PageHeight>29.7</PageHeight>
+        <PageWidth>21.0</PageWidth>
+        <PaperSize>A4</PaperSize>
+        <RightToLeft>true</RightToLeft>
+        <Components isList="true" count="5">
+
+          <!-- ═══════════ PAGE HEADER BAND ═══════════ -->
+          <PageHeaderBand Ref="20" type="Stimulsoft.Report.Components.StiPageHeaderBand" isKey="true">
+            <Brush>Transparent</Brush>
+            <ClientRectangle>0,0.2,19,5.5</ClientRectangle>
+            <Name>PageHeaderBand</Name>
+            <Components isList="true" count="15">
+
+              <!-- Top Red Bar -->
+              <TopRedBar Ref="21" type="Stimulsoft.Report.Components.StiShape" isKey="true">
+                <Brush>[198:40:40]</Brush>
+                <ClientRectangle>0,0,19,0.6</ClientRectangle>
+                <Name>TopRedBar</Name>
+                <ShapeType>Stimulsoft.Report.Components.ShapeTypes.StiRectangleShapeType</ShapeType>
+              </TopRedBar>
+
+              <!-- Side Accent -->
+              <SideAccent Ref="22" type="Stimulsoft.Report.Components.StiShape" isKey="true">
+                <Brush>[198:40:40]</Brush>
+                <ClientRectangle>18.8,0,0.2,5.5</ClientRectangle>
+                <Name>SideAccent</Name>
+                <ShapeType>Stimulsoft.Report.Components.ShapeTypes.StiRectangleShapeType</ShapeType>
+              </SideAccent>
+
+              <!-- Invoice Title -->
+              <InvoiceTitle Ref="23" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Border>All;[198:40:40];2;Solid;False;4;[0:0:0]</Border>
+                <Brush>[250:250:250]</Brush>
+                <ClientRectangle>6.5,0.8,6,1.2</ClientRectangle>
+                <Font>B Titr,16,Bold</Font>
+                <HorAlignment>Center</HorAlignment>
+                <Name>InvoiceTitle</Name>
+                <Text>پیش فاکتور فروش</Text>
+                <TextBrush>[198:40:40]</TextBrush>
+                <VertAlignment>Center</VertAlignment>
+              </InvoiceTitle>
+
+              <!-- Logo Placeholder -->
+              <LogoBox Ref="24" type="Stimulsoft.Report.Components.StiShape" isKey="true">
+                <Border>All;[158:158:158];1;Solid;False;4;[0:0:0]</Border>
+                <Brush>[255:255:255]</Brush>
+                <ClientRectangle>16.5,0.8,2.3,2.2</ClientRectangle>
+                <Name>LogoBox</Name>
+                <ShapeType>Stimulsoft.Report.Components.ShapeTypes.StiRoundedRectangleShapeType</ShapeType>
+              </LogoBox>
+
+              <!-- Invoice Number Label -->
+              <LblNumber Ref="25" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Brush>Transparent</Brush>
+                <ClientRectangle>0.3,0.8,1.5,0.5</ClientRectangle>
+                <Font>B Nazanin,9</Font>
+                <Name>LblNumber</Name>
+                <Text>شماره:</Text>
+                <TextBrush>[117:117:117]</TextBrush>
+              </LblNumber>
+
+              <!-- Invoice Number Value -->
+              <ValNumber Ref="26" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Brush>Transparent</Brush>
+                <ClientRectangle>1.8,0.8,3,0.5</ClientRectangle>
+                <Font>B Nazanin,10,Bold</Font>
+                <Name>ValNumber</Name>
+                <Text>{Quotation.Number}</Text>
+                <TextBrush>[51:51:51]</TextBrush>
+              </ValNumber>
+
+              <!-- Invoice Date Label -->
+              <LblDate Ref="27" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Brush>Transparent</Brush>
+                <ClientRectangle>0.3,1.3,1.5,0.5</ClientRectangle>
+                <Font>B Nazanin,9</Font>
+                <Name>LblDate</Name>
+                <Text>تاریخ:</Text>
+                <TextBrush>[117:117:117]</TextBrush>
+              </LblDate>
+
+              <!-- Invoice Date Value -->
+              <ValDate Ref="28" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Brush>Transparent</Brush>
+                <ClientRectangle>1.8,1.3,3,0.5</ClientRectangle>
+                <Font>B Nazanin,10,Bold</Font>
+                <Name>ValDate</Name>
+                <Text>{Quotation.Date}</Text>
+                <TextBrush>[51:51:51]</TextBrush>
+              </ValDate>
+
+              <!-- Expiration Date Label -->
+              <LblExpDate Ref="29" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Brush>Transparent</Brush>
+                <ClientRectangle>0.3,1.8,1.5,0.5</ClientRectangle>
+                <Font>B Nazanin,9</Font>
+                <Name>LblExpDate</Name>
+                <Text>اعتبار تا:</Text>
+                <TextBrush>[117:117:117]</TextBrush>
+              </LblExpDate>
+
+              <!-- Expiration Date Value -->
+              <ValExpDate Ref="30" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Brush>Transparent</Brush>
+                <ClientRectangle>1.8,1.8,3,0.5</ClientRectangle>
+                <Font>B Nazanin,10,Bold</Font>
+                <Name>ValExpDate</Name>
+                <Text>{Quotation.ExpirationDate}</Text>
+                <TextBrush>[51:51:51]</TextBrush>
+              </ValExpDate>
+
+              <!-- Customer Info Box Background -->
+              <CustomerBg Ref="31" type="Stimulsoft.Report.Components.StiShape" isKey="true">
+                <Border>All;[224:224:224];1;Solid;False;4;[0:0:0]</Border>
+                <Brush>[250:250:250]</Brush>
+                <ClientRectangle>0,2.8,19,2.5</ClientRectangle>
+                <Name>CustomerBg</Name>
+                <ShapeType>Stimulsoft.Report.Components.ShapeTypes.StiRoundedRectangleShapeType</ShapeType>
+              </CustomerBg>
+
+              <!-- Customer Section Title -->
+              <CustomerSectionTitle Ref="32" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Brush>[107:107:107]</Brush>
+                <ClientRectangle>16,2.9,3,0.5</ClientRectangle>
+                <Font>B Nazanin,9,Bold</Font>
+                <HorAlignment>Center</HorAlignment>
+                <Name>CustomerSectionTitle</Name>
+                <Text>اطلاعات مشتری</Text>
+                <TextBrush>[255:255:255]</TextBrush>
+                <VertAlignment>Center</VertAlignment>
+              </CustomerSectionTitle>
+
+              <!-- Customer Name -->
+              <LblPartyTitle Ref="33" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Brush>Transparent</Brush>
+                <ClientRectangle>15,3.5,2.5,0.45</ClientRectangle>
+                <Font>B Nazanin,8</Font>
+                <HorAlignment>Right</HorAlignment>
+                <Name>LblPartyTitle</Name>
+                <Text>نام مشتری:</Text>
+                <TextBrush>[117:117:117]</TextBrush>
+              </LblPartyTitle>
+              <ValPartyTitle Ref="34" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Brush>Transparent</Brush>
+                <ClientRectangle>9.5,3.5,5.5,0.45</ClientRectangle>
+                <Font>B Nazanin,9,Bold</Font>
+                <HorAlignment>Right</HorAlignment>
+                <Name>ValPartyTitle</Name>
+                <Text>{Quotation.PartyTitle}</Text>
+                <TextBrush>[51:51:51]</TextBrush>
+              </ValPartyTitle>
+            </Components>
+          </PageHeaderBand>
+
+          <!-- ═══════════ HEADER BAND (Data Header for Items Table) ═══════════ -->
+          <HeaderBand Ref="40" type="Stimulsoft.Report.Components.StiHeaderBand" isKey="true">
+            <Brush>[107:107:107]</Brush>
+            <ClientRectangle>0,6,19,0.7</ClientRectangle>
+            <Name>HeaderBand</Name>
+            <PrintOnAllPages>true</PrintOnAllPages>
+            <Components isList="true" count="9">
+              <HdrRow Ref="41" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Border>All;[74:74:74];0.5;Solid;False;4;[0:0:0]</Border>
+                <Brush>[107:107:107]</Brush>
+                <ClientRectangle>17.5,0,1.5,0.7</ClientRectangle>
+                <Font>B Nazanin,8,Bold</Font>
+                <HorAlignment>Center</HorAlignment>
+                <Name>HdrRow</Name>
+                <Text>ردیف</Text>
+                <TextBrush>[255:255:255]</TextBrush>
+                <VertAlignment>Center</VertAlignment>
+              </HdrRow>
+              <HdrItemCode Ref="42" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Border>All;[74:74:74];0.5;Solid;False;4;[0:0:0]</Border>
+                <Brush>[107:107:107]</Brush>
+                <ClientRectangle>15.5,0,2,0.7</ClientRectangle>
+                <Font>B Nazanin,8,Bold</Font>
+                <HorAlignment>Center</HorAlignment>
+                <Name>HdrItemCode</Name>
+                <Text>کد کالا</Text>
+                <TextBrush>[255:255:255]</TextBrush>
+                <VertAlignment>Center</VertAlignment>
+              </HdrItemCode>
+              <HdrItemTitle Ref="43" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Border>All;[74:74:74];0.5;Solid;False;4;[0:0:0]</Border>
+                <Brush>[107:107:107]</Brush>
+                <ClientRectangle>10.5,0,5,0.7</ClientRectangle>
+                <Font>B Nazanin,8,Bold</Font>
+                <HorAlignment>Center</HorAlignment>
+                <Name>HdrItemTitle</Name>
+                <Text>شرح کالا / خدمات</Text>
+                <TextBrush>[255:255:255]</TextBrush>
+                <VertAlignment>Center</VertAlignment>
+              </HdrItemTitle>
+              <HdrUnit Ref="44" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Border>All;[74:74:74];0.5;Solid;False;4;[0:0:0]</Border>
+                <Brush>[107:107:107]</Brush>
+                <ClientRectangle>9,0,1.5,0.7</ClientRectangle>
+                <Font>B Nazanin,8,Bold</Font>
+                <HorAlignment>Center</HorAlignment>
+                <Name>HdrUnit</Name>
+                <Text>واحد</Text>
+                <TextBrush>[255:255:255]</TextBrush>
+                <VertAlignment>Center</VertAlignment>
+              </HdrUnit>
+              <HdrQty Ref="45" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Border>All;[74:74:74];0.5;Solid;False;4;[0:0:0]</Border>
+                <Brush>[107:107:107]</Brush>
+                <ClientRectangle>7.3,0,1.7,0.7</ClientRectangle>
+                <Font>B Nazanin,8,Bold</Font>
+                <HorAlignment>Center</HorAlignment>
+                <Name>HdrQty</Name>
+                <Text>تعداد</Text>
+                <TextBrush>[255:255:255]</TextBrush>
+                <VertAlignment>Center</VertAlignment>
+              </HdrQty>
+              <HdrFee Ref="46" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Border>All;[74:74:74];0.5;Solid;False;4;[0:0:0]</Border>
+                <Brush>[107:107:107]</Brush>
+                <ClientRectangle>5,0,2.3,0.7</ClientRectangle>
+                <Font>B Nazanin,8,Bold</Font>
+                <HorAlignment>Center</HorAlignment>
+                <Name>HdrFee</Name>
+                <Text>فی (ریال)</Text>
+                <TextBrush>[255:255:255]</TextBrush>
+                <VertAlignment>Center</VertAlignment>
+              </HdrFee>
+              <HdrDiscount Ref="47" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Border>All;[74:74:74];0.5;Solid;False;4;[0:0:0]</Border>
+                <Brush>[107:107:107]</Brush>
+                <ClientRectangle>3,0,2,0.7</ClientRectangle>
+                <Font>B Nazanin,8,Bold</Font>
+                <HorAlignment>Center</HorAlignment>
+                <Name>HdrDiscount</Name>
+                <Text>تخفیف</Text>
+                <TextBrush>[255:255:255]</TextBrush>
+                <VertAlignment>Center</VertAlignment>
+              </HdrDiscount>
+              <HdrTax Ref="48" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Border>All;[74:74:74];0.5;Solid;False;4;[0:0:0]</Border>
+                <Brush>[107:107:107]</Brush>
+                <ClientRectangle>1.5,0,1.5,0.7</ClientRectangle>
+                <Font>B Nazanin,8,Bold</Font>
+                <HorAlignment>Center</HorAlignment>
+                <Name>HdrTax</Name>
+                <Text>مالیات</Text>
+                <TextBrush>[255:255:255]</TextBrush>
+                <VertAlignment>Center</VertAlignment>
+              </HdrTax>
+              <HdrTotal Ref="49" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Border>All;[74:74:74];0.5;Solid;False;4;[0:0:0]</Border>
+                <Brush>[107:107:107]</Brush>
+                <ClientRectangle>0,0,1.5,0.7</ClientRectangle>
+                <Font>B Nazanin,8,Bold</Font>
+                <HorAlignment>Center</HorAlignment>
+                <Name>HdrTotal</Name>
+                <Text>مبلغ کل</Text>
+                <TextBrush>[255:255:255]</TextBrush>
+                <VertAlignment>Center</VertAlignment>
+              </HdrTotal>
+            </Components>
+          </HeaderBand>
+
+          <!-- ═══════════ DATA BAND (Items Rows) ═══════════ -->
+          <DataBand Ref="50" type="Stimulsoft.Report.Components.StiDataBand" isKey="true">
+            <Brush>Transparent</Brush>
+            <ClientRectangle>0,7,19,0.6</ClientRectangle>
+            <DataSourceName>QuotationItem</DataSourceName>
+            <EvenStyle>AlternatingRow</EvenStyle>
+            <Name>DataBand</Name>
+            <Sort isList="true" count="2">
+              <value>ASC</value>
+              <value>QuotationItem.RowNumber</value>
+            </Sort>
+            <Components isList="true" count="9">
+              <CellRow Ref="51" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Border>All;[224:224:224];0.5;Solid;False;4;[0:0:0]</Border>
+                <Brush>Transparent</Brush>
+                <ClientRectangle>17.5,0,1.5,0.6</ClientRectangle>
+                <Font>B Nazanin,8</Font>
+                <HorAlignment>Center</HorAlignment>
+                <Name>CellRow</Name>
+                <Text>{QuotationItem.RowNumber}</Text>
+                <TextBrush>[51:51:51]</TextBrush>
+                <VertAlignment>Center</VertAlignment>
+              </CellRow>
+              <CellItemCode Ref="52" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Border>All;[224:224:224];0.5;Solid;False;4;[0:0:0]</Border>
+                <Brush>Transparent</Brush>
+                <ClientRectangle>15.5,0,2,0.6</ClientRectangle>
+                <Font>Tahoma,8</Font>
+                <HorAlignment>Center</HorAlignment>
+                <Name>CellItemCode</Name>
+                <Text>{QuotationItem.ItemCode}</Text>
+                <TextBrush>[51:51:51]</TextBrush>
+                <VertAlignment>Center</VertAlignment>
+              </CellItemCode>
+              <CellItemTitle Ref="53" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Border>All;[224:224:224];0.5;Solid;False;4;[0:0:0]</Border>
+                <Brush>Transparent</Brush>
+                <ClientRectangle>10.5,0,5,0.6</ClientRectangle>
+                <Font>B Nazanin,8</Font>
+                <HorAlignment>Right</HorAlignment>
+                <Name>CellItemTitle</Name>
+                <Text>{QuotationItem.ItemTitle}</Text>
+                <TextBrush>[51:51:51]</TextBrush>
+                <VertAlignment>Center</VertAlignment>
+                <WordWrap>true</WordWrap>
+              </CellItemTitle>
+              <CellUnit Ref="54" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Border>All;[224:224:224];0.5;Solid;False;4;[0:0:0]</Border>
+                <Brush>Transparent</Brush>
+                <ClientRectangle>9,0,1.5,0.6</ClientRectangle>
+                <Font>B Nazanin,8</Font>
+                <HorAlignment>Center</HorAlignment>
+                <Name>CellUnit</Name>
+                <Text>{QuotationItem.VoucherItemUnitTitle}</Text>
+                <TextBrush>[51:51:51]</TextBrush>
+                <VertAlignment>Center</VertAlignment>
+              </CellUnit>
+              <CellQty Ref="55" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Border>All;[224:224:224];0.5;Solid;False;4;[0:0:0]</Border>
+                <Brush>Transparent</Brush>
+                <ClientRectangle>7.3,0,1.7,0.6</ClientRectangle>
+                <Font>Tahoma,8</Font>
+                <HorAlignment>Center</HorAlignment>
+                <Name>CellQty</Name>
+                <Text>{QuotationItem.VoucherItemQuantity}</Text>
+                <TextBrush>[51:51:51]</TextBrush>
+                <TextFormat>Stimulsoft.Report.Components.TextFormats.StiNumberFormatService,N0</TextFormat>
+                <VertAlignment>Center</VertAlignment>
+              </CellQty>
+              <CellFee Ref="56" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Border>All;[224:224:224];0.5;Solid;False;4;[0:0:0]</Border>
+                <Brush>Transparent</Brush>
+                <ClientRectangle>5,0,2.3,0.6</ClientRectangle>
+                <Font>Tahoma,8</Font>
+                <HorAlignment>Center</HorAlignment>
+                <Name>CellFee</Name>
+                <Text>{QuotationItem.MainUnitFee}</Text>
+                <TextBrush>[51:51:51]</TextBrush>
+                <TextFormat>Stimulsoft.Report.Components.TextFormats.StiNumberFormatService,N0</TextFormat>
+                <VertAlignment>Center</VertAlignment>
+              </CellFee>
+              <CellDiscount Ref="57" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Border>All;[224:224:224];0.5;Solid;False;4;[0:0:0]</Border>
+                <Brush>Transparent</Brush>
+                <ClientRectangle>3,0,2,0.6</ClientRectangle>
+                <Font>Tahoma,8</Font>
+                <HorAlignment>Center</HorAlignment>
+                <Name>CellDiscount</Name>
+                <Text>{QuotationItem.DiscountDefinitionAmount}</Text>
+                <TextBrush>[51:51:51]</TextBrush>
+                <TextFormat>Stimulsoft.Report.Components.TextFormats.StiNumberFormatService,N0</TextFormat>
+                <VertAlignment>Center</VertAlignment>
+              </CellDiscount>
+              <CellTax Ref="58" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Border>All;[224:224:224];0.5;Solid;False;4;[0:0:0]</Border>
+                <Brush>Transparent</Brush>
+                <ClientRectangle>1.5,0,1.5,0.6</ClientRectangle>
+                <Font>Tahoma,8</Font>
+                <HorAlignment>Center</HorAlignment>
+                <Name>CellTax</Name>
+                <Text>{QuotationItem.ItemTaxPercent}</Text>
+                <TextBrush>[51:51:51]</TextBrush>
+                <VertAlignment>Center</VertAlignment>
+              </CellTax>
+              <CellTotal Ref="59" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Border>All;[224:224:224];0.5;Solid;False;4;[0:0:0]</Border>
+                <Brush>Transparent</Brush>
+                <ClientRectangle>0,0,1.5,0.6</ClientRectangle>
+                <Font>Tahoma,8,Bold</Font>
+                <HorAlignment>Center</HorAlignment>
+                <Name>CellTotal</Name>
+                <Text>{QuotationItem.MainUnitFee * QuotationItem.VoucherItemQuantity}</Text>
+                <TextBrush>[51:51:51]</TextBrush>
+                <TextFormat>Stimulsoft.Report.Components.TextFormats.StiNumberFormatService,N0</TextFormat>
+                <VertAlignment>Center</VertAlignment>
+              </CellTotal>
+            </Components>
+          </DataBand>
+
+          <!-- ═══════════ FOOTER BAND (Totals) ═══════════ -->
+          <FooterBand Ref="60" type="Stimulsoft.Report.Components.StiFooterBand" isKey="true">
+            <Brush>Transparent</Brush>
+            <ClientRectangle>0,8,19,6.5</ClientRectangle>
+            <Name>FooterBand</Name>
+            <Components isList="true" count="20">
+
+              <!-- Totals Labels and Values -->
+              <LblTotalPrice Ref="61" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Border>Bottom;[224:224:224];0.5;Solid;False;4;[0:0:0]</Border>
+                <Brush>Transparent</Brush>
+                <ClientRectangle>2.5,0.3,2.5,0.5</ClientRectangle>
+                <Font>B Nazanin,9</Font>
+                <HorAlignment>Right</HorAlignment>
+                <Name>LblTotalPrice</Name>
+                <Text>جمع مبلغ:</Text>
+                <TextBrush>[85:85:85]</TextBrush>
+                <VertAlignment>Center</VertAlignment>
+              </LblTotalPrice>
+              <ValTotalPrice Ref="62" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Border>Bottom;[224:224:224];0.5;Solid;False;4;[0:0:0]</Border>
+                <Brush>Transparent</Brush>
+                <ClientRectangle>0,0.3,2.5,0.5</ClientRectangle>
+                <Font>Tahoma,9,Bold</Font>
+                <HorAlignment>Center</HorAlignment>
+                <Name>ValTotalPrice</Name>
+                <Text>{Quotation.TotalPrice}</Text>
+                <TextBrush>[51:51:51]</TextBrush>
+                <TextFormat>Stimulsoft.Report.Components.TextFormats.StiNumberFormatService,N0</TextFormat>
+                <VertAlignment>Center</VertAlignment>
+              </ValTotalPrice>
+
+              <LblTotalDiscount Ref="63" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Border>Bottom;[224:224:224];0.5;Solid;False;4;[0:0:0]</Border>
+                <Brush>Transparent</Brush>
+                <ClientRectangle>2.5,0.8,2.5,0.5</ClientRectangle>
+                <Font>B Nazanin,9</Font>
+                <HorAlignment>Right</HorAlignment>
+                <Name>LblTotalDiscount</Name>
+                <Text>جمع تخفیف:</Text>
+                <TextBrush>[85:85:85]</TextBrush>
+                <VertAlignment>Center</VertAlignment>
+              </LblTotalDiscount>
+              <ValTotalDiscount Ref="64" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Border>Bottom;[224:224:224];0.5;Solid;False;4;[0:0:0]</Border>
+                <Brush>Transparent</Brush>
+                <ClientRectangle>0,0.8,2.5,0.5</ClientRectangle>
+                <Font>Tahoma,9,Bold</Font>
+                <HorAlignment>Center</HorAlignment>
+                <Name>ValTotalDiscount</Name>
+                <Text>{Quotation.TotalDiscount}</Text>
+                <TextBrush>[51:51:51]</TextBrush>
+                <TextFormat>Stimulsoft.Report.Components.TextFormats.StiNumberFormatService,N0</TextFormat>
+                <VertAlignment>Center</VertAlignment>
+              </ValTotalDiscount>
+
+              <LblTotalTax Ref="65" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Border>Bottom;[224:224:224];0.5;Solid;False;4;[0:0:0]</Border>
+                <Brush>Transparent</Brush>
+                <ClientRectangle>2.5,1.3,2.5,0.5</ClientRectangle>
+                <Font>B Nazanin,9</Font>
+                <HorAlignment>Right</HorAlignment>
+                <Name>LblTotalTax</Name>
+                <Text>جمع مالیات:</Text>
+                <TextBrush>[85:85:85]</TextBrush>
+                <VertAlignment>Center</VertAlignment>
+              </LblTotalTax>
+              <ValTotalTax Ref="66" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Border>Bottom;[224:224:224];0.5;Solid;False;4;[0:0:0]</Border>
+                <Brush>Transparent</Brush>
+                <ClientRectangle>0,1.3,2.5,0.5</ClientRectangle>
+                <Font>Tahoma,9,Bold</Font>
+                <HorAlignment>Center</HorAlignment>
+                <Name>ValTotalTax</Name>
+                <Text>{Quotation.TotalTax}</Text>
+                <TextBrush>[51:51:51]</TextBrush>
+                <TextFormat>Stimulsoft.Report.Components.TextFormats.StiNumberFormatService,N0</TextFormat>
+                <VertAlignment>Center</VertAlignment>
+              </ValTotalTax>
+
+              <LblTotalDuty Ref="67" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Border>Bottom;[224:224:224];0.5;Solid;False;4;[0:0:0]</Border>
+                <Brush>Transparent</Brush>
+                <ClientRectangle>2.5,1.8,2.5,0.5</ClientRectangle>
+                <Font>B Nazanin,9</Font>
+                <HorAlignment>Right</HorAlignment>
+                <Name>LblTotalDuty</Name>
+                <Text>جمع عوارض:</Text>
+                <TextBrush>[85:85:85]</TextBrush>
+                <VertAlignment>Center</VertAlignment>
+              </LblTotalDuty>
+              <ValTotalDuty Ref="68" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Border>Bottom;[224:224:224];0.5;Solid;False;4;[0:0:0]</Border>
+                <Brush>Transparent</Brush>
+                <ClientRectangle>0,1.8,2.5,0.5</ClientRectangle>
+                <Font>Tahoma,9,Bold</Font>
+                <HorAlignment>Center</HorAlignment>
+                <Name>ValTotalDuty</Name>
+                <Text>{Quotation.TotalDuty}</Text>
+                <TextBrush>[51:51:51]</TextBrush>
+                <TextFormat>Stimulsoft.Report.Components.TextFormats.StiNumberFormatService,N0</TextFormat>
+                <VertAlignment>Center</VertAlignment>
+              </ValTotalDuty>
+
+              <LblChangeReduction Ref="69" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Border>Bottom;[224:224:224];0.5;Solid;False;4;[0:0:0]</Border>
+                <Brush>Transparent</Brush>
+                <ClientRectangle>2.5,2.3,2.5,0.5</ClientRectangle>
+                <Font>B Nazanin,9</Font>
+                <HorAlignment>Right</HorAlignment>
+                <Name>LblChangeReduction</Name>
+                <Text>کسر خرده:</Text>
+                <TextBrush>[85:85:85]</TextBrush>
+                <VertAlignment>Center</VertAlignment>
+              </LblChangeReduction>
+              <ValChangeReduction Ref="70" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Border>Bottom;[224:224:224];0.5;Solid;False;4;[0:0:0]</Border>
+                <Brush>Transparent</Brush>
+                <ClientRectangle>0,2.3,2.5,0.5</ClientRectangle>
+                <Font>Tahoma,9,Bold</Font>
+                <HorAlignment>Center</HorAlignment>
+                <Name>ValChangeReduction</Name>
+                <Text>{Quotation.ChangeReduction}</Text>
+                <TextBrush>[51:51:51]</TextBrush>
+                <TextFormat>Stimulsoft.Report.Components.TextFormats.StiNumberFormatService,N0</TextFormat>
+                <VertAlignment>Center</VertAlignment>
+              </ValChangeReduction>
+
+              <!-- Grand Total Row (Red) -->
+              <GrandTotalBg Ref="71" type="Stimulsoft.Report.Components.StiShape" isKey="true">
+                <Brush>[198:40:40]</Brush>
+                <ClientRectangle>0,2.8,5,0.7</ClientRectangle>
+                <Name>GrandTotalBg</Name>
+                <ShapeType>Stimulsoft.Report.Components.ShapeTypes.StiRoundedRectangleShapeType</ShapeType>
+              </GrandTotalBg>
+              <LblGrandTotal Ref="72" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Brush>Transparent</Brush>
+                <ClientRectangle>2.5,2.8,2.5,0.7</ClientRectangle>
+                <Font>B Nazanin,10,Bold</Font>
+                <HorAlignment>Right</HorAlignment>
+                <Name>LblGrandTotal</Name>
+                <Text>مبلغ کل (ریال):</Text>
+                <TextBrush>[255:255:255]</TextBrush>
+                <VertAlignment>Center</VertAlignment>
+              </LblGrandTotal>
+              <ValGrandTotal Ref="73" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Brush>Transparent</Brush>
+                <ClientRectangle>0,2.8,2.5,0.7</ClientRectangle>
+                <Font>Tahoma,11,Bold</Font>
+                <HorAlignment>Center</HorAlignment>
+                <Name>ValGrandTotal</Name>
+                <Text>{Quotation.TotalNetPrice}</Text>
+                <TextBrush>[255:255:255]</TextBrush>
+                <TextFormat>Stimulsoft.Report.Components.TextFormats.StiNumberFormatService,N0</TextFormat>
+                <VertAlignment>Center</VertAlignment>
+              </ValGrandTotal>
+
+              <!-- Description Box -->
+              <DescriptionBox Ref="74" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Border>All;[224:224:224];0.5;Solid;False;4;[0:0:0]</Border>
+                <Brush>[250:250:250]</Brush>
+                <ClientRectangle>5.5,0.3,13.5,3.2</ClientRectangle>
+                <Font>B Nazanin,8</Font>
+                <HorAlignment>Right</HorAlignment>
+                <Name>DescriptionBox</Name>
+                <Text>توضیحات: {Quotation.Description}</Text>
+                <TextBrush>[85:85:85]</TextBrush>
+                <VertAlignment>Top</VertAlignment>
+                <WordWrap>true</WordWrap>
+              </DescriptionBox>
+
+              <!-- Signature Section -->
+              <SignatureLine Ref="75" type="Stimulsoft.Report.Components.StiShape" isKey="true">
+                <Border>Top;[224:224:224];1;Solid;False;4;[0:0:0]</Border>
+                <Brush>Transparent</Brush>
+                <ClientRectangle>0,4,19,0.05</ClientRectangle>
+                <Name>SignatureLine</Name>
+                <ShapeType>Stimulsoft.Report.Components.ShapeTypes.StiHorizontalLineShapeType</ShapeType>
+              </SignatureLine>
+
+              <SignSeller Ref="76" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Brush>Transparent</Brush>
+                <ClientRectangle>13,4.2,6,0.5</ClientRectangle>
+                <Font>B Nazanin,8</Font>
+                <HorAlignment>Center</HorAlignment>
+                <Name>SignSeller</Name>
+                <Text>مهر و امضاء فروشنده</Text>
+                <TextBrush>[117:117:117]</TextBrush>
+                <VertAlignment>Center</VertAlignment>
+              </SignSeller>
+              <SignManager Ref="77" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Brush>Transparent</Brush>
+                <ClientRectangle>6.5,4.2,6,0.5</ClientRectangle>
+                <Font>B Nazanin,8</Font>
+                <HorAlignment>Center</HorAlignment>
+                <Name>SignManager</Name>
+                <Text>تأیید مدیر فروش</Text>
+                <TextBrush>[117:117:117]</TextBrush>
+                <VertAlignment>Center</VertAlignment>
+              </SignManager>
+              <SignBuyer Ref="78" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Brush>Transparent</Brush>
+                <ClientRectangle>0,4.2,6,0.5</ClientRectangle>
+                <Font>B Nazanin,8</Font>
+                <HorAlignment>Center</HorAlignment>
+                <Name>SignBuyer</Name>
+                <Text>مهر و امضاء خریدار</Text>
+                <TextBrush>[117:117:117]</TextBrush>
+                <VertAlignment>Center</VertAlignment>
+              </SignBuyer>
+            </Components>
+          </FooterBand>
+
+          <!-- ═══════════ PAGE FOOTER BAND ═══════════ -->
+          <PageFooterBand Ref="80" type="Stimulsoft.Report.Components.StiPageFooterBand" isKey="true">
+            <Brush>Transparent</Brush>
+            <ClientRectangle>0,26.5,19,0.8</ClientRectangle>
+            <Name>PageFooterBand</Name>
+            <Components isList="true" count="3">
+              <!-- Bottom Red Line -->
+              <BottomRedLine Ref="81" type="Stimulsoft.Report.Components.StiShape" isKey="true">
+                <Brush>[198:40:40]</Brush>
+                <ClientRectangle>0,0,19,0.15</ClientRectangle>
+                <Name>BottomRedLine</Name>
+                <ShapeType>Stimulsoft.Report.Components.ShapeTypes.StiRectangleShapeType</ShapeType>
+              </BottomRedLine>
+
+              <FooterText Ref="82" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Brush>Transparent</Brush>
+                <ClientRectangle>5,0.2,14,0.5</ClientRectangle>
+                <Font>B Nazanin,7</Font>
+                <HorAlignment>Right</HorAlignment>
+                <Name>FooterText</Name>
+                <Text>این پیش فاکتور توسط نرم‌افزار حسابداری دشت همکاران سیستم صادر شده است.</Text>
+                <TextBrush>[153:153:153]</TextBrush>
+                <VertAlignment>Center</VertAlignment>
+              </FooterText>
+
+              <FooterBarcode Ref="83" type="Stimulsoft.Report.Components.StiText" isKey="true">
+                <Brush>Transparent</Brush>
+                <ClientRectangle>0,0.2,5,0.5</ClientRectangle>
+                <Font>Tahoma,7</Font>
+                <HorAlignment>Left</HorAlignment>
+                <Name>FooterBarcode</Name>
+                <Text>{Quotation.VoucherBarcode}</Text>
+                <TextBrush>[102:102:102]</TextBrush>
+                <VertAlignment>Center</VertAlignment>
+              </FooterBarcode>
+            </Components>
+          </PageFooterBand>
+
+        </Components>
+      </Page1>
+    </Pages>
+    <Styles isList="true" count="1">
+      <AlternatingRow Ref="90" type="Stimulsoft.Report.StiStyle" isKey="true">
+        <Brush>[248:248:248]</Brush>
+        <Name>AlternatingRow</Name>
+      </AlternatingRow>
+    </Styles>
+  </StiReport>
+</StiSerializer>
