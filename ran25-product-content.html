@@ -344,6 +344,29 @@
 @media(prefers-reduced-motion:reduce){
   .ran25-wrap *{animation:none!important;opacity:1!important}
 }
+
+/* ============ FINAL OVERRIDES — WordPress theme compatibility ============ */
+/* SVG sizing inside industrial machine bars (WP strips width/height attrs) */
+.ran25-machine svg{flex-shrink:0!important;height:56px!important;width:auto!important;
+  display:inline-block!important;vertical-align:middle!important;max-width:none!important}
+
+/* Ticker layout & SVG sizing */
+.ran25-ticker-track{display:flex!important;align-items:center!important;gap:48px!important;
+  width:max-content!important;max-width:none!important;padding:18px 24px!important;flex-wrap:nowrap!important}
+.ran25-ticker-track > span{display:inline-flex!important;align-items:center!important;
+  gap:14px!important;white-space:nowrap!important;flex-shrink:0!important}
+.ran25-ticker-track > span > svg{flex-shrink:0!important;width:18px!important;height:18px!important;
+  display:inline-block!important}
+
+/* Photo overlay: callouts/spots visible immediately regardless of animation state */
+.ran25-photo,.ran25-photo-stage{contain:none!important;overflow:visible!important}
+.ran25-callout{opacity:1!important}
+.ran25-spot,.ran25-callout{position:absolute!important;display:block!important}
+
+/* Counter for section badges — use descendant selector for WP wrapper compat */
+.ran25-wrap{counter-reset:sec!important}
+.ran25-wrap h2{counter-increment:sec!important}
+.ran25-summary h2,.ran25-cta h2{counter-increment:none!important}
 </style>
 
 <div class="ran25-wrap">
