@@ -83,6 +83,40 @@ Sections (numbered with CSS counter via h2):
 8. خلاصه و جمع‌بندی
 9. CTA section
 
+**Special Section — محاسبه‌گر ظرفیت حرارتی شوفاژ (MANDATORY in every product page)**:
+
+Insert a visually striking, hyper-designed promotional paragraph **after section 5 (مزایا و معایب) and before section 6 (نصب و راه‌اندازی)** — right in the middle of the content. This is NOT a regular paragraph — it must be an eye-catching, animated call-to-action block.
+
+**Content**: Explain that shofazh.com offers a free online heat capacity calculator tool that helps users precisely determine the right heating capacity for their space before purchasing a burner/boiler. Emphasize:
+- محاسبه دقیق ظرفیت حرارتی مورد نیاز بر اساس متراژ، عایق‌بندی، و شرایط آب و هوایی
+- انتخاب صحیح مشعل/دیگ بدون اتلاف انرژی و هزینه اضافی
+- کاملاً رایگان و آنلاین — بدون نیاز به نصب
+- کمک به جلوگیری از خرید مشعل با ظرفیت نامناسب (کم یا زیاد)
+
+**Links**:
+- Calculator page: `https://shofazh.com/shofazh-calculator.html`
+- Video: `https://shofazh.com/wp-content/uploads/2026/05/cleaned_محاسبه_گر_ظرفیت_حرارتی.mp4`
+
+**HTML/CSS requirements for this block** (must be self-contained within `.ran25-wrap`):
+- Wrap in a dedicated `<div class="ran25-calculator-promo">` with unique styling
+- Background: subtle gradient (e.g., `linear-gradient(135deg, #0d47a1 0%, #1565c0 50%, #1976d2 100%)`) — adapt to product accent color
+- White text on dark background for contrast
+- Animated entry: use `@keyframes slideInUp` with `animation: slideInUp 0.8s ease-out` (trigger via `IntersectionObserver` or CSS-only approach)
+- Include an inline SVG icon of a calculator or thermometer (simple, geometric, matching the industrial style)
+- Embed the video using `<video>` tag with:
+  - `controls autoplay muted loop playsinline`
+  - `poster` attribute (first frame or product image)
+  - Rounded corners (`border-radius: 12px`), subtle box-shadow
+  - `max-width: 100%` responsive
+  - Wrapper with padding and slight background tint
+- CTA button: "محاسبه ظرفیت حرارتی رایگان" linking to the calculator page
+  - Button style: pill shape, white background, dark text, hover glow animation (`box-shadow` pulse)
+- Add a pulsing dot or subtle `@keyframes pulse` animation on the CTA button to draw attention
+- The entire block should feel premium and distinct from regular content sections — like a magazine ad insert
+- Mobile responsive: stack video and text vertically on small screens
+
+**Tone for this paragraph**: Friendly, helpful, slightly persuasive — "قبل از خرید، مطمئن بشید که ظرفیت مناسب رو انتخاب می‌کنید!"
+
 **Tone**: Professional, EEAT-compliant, no ⚠️ markers, no placeholder text.
 **Internal linking**: 3-5 contextual links to related shofazh.com categories.
 **Entity SEO**: Use named entities (manufacturer, standards, certifications).
