@@ -203,9 +203,11 @@ All values in Persian (slug stays Latin). Every field is required.
 
 ### Step 4: Schema JSON-LD
 Embed inside `<script type="application/ld+json">` blocks:
-- `Product` (with offers, aggregateRating, brand)
+- `Product` (aggregateRating, brand — see `offers` rule below)
 - `FAQPage` (mirror all FAQs from accordion)
 - `BreadcrumbList` (Home > Category > Subcategory > Product)
+
+**`offers` rule (MANDATORY)**: Only include the `offers` block in the Product schema if a real numeric price was successfully retrieved from the product page URL during Step 2 (WebFetch). If the page was blocked (403/503/WAF), the fetch failed, or no price was found in the returned content, **omit `offers` entirely** from the Product JSON-LD. An `offers` block without a `price` value triggers Google Search Console warnings and must never be generated.
 
 ### Step 5: Build HTML
 - Copy `.ran25-wrap` CSS framework exactly as-is from RAN25 template
