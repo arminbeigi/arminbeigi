@@ -1,6 +1,6 @@
 ---
 name: shofazh-product-page
-description: Build a complete SEO + GEO product page (Persian) for shofazh.com products using the established RAN25 template. Use when user provides product name, URL, competitor brand, image, and category. Hands the user an image-generation prompt and pauses for them to supply the photo, then produces WordPress-ready HTML with animations, schema markup, and a separate SEO metadata file.
+description: Build a complete SEO + GEO product page (Persian) for shofazh.com products using the established RAN25 template. Use when user provides product name, URL, competitor brand, image, and category. Hands the user an image-generation prompt and pauses for them to supply the photo, then produces WordPress-ready HTML with animations and schema markup. SEO metadata is shown as an inline table in chat (never as a downloadable file).
 ---
 
 # Shofazh.com Product Page Builder
@@ -182,22 +182,24 @@ After generating the content outline but BEFORE building the final HTML, you MUS
 
 5. **If user provides images**: Store the URLs/paths and use them in Step 5 (Build HTML) to insert `<img>` tags with proper `alt` text, `loading="lazy"`, and responsive styling within the `.ran25-wrap` framework at the designated positions.
 
-#### Step 3c: SEO Metadata File (generate and send to the user immediately)
-As soon as the content above is written — and BEFORE building the HTML — produce a standalone SEO metadata file, save it to disk, and **send it to the user right away** with `SendUserFile` (status: `normal`).
+#### Step 3c: SEO Metadata Table (INLINE — never as a file)
+As soon as the content above is written — and BEFORE building the HTML — prepare the SEO metadata fields. **Do NOT** create a `.md` file, **do NOT** save anything to disk, and **do NOT** call `SendUserFile` for SEO metadata. Instead, render the metadata as a single Persian markdown table directly in the final chat reply so the user can copy values straight into their WordPress SEO plugin (Rank Math / Yoast).
 
-- File path: `[product-slug]-seo.md` (same slug as Step 6, e.g. `pgn0-seo.md`)
-- Written in Persian — it feeds WordPress SEO plugins (Rank Math / Yoast)
+Table format (must appear in the Output-to-User step as a fenced markdown table):
 
-The file MUST contain these fields (Persian labels):
-- **عنوان سئو (SEO Title)** — ≤ 60 characters, leads with the primary keyword, includes brand + model
-- **توضیحات متا (Meta Description)** — 150–160 characters, contains the focus keyphrase and a clear CTA
-- **کلمه کلیدی کانونی (Focus Keyphrase)** — the single primary keyword
-- **کلمات کلیدی ثانویه (Secondary Keywords)** — 4–6 related / LSI keywords as a list
-- **نامک پیشنهادی URL (URL Slug)** — lowercase Latin transliteration, matches the product slug
-- **متن جایگزین تصویر (Image Alt Text)** — descriptive alt for the product photo, includes brand + model
-- **عنوان شبکه‌های اجتماعی (Open Graph / Twitter Title)** — social-optimized title
-- **توضیحات شبکه‌های اجتماعی (Open Graph / Twitter Description)** — social-optimized description
-- **عنوان نان‌مایه (Breadcrumb Title)** — short breadcrumb label
+| فیلد | مقدار |
+|---|---|
+| عنوان سئو (SEO Title, ≤ 60 chars) | … |
+| توضیحات متا (Meta Description, 150–160 chars) | … |
+| کلمه کلیدی کانونی (Focus Keyphrase) | … |
+| کلمات کلیدی ثانویه (Secondary Keywords) | … (comma-separated) |
+| نامک URL (Slug) | … |
+| متن جایگزین تصویر (Image Alt) | … |
+| عنوان OG / Twitter | … |
+| توضیحات OG / Twitter | … |
+| عنوان نان‌مایه (Breadcrumb) | … |
+
+All values in Persian (slug stays Latin). Every field is required.
 
 ### Step 4: Schema JSON-LD
 Embed inside `<script type="application/ld+json">` blocks:
@@ -225,7 +227,7 @@ Embed inside `<script type="application/ld+json">` blocks:
 
 ### Step 6: Save, Commit, Push
 - File path: `[product-slug]-product-content.html` (e.g. `pgn0-product-content.html`)
-- Also commit the SEO metadata file created in Step 3b: `[product-slug]-seo.md`
+- Only the HTML file is committed. **Do NOT** create or commit any `[product-slug]-seo.md` file — SEO metadata lives in the chat reply table only.
 - Slug: lowercase Latin transliteration of product model
 - Commit message format:
   ```
@@ -238,13 +240,13 @@ Embed inside `<script type="application/ld+json">` blocks:
 ## Output to User
 
 After push, reply with:
-1. Filename and repo path (both the HTML page and the `[product-slug]-seo.md` SEO file)
+1. Filename and repo path (HTML file only)
 2. Three-line summary of what was generated (word count, schema types, image count)
-3. Confirmation that the SEO metadata file was already sent to the user in Step 3c
+3. **SEO metadata as an inline markdown table** (the table defined in Step 3c) — values ready to copy/paste into Rank Math or Yoast. Never attach this as a file.
 4. Note about hotspot positions needing visual verification in browser
 5. **Schema JSON-LD preview**: Display the full generated Schema JSON-LD code blocks (Product, FAQPage, BreadcrumbList) in the chat so the user can review and verify them before publishing
 
-Do NOT paste the full HTML in chat — the file in the repo IS the deliverable. But DO show the Schema JSON-LD separately.
+Do NOT paste the full HTML in chat — the file in the repo IS the deliverable. But DO show the Schema JSON-LD and the SEO metadata table separately in chat.
 
 ## Constraints
 
