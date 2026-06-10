@@ -1,6 +1,6 @@
 ---
 name: shofazh-product-page
-description: Build a complete SEO + GEO product page (Persian) for shofazh.com products using the established RAN25 template. Use when user provides product name, URL, competitor brand, image, and category. Hands the user an image-generation prompt and pauses for them to supply the photo, then produces WordPress-ready HTML with animations, schema markup, and a separate SEO metadata file.
+description: Build a complete SEO + GEO product page (Persian) for shofazh.com products using the established RAN25 template. Use when user provides product name, URL, competitor brand, image, and category. Hands the user an image-generation prompt and pauses for them to supply the photo, then produces WordPress-ready HTML with animations, schema markup, and outputs SEO metadata as a chat table.
 ---
 
 # Shofazh.com Product Page Builder
@@ -182,17 +182,24 @@ After generating the content outline but BEFORE building the final HTML, you MUS
 
 5. **If user provides images**: Store the URLs/paths and use them in Step 5 (Build HTML) to insert `<img>` tags with proper `alt` text, `loading="lazy"`, and responsive styling within the `.ran25-wrap` framework at the designated positions.
 
-#### Step 3c: SEO Metadata File (generate and send to the user immediately)
-As soon as the content above is written — and BEFORE building the HTML — produce a standalone SEO metadata file, save it to disk, and **send it to the user right away** with `SendUserFile` (status: `normal`).
+#### Step 3c: SEO Metadata (output as table in chat immediately)
+As soon as the content above is written — and BEFORE building the HTML — output the SEO metadata **directly in the chat as a Markdown table**. Do NOT create a file or use SendUserFile.
 
-- File path: `[product-slug]-seo.md` (same slug as Step 6, e.g. `pgn0-seo.md`)
-- Written in Persian — it feeds WordPress SEO plugins (Rank Math / Yoast)
+Format as a two-column Persian Markdown table with the headers `| فیلد | مقدار |` followed by a separator row, then one row per field. Example structure:
 
-The file MUST contain these fields (Persian labels):
+```
+| فیلد | مقدار |
+|------|-------|
+| عنوان سئو | ... |
+| توضیحات متا | ... |
+...
+```
+
+The table MUST contain these fields (Persian labels):
 - **عنوان سئو (SEO Title)** — ≤ 60 characters, leads with the primary keyword, includes brand + model
 - **توضیحات متا (Meta Description)** — 150–160 characters, contains the focus keyphrase and a clear CTA
 - **کلمه کلیدی کانونی (Focus Keyphrase)** — the single primary keyword
-- **کلمات کلیدی ثانویه (Secondary Keywords)** — 4–6 related / LSI keywords as a list
+- **کلمات کلیدی ثانویه (Secondary Keywords)** — 4–6 related / LSI keywords (comma-separated in one cell)
 - **نامک پیشنهادی URL (URL Slug)** — lowercase Latin transliteration, matches the product slug
 - **متن جایگزین تصویر (Image Alt Text)** — descriptive alt for the product photo, includes brand + model
 - **عنوان شبکه‌های اجتماعی (Open Graph / Twitter Title)** — social-optimized title
@@ -225,7 +232,7 @@ Embed inside `<script type="application/ld+json">` blocks:
 
 ### Step 6: Save, Commit, Push
 - File path: `[product-slug]-product-content.html` (e.g. `pgn0-product-content.html`)
-- Also commit the SEO metadata file created in Step 3b: `[product-slug]-seo.md`
+- Do NOT commit a separate SEO .md file — the metadata was already output as a chat table in Step 3c
 - Slug: lowercase Latin transliteration of product model
 - Commit message format:
   ```
@@ -238,9 +245,9 @@ Embed inside `<script type="application/ld+json">` blocks:
 ## Output to User
 
 After push, reply with:
-1. Filename and repo path (both the HTML page and the `[product-slug]-seo.md` SEO file)
+1. Filename and repo path (HTML page only)
 2. Three-line summary of what was generated (word count, schema types, image count)
-3. Confirmation that the SEO metadata file was already sent to the user in Step 3c
+3. Confirmation that the SEO metadata table was already output in chat in Step 3c
 4. Note about hotspot positions needing visual verification in browser
 5. **Schema JSON-LD preview**: Display the full generated Schema JSON-LD code blocks (Product, FAQPage, BreadcrumbList) in the chat so the user can review and verify them before publishing
 
