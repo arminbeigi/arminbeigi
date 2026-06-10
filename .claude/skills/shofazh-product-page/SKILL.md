@@ -225,6 +225,15 @@ Embed inside `<script type="application/ld+json">` blocks:
     - Have a subtle `<figcaption>` in Persian if appropriate
     - If no images were provided, insert `<!-- IMAGE PLACEHOLDER: [section name] -->` comments instead
 - Keep ALL animations, industrial bars, gear SVGs, counter system unchanged
+- **Ticker loop fix (MANDATORY)**: Every `.ran25-ticker-track` div must contain its `<span>` items **twice** — the full set of spans repeated back-to-back inside the same div. The `tickerSlide` keyframe animates `translateX(0) → translateX(-50%)`, so the track must be 2× the visible width. If spans appear only once, the animation reaches empty space and shows a black box before looping. Example structure:
+  ```html
+  <div class="ran25-ticker-track">
+    <!-- first copy -->
+    <span>آیتم ۱</span><span>آیتم ۲</span><span>آیتم ۳</span>
+    <!-- exact duplicate — required for seamless loop -->
+    <span>آیتم ۱</span><span>آیتم ۲</span><span>آیتم ۳</span>
+  </div>
+  ```
 - Include the WordPress override block (`!important` rules) at the end
 
 ### Step 6: Save, Commit, Push
