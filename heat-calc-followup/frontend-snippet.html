@@ -1,0 +1,75 @@
+<!--
+  اسنیپت اتصال فرانت‌اند به سیستم پیگیری سرنخ
+  این بلوک را بعد از نمایش نتیجه‌ی محاسبه بار حرارتی در صفحه ابزار قرار دهید
+  (مثلاً داخل shofazh-calculator-section.html بعد از باکس نتیجه).
+-->
+<div id="hc-lead-form" dir="rtl" style="max-width:420px;margin:16px auto;font-family:Tahoma,sans-serif">
+  <p style="font-size:.95rem;color:#1a3c5e;margin:0 0 8px">
+    📱 نتیجه محاسبه + لینک محصول پیشنهادی را پیامک کنیم؟
+  </p>
+  <div style="display:flex;gap:8px">
+    <input id="hc-lead-phone" type="tel" inputmode="numeric" maxlength="11"
+           placeholder="09xxxxxxxxx"
+           style="flex:1;padding:10px 12px;border:1px solid #cdd6e0;border-radius:8px;direction:ltr;text-align:left">
+    <button id="hc-lead-submit" type="button"
+            style="padding:10px 18px;border:0;border-radius:8px;background:#0a7d4f;color:#fff;cursor:pointer">
+      ارسال پیامک
+    </button>
+  </div>
+  <p id="hc-lead-msg" style="font-size:.85rem;min-height:1.2em;margin:6px 0 0"></p>
+</div>
+
+<script>
+(function () {
+  var API_URL = '/api/save-lead.php';
+  var btn = document.getElementById('hc-lead-submit');
+  var msg = document.getElementById('hc-lead-msg');
+
+  btn.addEventListener('click', function () {
+    var phone = document.getElementById('hc-lead-phone').value.trim()
+      // تبدیل ارقام فارسی به انگلیسی
+      .replace(/[۰-۹]/g, function (d) { return '۰۱۲۳۴۵۶۷۸۹'.indexOf(d); });
+
+    if (!/^09\d{9}$/.test(phone)) {
+      msg.style.color = '#c0392b';
+      msg.textContent = 'شماره موبایل معتبر وارد کنید (09xxxxxxxxx).';
+      return;
+    }
+
+    // ⚠️ این مقادیر را از خروجی واقعی محاسبه‌گر خود پر کنید:
+    var payload = {
+      phone: phone,
+      heat_load: window.hcResult && window.hcResult.heatLoad,        // مثال: 18500
+      suggested_model: window.hcResult && window.hcResult.model,     // مثال: "رادیاتور ایران رادیاتور RAN25"
+      suggested_fins: window.hcResult && window.hcResult.fins,       // مثال: 14
+      product_url: window.hcResult && window.hcResult.productUrl     // مثال: "https://shofazh.com/product/ran25"
+    };
+
+    btn.disabled = true;
+    msg.style.color = '#555';
+    msg.textContent = 'در حال ارسال...';
+
+    fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (data.ok) {
+          msg.style.color = '#0a7d4f';
+          msg.textContent = '✅ نتیجه محاسبه برایتان پیامک شد.';
+        } else {
+          msg.style.color = '#c0392b';
+          msg.textContent = data.error || 'خطا در ارسال. دوباره تلاش کنید.';
+          btn.disabled = false;
+        }
+      })
+      .catch(function () {
+        msg.style.color = '#c0392b';
+        msg.textContent = 'خطا در ارتباط با سرور.';
+        btn.disabled = false;
+      });
+  });
+})();
+</script>
