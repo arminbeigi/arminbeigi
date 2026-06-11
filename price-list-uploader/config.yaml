@@ -1,0 +1,24 @@
+# تنظیمات آپلود خودکار لیست قیمت
+wordpress:
+  url: "https://shofazh.com"
+  username: "admin"
+  app_password: "uNx0 8x4M WOSD cQ9u j76L MgH3"
+
+# آی‌دی صفحه لیست قیمت در وردپرس (price-lists)
+# اگر خالی باشد، اسکریپت خودکار پیدا می‌کند
+price_list_page_slug: "price-lists"
+
+folders:
+  watch: "./watch_folder"
+  uploaded: "./uploaded"
+
+# پسوندهای مجاز
+allowed_extensions:
+  - .pdf
+  - .xlsx
+  - .xls
+  - .csv
+
+general:
+  log_level: "INFO"
+  move_after_upload: true
