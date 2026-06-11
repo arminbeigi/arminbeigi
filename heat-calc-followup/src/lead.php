@@ -79,13 +79,13 @@ function save_lead_and_send_sms1(
 
     $leadId = (int) $pdo->lastInsertId();
 
+    // لغو دریافت از طریق «لغو11» خود کاوه‌نگار انجام می‌شود؛ لینک لغو در متن نیست
     $message = sprintf(
-        "شوفاژ - نتیجه محاسبه شما\nبار حرارتی: %s\nپیشنهاد ما: %s (%d پره)\nمشاهده و خرید:\n%s\nلغو پیامک:\n%s",
+        "شوفاژ - نتیجه محاسبه شما\nبار حرارتی: %s\nپیشنهاد ما: %s (%d پره)\nمشاهده و خرید:\n%s",
         number_format($heatLoad),
         $suggestedModel,
         $suggestedFins,
-        add_utm($productUrl, 'heatcalc_sms1'),
-        optout_link($token)
+        add_utm($productUrl, 'heatcalc_sms1')
     );
 
     if (send_sms($phone, $message, 'sms1', $leadId)) {

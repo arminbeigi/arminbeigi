@@ -49,12 +49,15 @@ try {
     $sent = 0;
     $markSent = $pdo->prepare('UPDATE heat_calc_leads SET sms2_sent_at = NOW() WHERE id = ?');
 
+    $salesPhone = cfg('SALES_PHONE', '');
+
     foreach ($leads as $lead) {
+        // لغو دریافت از طریق «لغو11» خود کاوه‌نگار انجام می‌شود؛ لینک لغو در متن نیست
         $message = sprintf(
-            "شوفاژ\nهنوز برای انتخاب رادیاتور مناسب (%s) سوال دارید؟\nمشاوره رایگان کارشناسان ما: 021-XXXXXXXX\nیا همین حالا سفارش دهید:\n%s\nلغو پیامک:\n%s",
+            "شوفاژ\nهنوز برای انتخاب رادیاتور مناسب (%s) سوال دارید؟\n%sیا همین حالا سفارش دهید:\n%s",
             $lead['suggested_model'],
-            add_utm($lead['product_url'], 'heatcalc_sms2'),
-            optout_link($lead['optout_token'])
+            $salesPhone !== '' ? "مشاوره رایگان کارشناسان ما: $salesPhone\n" : '',
+            add_utm($lead['product_url'], 'heatcalc_sms2')
         );
 
         if (send_sms($lead['phone'], $message, 'sms2', (int) $lead['id'])) {
