@@ -29,10 +29,14 @@ def get_page_content(cfg):
     return r.text
 
 
+ALLOWED_EXT = {".pdf", ".xlsx", ".xls", ".csv", ".doc", ".docx", ".zip"}
+
+
 def extract_urls(html: str, base_url: str) -> list[str]:
     pattern = re.compile(r'href=["\'](' + re.escape(base_url) + r'/wp-content/uploads/[^"\']+)["\']', re.IGNORECASE)
-    urls = list(dict.fromkeys(pattern.findall(html)))
-    return urls
+    all_urls = pattern.findall(html)
+    urls = [u for u in all_urls if Path(urlparse(u).path).suffix.lower() in ALLOWED_EXT]
+    return list(dict.fromkeys(urls))
 
 
 def download_file(url: str, dest_dir: Path) -> Path | None:
@@ -67,8 +71,8 @@ def main():
 
     urls = extract_urls(html, wp_url)
     if not urls:
-        print("⚠️  هیچ فایلی در صفحه price-lists پیدا نشد.")
-        print("    (ممکن است فایل‌ها با روش دیگری لینک شده باشند)")
+        print("⚠️  هیچ فایل PDF/Excel/ZIP در صفحه price-lists پیدا نشد.")
+        print("    (احتمالاً هنوز هیچ لیست قیمتی آپلود نشده)")
         return
 
     print(f"📄 {len(urls)} فایل پیدا شد:\n")
