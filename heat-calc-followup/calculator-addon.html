@@ -5,13 +5,16 @@
      ============================================================ -->
 <script>
 (function () {
-  /* ⚠️ لینک محصول هر بازه پیشنهاد را اینجا بگذارید (فعلاً صفحه اصلی): */
+  /* ⚠️ لینک داخل پیامک — برای همه نتیجه‌ها یکی است (صفحه فروشگاه/مشاوره): */
+  var SMS_LINK = 'https://shofazh.com/';
+
+  /* نام مدل پیشنهادی در متن پیامک، بر اساس نتیجه محاسبه: */
   var TIERS = [
-    { maxKw: 14,       model: 'پکیج دیواری ۱۲–۱۴ کیلووات شوفاژکار', url: 'https://shofazh.com/' },
-    { maxKw: 24,       model: 'پکیج دیواری ۲۴ کیلووات شوفاژکار',    url: 'https://shofazh.com/' },
-    { maxKw: 35,       model: 'دیگ چدنی ۳۵ کیلووات شوفاژکار',       url: 'https://shofazh.com/' },
-    { maxKw: 70,       model: 'دیگ فولادی ۵۰–۷۰ کیلووات شوفاژکار',  url: 'https://shofazh.com/' },
-    { maxKw: Infinity, model: 'دیگ مرکزی بالای ۷۰ کیلووات شوفاژکار', url: 'https://shofazh.com/' }
+    { maxKw: 14,       model: 'پکیج دیواری ۱۲–۱۴ کیلووات شوفاژکار' },
+    { maxKw: 24,       model: 'پکیج دیواری ۲۴ کیلووات شوفاژکار' },
+    { maxKw: 35,       model: 'دیگ چدنی ۳۵ کیلووات شوفاژکار' },
+    { maxKw: 70,       model: 'دیگ فولادی ۵۰–۷۰ کیلووات شوفاژکار' },
+    { maxKw: Infinity, model: 'دیگ مرکزی بالای ۷۰ کیلووات شوفاژکار' }
   ];
 
   function faToEn(s) {
@@ -71,7 +74,7 @@
           heat_load: btu,
           suggested_model: tier.model,
           suggested_fins: 0,
-          product_url: tier.url
+          product_url: SMS_LINK
         })
       })
       .then(function (r) { return r.json(); })
