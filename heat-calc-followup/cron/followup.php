@@ -3,7 +3,7 @@
  * کرون‌جاب پیگیری — هر ساعت اجرا شود:
  *   0 * * * * php /path/to/heat-calc-followup/cron/followup.php >> /var/log/shofazh/cron.log 2>&1
  *
- * سرنخ‌هایی که بیش از FOLLOWUP_DELAY_HOURS (پیش‌فرض ۲۴) ساعت از محاسبه‌شان گذشته،
+ * سرنخ‌هایی که بیش از FOLLOWUP_DELAY_MINUTES (پیش‌فرض ۱۴۴۰ = ۲۴ ساعت) دقیقه از محاسبه‌شان گذشته،
  * converted=0 و opted_out=0 و sms2_sent_at IS NULL دارند را پیدا کرده،
  * پیامک دوم (دعوت به مشاوره رایگان) می‌فرستد و sms2_sent_at را ست می‌کند.
  */
@@ -27,8 +27,8 @@ if ((int) $lock !== 1) {
 }
 
 try {
-    $delayHours = cfg_int('FOLLOWUP_DELAY_HOURS', 24);
-    $batchSize  = cfg_int('CRON_BATCH_SIZE', 100);
+    $delayMinutes = cfg_int('FOLLOWUP_DELAY_MINUTES', 1440);
+    $batchSize    = cfg_int('CRON_BATCH_SIZE', 100);
 
     $stmt = $pdo->prepare(
         'SELECT id, phone, suggested_model, product_url, optout_token
@@ -37,11 +37,11 @@ try {
             AND opted_out = 0
             AND sms2_sent_at IS NULL
             AND sms1_sent_at IS NOT NULL
-            AND created_at <= NOW() - INTERVAL ? HOUR
+            AND created_at <= NOW() - INTERVAL ? MINUTE
           ORDER BY created_at
           LIMIT ?'
     );
-    $stmt->bindValue(1, $delayHours, PDO::PARAM_INT);
+    $stmt->bindValue(1, $delayMinutes, PDO::PARAM_INT);
     $stmt->bindValue(2, $batchSize, PDO::PARAM_INT);
     $stmt->execute();
     $leads = $stmt->fetchAll();
@@ -54,7 +54,7 @@ try {
     foreach ($leads as $lead) {
         // لغو دریافت از طریق «لغو11» خود کاوه‌نگار انجام می‌شود؛ لینک لغو در متن نیست
         $message = sprintf(
-            "شوفاژ دات کام\nهنوز برای انتخاب رادیاتور مناسب (%s) سوال دارید؟\n%sیا همین حالا سفارش دهید:\n%s",
+            "شوفاژ دات کام\nهنوز برای انتخاب سیستم گرمایشی مناسب (%s) سوال دارید؟\n%sیا همین حالا سفارش دهید:\n%s",
             $lead['suggested_model'],
             $salesPhone !== '' ? "مشاوره رایگان کارشناسان ما: $salesPhone\n" : '',
             add_utm($lead['product_url'], 'heatcalc_sms2')

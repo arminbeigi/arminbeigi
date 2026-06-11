@@ -1,0 +1,107 @@
+<!-- ============================================================
+     شوفاژ دات کام — افزونه «پیامک نتیجه» برای محاسبه‌گر بار حرارتی
+     این بلوک را در فایل shofazh-calculator.html درست قبل از </body>
+     (یا انتهای فایل) بچسبانید. به کد فعلی محاسبه‌گر دست نزنید.
+     ============================================================ -->
+<script>
+(function () {
+  /* ⚠️ لینک محصول هر بازه پیشنهاد را اینجا بگذارید (فعلاً صفحه اصلی): */
+  var TIERS = [
+    { maxKw: 14,       model: 'پکیج دیواری ۱۲–۱۴ کیلووات شوفاژکار', url: 'https://shofazh.com/' },
+    { maxKw: 24,       model: 'پکیج دیواری ۲۴ کیلووات شوفاژکار',    url: 'https://shofazh.com/' },
+    { maxKw: 35,       model: 'دیگ چدنی ۳۵ کیلووات شوفاژکار',       url: 'https://shofazh.com/' },
+    { maxKw: 70,       model: 'دیگ فولادی ۵۰–۷۰ کیلووات شوفاژکار',  url: 'https://shofazh.com/' },
+    { maxKw: Infinity, model: 'دیگ مرکزی بالای ۷۰ کیلووات شوفاژکار', url: 'https://shofazh.com/' }
+  ];
+
+  function faToEn(s) {
+    return String(s).replace(/[۰-۹]/g, function (d) { return '۰۱۲۳۴۵۶۷۸۹'.indexOf(d); });
+  }
+
+  function buildForm() {
+    var box = document.createElement('div');
+    box.id = 'hc-sms-box';
+    box.style.cssText = 'margin-top:10px;padding:10px;border-radius:10px;background:rgba(255,255,255,.07);';
+    box.innerHTML =
+      '<div style="font-size:10.5px;color:rgba(255,255,255,.85);margin-bottom:7px;">' +
+        '📱 نتیجه + لینک محصول پیشنهادی را برایتان پیامک کنیم؟' +
+      '</div>' +
+      '<div style="display:flex;gap:6px;">' +
+        '<input id="hc-sms-phone" type="tel" inputmode="numeric" maxlength="11" placeholder="09xxxxxxxxx" ' +
+          'style="flex:1;min-width:0;padding:8px;border:1px solid rgba(255,255,255,.25);border-radius:8px;' +
+          'background:rgba(0,0,0,.25);color:#fff;direction:ltr;text-align:left;font-size:12px;">' +
+        '<button id="hc-sms-btn" type="button" ' +
+          'style="padding:8px 13px;border:0;border-radius:8px;background:#4ade80;color:#0a2818;' +
+          'font-weight:700;font-size:11.5px;cursor:pointer;white-space:nowrap;">ارسال</button>' +
+      '</div>' +
+      '<div id="hc-sms-msg" style="font-size:10px;margin-top:6px;min-height:1.2em;color:rgba(255,255,255,.7);"></div>';
+    return box;
+  }
+
+  function attach() {
+    var result = document.getElementById('hc-result');
+    if (!result || document.getElementById('hc-sms-box')) return;
+    result.appendChild(buildForm());
+
+    document.getElementById('hc-sms-btn').addEventListener('click', function () {
+      var btn = this;
+      var msg = document.getElementById('hc-sms-msg');
+      var phone = faToEn(document.getElementById('hc-sms-phone').value.trim());
+
+      if (!/^09\d{9}$/.test(phone)) {
+        msg.style.color = '#fca5a5';
+        msg.textContent = 'شماره معتبر وارد کنید (09xxxxxxxxx).';
+        return;
+      }
+
+      // خواندن نتیجه از روی صفحه
+      var kw  = parseFloat(faToEn(document.getElementById('hc-result-kw').textContent)) || 0;
+      var btu = parseInt(faToEn(document.getElementById('hc-result-btu').textContent).replace(/\D/g, ''), 10) || 0;
+      var tier = TIERS.filter(function (t) { return kw <= t.maxKw; })[0] || TIERS[TIERS.length - 1];
+
+      btn.disabled = true;
+      msg.style.color = 'rgba(255,255,255,.7)';
+      msg.textContent = 'در حال ارسال...';
+
+      fetch('/api/save-lead.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          phone: phone,
+          heat_load: btu,
+          suggested_model: tier.model,
+          suggested_fins: 0,
+          product_url: tier.url
+        })
+      })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (d.ok) {
+          msg.style.color = '#4ade80';
+          msg.textContent = '✅ نتیجه برایتان پیامک شد.';
+          document.getElementById('hc-sms-phone').disabled = true;
+        } else {
+          msg.style.color = '#fca5a5';
+          msg.textContent = d.error || 'خطا در ارسال؛ دوباره تلاش کنید.';
+          btn.disabled = false;
+        }
+      })
+      .catch(function () {
+        msg.style.color = '#fca5a5';
+        msg.textContent = 'خطا در ارتباط با سرور.';
+        btn.disabled = false;
+      });
+    });
+  }
+
+  // بعد از هر محاسبه موفق، فرم زیر نتیجه ظاهر شود
+  var orig = window.hcCalculate;
+  if (typeof orig === 'function') {
+    window.hcCalculate = function () {
+      orig.apply(this, arguments);
+      var result = document.getElementById('hc-result');
+      if (result && result.classList.contains('visible')) attach();
+    };
+  }
+}());
+</script>

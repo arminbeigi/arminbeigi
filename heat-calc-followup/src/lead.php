@@ -80,11 +80,12 @@ function save_lead_and_send_sms1(
     $leadId = (int) $pdo->lastInsertId();
 
     // لغو دریافت از طریق «لغو11» خود کاوه‌نگار انجام می‌شود؛ لینک لغو در متن نیست
+    // تعداد پره فقط برای رادیاتور معنا دارد؛ برای پکیج/دیگ صفر بفرستید تا حذف شود
     $message = sprintf(
-        "شوفاژ دات کام - نتیجه محاسبه شما\nبار حرارتی: %s\nپیشنهاد ما: %s (%d پره)\nمشاهده و خرید:\n%s",
+        "شوفاژ دات کام - نتیجه محاسبه شما\nبار حرارتی: %s BTU/h\nپیشنهاد ما: %s%s\nمشاهده و خرید:\n%s",
         number_format($heatLoad),
         $suggestedModel,
-        $suggestedFins,
+        $suggestedFins > 0 ? " ({$suggestedFins} پره)" : '',
         add_utm($productUrl, 'heatcalc_sms1')
     );
 

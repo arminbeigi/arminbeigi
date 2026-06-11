@@ -30,7 +30,7 @@ function sms_allowed(string $phone): bool
 
     $capWindowDays = cfg_int('SMS_CAP_WINDOW_DAYS', 30);
     $maxPerNumber  = cfg_int('MAX_SMS_PER_NUMBER', 3);
-    $minIntervalH  = cfg_int('MIN_SMS_INTERVAL_HOURS', 20);
+    $minIntervalM  = cfg_int('MIN_SMS_INTERVAL_MINUTES', 25);
 
     $stmt = $pdo->prepare(
         'SELECT COUNT(*) AS cnt, MAX(created_at) AS last_sent
@@ -45,7 +45,7 @@ function sms_allowed(string $phone): bool
         return false;
     }
     if ($row['last_sent'] !== null
-        && strtotime($row['last_sent']) > time() - $minIntervalH * 3600) {
+        && strtotime($row['last_sent']) > time() - $minIntervalM * 60) {
         return false;
     }
     return true;
