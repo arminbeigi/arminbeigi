@@ -96,13 +96,14 @@ class WordPressUploader:
         resp.raise_for_status()
 
 
-def build_file_entry(media: dict, file_path: Path) -> str:
+def build_file_entry(media: dict, file_path: Path, brand: str = "") -> str:
     now = datetime.now().strftime("%Y/%m/%d")
     size_kb = file_path.stat().st_size // 1024
     ext = file_path.suffix.upper().lstrip(".")
+    label = f"{brand} — {file_path.stem}" if brand else file_path.stem
     return (
         f'\n<p>📄 <a href="{media["url"]}" target="_blank" rel="noopener">'
-        f'{media["title"]}</a> '
+        f'{label}</a> '
         f'<small>({ext} — {size_kb} KB — {now})</small></p>\n'
     )
 
@@ -130,20 +131,31 @@ class PriceListHandler(FileSystemEventHandler):
         if not file_path.exists():
             return
 
-        self.logger.info(f"فایل جدید: {file_path.name}")
+        # نام برند = نام پوشه والد (اگر زیرپوشه watch_folder باشد)
+        brand = ""
+        try:
+            rel = file_path.relative_to(self.watch_dir)
+            if len(rel.parts) > 1:
+                brand = rel.parts[0]
+        except ValueError:
+            pass
+
+        self.logger.info(f"فایل جدید: {file_path.name}" + (f" (برند: {brand})" if brand else ""))
         try:
             media = self.wp.upload_media(file_path)
             self.logger.info(f"آپلود شد: {media['url']}")
 
             page_id = self._page_id_cached()
             content = self.wp.get_page_content(page_id)
-            entry = build_file_entry(media, file_path)
+            entry = build_file_entry(media, file_path, brand)
             new_content = content + entry
             self.wp.update_page_content(page_id, new_content)
             self.logger.info(f"صفحه price-lists به‌روز شد")
 
             if self.cfg["general"].get("move_after_upload"):
-                dest = self.uploaded_dir / file_path.name
+                dest_dir = self.uploaded_dir / (brand if brand else "")
+                dest_dir.mkdir(parents=True, exist_ok=True)
+                dest = dest_dir / file_path.name
                 shutil.move(str(file_path), str(dest))
                 self.logger.info(f"فایل منتقل شد به: {dest}")
 
@@ -178,16 +190,16 @@ def main():
 
     handler = PriceListHandler(cfg)
 
-    # پردازش فایل‌های موجود در پوشه
-    existing = list(watch_dir.glob("*"))
-    if existing:
-        logger.info(f"{len(existing)} فایل موجود پیدا شد، در حال پردازش...")
-        for f in existing:
-            if f.is_file():
-                handler.process(f)
+    # پردازش فایل‌های موجود (شامل زیرپوشه‌ها)
+    existing = list(watch_dir.rglob("*"))
+    files = [f for f in existing if f.is_file()]
+    if files:
+        logger.info(f"{len(files)} فایل موجود پیدا شد، در حال پردازش...")
+        for f in files:
+            handler.process(f)
 
     observer = Observer()
-    observer.schedule(handler, str(watch_dir), recursive=False)
+    observer.schedule(handler, str(watch_dir), recursive=True)
     observer.start()
     logger.info("✅ در انتظار فایل جدید...")
 
