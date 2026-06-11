@@ -1,12 +1,13 @@
 <?php
 /**
- * Wrapper ارسال پیامک روی API پنل پیامکی با cURL.
- * - URL و کلید API از متغیر محیطی خوانده می‌شود (SMS_API_URL ،SMS_API_KEY ،SMS_SENDER).
+ * Wrapper ارسال پیامک روی API کاوه‌نگار با cURL.
+ * - کلید API از متغیر محیطی خوانده می‌شود (SMS_API_KEY ،SMS_SENDER).
  * - پاسخ API و کد HTTP در جدول sms_log و فایل لاگ ثبت می‌شود.
  * - قبل از ارسال، سقف تعداد پیامک و حداقل فاصله ارسال به هر شماره چک می‌شود.
  *
- * بدنه‌ی درخواست مطابق پنل‌های رایج ایرانی (کاوه‌نگار/ملی‌پیامک/SMS.ir) است؛
- * در صورت تفاوت، فقط آرایه $payload و هدر Authorization را با مستندات پنل خود تطبیق دهید.
+ * مستندات کاوه‌نگار: https://kavenegar.com/rest.html
+ * POST https://api.kavenegar.com/v1/{API-KEY}/sms/send.json
+ * با فیلدهای receptor / sender / message (form-urlencoded)
  */
 
 declare(strict_types=1);
@@ -71,24 +72,26 @@ function send_sms(string $phone, string $message, string $smsType = 'other', ?in
         return false;
     }
 
+    // کاوه‌نگار: کلید API داخل URL است و بدنه form-urlencoded
+    $url = sprintf(
+        '%s/%s/sms/send.json',
+        rtrim(cfg('SMS_API_URL', 'https://api.kavenegar.com/v1'), '/'),
+        cfg('SMS_API_KEY')
+    );
     $payload = [
         'receptor' => $phone,
         'sender'   => cfg('SMS_SENDER'),
         'message'  => $message,
     ];
 
-    $ch = curl_init(cfg('SMS_API_URL'));
+    $ch = curl_init($url);
     curl_setopt_array($ch, [
         CURLOPT_POST           => true,
-        CURLOPT_POSTFIELDS     => json_encode($payload, JSON_UNESCAPED_UNICODE),
+        CURLOPT_POSTFIELDS     => http_build_query($payload),
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_TIMEOUT        => 15,
         CURLOPT_CONNECTTIMEOUT => 5,
-        CURLOPT_HTTPHEADER     => [
-            'Content-Type: application/json',
-            'Accept: application/json',
-            'Authorization: Bearer ' . cfg('SMS_API_KEY'),
-        ],
+        CURLOPT_HTTPHEADER     => ['Accept: application/json'],
     ]);
 
     $response  = curl_exec($ch);
@@ -97,6 +100,13 @@ function send_sms(string $phone, string $message, string $smsType = 'other', ?in
     curl_close($ch);
 
     $success = $response !== false && $httpCode >= 200 && $httpCode < 300;
+    // کاوه‌نگار وضعیت واقعی را در return.status برمی‌گرداند
+    if ($success) {
+        $decoded = json_decode((string) $response, true);
+        if (isset($decoded['return']['status']) && (int) $decoded['return']['status'] !== 200) {
+            $success = false;
+        }
+    }
     $apiResponse = $response !== false ? (string) $response : "cURL error: $curlError";
 
     db()->prepare(
