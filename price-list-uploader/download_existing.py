@@ -4,7 +4,6 @@
 و ذخیره در پوشه uploaded (بدون آپلود مجدد)
 """
 
-import base64
 import re
 import sys
 from pathlib import Path
@@ -21,28 +20,13 @@ def load_config():
         return yaml.safe_load(f)
 
 
-def wp_headers(cfg):
-    creds = f"{cfg['username']}:{cfg['app_password']}"
-    token = base64.b64encode(creds.encode()).decode()
-    return {"Authorization": f"Basic {token}"}
-
 
 def get_page_content(cfg):
     wp = cfg["wordpress"]
-    headers = wp_headers(wp)
-    r = requests.get(
-        f"{wp['url']}/wp-json/wp/v2/pages",
-        headers=headers,
-        params={"slug": cfg["price_list_page_slug"], "per_page": 1},
-        timeout=30,
-    )
+    url = f"{wp['url']}/{cfg['price_list_page_slug']}/"
+    r = requests.get(url, timeout=30, headers={"User-Agent": "Mozilla/5.0"})
     r.raise_for_status()
-    pages = r.json()
-    if not pages:
-        print("❌ صفحه price-lists پیدا نشد")
-        sys.exit(1)
-    raw = pages[0].get("content", {}).get("rendered", "") or pages[0].get("content", {}).get("raw", "")
-    return raw
+    return r.text
 
 
 def extract_urls(html: str, base_url: str) -> list[str]:
@@ -77,7 +61,8 @@ def main():
     uploaded_dir = BASE_DIR / cfg["folders"]["uploaded"]
     uploaded_dir.mkdir(exist_ok=True)
 
-    print("🔍 در حال دریافت محتوای صفحه price-lists...")
+    page_url = f"{wp_url}/{cfg['price_list_page_slug']}/"
+    print(f"🔍 در حال دریافت: {page_url}")
     html = get_page_content(cfg)
 
     urls = extract_urls(html, wp_url)
