@@ -1,19 +1,20 @@
 #!/usr/bin/env python3
 """
-آپلود خودکار لیست قیمت به صفحه shofazh.com/price-lists/
+سیستم همگام‌سازی لیست قیمت با shofazh.com/price-lists/
 
-فایل PDF/Excel را در پوشه watch_folder بگذارید.
-سیستم آن را به مدیا وردپرس آپلود می‌کند و لینک دانلود را
-به صفحه price-lists اضافه می‌کند.
+- هر پوشه داخل watch_folder = یک برند
+- فایل‌های جدید خودکار آپلود می‌شوند
+- صفحه سایت کاملاً بر اساس پوشه‌ها بازسازی می‌شود
+- دیتابیس JSON فایل‌های آپلود شده را نگه می‌دارد
 """
 
-import os
 import sys
 import time
 import shutil
 import base64
 import logging
 import mimetypes
+import json
 from datetime import datetime
 from pathlib import Path
 
@@ -23,6 +24,7 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
 BASE_DIR = Path(__file__).parent
+DB_FILE = BASE_DIR / "uploaded_files.json"
 
 
 def setup_logging(level="INFO"):
@@ -39,9 +41,20 @@ def setup_logging(level="INFO"):
 
 
 def load_config():
-    path = BASE_DIR / "config.yaml"
-    with open(path, encoding="utf-8") as f:
+    with open(BASE_DIR / "config.yaml", encoding="utf-8") as f:
         return yaml.safe_load(f)
+
+
+def load_db() -> dict:
+    if DB_FILE.exists():
+        with open(DB_FILE, encoding="utf-8") as f:
+            return json.load(f)
+    return {}
+
+
+def save_db(db: dict):
+    with open(DB_FILE, "w", encoding="utf-8") as f:
+        json.dump(db, f, ensure_ascii=False, indent=2)
 
 
 class WordPressUploader:
@@ -58,11 +71,11 @@ class WordPressUploader:
                 f"{self.base}/wp-json/wp/v2/media",
                 headers={**self.headers, "Content-Disposition": f'attachment; filename="{file_path.name}"'},
                 files={"file": (file_path.name, f, mime)},
-                timeout=60,
+                timeout=120,
             )
         resp.raise_for_status()
         data = resp.json()
-        return {"id": data["id"], "url": data["source_url"], "title": data.get("title", {}).get("rendered", file_path.name)}
+        return {"id": data["id"], "url": data["source_url"], "title": data.get("title", {}).get("rendered", file_path.stem)}
 
     def get_page_id(self, slug: str) -> int:
         resp = requests.get(
@@ -77,15 +90,6 @@ class WordPressUploader:
             raise ValueError(f"صفحه‌ای با slug '{slug}' پیدا نشد")
         return pages[0]["id"]
 
-    def get_page_content(self, page_id: int) -> str:
-        resp = requests.get(
-            f"{self.base}/wp-json/wp/v2/pages/{page_id}",
-            headers=self.headers,
-            timeout=30,
-        )
-        resp.raise_for_status()
-        return resp.json().get("content", {}).get("raw", "")
-
     def update_page_content(self, page_id: int, content: str):
         resp = requests.post(
             f"{self.base}/wp-json/wp/v2/pages/{page_id}",
@@ -96,16 +100,36 @@ class WordPressUploader:
         resp.raise_for_status()
 
 
-def build_file_entry(media: dict, file_path: Path, brand: str = "") -> str:
-    now = datetime.now().strftime("%Y/%m/%d")
-    size_kb = file_path.stat().st_size // 1024
-    ext = file_path.suffix.upper().lstrip(".")
-    label = f"{brand} — {file_path.stem}" if brand else file_path.stem
-    return (
-        f'\n<p>📄 <a href="{media["url"]}" target="_blank" rel="noopener">'
-        f'{label}</a> '
-        f'<small>({ext} — {size_kb} KB — {now})</small></p>\n'
-    )
+def build_page_html(db: dict, watch_dir: Path, allowed: set) -> str:
+    """ساخت HTML کامل صفحه بر اساس ساختار پوشه‌ها"""
+    html = ""
+    brands = {}
+
+    for key, info in db.items():
+        brand = info.get("brand", "عمومی")
+        brands.setdefault(brand, []).append(info)
+
+    # مرتب‌سازی برندها
+    for brand in sorted(brands.keys()):
+        files = brands[brand]
+        html += f'\n<h3>📁 {brand}</h3>\n<ul>\n'
+        for f in sorted(files, key=lambda x: x["name"]):
+            size_kb = f.get("size_kb", 0)
+            date = f.get("date", "")
+            ext = Path(f["name"]).suffix.upper().lstrip(".")
+            html += (
+                f'  <li>📄 <a href="{f["url"]}" target="_blank" rel="noopener">'
+                f'{f["name"]}</a>'
+                f' <small>({ext}'
+                f'{" — " + str(size_kb) + " KB" if size_kb else ""}'
+                f'{" — " + date if date else ""})</small></li>\n'
+            )
+        html += '</ul>\n'
+
+    if not html:
+        html = "<p>لیست قیمتی موجود نیست.</p>"
+
+    return html
 
 
 class PriceListHandler(FileSystemEventHandler):
@@ -113,17 +137,38 @@ class PriceListHandler(FileSystemEventHandler):
         self.cfg = cfg
         self.wp = WordPressUploader(cfg["wordpress"])
         self.watch_dir = BASE_DIR / cfg["folders"]["watch"]
-        self.uploaded_dir = BASE_DIR / cfg["folders"]["uploaded"]
-        self.uploaded_dir.mkdir(exist_ok=True)
         self.allowed = set(cfg.get("allowed_extensions", [".pdf", ".xlsx", ".xls", ".csv"]))
         self._page_id = None
         self.logger = logging.getLogger("PriceListUploader")
+        self.db = load_db()
 
     def _page_id_cached(self):
         if self._page_id is None:
             self._page_id = self.wp.get_page_id(self.cfg["price_list_page_slug"])
-            self.logger.info(f"آی‌دی صفحه price-lists: {self._page_id}")
+            self.logger.info(f"آی‌دی صفحه: {self._page_id}")
         return self._page_id
+
+    def _db_key(self, file_path: Path) -> str:
+        try:
+            return str(file_path.relative_to(self.watch_dir))
+        except ValueError:
+            return file_path.name
+
+    def _brand(self, file_path: Path) -> str:
+        try:
+            rel = file_path.relative_to(self.watch_dir)
+            return rel.parts[0] if len(rel.parts) > 1 else "عمومی"
+        except ValueError:
+            return "عمومی"
+
+    def rebuild_page(self):
+        try:
+            page_id = self._page_id_cached()
+            content = build_page_html(self.db, self.watch_dir, self.allowed)
+            self.wp.update_page_content(page_id, content)
+            self.logger.info(f"✅ صفحه price-lists بازسازی شد ({len(self.db)} فایل)")
+        except Exception as e:
+            self.logger.error(f"خطا در بازسازی صفحه: {e}")
 
     def process(self, file_path: Path):
         if file_path.suffix.lower() not in self.allowed:
@@ -131,40 +176,51 @@ class PriceListHandler(FileSystemEventHandler):
         if not file_path.exists():
             return
 
-        # نام برند = نام پوشه والد (اگر زیرپوشه watch_folder باشد)
-        brand = ""
-        try:
-            rel = file_path.relative_to(self.watch_dir)
-            if len(rel.parts) > 1:
-                brand = rel.parts[0]
-        except ValueError:
-            pass
+        key = self._db_key(file_path)
+        brand = self._brand(file_path)
 
-        self.logger.info(f"فایل جدید: {file_path.name}" + (f" (برند: {brand})" if brand else ""))
+        # اگر قبلاً آپلود شده، رد شو
+        if key in self.db:
+            self.logger.info(f"⏭  قبلاً آپلود شده: {file_path.name}")
+            return
+
+        self.logger.info(f"📤 آپلود: {file_path.name} (برند: {brand})")
         try:
             media = self.wp.upload_media(file_path)
-            self.logger.info(f"آپلود شد: {media['url']}")
+            size_kb = file_path.stat().st_size // 1024
 
-            page_id = self._page_id_cached()
-            content = self.wp.get_page_content(page_id)
-            entry = build_file_entry(media, file_path, brand)
-            new_content = content + entry
-            self.wp.update_page_content(page_id, new_content)
-            self.logger.info(f"صفحه price-lists به‌روز شد")
-
-            if self.cfg["general"].get("move_after_upload"):
-                dest_dir = self.uploaded_dir / (brand if brand else "")
-                dest_dir.mkdir(parents=True, exist_ok=True)
-                dest = dest_dir / file_path.name
-                shutil.move(str(file_path), str(dest))
-                self.logger.info(f"فایل منتقل شد به: {dest}")
+            self.db[key] = {
+                "name": file_path.name,
+                "brand": brand,
+                "url": media["url"],
+                "id": media["id"],
+                "size_kb": size_kb,
+                "date": datetime.now().strftime("%Y/%m/%d"),
+            }
+            save_db(self.db)
+            self.logger.info(f"✅ آپلود شد: {media['url']}")
+            self.rebuild_page()
 
         except Exception as e:
-            self.logger.error(f"خطا در پردازش {file_path.name}: {e}")
+            self.logger.error(f"❌ خطا در آپلود {file_path.name}: {e}")
+
+    def scan_all(self):
+        """اسکن کامل پوشه و آپلود فایل‌های جدید"""
+        files = [f for f in self.watch_dir.rglob("*") if f.is_file() and f.suffix.lower() in self.allowed]
+        new_files = [f for f in files if self._db_key(f) not in self.db]
+
+        if new_files:
+            self.logger.info(f"📦 {len(new_files)} فایل جدید پیدا شد")
+            for f in new_files:
+                self.process(f)
+        else:
+            self.logger.info(f"✅ همه {len(files)} فایل قبلاً آپلود شده‌اند")
+            if files:
+                self.rebuild_page()
 
     def on_created(self, event):
         if not event.is_directory:
-            time.sleep(1)  # صبر تا فایل کامل کپی شود
+            time.sleep(2)
             self.process(Path(event.src_path))
 
     def on_moved(self, event):
@@ -182,26 +238,18 @@ def main():
     watch_dir.mkdir(exist_ok=True)
 
     logger.info("=" * 50)
-    logger.info("🚀 سیستم آپلود لیست قیمت شروع شد")
-    logger.info(f"📂 پوشه زیر نظر: {watch_dir}")
-    logger.info(f"🌐 سایت: {cfg['wordpress']['url']}")
-    logger.info(f"📄 صفحه مقصد: /{cfg['price_list_page_slug']}/")
+    logger.info("🚀 سیستم همگام‌سازی لیست قیمت")
+    logger.info(f"📂 پوشه: {watch_dir}")
+    logger.info(f"🌐 سایت: {cfg['wordpress']['url']}/{cfg['price_list_page_slug']}/")
     logger.info("=" * 50)
 
     handler = PriceListHandler(cfg)
-
-    # پردازش فایل‌های موجود (شامل زیرپوشه‌ها)
-    existing = list(watch_dir.rglob("*"))
-    files = [f for f in existing if f.is_file()]
-    if files:
-        logger.info(f"{len(files)} فایل موجود پیدا شد، در حال پردازش...")
-        for f in files:
-            handler.process(f)
+    handler.scan_all()
 
     observer = Observer()
     observer.schedule(handler, str(watch_dir), recursive=True)
     observer.start()
-    logger.info("✅ در انتظار فایل جدید...")
+    logger.info("👀 در انتظار فایل جدید...")
 
     try:
         while True:
