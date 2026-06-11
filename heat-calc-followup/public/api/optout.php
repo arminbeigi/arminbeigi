@@ -7,7 +7,16 @@
 
 declare(strict_types=1);
 
-require_once dirname(__DIR__, 2) . '/src/lead.php';
+// پیدا کردن خودکار src/lead.php — هم در چیدمان مخزن، هم وقتی این فایل در public_html/api است
+foreach ([
+    dirname(__DIR__, 2) . '/src/lead.php',
+    dirname(__DIR__, 2) . '/heat-calc-followup/src/lead.php',
+] as $leadLib) {
+    if (is_file($leadLib)) {
+        require_once $leadLib;
+        break;
+    }
+}
 
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 
