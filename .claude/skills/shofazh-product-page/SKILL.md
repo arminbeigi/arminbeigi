@@ -1,6 +1,6 @@
 ---
 name: shofazh-product-page
-description: Build a complete SEO + GEO product page (Persian) for shofazh.com products using the established RAN25 template. Use when user provides product name, URL, competitor brand, image, and category. Hands the user an image-generation prompt and pauses for them to supply the photo, then produces WordPress-ready HTML with animations, schema markup, and a separate SEO metadata file.
+description: Build a complete SEO + GEO product page (Persian) for shofazh.com products using the established RAN25 template. Use when user provides product name, URL, competitor brand, image, and category. Hands the user an image-generation prompt and pauses for them to supply the photo, then produces WordPress-ready HTML with animations and schema markup. After delivery, presents SEO metadata as an inline table in chat (no separate file).
 ---
 
 # Shofazh.com Product Page Builder
@@ -72,11 +72,27 @@ Read `ran25-product-content.html` from the repo root to load the exact CSS frame
 ### Step 2: Product Analysis
 - Try to fetch the product page URL (WebFetch) to extract real specs, price, model details
 - **If WebFetch returns 403**: shofazh.com blocks automated requests (WAF/Cloudflare). In this case, use `AskUserQuestion` to ask the user to paste the product specs manually (header: "مشخصات محصول", question: "دسترسی مستقیم به سایت ممکن نیست. لطفاً مشخصات فنی محصول (مدل، ظرفیت، قیمت، ابعاد و ...) رو اینجا پیست کنید."). Then continue with the provided data.
-- Identify the product category-specific accent color:
-  - گازسوز → blue (#1565C0) — RAN25 default
-  - گازوئیلی → red (#C62828)
-  - دوگانه‌سوز → orange (#FF6F00)
-  - سایر → keep blue
+- Identify the product category-specific **design palette** (minimal, modern, high-readability — not just an accent swap). Each palette defines: primary accent, secondary accent, soft background tint, text-on-light, text-on-dark, and a subtle gradient for hero/calculator blocks. Pick crisp, magazine-grade combinations; avoid muddy or low-contrast pairs. Body text must always sit on a near-white surface for AA-readability; accents are reserved for headings, dividers, hotspots, buttons, and the ticker bar.
+
+  - **گازسوز (Gas burner) — Cool Industrial Blue**
+    - Primary: `#0D47A1` · Secondary: `#1976D2` · Soft tint bg: `#E8F1FB`
+    - Hero gradient: `linear-gradient(135deg,#0D47A1 0%,#1976D2 100%)`
+    - Mood: clean, technical, trustworthy
+  - **گازوئیلی (Oil burner) — Warm Ember**
+    - Primary: `#B71C1C` · Secondary: `#E65100` · Soft tint bg: `#FFF1EC`
+    - Hero gradient: `linear-gradient(135deg,#7F1D1D 0%,#B71C1C 55%,#E65100 100%)`
+    - Mood: powerful, high-heat, robust
+  - **دوگانه‌سوز (Dual-fuel) — Amber Graphite**
+    - Primary: `#E65100` · Secondary: `#37474F` · Soft tint bg: `#FFF6E8`
+    - Hero gradient: `linear-gradient(135deg,#263238 0%,#455A64 50%,#E65100 100%)`
+    - Mood: versatile, premium, balanced
+  - **سایر (Other) — Slate Teal**
+    - Primary: `#0F766E` · Secondary: `#334155` · Soft tint bg: `#ECF7F5`
+    - Hero gradient: `linear-gradient(135deg,#0F766E 0%,#334155 100%)`
+    - Mood: neutral, minimal, modern
+
+  Apply the palette consistently across: H2 numbered counters, table header rows, blockquotes/callout borders, hotspot dots, CTA buttons, ticker bar background, calculator-promo gradient, and the `--accent` CSS custom property of `.ran25-wrap`. Body copy stays `#111` on `#FFFFFF`/`#FAFAFA` for maximum readability — never colorize paragraph text.
+
 - Identify target audience (موتورخانه خانگی / تجاری / صنعتی)
 
 ### Step 2b: Image Prompt Handoff (MANDATORY PAUSE)
@@ -182,17 +198,14 @@ After generating the content outline but BEFORE building the final HTML, you MUS
 
 5. **If user provides images**: Store the URLs/paths and use them in Step 5 (Build HTML) to insert `<img>` tags with proper `alt` text, `loading="lazy"`, and responsive styling within the `.ran25-wrap` framework at the designated positions.
 
-#### Step 3c: SEO Metadata File (generate and send to the user immediately)
-As soon as the content above is written — and BEFORE building the HTML — produce a standalone SEO metadata file, save it to disk, and **send it to the user right away** with `SendUserFile` (status: `normal`).
+#### Step 3c: SEO Metadata (prepared for the final chat table — NO separate file)
+Prepare the SEO metadata in memory now so it's ready for the post-delivery chat table in the "Output to User" step. **Do NOT create, save, or send a `.md` file.** The metadata is delivered exclusively as a Persian Markdown table in chat AFTER the HTML is pushed.
 
-- File path: `[product-slug]-seo.md` (same slug as Step 6, e.g. `pgn0-seo.md`)
-- Written in Persian — it feeds WordPress SEO plugins (Rank Math / Yoast)
-
-The file MUST contain these fields (Persian labels):
+Prepare these fields (Persian labels, Persian values):
 - **عنوان سئو (SEO Title)** — ≤ 60 characters, leads with the primary keyword, includes brand + model
 - **توضیحات متا (Meta Description)** — 150–160 characters, contains the focus keyphrase and a clear CTA
 - **کلمه کلیدی کانونی (Focus Keyphrase)** — the single primary keyword
-- **کلمات کلیدی ثانویه (Secondary Keywords)** — 4–6 related / LSI keywords as a list
+- **کلمات کلیدی ثانویه (Secondary Keywords)** — 4–6 related / LSI keywords, comma-separated
 - **نامک پیشنهادی URL (URL Slug)** — lowercase Latin transliteration, matches the product slug
 - **متن جایگزین تصویر (Image Alt Text)** — descriptive alt for the product photo, includes brand + model
 - **عنوان شبکه‌های اجتماعی (Open Graph / Twitter Title)** — social-optimized title
@@ -213,7 +226,7 @@ Embed inside `<script type="application/ld+json">` blocks:
   - Hotspot positions on photo (4-6 callouts on actual product parts)
   - Ticker bar items (product-specific features)
   - Schema JSON-LD values
-  - Accent color if category requires it
+  - **Category design palette** (Step 2): set `--accent`, `--accent-2`, `--accent-soft`, and `--hero-gradient` CSS custom properties on `.ran25-wrap` and wire them into H2 counters, table headers, ticker bar, hotspot dots, CTA, and the calculator-promo gradient. Keep body text on near-white surfaces (`#111` on `#FFFFFF`/`#FAFAFA`) for AA readability — never tint paragraph text. Choose minimal, magazine-grade combinations only.
   - **Mid-content images** (from Step 3.5): Insert collected images at their designated positions between sections. Each image must:
     - Use `<figure>` with `<img>` inside, styled consistently with `.ran25-wrap`
     - Include descriptive Persian `alt` text for SEO
@@ -225,7 +238,7 @@ Embed inside `<script type="application/ld+json">` blocks:
 
 ### Step 6: Save, Commit, Push
 - File path: `[product-slug]-product-content.html` (e.g. `pgn0-product-content.html`)
-- Also commit the SEO metadata file created in Step 3b: `[product-slug]-seo.md`
+- Do NOT create or commit any SEO `.md` file — SEO metadata is delivered as a chat table only.
 - Slug: lowercase Latin transliteration of product model
 - Commit message format:
   ```
@@ -237,14 +250,17 @@ Embed inside `<script type="application/ld+json">` blocks:
 
 ## Output to User
 
-After push, reply with:
-1. Filename and repo path (both the HTML page and the `[product-slug]-seo.md` SEO file)
-2. Three-line summary of what was generated (word count, schema types, image count)
-3. Confirmation that the SEO metadata file was already sent to the user in Step 3c
-4. Note about hotspot positions needing visual verification in browser
-5. **Schema JSON-LD preview**: Display the full generated Schema JSON-LD code blocks (Product, FAQPage, BreadcrumbList) in the chat so the user can review and verify them before publishing
+After push, reply with — in this exact order:
 
-Do NOT paste the full HTML in chat — the file in the repo IS the deliverable. But DO show the Schema JSON-LD separately.
+1. Filename and repo path of the HTML page only (no SEO `.md` file is created).
+2. Three-line summary of what was generated (word count, schema types, image count).
+3. Note about hotspot positions needing visual verification in browser.
+4. **SEO metadata table** — a Persian Markdown table with two columns (`فیلد` | `مقدار`) containing every field prepared in Step 3c:
+   - عنوان سئو، توضیحات متا، کلمه کلیدی کانونی، کلمات کلیدی ثانویه، نامک URL، متن جایگزین تصویر، عنوان OG/Twitter، توضیحات OG/Twitter، عنوان نان‌مایه.
+   - Values are ready to paste into Rank Math / Yoast — no extra prose around them.
+5. **Schema JSON-LD preview**: Display the full generated Schema JSON-LD code blocks (Product, FAQPage, BreadcrumbList) in the chat so the user can review and verify them before publishing.
+
+Do NOT paste the full HTML in chat — the file in the repo IS the deliverable. But DO show the SEO table and Schema JSON-LD inline.
 
 ## Constraints
 
