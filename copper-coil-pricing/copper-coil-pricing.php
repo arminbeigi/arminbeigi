@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CCP_VERSION', '1.1.1' );
+define( 'CCP_VERSION', '1.1.2' );
 define( 'CCP_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CCP_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 

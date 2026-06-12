@@ -153,6 +153,18 @@ class CCP_Tables {
 			}
 		}
 
+		// مقایسه بر اساس فقط ارقام — برای حالت‌هایی مثل «۴ میلیمتر»، «4mm» یا «۵ میلی‌متر».
+		// کلید کویل k-4 امضای «4» دارد و دوجداره 4-2/5 امضای «425». چون فقط داخل
+		// جدول همان نوع جست‌وجو می‌شود، تداخلی پیش نمی‌آید.
+		$digits = preg_replace( '/\D+/', '', $normalized );
+		if ( '' !== $digits ) {
+			foreach ( $weights as $key => $weight ) {
+				if ( preg_replace( '/\D+/', '', self::normalize_thickness( $key ) ) === $digits ) {
+					return (float) $weight;
+				}
+			}
+		}
+
 		return null;
 	}
 }
