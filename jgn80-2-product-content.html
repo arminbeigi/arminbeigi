@@ -805,7 +805,7 @@
   </div>
 </div>
 
-<script type="application/ld+json">
+<script type="application/ld+json" id="jgn80-2-product-schema">
 {
   "@context": "https://schema.org/",
   "@type": "Product",
@@ -827,11 +827,42 @@
     "@type": "Offer",
     "url": "https://shofazh.com/product/iranradiator-jgn80-2/",
     "priceCurrency": "IRR",
+    "price": "0",
     "availability": "https://schema.org/InStock",
     "itemCondition": "https://schema.org/NewCondition",
     "seller": {
       "@type": "Organization",
       "name": "شوفاژ دات کام"
+    },
+    "hasMerchantReturnPolicy": {
+      "@type": "MerchantReturnPolicy",
+      "applicableCountry": "IR",
+      "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+      "merchantReturnDays": 7,
+      "returnMethod": "https://schema.org/ReturnByMail",
+      "returnFees": "https://schema.org/FreeReturn"
+    },
+    "shippingDetails": {
+      "@type": "OfferShippingDetails",
+      "shippingDestination": {
+        "@type": "DefinedRegion",
+        "addressCountry": "IR"
+      },
+      "deliveryTime": {
+        "@type": "ShippingDeliveryTime",
+        "handlingTime": {
+          "@type": "QuantitativeValue",
+          "minValue": 0,
+          "maxValue": 1,
+          "unitCode": "DAY"
+        },
+        "transitTime": {
+          "@type": "QuantitativeValue",
+          "minValue": 1,
+          "maxValue": 4,
+          "unitCode": "DAY"
+        }
+      }
     }
   },
   "aggregateRating": {
@@ -885,4 +916,68 @@
     {"@type": "ListItem", "position": 5, "name": "مشعل JGN 80/2", "item": "https://shofazh.com/product/iranradiator-jgn80-2/"}
   ]
 }
+</script>
+
+<script>
+/* Auto-inject WooCommerce price into Product JSON-LD.
+   Reads the live price shown on the page so the schema never goes stale. */
+(function () {
+  function toEnglishDigits(str) {
+    var fa = '۰۱۲۳۴۵۶۷۸۹', ar = '٠١٢٣٤٥٦٧٨٩';
+    return str.replace(/[۰-۹٠-٩]/g, function (d) {
+      var i = fa.indexOf(d);
+      return i > -1 ? String(i) : String(ar.indexOf(d));
+    });
+  }
+
+  function extractPrice() {
+    // WooCommerce price selectors, in priority order.
+    // When a sale is active, ins holds the current price.
+    var selectors = [
+      '.summary .price ins .woocommerce-Price-amount bdi',
+      '.summary .price ins .woocommerce-Price-amount',
+      '.summary .price .woocommerce-Price-amount bdi',
+      '.summary .price .woocommerce-Price-amount',
+      '.product .price ins .woocommerce-Price-amount',
+      '.product .price .woocommerce-Price-amount'
+    ];
+    for (var i = 0; i < selectors.length; i++) {
+      var el = document.querySelector(selectors[i]);
+      if (el && el.textContent) {
+        var digits = toEnglishDigits(el.textContent).replace(/[^\d]/g, '');
+        if (digits && parseInt(digits, 10) > 0) return digits;
+      }
+    }
+    return null;
+  }
+
+  function detectCurrency() {
+    var cur = document.querySelector('.summary .price .woocommerce-Price-currencySymbol, .product .price .woocommerce-Price-currencySymbol');
+    if (cur && /تومان/.test(cur.textContent)) return 'TOMAN';
+    return 'IRR';
+  }
+
+  function inject() {
+    var tag = document.getElementById('jgn80-2-product-schema');
+    if (!tag) return;
+    var price = extractPrice();
+    if (!price) return;
+    try {
+      var data = JSON.parse(tag.textContent);
+      // Google expects ISO currency; Toman prices are converted to Rial.
+      if (detectCurrency() === 'TOMAN') {
+        price = String(parseInt(price, 10) * 10);
+      }
+      data.offers.price = price;
+      data.offers.priceCurrency = 'IRR';
+      tag.textContent = JSON.stringify(data);
+    } catch (e) { /* leave schema untouched on parse failure */ }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', inject);
+  } else {
+    inject();
+  }
+})();
 </script>
