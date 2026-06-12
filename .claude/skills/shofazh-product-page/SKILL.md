@@ -86,10 +86,13 @@ Read `ran25-product-content.html` from the repo root to load the exact CSS frame
     - Primary: `#E65100` · Secondary: `#37474F` · Soft tint bg: `#FFF6E8`
     - Hero gradient: `linear-gradient(135deg,#263238 0%,#455A64 50%,#E65100 100%)`
     - Mood: versatile, premium, balanced
-  - **سایر (Other) — Slate Teal**
-    - Primary: `#0F766E` · Secondary: `#334155` · Soft tint bg: `#ECF7F5`
-    - Hero gradient: `linear-gradient(135deg,#0F766E 0%,#334155 100%)`
-    - Mood: neutral, minimal, modern
+  - **سایر (Other) — DERIVE a custom palette, no fixed default**
+    - When the user picked "سایر" and typed a custom category, you MUST design a bespoke palette derived from three signals, in priority order:
+      1. **The typed category's nature** — e.g. پمپ/آبرسانی → aqua-blues; دیگ بخار → steel/graphite + hot accent; منبع انبساط → copper/bronze tones; رادیاتور/حوله‌خشک‌کن → warm neutrals; تجهیزات استخر → cyan/turquoise; کنترل و ابزار دقیق → violet/indigo tech tones.
+      2. **The product itself** — its dominant body color in the reference photo (Question 5) can inform the secondary accent so page and photo feel cohesive.
+      3. **The brand identity** — if the brand has a recognizable color (e.g. ایران رادیاتور red, بوتان blue), echo it subtly in the accent.
+    - Build the same token set as the fixed palettes: Primary, Secondary, Soft tint bg, Hero gradient — minimal, modern, AA-readable.
+    - In the final reply, briefly state (one Persian sentence) which palette you derived and why.
 
   Apply the palette consistently across: H2 numbered counters, table header rows, blockquotes/callout borders, hotspot dots, CTA buttons, ticker bar background, calculator-promo gradient, and the `--accent` CSS custom property of `.ran25-wrap`. Body copy stays `#111` on `#FFFFFF`/`#FAFAFA` for maximum readability — never colorize paragraph text.
 
