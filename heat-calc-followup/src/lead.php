@@ -79,14 +79,14 @@ function save_lead_and_send_sms1(
 
     $leadId = (int) $pdo->lastInsertId();
 
+    // لینک کوتاه روی دامنه خود سایت (پوشه s1 در public_html) که با UTM به فروشگاه هدایت می‌کند
     // لغو دریافت از طریق «لغو11» خود کاوه‌نگار انجام می‌شود؛ لینک لغو در متن نیست
-    // تعداد پره فقط برای رادیاتور معنا دارد؛ برای پکیج/دیگ صفر بفرستید تا حذف شود
     $message = sprintf(
-        "شوفاژ دات کام - نتیجه محاسبه شما\nبار حرارتی: %s BTU/h\nپیشنهاد ما: %s%s\nمشاهده و خرید:\n%s",
+        "سلام 🌹\nنتیجه محاسبه شما در شوفاژ دات کام آماده‌ست:\n🔥 بار حرارتی: %s BTU/h\n✅ پیشنهاد ما: %s%s\nمشاهده و خرید 👇\n%s",
         number_format($heatLoad),
         $suggestedModel,
         $suggestedFins > 0 ? " ({$suggestedFins} پره)" : '',
-        add_utm($productUrl, 'heatcalc_sms1')
+        cfg('SMS1_LINK', 'https://shofazh.com/s1')
     );
 
     if (send_sms($phone, $message, 'sms1', $leadId)) {

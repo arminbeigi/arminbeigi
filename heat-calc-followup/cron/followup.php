@@ -52,12 +52,12 @@ try {
     $salesPhone = cfg('SALES_PHONE', '');
 
     foreach ($leads as $lead) {
-        // لغو دریافت از طریق «لغو11» خود کاوه‌نگار انجام می‌شود؛ لینک لغو در متن نیست
+        // لینک کوتاه روی دامنه خود سایت (پوشه s2 در public_html) که با UTM به فروشگاه هدایت می‌کند
         $message = sprintf(
-            "شوفاژ دات کام\nهنوز برای انتخاب سیستم گرمایشی مناسب (%s) سوال دارید؟\n%sیا همین حالا سفارش دهید:\n%s",
+            "سلام دوباره 😊\nهنوز برای انتخاب سیستم گرمایشی مناسب (%s) سوال دارید؟\nکارشناس شوفاژ دات کام رایگان راهنمایی‌تان می‌کند 🤝\n%sسفارش آنلاین 👇\n%s",
             $lead['suggested_model'],
-            $salesPhone !== '' ? "مشاوره رایگان کارشناسان ما: $salesPhone\n" : '',
-            add_utm($lead['product_url'], 'heatcalc_sms2')
+            $salesPhone !== '' ? "📞 $salesPhone\n" : '',
+            cfg('SMS2_LINK', 'https://shofazh.com/s2')
         );
 
         if (send_sms($lead['phone'], $message, 'sms2', (int) $lead['id'])) {
