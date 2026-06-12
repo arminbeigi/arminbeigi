@@ -202,8 +202,21 @@ The file MUST contain these fields (Persian labels):
 ### Step 4: Schema JSON-LD
 Embed inside `<script type="application/ld+json">` blocks:
 - `Product` (with offers, aggregateRating, brand)
-- `FAQPage` (mirror all FAQs from accordion)
+- `FAQPage` (mirror all FAQs from accordion) — NOTE: since Aug 2023 Google only shows FAQ rich results for gov/health sites, but keep it anyway: it remains valuable structured data for GEO (AI Overviews, ChatGPT, etc.)
 - `BreadcrumbList` (Home > Category > Subcategory > Product)
+- `VideoObject` (MANDATORY) — for the calculator promo video embedded in every product page. Gives the page a video thumbnail eligibility in Google results. Required fields:
+  ```json
+  {"@context": "https://schema.org", "@type": "VideoObject",
+   "name": "محاسبه‌گر ظرفیت حرارتی شوفاژ — آموزش استفاده",
+   "description": "آموزش استفاده از ابزار رایگان محاسبه ظرفیت حرارتی موتورخانه در شوفاژ دات کام؛ انتخاب مشعل و دیگ مناسب بر اساس متراژ و عایق‌بندی.",
+   "thumbnailUrl": "[main product image URL]",
+   "contentUrl": "https://shofazh.com/wp-content/uploads/2026/05/cleaned_محاسبه_گر_ظرفیت_حرارتی.mp4",
+   "uploadDate": "2026-05-01",
+   "publisher": {"@type": "Organization", "name": "شوفاژ دات کام", "url": "https://shofazh.com/"}}
+  ```
+  If the page embeds any additional product video, add a separate VideoObject for it too.
+- `Review` (OPTIONAL — only with real data): during intake, if the user can supply 2–3 genuine customer reviews (name, rating, text), embed them as `review` array inside the Product schema to strengthen the star rich result. NEVER fabricate reviews — if the user has none, ship only `aggregateRating`.
+- Do NOT add `HowTo` schema for the installation section — Google removed HowTo rich results entirely in 2023.
 
 **Google Rich Results compliance (MANDATORY — prevents critical/non-critical errors in the Rich Results Test):**
 
@@ -272,7 +285,7 @@ After push, reply with:
 2. Three-line summary of what was generated (word count, schema types, image count)
 3. Confirmation that the SEO metadata file was already sent to the user in Step 3c
 4. Note about hotspot positions needing visual verification in browser
-5. **Schema JSON-LD preview**: Display the full generated Schema JSON-LD code blocks (Product, FAQPage, BreadcrumbList) in the chat so the user can review and verify them before publishing
+5. **Schema JSON-LD preview**: Display the full generated Schema JSON-LD code blocks (Product, FAQPage, BreadcrumbList, VideoObject) in the chat so the user can review and verify them before publishing
 
 Do NOT paste the full HTML in chat — the file in the repo IS the deliverable. But DO show the Schema JSON-LD separately.
 
