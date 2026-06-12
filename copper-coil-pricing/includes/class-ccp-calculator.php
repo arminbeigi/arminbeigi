@@ -89,26 +89,63 @@ class CCP_Calculator {
 	 * @return int تعداد قیمت‌های به‌روز شده.
 	 */
 	public static function update_product_prices( $product_id ) {
+		$result = self::update_product_prices_detailed( $product_id );
+		return $result['updated'];
+	}
+
+	/**
+	 * به‌روزرسانی قیمت یک محصول با گزارش تشخیصی کامل
+	 *
+	 * @param int $product_id شناسه محصول مادر.
+	 * @return array{name:string,enabled:bool,updated:int,messages:string[]}
+	 */
+	public static function update_product_prices_detailed( $product_id ) {
+		$report = array(
+			'name'     => get_the_title( $product_id ),
+			'enabled'  => false,
+			'updated'  => 0,
+			'messages' => array(),
+		);
+
 		$product = wc_get_product( $product_id );
 		if ( ! $product ) {
-			return 0;
+			$report['messages'][] = 'محصول یافت نشد.';
+			return $report;
 		}
 
 		if ( 'yes' !== $product->get_meta( self::META_ENABLED ) ) {
-			return 0;
+			$report['messages'][] = 'محاسبه خودکار برای این محصول فعال نیست.';
+			return $report;
 		}
+		$report['enabled'] = true;
 
 		$type     = $product->get_meta( self::META_TYPE );
 		$capacity = (int) $product->get_meta( self::META_CAPACITY );
-		if ( ! in_array( $type, array( 'coil', 'double' ), true ) || $capacity <= 0 ) {
-			return 0;
+		if ( ! in_array( $type, array( 'coil', 'double' ), true ) ) {
+			$report['messages'][] = 'نوع منبع (کویل‌دار/دوجداره) انتخاب نشده است.';
+			return $report;
+		}
+		if ( $capacity <= 0 ) {
+			$report['messages'][] = 'ظرفیت انتخاب نشده است.';
+			return $report;
+		}
+
+		$table_weights = CCP_Tables::get_weights( $type, $capacity );
+		if ( ! $table_weights ) {
+			$report['messages'][] = sprintf( 'برای ظرفیت %d لیتری در جدول %s وزنی تعریف نشده است.', $capacity, 'coil' === $type ? 'کویل‌دار' : 'دوجداره' );
+			return $report;
 		}
 
 		$coil_feet = ( 'coil' === $type ) ? CCP_Tables::get_coil_feet( $capacity ) : 0;
 		$updated   = 0;
 
 		if ( $product->is_type( 'variable' ) ) {
-			foreach ( $product->get_children() as $variation_id ) {
+			$children = $product->get_children();
+			if ( ! $children ) {
+				$report['messages'][] = 'این محصول متغیر هیچ گونه‌ای ندارد.';
+			}
+
+			foreach ( $children as $variation_id ) {
 				$variation = wc_get_product( $variation_id );
 				if ( ! $variation ) {
 					continue;
@@ -116,12 +153,25 @@ class CCP_Calculator {
 
 				$weight = self::resolve_variation_weight( $variation, $type, $capacity );
 				if ( null === $weight ) {
+					$attrs = array();
+					foreach ( $variation->get_attributes() as $tax => $val ) {
+						if ( '' !== $val ) {
+							$attrs[] = $val;
+						}
+					}
+					$report['messages'][] = sprintf(
+						'گونه #%d: ضخامتِ «%s» با کلیدهای جدول (%s) تطبیق داده نشد.',
+						$variation_id,
+						$attrs ? implode( '، ', $attrs ) : 'خالی',
+						implode( '، ', array_keys( $table_weights ) )
+					);
 					continue;
 				}
 
 				$price = self::calculate( $weight, $coil_feet );
 				if ( null === $price ) {
-					continue;
+					$report['messages'][] = 'فی هر کیلو ورق تنظیم نشده است (در صفحه تنظیمات وارد کنید).';
+					break;
 				}
 
 				$variation->set_regular_price( $price );
@@ -135,11 +185,12 @@ class CCP_Calculator {
 			}
 		} else {
 			// محصول ساده: کمترین ضخامت موجود در جدول ملاک است.
-			$weights = CCP_Tables::get_weights( $type, $capacity );
-			$weight  = $weights ? (float) reset( $weights ) : 0;
+			$weight = (float) reset( $table_weights );
 			if ( $weight > 0 ) {
 				$price = self::calculate( $weight, $coil_feet );
-				if ( null !== $price ) {
+				if ( null === $price ) {
+					$report['messages'][] = 'فی هر کیلو ورق تنظیم نشده است (در صفحه تنظیمات وارد کنید).';
+				} else {
 					$product->set_regular_price( $price );
 					$product->set_price( $price );
 					$product->save();
@@ -152,13 +203,14 @@ class CCP_Calculator {
 			wc_delete_product_transients( $product_id );
 		}
 
-		return $updated;
+		$report['updated'] = $updated;
+		return $report;
 	}
 
 	/**
 	 * به‌روزرسانی قیمت همه محصولاتی که محاسبه خودکار برایشان فعال است
 	 *
-	 * @return array{products:int,prices:int} آمار به‌روزرسانی.
+	 * @return array{products:int,prices:int,enabled:int,log:array} آمار و گزارش.
 	 */
 	public static function update_all_prices() {
 		$product_ids = get_posts( array(
@@ -173,13 +225,21 @@ class CCP_Calculator {
 		$stats = array(
 			'products' => 0,
 			'prices'   => 0,
+			'enabled'  => count( $product_ids ),
+			'log'      => array(),
 		);
 
 		foreach ( $product_ids as $product_id ) {
-			$updated = self::update_product_prices( $product_id );
-			if ( $updated > 0 ) {
+			$report = self::update_product_prices_detailed( $product_id );
+
+			if ( $report['updated'] > 0 ) {
 				$stats['products']++;
-				$stats['prices'] += $updated;
+				$stats['prices'] += $report['updated'];
+			}
+
+			// فقط محصولاتی که مشکلی داشتند یا چیزی به‌روز نشد در گزارش ثبت می‌شوند.
+			if ( $report['updated'] === 0 || ! empty( $report['messages'] ) ) {
+				$stats['log'][] = $report;
 			}
 		}
 

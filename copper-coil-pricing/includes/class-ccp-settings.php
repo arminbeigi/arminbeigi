@@ -43,13 +43,42 @@ class CCP_Settings {
 		}
 
 		if ( isset( $_GET['ccp_updated'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
-			$products = isset( $_GET['ccp_products'] ) ? absint( $_GET['ccp_products'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification
-			$prices   = isset( $_GET['ccp_prices'] ) ? absint( $_GET['ccp_prices'] ) : 0;     // phpcs:ignore WordPress.Security.NonceVerification
+			$stats = get_transient( 'ccp_last_run' );
+			delete_transient( 'ccp_last_run' );
+
+			$products = isset( $stats['products'] ) ? (int) $stats['products'] : 0;
+			$prices   = isset( $stats['prices'] ) ? (int) $stats['prices'] : 0;
+			$enabled  = isset( $stats['enabled'] ) ? (int) $stats['enabled'] : 0;
+			$log      = isset( $stats['log'] ) ? $stats['log'] : array();
+
+			$class = $prices > 0 ? 'notice-success' : 'notice-warning';
 			printf(
-				'<div class="notice notice-success is-dismissible"><p>تنظیمات ذخیره شد. قیمت <strong>%d</strong> گونه در <strong>%d</strong> محصول به‌روزرسانی شد.</p></div>',
+				'<div class="notice %s"><p>تنظیمات ذخیره شد. قیمت <strong>%d</strong> گونه در <strong>%d</strong> محصول به‌روزرسانی شد. (محصولات فعال‌شده: <strong>%d</strong>)</p>',
+				esc_attr( $class ),
 				esc_html( $prices ),
-				esc_html( $products )
+				esc_html( $products ),
+				esc_html( $enabled )
 			);
+
+			if ( 0 === $enabled ) {
+				echo '<p>هیچ محصولی برای محاسبه خودکار فعال نشده است. وارد ویرایش محصول شوید، تب «قیمت کویل مسی» را باز کنید، تیک «محاسبه خودکار قیمت» را بزنید و نوع و ظرفیت را انتخاب کرده و محصول را ذخیره کنید.</p>';
+			}
+
+			if ( ! empty( $log ) ) {
+				echo '<p><strong>گزارش محصولاتی که به‌روز نشدند:</strong></p><ul style="list-style:disc;margin-right:20px">';
+				foreach ( $log as $item ) {
+					$name = isset( $item['name'] ) && '' !== $item['name'] ? $item['name'] : 'محصول';
+					printf(
+						'<li><strong>%s</strong> (به‌روز شد: %d) — %s</li>',
+						esc_html( $name ),
+						esc_html( isset( $item['updated'] ) ? (int) $item['updated'] : 0 ),
+						esc_html( ! empty( $item['messages'] ) ? implode( ' ', $item['messages'] ) : '—' )
+					);
+				}
+				echo '</ul>';
+			}
+
+			echo '</div>';
 		} elseif ( isset( $_GET['ccp_saved'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
 			echo '<div class="notice notice-success is-dismissible"><p>تنظیمات ذخیره شد.</p></div>';
 		}
@@ -72,10 +101,9 @@ class CCP_Settings {
 		$args = array( 'page' => 'ccp-settings' );
 
 		if ( ! empty( $_POST['ccp_recalculate'] ) ) {
-			$stats                = CCP_Calculator::update_all_prices();
-			$args['ccp_updated']  = 1;
-			$args['ccp_products'] = $stats['products'];
-			$args['ccp_prices']   = $stats['prices'];
+			$stats = CCP_Calculator::update_all_prices();
+			set_transient( 'ccp_last_run', $stats, 60 );
+			$args['ccp_updated'] = 1;
 		} else {
 			$args['ccp_saved'] = 1;
 		}
