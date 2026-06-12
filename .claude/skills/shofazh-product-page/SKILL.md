@@ -205,6 +205,36 @@ Embed inside `<script type="application/ld+json">` blocks:
 - `FAQPage` (mirror all FAQs from accordion)
 - `BreadcrumbList` (Home > Category > Subcategory > Product)
 
+**Google Rich Results compliance (MANDATORY — prevents critical/non-critical errors in the Rich Results Test):**
+
+1. **Price auto-injection script**: The `Product` JSON-LD `<script>` tag MUST have a unique `id` (e.g. `id="[product-slug]-product-schema"`). The static schema sets `"price": "0"` as a fallback, and a plain-JS snippet placed after the JSON-LD blocks reads the live WooCommerce price from the page DOM and patches the schema at runtime (Googlebot renders JS, so the injected price is seen by the Rich Results Test). The script must:
+   - Try WooCommerce selectors in priority order, sale price (`ins`) first:
+     `.summary .price ins .woocommerce-Price-amount bdi`, `.summary .price ins .woocommerce-Price-amount`, `.summary .price .woocommerce-Price-amount bdi`, `.summary .price .woocommerce-Price-amount`, `.product .price ins .woocommerce-Price-amount`, `.product .price .woocommerce-Price-amount`
+   - Convert Persian/Arabic digits to English and strip non-digits
+   - Detect the currency symbol: if it contains "تومان", multiply by 10 and report as `IRR` (Google only accepts ISO currencies)
+   - Parse the JSON-LD by its `id`, set `offers.price` and `offers.priceCurrency = "IRR"`, re-serialize; on any failure leave the schema untouched
+   - Run on `DOMContentLoaded` (or immediately if already loaded)
+   - See `jgn80-2-product-content.html` in the repo root for the canonical implementation to copy
+
+2. **`offers.hasMerchantReturnPolicy`** (fixes non-critical warning):
+   ```json
+   {"@type": "MerchantReturnPolicy", "applicableCountry": "IR",
+    "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+    "merchantReturnDays": 7, "returnMethod": "https://schema.org/ReturnByMail",
+    "returnFees": "https://schema.org/FreeReturn"}
+   ```
+
+3. **`offers.shippingDetails`** (fixes non-critical warning):
+   ```json
+   {"@type": "OfferShippingDetails",
+    "shippingDestination": {"@type": "DefinedRegion", "addressCountry": "IR"},
+    "deliveryTime": {"@type": "ShippingDeliveryTime",
+      "handlingTime": {"@type": "QuantitativeValue", "minValue": 0, "maxValue": 1, "unitCode": "DAY"},
+      "transitTime": {"@type": "QuantitativeValue", "minValue": 1, "maxValue": 4, "unitCode": "DAY"}}}
+   ```
+
+4. In the final report to the user, remind them to re-run the page through Google's Rich Results Test after publishing to confirm the injected price resolves (fallback `"0"` means the selectors didn't match).
+
 ### Step 5: Build HTML
 - Copy `.ran25-wrap` CSS framework exactly as-is from RAN25 template
 - Only modify:
@@ -254,3 +284,4 @@ Do NOT paste the full HTML in chat — the file in the repo IS the deliverable. 
 - All graphics must remain inline SVG or CSS
 - File must be self-contained and paste-ready into WordPress Text/Code editor
 - Persian text only in content; English allowed in schema, CSS, and code comments
+- Never mention the brand/manufacturer of internal components (e.g. solenoid valves, control relays' makers) — refer to them generically ("شیر برقی پروگرسیو", "رله کنترل") unless the component model number itself is part of the product spec (e.g. "رله G790" is fine)
