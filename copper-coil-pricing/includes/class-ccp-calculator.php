@@ -2,7 +2,10 @@
 /**
  * منطق محاسبه قیمت
  *
- * قیمت نهایی = (وزن مخزن به کیلوگرم × فی هر کیلو ورق) + (متراژ کویل به فوت × فی هر فوت مس)
+ * منبع کویل‌دار: قیمت = (وزن مخزن × فی هر کیلو ورق) + (متراژ کویل × فی هر فوت مس)
+ * منبع دوجداره: قیمت = وزن مخزن × فی هر کیلو ورق
+ *
+ * وزن هر گونه از جداول کارخانه (CCP_Tables) بر اساس ظرفیت و ضخامت ورق خوانده می‌شود.
  *
  * @package CopperCoilPricing
  */
@@ -13,22 +16,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class CCP_Calculator {
 
-	const META_WEIGHT    = '_ccp_weight_kg';   // وزن مخزن (کیلوگرم) — روی گونه یا محصول ساده.
-	const META_COIL_FEET = '_ccp_coil_feet';   // متراژ کویل مسی (فوت) — روی محصول مادر.
-	const META_ENABLED   = '_ccp_enabled';     // فعال بودن محاسبه خودکار برای محصول.
+	const META_ENABLED  = '_ccp_enabled';   // فعال بودن محاسبه خودکار.
+	const META_TYPE     = '_ccp_type';      // نوع منبع: coil | double.
+	const META_CAPACITY = '_ccp_capacity';  // ظرفیت به لیتر.
 
 	/**
 	 * محاسبه قیمت بر اساس وزن و فوت
 	 *
 	 * @param float $weight_kg وزن به کیلوگرم.
-	 * @param float $coil_feet متراژ کویل به فوت.
+	 * @param float $coil_feet متراژ کویل به فوت (برای دوجداره صفر).
 	 * @return float|null قیمت محاسبه‌شده یا null اگر فی‌ها تنظیم نشده باشند.
 	 */
-	public static function calculate( $weight_kg, $coil_feet ) {
+	public static function calculate( $weight_kg, $coil_feet = 0 ) {
 		$price_per_kg = (float) get_option( 'ccp_price_per_kg', 0 );
 		$price_per_ft = (float) get_option( 'ccp_price_per_ft', 0 );
 
-		if ( $price_per_kg <= 0 && $price_per_ft <= 0 ) {
+		if ( $price_per_kg <= 0 ) {
 			return null;
 		}
 
@@ -39,14 +42,48 @@ class CCP_Calculator {
 			$price = ceil( $price / $rounding ) * $rounding;
 		}
 
-		/**
-		 * امکان تغییر قیمت محاسبه‌شده با فیلتر
-		 */
 		return (float) apply_filters( 'ccp_calculated_price', $price, $weight_kg, $coil_feet );
 	}
 
 	/**
-	 * به‌روزرسانی قیمت یک محصول (ساده یا متغیر به همراه همه گونه‌ها)
+	 * یافتن وزن یک گونه از جدول کارخانه بر اساس ویژگی ضخامت ورق آن
+	 *
+	 * همه ویژگی‌های گونه بررسی می‌شوند و اولین مقداری که با کلیدهای جدول
+	 * (مثل K-4 یا 4-2/5) تطبیق کند، وزن را تعیین می‌کند. ویژگی «وزن» سایت ملاک نیست.
+	 *
+	 * @param WC_Product $variation گونه محصول.
+	 * @param string     $type      coil | double.
+	 * @param int        $capacity  ظرفیت به لیتر.
+	 * @return float|null
+	 */
+	public static function resolve_variation_weight( $variation, $type, $capacity ) {
+		foreach ( $variation->get_attributes() as $taxonomy => $value ) {
+			if ( '' === $value ) {
+				continue;
+			}
+
+			// نام نمایشی ترم (برای ویژگی‌های سراسری) و خود مقدار، هر دو امتحان می‌شوند.
+			$candidates = array( $value );
+			if ( taxonomy_exists( $taxonomy ) ) {
+				$term = get_term_by( 'slug', $value, $taxonomy );
+				if ( $term ) {
+					$candidates[] = $term->name;
+				}
+			}
+
+			foreach ( $candidates as $candidate ) {
+				$weight = CCP_Tables::lookup_weight( $type, $capacity, $candidate );
+				if ( null !== $weight ) {
+					return $weight;
+				}
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * به‌روزرسانی قیمت یک محصول (متغیر به همراه همه گونه‌ها، یا ساده)
 	 *
 	 * @param int $product_id شناسه محصول مادر.
 	 * @return int تعداد قیمت‌های به‌روز شده.
@@ -61,7 +98,13 @@ class CCP_Calculator {
 			return 0;
 		}
 
-		$coil_feet = (float) $product->get_meta( self::META_COIL_FEET );
+		$type     = $product->get_meta( self::META_TYPE );
+		$capacity = (int) $product->get_meta( self::META_CAPACITY );
+		if ( ! in_array( $type, array( 'coil', 'double' ), true ) || $capacity <= 0 ) {
+			return 0;
+		}
+
+		$coil_feet = ( 'coil' === $type ) ? CCP_Tables::get_coil_feet( $capacity ) : 0;
 		$updated   = 0;
 
 		if ( $product->is_type( 'variable' ) ) {
@@ -71,8 +114,8 @@ class CCP_Calculator {
 					continue;
 				}
 
-				$weight = (float) $variation->get_meta( self::META_WEIGHT );
-				if ( $weight <= 0 ) {
+				$weight = self::resolve_variation_weight( $variation, $type, $capacity );
+				if ( null === $weight ) {
 					continue;
 				}
 
@@ -87,12 +130,13 @@ class CCP_Calculator {
 				$updated++;
 			}
 
-			// همگام‌سازی بازه قیمت محصول متغیر.
 			if ( $updated > 0 ) {
 				WC_Product_Variable::sync( $product_id );
 			}
 		} else {
-			$weight = (float) $product->get_meta( self::META_WEIGHT );
+			// محصول ساده: کمترین ضخامت موجود در جدول ملاک است.
+			$weights = CCP_Tables::get_weights( $type, $capacity );
+			$weight  = $weights ? (float) reset( $weights ) : 0;
 			if ( $weight > 0 ) {
 				$price = self::calculate( $weight, $coil_feet );
 				if ( null !== $price ) {

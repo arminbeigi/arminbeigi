@@ -2,8 +2,8 @@
 /**
  * Plugin Name: قیمت‌گذار منبع کویل مسی
  * Plugin URI: https://shofazh.com
- * Description: محاسبه خودکار قیمت منابع کویل مسی در ووکامرس. فی روز هر کیلو ورق و هر فوت کویل مسی را وارد کنید؛ افزونه قیمت هر گونه (ضخامت ورق) را بر اساس وزن مخزن و متراژ کویل محاسبه و در قیمت محصول ثبت می‌کند.
- * Version: 1.0.0
+ * Description: محاسبه خودکار قیمت منابع کویل‌دار و دوجداره در ووکامرس. فی روز هر کیلو ورق و هر فوت کویل مسی را وارد کنید؛ افزونه وزن هر ضخامت را از جدول کارخانه برمی‌دارد و قیمت هر گونه را محاسبه و ثبت می‌کند.
+ * Version: 1.1.0
  * Author: Armin Beigi
  * Text Domain: copper-coil-pricing
  * Requires at least: 5.8
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CCP_VERSION', '1.0.0' );
+define( 'CCP_VERSION', '1.1.0' );
 define( 'CCP_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CCP_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 
@@ -40,6 +40,7 @@ function ccp_init() {
 		return;
 	}
 
+	require_once CCP_PLUGIN_DIR . 'includes/class-ccp-tables.php';
 	require_once CCP_PLUGIN_DIR . 'includes/class-ccp-calculator.php';
 	require_once CCP_PLUGIN_DIR . 'includes/class-ccp-settings.php';
 	require_once CCP_PLUGIN_DIR . 'includes/class-ccp-product-fields.php';

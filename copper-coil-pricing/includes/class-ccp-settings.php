@@ -91,10 +91,11 @@ class CCP_Settings {
 		$currency     = get_woocommerce_currency_symbol();
 		?>
 		<div class="wrap" style="max-width:640px">
-			<h1>قیمت‌گذار منبع کویل مسی</h1>
-			<p>فی روز را وارد کنید و دکمه «ذخیره و به‌روزرسانی همه قیمت‌ها» را بزنید تا قیمت همه گونه‌های محصولات فعال‌شده، به‌صورت خودکار محاسبه و ثبت شود.</p>
+			<h1>قیمت‌گذار منابع کویل‌دار و دوجداره</h1>
+			<p>فی روز را وارد کنید و دکمه «ذخیره و به‌روزرسانی همه قیمت‌ها» را بزنید تا قیمت همه گونه‌های محصولات فعال‌شده، به‌صورت خودکار محاسبه و ثبت شود. وزن هر ضخامت از جدول کارخانه (تعبیه‌شده در افزونه) برداشته می‌شود.</p>
 			<p style="background:#f0f6fc;border-right:4px solid #2271b1;padding:10px 14px">
-				<strong>فرمول:</strong> قیمت گونه = (وزن مخزن × فی هر کیلو ورق) + (متراژ کویل × فی هر فوت مس)
+				<strong>منبع کویل‌دار:</strong> قیمت = (وزن مخزن × فی هر کیلو ورق) + (متراژ کویل × فی هر فوت مس)<br />
+				<strong>منبع دوجداره:</strong> قیمت = وزن مخزن × فی هر کیلو ورق
 			</p>
 
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
@@ -107,7 +108,7 @@ class CCP_Settings {
 						<td>
 							<input type="text" inputmode="decimal" id="ccp_price_per_kg" name="ccp_price_per_kg"
 								value="<?php echo esc_attr( $price_per_kg ); ?>" class="regular-text" dir="ltr" />
-							<p class="description">قیمت روز هر کیلوگرم ورق (وزن مخزن بر اساس ضخامت ورق در هر گونه تعریف می‌شود).</p>
+							<p class="description">قیمت روز هر کیلوگرم ورق — در هر دو نوع منبع استفاده می‌شود.</p>
 						</td>
 					</tr>
 					<tr>
@@ -115,7 +116,7 @@ class CCP_Settings {
 						<td>
 							<input type="text" inputmode="decimal" id="ccp_price_per_ft" name="ccp_price_per_ft"
 								value="<?php echo esc_attr( $price_per_ft ); ?>" class="regular-text" dir="ltr" />
-							<p class="description">قیمت روز هر فوت کویل مسی (متراژ کویل در تب «کویل مسی» هر محصول تعریف می‌شود).</p>
+							<p class="description">قیمت روز هر فوت کویل مسی — فقط برای منابع کویل‌دار؛ متراژ هر ظرفیت از جدول کارخانه خوانده می‌شود.</p>
 						</td>
 					</tr>
 					<tr>
@@ -139,10 +140,43 @@ class CCP_Settings {
 			<hr />
 			<h2>راهنمای استفاده</h2>
 			<ol>
-				<li>در ویرایش محصول، در تب <strong>«کویل مسی»</strong> گزینه «محاسبه خودکار قیمت» را فعال کرده و <strong>متراژ کویل مسی (فوت)</strong> را وارد کنید.</li>
-				<li>برای محصول متغیر، در هر گونه (ضخامت ورق) فیلد <strong>«وزن مخزن (کیلوگرم)»</strong> را وارد کنید.</li>
+				<li>در ویرایش هر محصول، در تب <strong>«قیمت کویل مسی»</strong> گزینه «محاسبه خودکار قیمت» را فعال کنید.</li>
+				<li><strong>نوع منبع</strong> (کویل‌دار یا دوجداره) و <strong>ظرفیت</strong> آن را انتخاب کنید — همین کافی است.</li>
+				<li>ضخامت ورق هر گونه از ویژگی همان گونه (مثل K-4 یا 4-2/5) تشخیص داده می‌شود و وزنش از جدول زیر برداشته می‌شود.</li>
 				<li>با ذخیره محصول یا با دکمه بالا، قیمت‌ها به‌صورت خودکار محاسبه و ثبت می‌شوند.</li>
 			</ol>
+
+			<h2>جدول منابع کویل‌دار</h2>
+			<table class="widefat striped" style="max-width:640px">
+				<thead><tr><th>ظرفیت (لیتر)</th><th>کویل (فوت)</th><th>K-4</th><th>K-5</th><th>K-6</th><th>K-8</th></tr></thead>
+				<tbody>
+				<?php foreach ( CCP_Tables::coil_table() as $cap => $row ) : ?>
+					<tr>
+						<td><?php echo esc_html( $cap ); ?></td>
+						<td><?php echo esc_html( $row['feet'] ); ?></td>
+						<?php foreach ( array( 'k-4', 'k-5', 'k-6', 'k-8' ) as $k ) : ?>
+							<td><?php echo isset( $row['weights'][ $k ] ) ? esc_html( $row['weights'][ $k ] ) : '—'; ?></td>
+						<?php endforeach; ?>
+					</tr>
+				<?php endforeach; ?>
+				</tbody>
+			</table>
+
+			<h2>جدول منابع دوجداره</h2>
+			<table class="widefat striped" style="max-width:640px">
+				<thead><tr><th>ظرفیت (لیتر)</th><th>4-2</th><th>4-2/5</th><th>4-3</th><th>5-2/5</th><th>5-3</th></tr></thead>
+				<tbody>
+				<?php foreach ( CCP_Tables::double_table() as $cap => $row ) : ?>
+					<tr>
+						<td><?php echo esc_html( $cap ); ?></td>
+						<?php foreach ( array( '4-2', '4-2/5', '4-3', '5-2/5', '5-3' ) as $k ) : ?>
+							<td><?php echo isset( $row[ $k ] ) ? esc_html( $row[ $k ] ) : '—'; ?></td>
+						<?php endforeach; ?>
+					</tr>
+				<?php endforeach; ?>
+				</tbody>
+			</table>
+			<p class="description">وزن‌ها به کیلوگرم. این جداول داخل افزونه تعبیه شده‌اند؛ برای تغییر، فایل <code>includes/class-ccp-tables.php</code> را ویرایش کنید.</p>
 		</div>
 		<?php
 	}
