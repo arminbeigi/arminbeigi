@@ -62,10 +62,15 @@ class CCP_Calculator {
 				continue;
 			}
 
-			// نام نمایشی ترم (برای ویژگی‌های سراسری) و خود مقدار، هر دو امتحان می‌شوند.
-			$candidates = array( $value );
+			// مقدار خام و نسخه دیکدشده‌ی آن (ووکامرس اسلاگ فارسی را به‌صورت
+			// URL-encode مثل «%db%b4-...» برمی‌گرداند) و نام نمایشی ترم، همگی امتحان می‌شوند.
+			$candidates = array( $value, urldecode( $value ), rawurldecode( $value ) );
+
 			if ( taxonomy_exists( $taxonomy ) ) {
 				$term = get_term_by( 'slug', $value, $taxonomy );
+				if ( ! $term ) {
+					$term = get_term_by( 'slug', urldecode( $value ), $taxonomy );
+				}
 				if ( $term ) {
 					$candidates[] = $term->name;
 				}
