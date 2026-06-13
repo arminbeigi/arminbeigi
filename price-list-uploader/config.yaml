@@ -9,8 +9,8 @@ wordpress:
 price_list_page_slug: "price-lists"
 
 folders:
-  watch: "./watch_folder"
-  uploaded: "./uploaded"
+  watch: "/Users/armin/Desktop/لیست قیمت"
+  uploaded: "/Users/armin/Desktop/لیست قیمت/آپلود شده"
 
 # پسوندهای مجاز
 allowed_extensions:
@@ -21,4 +21,4 @@ allowed_extensions:
 
 general:
   log_level: "INFO"
-  move_after_upload: true
+  move_after_upload: false
