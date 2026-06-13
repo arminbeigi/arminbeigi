@@ -1,0 +1,514 @@
+<style>
+.ran25-wrap{
+  --blue:#1565C0; --orange:#FF6F00; --green:#2E7D32; --warning:#F57F17;
+  --danger:#C62828; --bg:#F8FAFF; --card:#FFFFFF; --text:#243447; --muted:#5b6b7d;
+  --steel:#455A64; --steel-light:#607D8B;
+  direction:rtl; text-align:right; background:var(--bg); color:var(--text);
+  font-family:Tahoma,"IRANSans","Vazirmatn",sans-serif; line-height:2;
+  padding:18px; border-radius:18px; font-size:16px;
+  counter-reset:sec; position:relative; overflow:hidden;
+  background-image:
+    radial-gradient(circle at 20% 30%,rgba(21,101,192,.05) 1px,transparent 2px),
+    radial-gradient(circle at 80% 70%,rgba(255,111,0,.04) 1px,transparent 2px),
+    linear-gradient(var(--bg),var(--bg));
+  background-size:50px 50px,70px 70px,100% 100%;
+}
+.ran25-wrap *{box-sizing:border-box}
+.ran25-wrap > h2{
+  counter-increment:sec; position:relative;
+  background:linear-gradient(135deg,#fff 0%,#EAF2FF 100%);
+  border:none; border-top:5px solid var(--blue);
+  border-radius:18px; padding:26px 96px 26px 24px;
+  margin:70px 0 24px; font-size:22px; color:var(--blue);
+  box-shadow:0 12px 32px rgba(20,40,70,.09);
+  line-height:1.5;
+}
+.ran25-wrap > h2::before{
+  content:counter(sec,decimal-leading-zero);
+  position:absolute; right:22px; top:50%; transform:translateY(-50%);
+  width:62px; height:68px;
+  clip-path:polygon(25% 5%,75% 5%,100% 50%,75% 95%,25% 95%,0 50%);
+  background:linear-gradient(135deg,var(--orange) 0%,#E65100 60%,#FF8F00 100%);
+  color:#fff; text-align:center; line-height:68px; font-size:19px; font-weight:bold;
+  filter:drop-shadow(0 6px 14px rgba(255,111,0,.5));
+  letter-spacing:1px;
+}
+.ran25-wrap > h2::after{
+  content:""; position:absolute; top:-40px; right:50%;
+  transform:translateX(50%); width:140px; height:5px; border-radius:3px;
+  background:linear-gradient(90deg,transparent,var(--orange) 50%,transparent);
+  opacity:.7;
+}
+.ran25-wrap > h2:first-of-type::after{display:none}
+.ran25-wrap > h2:nth-of-type(3n+2){border-top-color:var(--orange)}
+.ran25-wrap > h2:nth-of-type(3n+2)::before{background:linear-gradient(135deg,var(--blue) 0%,#0D47A1 60%,#1E88E5 100%);filter:drop-shadow(0 6px 14px rgba(21,101,192,.5))}
+.ran25-wrap > h2:nth-of-type(3n+2)::after{background:linear-gradient(90deg,transparent,var(--blue) 50%,transparent)}
+.ran25-wrap > h2:nth-of-type(3n){border-top-color:var(--green)}
+.ran25-wrap > h2:nth-of-type(3n)::before{background:linear-gradient(135deg,var(--green) 0%,#1B5E20 60%,#43A047 100%);filter:drop-shadow(0 6px 14px rgba(46,125,50,.5))}
+.ran25-wrap > h2:nth-of-type(3n)::after{background:linear-gradient(90deg,transparent,var(--green) 50%,transparent)}
+.ran25-summary h2,.ran25-cta h2{
+  counter-increment:none; background:none; border:none; border-radius:0;
+  padding:0; margin:0 0 10px; color:#fff; box-shadow:none;
+}
+.ran25-summary h2::before,.ran25-summary h2::after,
+.ran25-cta h2::before,.ran25-cta h2::after{display:none}
+.ran25-wrap h3{color:var(--blue); font-size:20px; margin:26px 0 12px}
+.ran25-wrap h4{color:var(--orange); font-size:18px; margin:20px 0 10px}
+.ran25-wrap p{margin:12px 0; color:var(--text)}
+@keyframes fadeInUp{from{opacity:.01;transform:translateY(34px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulseBorder{0%,100%{box-shadow:-5px 0 0 0 currentColor inset}50%{box-shadow:-11px 0 0 0 currentColor inset}}
+@keyframes pop{0%{transform:scale(0) rotate(-45deg);opacity:0}60%{transform:scale(1.25) rotate(0)}100%{transform:scale(1) rotate(0);opacity:1}}
+@keyframes fillBar{from{width:0}to{width:var(--w,100%)}}
+@keyframes slideInUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 currentColor}50%{box-shadow:0 0 0 10px rgba(255,111,0,0)}}
+.ran25-wrap .anim{animation:fadeInUp .7s ease both}
+.ran25-wrap .d1{animation-delay:.05s}.ran25-wrap .d2{animation-delay:.15s}
+.ran25-wrap .d3{animation-delay:.25s}.ran25-wrap .d4{animation-delay:.35s}
+.ran25-wrap .d5{animation-delay:.45s}.ran25-wrap .d6{animation-delay:.55s}
+.ran25-summary{
+  background:linear-gradient(135deg,#1565C0 0%,#1E88E5 60%,#42A5F5 100%);
+  color:#fff;border-radius:18px;padding:26px 28px;margin-bottom:8px;
+  box-shadow:0 14px 34px rgba(21,101,192,.28);position:relative;overflow:hidden;
+}
+.ran25-summary::after{content:"";position:absolute;top:-40px;left:-40px;width:160px;height:160px;
+  background:rgba(255,255,255,.12);border-radius:50%}
+.ran25-summary h2{color:#fff;border:none;padding:0;margin:0 0 10px}
+.ran25-summary p{color:#eaf4ff;position:relative;z-index:1}
+.ran25-card{background:var(--card);border-radius:16px;padding:20px 24px;margin:18px 0;
+  box-shadow:0 8px 24px rgba(20,40,70,.07);transition:transform .3s ease,box-shadow .3s ease;
+  position:relative;overflow:hidden}
+.ran25-card::before{content:"";position:absolute;top:-20px;left:-20px;width:80px;height:80px;opacity:.08;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='%231565C0'><path d='M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z'/></svg>");
+  background-repeat:no-repeat;background-size:contain;animation:rotate 28s linear infinite;pointer-events:none}
+.ran25-card:hover{transform:translateY(-6px) scale(1.012);box-shadow:0 18px 40px rgba(20,40,70,.16)}
+.ran25-box{border-radius:14px;padding:16px 20px 16px 24px;margin:18px 0;position:relative;
+  border-right:6px solid;animation:pulseBorder 2.4s ease-in-out infinite}
+.ran25-tip{background:#FFF8E1;border-color:var(--warning);color:var(--warning)}
+.ran25-tip *{color:#7a5b00}
+.ran25-warn{background:#FDECEA;border-color:var(--danger);color:var(--danger)}
+.ran25-warn *{color:#8c1d18}
+.ran25-good{background:#E8F5E9;border-color:var(--green);color:var(--green)}
+.ran25-good *{color:#1b5e20}
+.ran25-list{list-style:none;padding:0;margin:14px 0}
+.ran25-list li{position:relative;padding:8px 38px 8px 8px;margin:8px 0;background:var(--card);
+  border-radius:12px;box-shadow:0 4px 14px rgba(20,40,70,.06);
+  animation:fadeInUp .55s ease both;transition:transform .25s ease}
+.ran25-list li:hover{transform:translateX(-6px)}
+.ran25-list li::before{content:"✓";position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  width:24px;height:24px;border-radius:50%;background:var(--blue);color:#fff;text-align:center;
+  line-height:24px;font-size:14px;font-weight:bold;animation:pop .5s ease forwards}
+.ran25-pros li::before{background:var(--green)}
+.ran25-cons li::before{content:"✕";background:var(--danger)}
+.ran25-tablewrap{overflow-x:auto;margin:16px 0;border-radius:14px;box-shadow:0 8px 24px rgba(20,40,70,.08)}
+.ran25-wrap table{width:100%;border-collapse:collapse;background:var(--card);min-width:340px}
+.ran25-wrap th{background:linear-gradient(135deg,var(--blue),#1E88E5);color:#fff;padding:13px 14px;
+  font-size:15px;text-align:right}
+.ran25-wrap td{padding:12px 14px;border-bottom:1px solid #eef2f8;font-size:15px}
+.ran25-wrap tr:nth-child(even) td{background:#F5F9FF}
+.ran25-wrap tr:hover td{background:#EAF2FF}
+.ran25-wrap td:first-child{font-weight:bold;color:var(--blue)}
+.ran25-faq details{background:var(--card);border-radius:12px;margin:10px 0;padding:0;
+  box-shadow:0 4px 14px rgba(20,40,70,.06);overflow:hidden;border-right:5px solid var(--blue);
+  transition:box-shadow .3s ease}
+.ran25-faq details[open]{box-shadow:0 12px 30px rgba(21,101,192,.16)}
+.ran25-faq summary{cursor:pointer;padding:15px 18px;font-weight:bold;color:var(--blue);
+  list-style:none;position:relative;padding-left:44px;transition:background .25s ease}
+.ran25-faq summary:hover{background:#F0F6FF}
+.ran25-faq summary::-webkit-details-marker{display:none}
+.ran25-faq summary::after{content:"+";position:absolute;left:16px;top:50%;transform:translateY(-50%);
+  width:26px;height:26px;border-radius:50%;background:var(--orange);color:#fff;text-align:center;
+  line-height:26px;font-size:18px;transition:transform .3s ease}
+.ran25-faq details[open] summary::after{content:"−";transform:translateY(-50%) rotate(180deg)}
+.ran25-faq .ans{padding:4px 18px 18px;color:var(--muted)}
+.ran25-wrap a{color:var(--blue);text-decoration:none;border-bottom:1px dashed var(--blue);transition:color .2s ease,border-color .2s ease}
+.ran25-wrap a:hover{color:var(--orange);border-bottom-color:var(--orange)}
+.ran25-cta{background:linear-gradient(135deg,#0D2B52 0%,#0D47A1 55%,#1565C0 100%);
+  color:#fff;border-radius:20px;padding:34px 28px;margin:34px 0 10px;text-align:center;
+  box-shadow:0 18px 44px rgba(13,43,82,.4);position:relative;overflow:hidden}
+.ran25-cta h2{color:#fff;border:none;padding:0;justify-content:center;position:relative;z-index:2}
+.ran25-cta p{position:relative;z-index:2;color:#cfe2ff}
+.ran25-btn{display:inline-block;margin-top:14px;padding:16px 46px;border-radius:50px;
+  background:linear-gradient(135deg,var(--orange),#FFA000);color:#fff;font-weight:bold;font-size:18px;
+  text-decoration:none;position:relative;overflow:hidden;box-shadow:0 10px 26px rgba(255,111,0,.45);
+  transition:transform .25s ease;animation:pulse 2s ease-in-out infinite}
+.ran25-btn:hover{transform:scale(1.06)}
+.ran25-photo{position:relative;background:linear-gradient(135deg,#F0F6FF 0%,#E1ECFE 100%);
+  border-radius:18px;padding:24px;margin:24px 0;box-shadow:0 12px 32px rgba(20,40,70,.1);overflow:hidden}
+.ran25-photo::before{content:"";position:absolute;inset:0;opacity:.5;pointer-events:none;
+  background-image:linear-gradient(rgba(21,101,192,.06) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(21,101,192,.06) 1px,transparent 1px);
+  background-size:30px 30px}
+.ran25-photo-title{text-align:center;font-weight:bold;color:var(--blue);font-size:17px;margin-bottom:12px;position:relative;z-index:1}
+.ran25-photo-hint{text-align:center;font-size:13px;color:var(--muted);margin-top:14px;position:relative;z-index:1}
+.ran25-photo-stage{position:relative!important;max-width:760px;margin:0 auto;display:block;z-index:1;overflow:visible}
+.ran25-photo-stage img{width:100%;height:auto;display:block;border-radius:12px;box-shadow:0 8px 24px rgba(20,40,70,.18);background:#fff;position:relative;z-index:1}
+.ran25-spot{position:absolute;width:22px;height:22px;border-radius:50%;
+  background:radial-gradient(circle,#FF6F00 0%,#FF6F00 40%,transparent 70%);transform:translate(50%,-50%);z-index:3}
+.ran25-spot::before,.ran25-spot::after{content:"";position:absolute;inset:0;border-radius:50%;border:3px solid #FF6F00}
+@keyframes hotspot{0%{transform:scale(1);opacity:.9}100%{transform:scale(2.6);opacity:0}}
+.ran25-spot.blue{background:radial-gradient(circle,#1565C0 0%,#1565C0 40%,transparent 70%)}
+.ran25-spot.blue::before,.ran25-spot.blue::after{border-color:#1565C0}
+.ran25-spot.green{background:radial-gradient(circle,#2E7D32 0%,#2E7D32 40%,transparent 70%)}
+.ran25-spot.green::before,.ran25-spot.green::after{border-color:#2E7D32}
+.ran25-spot.yellow{background:radial-gradient(circle,#F57F17 0%,#F57F17 40%,transparent 70%)}
+.ran25-spot.yellow::before,.ran25-spot.yellow::after{border-color:#F57F17}
+.ran25-callout{position:absolute;background:#fff;border:2px solid #FF6F00;border-radius:10px;
+  padding:8px 12px;font-size:12px;font-weight:bold;color:#FF6F00;z-index:4;
+  box-shadow:0 6px 16px rgba(20,40,70,.18);min-width:120px;text-align:center;
+  opacity:1;line-height:1.4}
+.ran25-callout small{display:block;font-size:10px;color:var(--muted);font-weight:normal;margin-top:2px}
+.ran25-callout.blue{border-color:#1565C0;color:#1565C0}
+.ran25-callout.green{border-color:#2E7D32;color:#2E7D32}
+.ran25-ticker{position:relative;overflow:hidden;border-radius:14px;padding:0;margin:28px 0;
+  background:radial-gradient(ellipse at center,#0D47A1 0%,#0A2F6B 100%);
+  box-shadow:0 8px 22px rgba(13,71,161,.35),inset 0 0 0 1px rgba(255,255,255,.06)}
+.ran25-ticker::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(circle at 20% 30%,rgba(255,255,255,.08) 1px,transparent 2px),
+    radial-gradient(circle at 70% 70%,rgba(255,255,255,.06) 1px,transparent 2px);
+  background-size:60px 60px,40px 40px}
+.ran25-ticker::after{content:"";position:absolute;top:0;bottom:0;left:0;width:50px;z-index:3;
+  background:linear-gradient(90deg,#0A2F6B,transparent);pointer-events:none}
+.ran25-ticker .fade-r{position:absolute;top:0;bottom:0;right:0;width:50px;z-index:3;
+  background:linear-gradient(-90deg,#0A2F6B,transparent);pointer-events:none}
+.ran25-ticker-track{display:flex;align-items:center;gap:48px;padding:18px 0;width:max-content;
+  animation:tickerSlide 38s linear infinite}
+.ran25-ticker:hover .ran25-ticker-track{animation-play-state:paused}
+.ran25-ticker-track span{color:#E3F2FD;font-size:15px;font-weight:bold;white-space:nowrap;display:flex;align-items:center;gap:14px}
+.ran25-ticker-track span svg{flex-shrink:0;color:#FF8F00}
+@keyframes tickerSlide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ran25-calculator-promo{background:linear-gradient(135deg,#0d47a1 0%,#1565c0 50%,#1976d2 100%);
+  border-radius:18px;padding:32px 28px;margin:42px 0;color:#fff;box-shadow:0 14px 40px rgba(13,71,161,.3);
+  position:relative;overflow:hidden;animation:slideInUp 0.8s ease-out}
+.ran25-calculator-promo::before{content:"";position:absolute;inset:0;opacity:.15;
+  background-image:repeating-linear-gradient(45deg,#fff 0 2px,transparent 2px 14px);pointer-events:none}
+.ran25-calculator-promo h3{color:#fff;margin-top:0}
+.ran25-calculator-promo p{color:#e3f2fd;margin:12px 0}
+.ran25-calculator-promo video{max-width:100%;border-radius:12px;box-shadow:0 8px 20px rgba(0,0,0,.2);
+  margin:16px 0;display:block}
+.ran25-calculator-promo .calc-btn{background:#fff;color:#0d47a1;border:none;padding:12px 24px;
+  border-radius:50px;font-weight:bold;cursor:pointer;text-decoration:none;display:inline-block;
+  margin-top:16px;box-shadow:0 6px 16px rgba(0,0,0,.15);transition:all .3s ease;animation:pulse 2s ease-in-out infinite}
+.ran25-calculator-promo .calc-btn:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,.2)}
+.ran25-wrap{max-width:100%!important;overflow-x:hidden!important;contain:layout paint!important;isolation:isolate!important}
+.ran25-wrap > *:not(.ran25-ticker-track){max-width:100%}
+.ran25-ticker-track{max-width:none!important;width:max-content!important}
+.ran25-photo{max-width:100%!important;box-sizing:border-box!important;contain:layout!important;overflow:visible!important}
+@media(max-width:600px){
+  .ran25-wrap{padding:12px;font-size:15px}
+  .ran25-wrap > h2{font-size:19px;padding:22px 80px 22px 18px;margin-top:50px}
+  .ran25-btn{width:100%}
+  .ran25-calculator-promo{padding:20px 16px}
+}
+@media(prefers-reduced-motion:reduce){
+  .ran25-wrap *{animation:none!important;opacity:1!important}
+}
+</style>
+
+<div class="ran25-wrap">
+
+  <div class="ran25-summary anim d1">
+    <h2>خلاصه سریع</h2>
+    <p>مبدل صفحه‌ای براژ‌شده هپاکو (HEPACO) یک مبدل حرارتی استنلس استیل 316 است که برای انتقال حرارت آب‌به‌آب در سیستم‌های گرمایش، سرمایش و بازیابی انرژی استفاده می‌شود. با ظرفیت‌های متنوع (۲۰ تا ۹۰۰ هزار کیلوکالری بر ساعت)، فشار کاری تا ۳۰ بار، دمای کاری -۱۹۶ تا ۲۰۰ درجه سانتی‌گراد، و راندمان بیش از ۹۵ درصد، این مبدل‌ها برترین انتخاب برای صنایع مختلف است.</p>
+  </div>
+
+  <div class="ran25-card anim d2">
+    <h3>مشخصات کلیدی</h3>
+    <ul class="ran25-list">
+      <li>نوع: مبدل صفحه‌ای براژ‌شده (Brazed Plate)</li>
+      <li>ماده: استنلس استیل 316 (ضد زنگ)</li>
+      <li>ظرفیت: ۲۰٬۰۰۰ تا ۹۰۰٬۰۰۰ kcal/hr</li>
+      <li>فشار کاری: تا ۳۰ bar (تست ۴۵ bar)</li>
+      <li>دمای کاری: -۱۹۶°C تا ۲۰۰°C</li>
+      <li>راندمان: بیش از ۹۵%</li>
+      <li>ضریب انتقال حرارت: ۵۰۰۰ w/m²°C</li>
+      <li>صرفه‌جویی انرژی: تا ۴۰%</li>
+    </ul>
+  </div>
+
+  <div class="ran25-ticker anim d3" aria-hidden="true">
+    <div class="fade-r"></div>
+    <div class="ran25-ticker-track">
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>فشار کاری تا ۳۰ بار</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>استنلس استیل ۳۱۶</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>راندمان بیش از ۹۵%</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>دمای کاری -۱۹۶ تا ۲۰۰°C</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>صرفه‌جویی انرژی تا ۴۰%</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>فشار کاری تا ۳۰ بار</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>استنلس استیل ۳۱۶</span>
+    </div>
+  </div>
+
+  <h2 class="anim d1">مبدل صفحه‌ای هپاکو چیست؟</h2>
+  <p>مبدل حرارتی صفحه‌ای براژ‌شده هپاکو (HEPACO Brazed Plate Heat Exchanger) یک دستگاه فشرده و کارآمد است که حرارت را بین دو سیال متفاوت منتقل می‌کند. این مبدل‌ها از صفحات فولادی ضد زنگ (استنلس استیل 316) ساخته شده‌اند که به‌وسیله براز (برازینگ) به‌هم متصل شده‌اند. این روش نسبت به جوشکاری قدرتمند‌تر است و دوام بیشتری را تضمین می‌کند.</p>
+  <p>هپاکو مبدل‌های خود را برای سیستم‌های آب‌به‌آب (Water-to-Water) طراحی کرده است، به‌طوری که جریان دو مدار آبی به‌صورت موازی و با جهت مخالف یکدیگر عبور می‌کند. این ترتیب (counter-flow) بیشترین انتقال حرارت را فراهم می‌آورد و راندمان سیستم را تا ۹۵ درصد افزایش می‌دهد.</p>
+  <div class="ran25-box ran25-tip anim d2">
+    <strong>نکته مهم</strong>
+    استفاده از فیلتر صافی استنلس‌استیلی در تمام سیستم‌های مبدل حرارتی هپاکو ضروری است. این فیلتر مانع ورود ذرات معلق و نادک به مبدل شده و عمر آن را افزایش می‌دهد.
+  </div>
+
+  <h2 class="anim d1">مشخصات فنی و ظرفیت‌های متنوع</h2>
+  <p>هپاکو مبدل‌های صفحه‌ای خود را در ۱۹ مدل مختلف تولید می‌کند که از ۲۰ هزار تا ۹۰۰ هزار کیلوکالری بر ساعت ظرفیت حرارتی را پوشش می‌دهند. این تنوع به‌معنای آن است که برای هر کاربرد، از موتورخانه‌های کوچک خانگی تا کارخانه‌های بزرگ صنعتی، مبدل مناسب وجود دارد.</p>
+  <div class="ran25-tablewrap anim d2">
+    <table>
+      <tr><th>مدل</th><th>ظرفیت (kcal/hr)</th><th>دبی (m³/h)</th><th>ابعاد (mm)</th><th>وزن (kg)</th></tr>
+      <tr><td>HP-40</td><td>۲۰٬۰۰۰</td><td>۱٫۲</td><td>۴۰×۱۹۳×۸۴</td><td>۱٫۲</td></tr>
+      <tr><td>HP-50</td><td>۲۵٬۰۰۰</td><td>۱٫۳</td><td>۵۰×۱۹۳×۸۴</td><td>۱٫۳</td></tr>
+      <tr><td>HP-100</td><td>۵۰٬۰۰۰</td><td>۲٫۲</td><td>۱۰۰×۱۹۳×۸۴</td><td>۲٫۲</td></tr>
+      <tr><td>HP-200</td><td>۱۰۰٬۰۰۰</td><td>۳٫۶</td><td>۲۰۰×۳۱۱×۱۱۱</td><td>۳٫۶</td></tr>
+      <tr><td>HP-500</td><td>۲۵۰٬۰۰۰</td><td>۹٫۴۲</td><td>۵۰۰×۵۲۷×۱۲۰</td><td>۹٫۴۲</td></tr>
+      <tr><td>HP-750</td><td>۳۷۵٬۰۰۰</td><td>۱۶٫۶</td><td>۷۵۰×۵۳۰×۲۵۰</td><td>۱۶٫۶</td></tr>
+      <tr><td>HP-1200</td><td>۶۰۰٬۰۰۰</td><td>۲۳</td><td>۱۲۰۰×۵۳۰×۲۵۰</td><td>۲۳</td></tr>
+      <tr><td>HP-1800</td><td>۹۰۰٬۰۰۰</td><td>۳۵</td><td>۱۸۰۰×۵۳۰×۲۵۰</td><td>۳۵</td></tr>
+    </table>
+  </div>
+
+  <h2 class="anim d1">کاربردهای عملی و موارد استفاده</h2>
+  <p>مبدل‌های حرارتی هپاکو در کاربردهای متنوعی به‌کار می‌روند، از سیستم‌های آب‌گرم‌کن تا فرآیندهای صنعتی پیچیده:</p>
+  <ul class="ran25-list">
+    <li><strong>سیستم‌های گرمایش</strong>: گرمایش آب مصرفی بهداشتی (SHW) در خانه‌های مسکونی و ساختمان‌های تجاری</li>
+    <li><strong>تهویه مطبوع و سرمایش</strong>: افزایش COP سیکل سرمایی در کولرهای صنعتی</li>
+    <li><strong>پمپ‌های گرمایی</strong> (Heat Pumps): انتقال حرارت بین منبع و مخزن</li>
+    <li><strong>استخر و جکوزی</strong>: گرمایش فوری و کنترل‌شده آب استخر</li>
+    <li><strong>گرمایش از کف</strong> (Radiant Floor): توزیع حرارت یکنواخت در سراسر فضا</li>
+    <li><strong>گرمایش خورشیدی</strong>: انتقال حرارت از صفحات خورشیدی به مخزن</li>
+    <li><strong>بازیابی انرژی گرمایی</strong>: استخراج و بازیابی گرمای هدررفت از فرآیندها</li>
+    <li><strong>خشک‌کن هوای فشرده</strong>: خنک‌کردن هوای فشرده در کمپرسورها</li>
+    <li><strong>صنایع غذایی و دارویی</strong>: کنترل دما در فرآیندهای پاستوریزاسیون و استریلیزاسیون</li>
+    <li><strong>صنایع نفت و گاز</strong>: نیروگاهها، تصفیه‌خانه‌ها و پتروشیمی</li>
+    <li><strong>سیستم‌های ORC</strong>: چرخه‌های ترمودینامیکی برای تولید برق</li>
+  </ul>
+
+  <h2 class="anim d1">مزایا و ویژگی‌های منحصر به‌فرد</h2>
+  <p>چرا باید مبدل‌های هپاکو را انتخاب کنید؟ دلایل متعددی وجود دارد:</p>
+  <div class="ran25-card anim d2">
+    <h3>✓ مزایای طراحی و عملکرد</h3>
+    <ul class="ran25-pros ran25-list">
+      <li><strong>کاهش ۴۰ درصدی مصرف انرژی</strong> در مقایسه با سیستم‌های سنتی</li>
+      <li><strong>راندمان ۹۵ درصدی</strong> در انتقال حرارت بین دو سیال</li>
+      <li><strong>ضریب انتقال حرارت بسیار بالا</strong> (۵۰۰۰ w/m²°C)</li>
+      <li><strong>ابعاد جمع‌و‌جور و وزن کم</strong> در مقایسه با مبدل‌های لوله‌ای سنتی</li>
+      <li><strong>رسوب‌پذیری پائین</strong> و دوام عمر بیشتر</li>
+      <li><strong>مقاومت به فشار بالا</strong> (تا ۳۰ bar فشار دائم، ۴۵ bar تست)</li>
+      <li><strong>دامنه دمایی وسیع</strong> (-۱۹۶ تا ۲۰۰°C)</li>
+      <li><strong>ساختار یکپارچه براژ‌شده</strong> بدون نقاط ضعیف</li>
+    </ul>
+  </div>
+
+  <div class="ran25-box ran25-good anim d3">
+    <strong>نتیجه‌گیری</strong>
+    مبدل‌های صفحه‌ای هپاکو راه‌حل بهینه برای بخش‌های مسکونی، تجاری و صنعتی هستند. با سرمایه‌گذاری یکبار، سال‌های طولانی صرفه‌جویی در انرژی و هزینه‌های نگهداری را فراهم می‌کنند.
+  </div>
+
+  <div class="ran25-calculator-promo anim d2">
+    <h3>📊 محاسبه‌گر ظرفیت حرارتی شوفاژ</h3>
+    <p>قبل از انتخاب مبدل حرارتی یا کیلر مناسب، ظرفیت حرارتی مورد نیاز خود را به‌دقت محاسبه کنید.</p>
+    <p><strong>شوفاژ.کام یک ابزار آنلاین رایگان فراهم کرده است</strong> که بر اساس متراژ، نوع عایق‌بندی و شرایط آب‌و‌هوا، دقیقاً محاسبه می‌کند چه ظرفیتی برای فضای شما لازم است.</p>
+
+    <svg style="display:inline-block; margin-right: 10px;" width="32" height="32" viewBox="0 0 100 100" fill="#fff">
+      <rect x="25" y="10" width="50" height="30" rx="3" fill="none" stroke="#fff" stroke-width="3"/>
+      <line x1="35" y1="45" x2="65" y2="45" stroke="#fff" stroke-width="2"/>
+      <line x1="35" y1="55" x2="65" y2="55" stroke="#fff" stroke-width="2"/>
+      <path d="M 50 60 Q 40 70 50 80 Q 60 70 50 60" fill="none" stroke="#fff" stroke-width="2"/>
+    </svg>
+
+    <p><strong>ویژگی‌های محاسبه‌گر:</strong></p>
+    <ul class="ran25-list" style="background:transparent;padding:0">
+      <li style="background:rgba(255,255,255,0.1);border:none">محاسبه دقیق ظرفیت حرارتی بر اساس متراژ، عایق‌بندی و آب‌و‌هوا</li>
+      <li style="background:rgba(255,255,255,0.1);border:none">جلوگیری از خرید مشعل یا کیلر با ظرفیت نامناسب</li>
+      <li style="background:rgba(255,255,255,0.1);border:none">کاملاً رایگان و آنلاین — بدون نیاز به نصب نرم‌افزار</li>
+      <li style="background:rgba(255,255,255,0.1);border:none">نتایج فوری و قابل‌اعتماد برای تصمیم‌گیری</li>
+    </ul>
+
+    <a href="https://shofazh.com/shofazh-calculator.html" class="calc-btn" target="_blank">محاسبه ظرفیت حرارتی رایگان</a>
+  </div>
+
+  <h2 class="anim d1">نصب و راه‌اندازی</h2>
+  <p>نصب صحیح مبدل‌های حرارتی هپاکو برای بهینه‌سازی عملکرد ضروری است:</p>
+  <div class="ran25-box ran25-tip anim d2">
+    <strong>مراحل نصب مهم</strong>
+    <ol>
+      <li>اطمینان از فشار کافی گاز و هوا در مدار ورودی</li>
+      <li>نصب فیلتر صافی استنلس‌استیلی در تمام سیستم‌ها</li>
+      <li>جریان دو مدار آبی باید متوازی و با جهت مخالف باشد</li>
+      <li>استفاده از لوله‌های غیر‌فلزی (پلیمری) برای اتصالات</li>
+      <li>تست فشار و چک‌کردن برای نشت‌های احتمالی</li>
+    </ol>
+  </div>
+  <div class="ran25-box ran25-warn anim d3">
+    <strong>هشدار</strong>
+    هرگز از ضد‌رسوب‌های الکترونیکی یا مغناطیسی استفاده نکنید. این دستگاه‌ها می‌تواند خرابی‌های الکتریکی ایجاد کنند.
+  </div>
+
+  <h2 class="anim d1">سوالات متداول</h2>
+  <div class="ran25-faq anim d2">
+    <details>
+      <summary>چرا مبدل صفحه‌ای بهتر از لوله‌ای است؟</summary>
+      <div class="ans">
+        مبدل‌های صفحه‌ای به‌دلیل طراحی counter-flow، سطح تماس بیشتر و ابعاد فشرده‌تر، راندمان ۲ تا ۳ برابر بیشتری نسبت به لوله‌ای‌ها دارند. همچنین جای کمتری در موتورخانه می‌گیرند و نگهداری آن‌ها ساده‌تر است.
+      </div>
+    </details>
+
+    <details>
+      <summary>مبدل هپاکو چگونه در مقابل رسوب محافظت می‌شود؟</summary>
+      <div class="ans">
+        ساختار صفحه‌ای و استنلس‌استیل ۳۱۶ طبیعتاً مقاومت به رسوب را فراهم می‌کند. از طرفی، استفاده از فیلتر صافی استنلس‌استیلی مناسب، ورود ذرات معلق را به‌ضروری‌ترین حد کاهش می‌دهد.
+      </div>
+    </details>
+
+    <details>
+      <summary>آیا می‌توانم مبدل را به‌صورت عمودی نصب کنم؟</summary>
+      <div class="ans">
+        بله، مبدل‌های صفحه‌ای هپاکو را می‌توان افقی یا عمودی نصب کرد. اما حتماً هوای برگشت‌خور در مدار بالا برود تا از آسیب ناشی از حباب‌های هوایی جلوگیری شود.
+      </div>
+    </details>
+
+    <details>
+      <summary>عمر مفید مبدل چند سال است؟</summary>
+      <div class="ans">
+        با نگهداری صحیح و استفاده از فیلتر مناسب، مبدل‌های هپاکو معمولاً ۱۵ تا ۲۰ سال دوام می‌آورند. برخی حتی بیشتر از آن کار می‌کنند. نگهداری و پاکیزگی آب سیستم کلید طول عمر است.
+      </div>
+    </details>
+
+    <details>
+      <summary>ظرفیت مناسب برای موتورخانه من چقدر است؟</summary>
+      <div class="ans">
+        این به متراژ ساختمان، میزان عایق‌بندی دیوارها، تعداد افراد و شرایط اقلیمی منطقه بستگی دارد. از <a href="https://shofazh.com/shofazh-calculator.html">محاسبه‌گر رایگان شوفاژ</a> استفاده کنید تا دقیقاً بفهمید چه ظرفیتی لازم دارید.
+      </div>
+    </details>
+
+    <details>
+      <summary>آیا مبدل را می‌توان تعمیر کرد؟</summary>
+      <div class="ans">
+        ساختار براژ‌شده مبدل‌های هپاکو ایمن‌تر و قوی‌تر است، اما تعمیر سخت‌تر است. در صورت نشت‌های جزئی، معمولاً جایگزینی بهتر است. مراکز خدمات مجاز شوفاژ می‌توانند مشاوره درباره این موضوع دهند.
+      </div>
+    </details>
+
+    <details>
+      <summary>مبدل برای چه دمای آب مناسب است؟</summary>
+      <div class="ans">
+        هپاکو مبدل‌های خود را برای محدوده دمایی ۰°C تا ۸۰°C (برای سیستم‌های گرمایی) طراحی کرده است. درجات حرارت افراطی‌تر در سیستم‌های صنعتی نیاز به مبدل‌های ویژه دارند. دمای کاری حداکثری مشخص شده هر مدل را بررسی کنید.
+      </div>
+    </details>
+
+    <details>
+      <summary>تفاوت بین مدل‌های مختلف هپاکو چیست؟</summary>
+      <div class="ans">
+        مدل‌های مختلف (HP-40 تا HP-1800) تنها در ظرفیت حرارتی تفاوت دارند. هرچه شماره مدل بزرگ‌تر، ظرفیت بیشتر است. انتخاب مدل به‌طور مستقیم به‌ نیاز حرارتی سیستم شما بستگی دارد.
+      </div>
+    </details>
+  </div>
+
+  <h2 class="anim d1">خلاصه و نتیجه‌گیری</h2>
+  <p>مبدل‌های صفحه‌ای براژ‌شده هپاکو راه‌حل مدرن و کارآمد برای انتقال حرارت در سیستم‌های مختلف هستند. با ترکیبی از فناوری پیشرفته، ساختار استنلس‌استیل ۳۱۶، و طراحی منطقی، این مبدل‌ها معیار صنعت را تعریف کرده‌اند.</p>
+  <p>بدون شک، انتخاب مبدل مناسب برای نیازهای شما یک تصمیم سرمایه‌گذاری مهم است. با کاهش ۴۰ درصدی مصرف انرژی، عمر طویل، و نگهداری ساده، هپاکو مبدل‌ها بهترین بازگشت سرمایه را فراهم می‌کنند.</p>
+  <div class="ran25-box ran25-good anim d2">
+    <strong>آیا آماده‌ید گام اول را بردارید؟</strong>
+    با تماس با مشاوران شوفاژ.کام، ظرفیت دقیق موتورخانه خود را محاسبه کنید و مبدل هپاکو مناسب را انتخاب کنید. تیم ما ۲۴/۷ آماده‌ کمک است.
+  </div>
+
+  <div class="ran25-cta anim d3">
+    <h2>آماده‌اید بهترین راه‌حل حرارتی را انتخاب کنید؟</h2>
+    <p>مبدل‌های صفحه‌ای هپاکو سال‌ها صرفه‌جویی در انرژی و هزینه‌های نگهداری را فراهم می‌کنند.</p>
+    <a href="https://shofazh.com/contact/" class="ran25-btn" target="_blank">تماس با ما برای مشاوره رایگان</a>
+  </div>
+
+</div>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "مبدل حرارتی صفحه‌ای هپاکو استنلس استیل",
+  "image": "https://d8j0ntlcm91z4.cloudfront.net/user_3EdJ4I6m5YJ1wXqp8iWlIZLCuLp/hf_20260608_204359_4a8a302c-ae2e-47eb-95a6-7e6b9d598347.png",
+  "description": "مبدل حرارتی صفحه‌ای براژ‌شده هپاکو از استنلس استیل 316 با ظرفیت 20 تا 900 هزار کیلوکالری برای سیستم‌های آب‌به‌آب",
+  "brand": {
+    "@type": "Brand",
+    "name": "HEPACO"
+  },
+  "manufacturer": {
+    "@type": "Organization",
+    "name": "HEPACO",
+    "url": "https://shofazh.com"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.8",
+    "reviewCount": "147"
+  },
+  "offers": {
+    "@type": "AggregateOffer",
+    "priceCurrency": "IRR",
+    "url": "https://shofazh.com/product/hepaco-plate-heat-exchanger/",
+    "availability": "https://schema.org/InStock",
+    "offerCount": "19"
+  },
+  "specifications": {
+    "Material": "Stainless Steel 316",
+    "WorkingPressure": "30 bar",
+    "TestPressure": "45 bar",
+    "TemperatureRange": "-196 to 200 °C",
+    "Efficiency": "95%+",
+    "HeatTransferCoefficient": "5000 w/m²°C"
+  }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "چرا مبدل صفحه‌ای بهتر از لوله‌ای است؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "مبدل‌های صفحه‌ای به‌دلیل طراحی counter-flow، سطح تماس بیشتر و ابعاد فشرده‌تر، راندمان ۲ تا ۳ برابر بیشتری نسبت به لوله‌ای‌ها دارند."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "مبدل هپاکو چگونه در مقابل رسوب محافظت می‌شود؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "ساختار صفحه‌ای و استنلس‌استیل ۳۱۶ طبیعتاً مقاومت به رسوب را فراهم می‌کند."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "عمر مفید مبدل چند سال است؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "با نگهداری صحیح، مبدل‌های هپاکو معمولاً ۱۵ تا ۲۰ سال دوام می‌آورند."
+      }
+    }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "شوفاژ",
+      "item": "https://shofazh.com"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "مبدل‌های حرارتی",
+      "item": "https://shofazh.com/product-category/heat-exchangers/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "مبدل صفحه‌ای هپاکو",
+      "item": "https://shofazh.com/product/hepaco-plate-heat-exchanger/"
+    }
+  ]
+}
+</script>
