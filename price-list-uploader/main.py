@@ -1,30 +1,34 @@
 #!/usr/bin/env python3
 """
-سیستم همگام‌سازی لیست قیمت با shofazh.com/price-lists/
+سیستم همگام‌سازی لیست قیمت با GitHub Pages
 
-- هر پوشه داخل watch_folder = یک برند
-- فایل‌های جدید خودکار آپلود می‌شوند
-- صفحه سایت کاملاً بر اساس پوشه‌ها بازسازی می‌شود
-- دیتابیس JSON فایل‌های آپلود شده را نگه می‌دارد
+ساختار watch_folder:
+  watch_folder/
+    DAB_داب/
+      price_list.pdf    ← لیست قیمت
+      brand_logo.jpg    ← لوگو (اختیاری)
+    GREE_گری/
+      price_list.pdf
+      brand_logo.jpg
+    index.html          ← صفحه اصلی (دست نزنید)
+    manifest.json       ← خودکار به‌روز می‌شود
+
+هر تغییر → manifest.json به‌روز → push به gh-pages → GitHub Pages deploy
 """
 
+import subprocess
 import sys
 import time
-import shutil
-import base64
-import logging
-import mimetypes
 import json
+import logging
 from datetime import datetime
 from pathlib import Path
 
-import requests
 import yaml
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
 BASE_DIR = Path(__file__).parent
-DB_FILE = BASE_DIR / "uploaded_files.json"
 
 
 def setup_logging(level="INFO"):
@@ -45,215 +49,189 @@ def load_config():
         return yaml.safe_load(f)
 
 
-def load_db() -> dict:
-    if DB_FILE.exists():
-        with open(DB_FILE, encoding="utf-8") as f:
-            return json.load(f)
-    return {}
+def run(cmd, cwd=None, check=True):
+    result = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True)
+    if check and result.returncode != 0:
+        raise RuntimeError(result.stderr.strip() or result.stdout.strip())
+    return result.stdout.strip()
 
 
-def save_db(db: dict):
-    with open(DB_FILE, "w", encoding="utf-8") as f:
-        json.dump(db, f, ensure_ascii=False, indent=2)
+def setup_repo(watch_dir: Path, repo_url: str, logger):
+    """اگر watch_folder git repo نیست، gh-pages را clone می‌کند"""
+    if (watch_dir / ".git").exists():
+        logger.info("✅ ریپو موجود است")
+        run(["git", "pull", "origin", "gh-pages"], cwd=watch_dir)
+        logger.info("✅ به‌روز شد")
+        return
+
+    logger.info(f"📥 در حال clone کردن gh-pages از {repo_url} ...")
+    watch_dir.mkdir(parents=True, exist_ok=True)
+    run(["git", "clone", "--branch", "gh-pages", "--single-branch", repo_url, str(watch_dir)])
+    logger.info("✅ clone انجام شد")
 
 
-class WordPressUploader:
-    def __init__(self, cfg):
-        self.base = cfg["url"].rstrip("/")
-        creds = f"{cfg['username']}:{cfg['app_password']}"
-        token = base64.b64encode(creds.encode()).decode()
-        self.headers = {"Authorization": f"Basic {token}"}
+def scan_brands(watch_dir: Path) -> list[dict]:
+    """اسکن پوشه‌های برند و ساخت لیست"""
+    brands = []
+    for d in sorted(watch_dir.iterdir()):
+        if not d.is_dir() or d.name.startswith("."):
+            continue
 
-    def upload_media(self, file_path: Path) -> dict:
-        mime = mimetypes.guess_type(str(file_path))[0] or "application/octet-stream"
-        with open(file_path, "rb") as f:
-            resp = requests.post(
-                f"{self.base}/wp-json/wp/v2/media",
-                headers={**self.headers, "Content-Disposition": f'attachment; filename="{file_path.name}"'},
-                files={"file": (file_path.name, f, mime)},
-                timeout=120,
-            )
-        resp.raise_for_status()
-        data = resp.json()
-        return {"id": data["id"], "url": data["source_url"], "title": data.get("title", {}).get("rendered", file_path.stem)}
+        pdf = d / "price_list.pdf"
+        has_pdf = pdf.exists()
 
-    def get_page_id(self, slug: str) -> int:
-        resp = requests.get(
-            f"{self.base}/wp-json/wp/v2/pages",
-            headers=self.headers,
-            params={"slug": slug, "per_page": 1},
-            timeout=30,
-        )
-        resp.raise_for_status()
-        pages = resp.json()
-        if not pages:
-            raise ValueError(f"صفحه‌ای با slug '{slug}' پیدا نشد")
-        return pages[0]["id"]
+        # پیدا کردن لوگو
+        logo_ext = ""
+        has_logo = False
+        for ext in [".jpg", ".jpeg", ".png", ".webp", ".svg"]:
+            if (d / f"brand_logo{ext}").exists():
+                logo_ext = ext
+                has_logo = True
+                break
 
-    def update_page_content(self, page_id: int, content: str):
-        resp = requests.post(
-            f"{self.base}/wp-json/wp/v2/pages/{page_id}",
-            headers={**self.headers, "Content-Type": "application/json"},
-            json={"content": content},
-            timeout=30,
-        )
-        resp.raise_for_status()
+        # نام برند از نام پوشه
+        brand_name = d.name.replace("_", " ").strip()
+
+        updated_at = int(pdf.stat().st_mtime) if has_pdf else int(d.stat().st_mtime)
+
+        brands.append({
+            "slug": d.name,
+            "brand": brand_name,
+            "date": "",
+            "has_pdf": has_pdf,
+            "has_image": has_logo,
+            "has_logo": has_logo,
+            "logo_ext": logo_ext,
+            "updated_at": updated_at,
+        })
+
+    # مرتب‌سازی بر اساس تاریخ آپدیت (جدیدترین اول)
+    brands.sort(key=lambda x: x["updated_at"], reverse=True)
+    return brands
 
 
-def build_page_html(db: dict, watch_dir: Path, allowed: set) -> str:
-    """ساخت HTML کامل صفحه بر اساس ساختار پوشه‌ها"""
-    html = ""
-    brands = {}
+def update_manifest(watch_dir: Path, logger) -> bool:
+    """به‌روزرسانی manifest.json و بازگشت True اگر تغییر داشت"""
+    manifest_path = watch_dir / "manifest.json"
+    brands = scan_brands(watch_dir)
 
-    for key, info in db.items():
-        brand = info.get("brand", "عمومی")
-        brands.setdefault(brand, []).append(info)
+    new_content = json.dumps(brands, ensure_ascii=False, indent=2)
 
-    # مرتب‌سازی برندها
-    for brand in sorted(brands.keys()):
-        files = brands[brand]
-        html += f'\n<h3>📁 {brand}</h3>\n<ul>\n'
-        for f in sorted(files, key=lambda x: x["name"]):
-            size_kb = f.get("size_kb", 0)
-            date = f.get("date", "")
-            ext = Path(f["name"]).suffix.upper().lstrip(".")
-            html += (
-                f'  <li>📄 <a href="{f["url"]}" target="_blank" rel="noopener">'
-                f'{f["name"]}</a>'
-                f' <small>({ext}'
-                f'{" — " + str(size_kb) + " KB" if size_kb else ""}'
-                f'{" — " + date if date else ""})</small></li>\n'
-            )
-        html += '</ul>\n'
+    old_content = ""
+    if manifest_path.exists():
+        old_content = manifest_path.read_text(encoding="utf-8")
 
-    if not html:
-        html = "<p>لیست قیمتی موجود نیست.</p>"
+    if new_content == old_content:
+        return False
 
-    return html
+    manifest_path.write_text(new_content, encoding="utf-8")
+    logger.info(f"📋 manifest.json به‌روز شد ({len(brands)} برند)")
+    return True
 
 
-class PriceListHandler(FileSystemEventHandler):
-    def __init__(self, cfg):
-        self.cfg = cfg
-        self.wp = WordPressUploader(cfg["wordpress"])
-        self.watch_dir = BASE_DIR / cfg["folders"]["watch"]
-        self.allowed = set(cfg.get("allowed_extensions", [".pdf", ".xlsx", ".xls", ".csv"]))
-        self._page_id = None
-        self.logger = logging.getLogger("PriceListUploader")
-        self.db = load_db()
-
-    def _page_id_cached(self):
-        if self._page_id is None:
-            self._page_id = self.wp.get_page_id(self.cfg["price_list_page_slug"])
-            self.logger.info(f"آی‌دی صفحه: {self._page_id}")
-        return self._page_id
-
-    def _db_key(self, file_path: Path) -> str:
-        try:
-            return str(file_path.relative_to(self.watch_dir))
-        except ValueError:
-            return file_path.name
-
-    def _brand(self, file_path: Path) -> str:
-        try:
-            rel = file_path.relative_to(self.watch_dir)
-            return rel.parts[0] if len(rel.parts) > 1 else "عمومی"
-        except ValueError:
-            return "عمومی"
-
-    def rebuild_page(self):
-        try:
-            page_id = self._page_id_cached()
-            content = build_page_html(self.db, self.watch_dir, self.allowed)
-            self.wp.update_page_content(page_id, content)
-            self.logger.info(f"✅ صفحه price-lists بازسازی شد ({len(self.db)} فایل)")
-        except Exception as e:
-            self.logger.error(f"خطا در بازسازی صفحه: {e}")
-
-    def process(self, file_path: Path):
-        if file_path.suffix.lower() not in self.allowed:
-            return
-        if not file_path.exists():
+def git_push(watch_dir: Path, message: str, logger):
+    """commit و push به gh-pages"""
+    try:
+        run(["git", "add", "-A"], cwd=watch_dir)
+        status = run(["git", "status", "--porcelain"], cwd=watch_dir)
+        if not status:
+            logger.info("⏭  هیچ تغییری برای commit نیست")
             return
 
-        key = self._db_key(file_path)
-        brand = self._brand(file_path)
+        run(["git", "commit", "-m", message], cwd=watch_dir)
+        run(["git", "push", "origin", "gh-pages"], cwd=watch_dir)
+        logger.info(f"🚀 Push شد: {message}")
+    except RuntimeError as e:
+        logger.error(f"❌ خطا در git push: {e}")
 
-        # اگر قبلاً آپلود شده، رد شو
-        if key in self.db:
-            self.logger.info(f"⏭  قبلاً آپلود شده: {file_path.name}")
+
+# فایل‌هایی که تغییرشان اهمیت دارد
+WATCHED_SUFFIXES = {".pdf", ".jpg", ".jpeg", ".png", ".webp", ".svg"}
+SKIP_NAMES = {"manifest.json", "index.html", ".DS_Store"}
+
+
+class SiteHandler(FileSystemEventHandler):
+    def __init__(self, watch_dir: Path, logger):
+        self.watch_dir = watch_dir
+        self.logger = logger
+        self._pending = False
+        self._last_event = 0
+
+    def _should_handle(self, path: Path) -> bool:
+        if path.name in SKIP_NAMES:
+            return False
+        if path.suffix.lower() not in WATCHED_SUFFIXES:
+            return False
+        if path.name.startswith("."):
+            return False
+        return True
+
+    def _trigger(self, path: Path, action: str):
+        if not self._should_handle(path):
             return
-
-        self.logger.info(f"📤 آپلود: {file_path.name} (برند: {brand})")
-        try:
-            media = self.wp.upload_media(file_path)
-            size_kb = file_path.stat().st_size // 1024
-
-            self.db[key] = {
-                "name": file_path.name,
-                "brand": brand,
-                "url": media["url"],
-                "id": media["id"],
-                "size_kb": size_kb,
-                "date": datetime.now().strftime("%Y/%m/%d"),
-            }
-            save_db(self.db)
-            self.logger.info(f"✅ آپلود شد: {media['url']}")
-            self.rebuild_page()
-
-        except Exception as e:
-            self.logger.error(f"❌ خطا در آپلود {file_path.name}: {e}")
-
-    def scan_all(self):
-        """اسکن کامل پوشه و آپلود فایل‌های جدید"""
-        files = [f for f in self.watch_dir.rglob("*") if f.is_file() and f.suffix.lower() in self.allowed]
-        new_files = [f for f in files if self._db_key(f) not in self.db]
-
-        if new_files:
-            self.logger.info(f"📦 {len(new_files)} فایل جدید پیدا شد")
-            for f in new_files:
-                self.process(f)
-        else:
-            self.logger.info(f"✅ همه {len(files)} فایل قبلاً آپلود شده‌اند")
-            if files:
-                self.rebuild_page()
+        self.logger.info(f"📁 {action}: {path.relative_to(self.watch_dir)}")
+        self._last_event = time.time()
+        self._pending = True
 
     def on_created(self, event):
         if not event.is_directory:
-            time.sleep(2)
-            self.process(Path(event.src_path))
+            self._trigger(Path(event.src_path), "فایل جدید")
+
+    def on_modified(self, event):
+        if not event.is_directory:
+            self._trigger(Path(event.src_path), "فایل تغییر کرد")
 
     def on_moved(self, event):
         if not event.is_directory:
-            time.sleep(1)
-            self.process(Path(event.dest_path))
+            self._trigger(Path(event.dest_path), "فایل جابجا شد")
+
+    def on_deleted(self, event):
+        if not event.is_directory:
+            self._trigger(Path(event.src_path), "فایل حذف شد")
+
+    def flush_if_idle(self):
+        """اگر ۵ ثانیه از آخرین رویداد گذشته، push کن"""
+        if self._pending and (time.time() - self._last_event) >= 5:
+            self._pending = False
+            changed = update_manifest(self.watch_dir, self.logger)
+            msg = f"update: به‌روزرسانی لیست قیمت — {datetime.now():%Y-%m-%d %H:%M}"
+            git_push(self.watch_dir, msg, self.logger)
 
 
 def main():
     cfg = load_config()
     setup_logging(cfg["general"].get("log_level", "INFO"))
-    logger = logging.getLogger("PriceListUploader")
+    logger = logging.getLogger("PriceListSync")
 
     watch_dir = BASE_DIR / cfg["folders"]["watch"]
-    watch_dir.mkdir(exist_ok=True)
+    repo_url = cfg.get("github", {}).get("repo_url", "")
 
-    logger.info("=" * 50)
-    logger.info("🚀 سیستم همگام‌سازی لیست قیمت")
+    logger.info("=" * 55)
+    logger.info("🚀 سیستم همگام‌سازی لیست قیمت با GitHub Pages")
     logger.info(f"📂 پوشه: {watch_dir}")
-    logger.info(f"🌐 سایت: {cfg['wordpress']['url']}/{cfg['price_list_page_slug']}/")
-    logger.info("=" * 50)
+    logger.info("=" * 55)
 
-    handler = PriceListHandler(cfg)
-    handler.scan_all()
+    if repo_url:
+        setup_repo(watch_dir, repo_url, logger)
 
+    # به‌روزرسانی اولیه manifest
+    changed = update_manifest(watch_dir, logger)
+    if changed:
+        git_push(watch_dir, "update: sync اولیه manifest.json", logger)
+
+    brands = scan_brands(watch_dir)
+    logger.info(f"📦 {len(brands)} برند در پوشه یافت شد")
+
+    handler = SiteHandler(watch_dir, logger)
     observer = Observer()
     observer.schedule(handler, str(watch_dir), recursive=True)
     observer.start()
-    logger.info("👀 در انتظار فایل جدید...")
+    logger.info("👀 در انتظار تغییرات...")
 
     try:
         while True:
-            time.sleep(5)
+            handler.flush_if_idle()
+            time.sleep(1)
     except KeyboardInterrupt:
         observer.stop()
         logger.info("سرویس متوقف شد.")
