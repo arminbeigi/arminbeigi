@@ -6,7 +6,7 @@
 سیستم آن را مستقیم به وردپرس آپلود می‌کند.
 """
 
-import sys, time, base64, logging, mimetypes, json
+import sys, time, base64, logging, mimetypes, json, re
 from datetime import datetime
 from pathlib import Path
 
@@ -44,33 +44,47 @@ def save_db(db):
 
 class WP:
     def __init__(self, cfg):
+        self.cfg  = cfg
         self.base = cfg["url"].rstrip("/")
-        token = base64.b64encode(f"{cfg['username']}:{cfg['app_password']}".encode()).decode()
-        self.auth = {"Authorization": f"Basic {token}"}
 
     def upload(self, path: Path) -> dict:
         mime = mimetypes.guess_type(str(path))[0] or "application/octet-stream"
+        # نام فایل باید ASCII باشد — فارسی را transliterate می‌کنیم
+        safe_name = path.name.encode("ascii", errors="ignore").decode() or f"file{path.suffix}"
+        if not safe_name.strip():
+            safe_name = f"pricelist-{int(time.time())}{path.suffix}"
         with open(path, "rb") as f:
-            r = requests.post(
-                f"{self.base}/wp-json/wp/v2/media",
-                headers={**self.auth, "Content-Disposition": f'attachment; filename="{path.name}"'},
-                files={"file": (path.name, f, mime)},
-                timeout=120,
-            )
+            data = f.read()
+        r = requests.post(
+            f"{self.base}/wp-json/wp/v2/media",
+            headers={
+                "Content-Disposition": f'attachment; filename="{safe_name}"',
+                "Content-Type": mime,
+                "User-Agent": "Mozilla/5.0 PriceListBot/1.0",
+            },
+            data=data,
+            auth=(self.cfg["username"], self.cfg["app_password"]),
+            timeout=120,
+        )
         r.raise_for_status()
         d = r.json()
         return {"id": d["id"], "url": d["source_url"]}
 
     def get_page(self, slug) -> tuple[int, str]:
         r = requests.get(f"{self.base}/wp-json/wp/v2/pages",
-                         headers=self.auth, params={"slug": slug, "per_page": 1}, timeout=30)
+                         params={"slug": slug, "per_page": 1},
+                         auth=(self.cfg["username"], self.cfg["app_password"]),
+                         headers={"User-Agent": "Mozilla/5.0 PriceListBot/1.0"},
+                         timeout=30)
         r.raise_for_status()
         p = r.json()[0]
         return p["id"], p.get("content", {}).get("raw", "")
 
     def update_page(self, page_id, content):
         r = requests.post(f"{self.base}/wp-json/wp/v2/pages/{page_id}",
-                          headers={**self.auth, "Content-Type": "application/json"},
+                          auth=(self.cfg["username"], self.cfg["app_password"]),
+                          headers={"Content-Type": "application/json",
+                                   "User-Agent": "Mozilla/5.0 PriceListBot/1.0"},
                           json={"content": content}, timeout=30)
         r.raise_for_status()
 
