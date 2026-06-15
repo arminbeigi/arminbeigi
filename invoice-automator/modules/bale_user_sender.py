@@ -58,14 +58,20 @@ class BaleUserSender:
             return {"success": False, "error": "aiobale نصب نیست (pip install aiobale)"}
 
         client = Client(session_file=self.session_file)
-        await _maybe_await(client.start(run_in_background=True))
         try:
+            # signal_handling=False ضروری است چون داخل thread جانبی اجرا می‌شویم
+            await _maybe_await(
+                client.start(run_in_background=True, signal_handling=False)
+            )
             peer = await self._resolve_peer(client, phone)
             if peer is None:
                 return {"success": False, "error": f"مخاطب {phone} در بله پیدا نشد"}
 
             chat_type = getattr(peer, "type", None) or ChatType.PRIVATE
-            file_input = FileInput(pdf_path)
+            try:
+                file_input = FileInput(pdf_path)
+            except Exception:
+                file_input = FileInput(path=pdf_path)
 
             await client.send_document(
                 file=file_input,
