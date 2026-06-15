@@ -61,6 +61,8 @@ def load_config() -> dict:
 def process_invoice(pdf_path: str, config: dict) -> dict:
     """پردازش کامل یک فایل PDF"""
 
+    # تبدیل مسیر نسبی به مطلق
+    pdf_path = str(Path(pdf_path).resolve())
     report = {"file": pdf_path, "ok": [], "fail": []}
 
     # ── ۱. استخراج اطلاعات از نام فایل ──
