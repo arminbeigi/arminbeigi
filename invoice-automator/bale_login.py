@@ -6,7 +6,9 @@
 استفاده:
   python3 bale_login.py
 
-سپس شماره تلفن (مثل 09123456789) و کد تأییدی که بله می‌فرستد را وارد کنید.
+خودِ aiobale به‌صورت تعاملی شماره تلفن و کد تأیید را می‌پرسد:
+  - شماره را به فرمت بین‌المللی وارد کنید: 98XXXXXXXXXX  (بدون + و بدون 0)
+  - سپس کدی که بله می‌فرستد را وارد کنید
 فایل session (bale_session.bale) خودکار ذخیره می‌شود.
 
 ⚠️ این کتابخانه غیررسمی است؛ استفاده‌ی انبوه ممکن است اکانت را محدود کند.
@@ -19,24 +21,9 @@ SESSION_FILE = Path(__file__).parent / "bale_session.bale"
 
 
 async def _maybe_await(x):
-    """اگر مقدار coroutine بود، await کن"""
     if asyncio.iscoroutine(x):
         return await x
     return x
-
-
-def _to_int_phone(raw: str) -> int:
-    """تبدیل شماره به عددِ ملی (بدون صفر و بدون کد کشور)
-    مثال: 09123456789 → 9123456789
-    """
-    raw = raw.strip().replace(" ", "").replace("+", "")
-    if raw.startswith("0098"):
-        raw = raw[4:]
-    elif raw.startswith("98") and len(raw) == 12:
-        raw = raw[2:]
-    elif raw.startswith("0"):
-        raw = raw[1:]
-    return int(raw)
 
 
 async def login():
@@ -49,45 +36,21 @@ async def login():
     print("\n" + "=" * 50)
     print("🔐 لاگین بله (اکانت شخصی)")
     print("=" * 50)
-
-    phone_raw = input("\n📱 شماره تلفن (مثل 09123456789): ").strip()
-    if not phone_raw:
-        print("❌ شماره خالی است.")
-        return False
-
-    phone_int = _to_int_phone(phone_raw)
-    print(f"→ شماره ارسالی به بله: {phone_int}")
+    print("\nخودِ بله شماره و کد را می‌پرسد.")
+    print("شماره را این‌طور وارد کن:  98XXXXXXXXXX  (بدون + و بدون صفر اول)\n")
 
     client = Client(session_file=str(SESSION_FILE))
-    await _maybe_await(client.start(run_in_background=True))
-
     try:
-        print("\n⏳ درخواست کد تأیید...")
-        resp = await client.start_phone_auth(phone_number=phone_int)
-        registered = getattr(resp, "is_registered", "?")
-        print(f"✅ کد تأیید ارسال شد.  (اکانت ثبت‌شده: {registered})")
-
-        code = input("\n🔑 کد تأییدی که بله فرستاد: ").strip()
-
-        print("\n⏳ بررسی کد...")
-        result = await client.validate_code(
-            code=code, transaction_hash=resp.transaction_hash
-        )
-        user = getattr(result, "user", None)
-
-        # کمی صبر تا session روی دیسک نوشته شود
-        await asyncio.sleep(1)
-
-        print("\n✅ لاگین موفق بود!")
-        print(f"👤 کاربر: {user}")
-        print(f"💾 session ذخیره شد: {SESSION_FILE.name}")
-        print("✅ اکنون main.py را اجرا کنید؛ بله از این اکانت ارسال می‌کند.")
+        # aiobale خودش لاگین تعاملی را انجام می‌دهد و session را ذخیره می‌کند
+        await _maybe_await(client.start(run_in_background=True))
+        await asyncio.sleep(1)  # فرصت برای ذخیره‌ی session
+        print("\n" + "=" * 50)
+        print("✅ session آماده است:", SESSION_FILE.name)
+        print("✅ اکنون main.py را اجرا کن؛ بله از این اکانت ارسال می‌کند.")
+        print("=" * 50)
         return True
-
     except Exception as e:
         print(f"\n❌ خطا: {e}")
-        print("\nاگر کد به دستت نرسید یا خطای شماره گرفتی، به من بگو تا فرمت")
-        print("شماره (با/بدون کد کشور 98) را عوض کنیم.")
         return False
     finally:
         await _maybe_await(client.stop())
