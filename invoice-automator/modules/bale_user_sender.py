@@ -59,10 +59,7 @@ class BaleUserSender:
 
         client = Client(session_file=self.session_file)
         try:
-            # signal_handling=False ضروری است چون داخل thread جانبی اجرا می‌شویم
-            await _maybe_await(
-                client.start(run_in_background=True, signal_handling=False)
-            )
+            await _maybe_await(client.start(run_in_background=True))
             peer = await self._resolve_peer(client, phone)
             if peer is None:
                 return {"success": False, "error": f"مخاطب {phone} در بله پیدا نشد"}
@@ -108,8 +105,5 @@ class BaleUserSender:
             f"📞 02188302400"
         )
 
-        loop = asyncio.new_event_loop()
-        try:
-            return loop.run_until_complete(self._send_async(phone, pdf_path, caption))
-        finally:
-            loop.close()
+        # asyncio.run مثل bale_test_send.py — ضروری برای لود شدن صحیح session
+        return asyncio.run(self._send_async(phone, pdf_path, caption))
