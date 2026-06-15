@@ -4,8 +4,8 @@
 
 # ── پوشه‌ها ──────────────────────────────────────
 folders:
-  watch: "./watch_folder"
-  processed: "./watch_folder/processed"
+  watch: "/Users/armin/Desktop/ارسال پیش فاکتور"
+  processed: "/Users/armin/Desktop/ارسال پیش فاکتور/ارسال شده"
 
 # ── وردپرس (آپلود PDF + لینک کوتاه) ─────────────
 # مراحل راه‌اندازی:
