@@ -36,6 +36,7 @@ from modules.wp_uploader import WordPressUploader
 from modules.sms_kavenegar import KavenegarSMS
 from modules.whatsapp_sender import WhatsAppSender
 from modules.bale_sender import BaleSender
+from modules.bale_user_sender import BaleUserSender
 from modules.rubika_sender import RubikaSender
 
 logger = logging.getLogger("InvoiceBot")
@@ -164,14 +165,24 @@ def process_invoice(pdf_path: str, config: dict) -> dict:
             return "whatsapp", r
 
         def send_bale():
-            bale = BaleSender(config.get("bale", {}))
-            return "bale", bale.send_invoice(phone, pdf_path, info, short_link)
+            # اولویت ۱: اکانت شخصی (چت واقعی دو‌طرفه)
+            bale_config = config.get("bale", {})
+            if bale_config.get("user_session_file"):
+                bale = BaleUserSender(bale_config)
+                result = bale.send_invoice(phone, pdf_path, info, short_link)
+                key = "bale_user" if result.get("success") else "bale"
+            else:
+                # اولویت ۲: ربات (فقط برای مشتری‌های که ربات را استارت کردند)
+                bale = BaleSender(bale_config)
+                result = bale.send_invoice(phone, pdf_path, info, short_link)
+                key = "bale"
+            return key, result
 
         def send_rubika():
             rubika = RubikaSender(config.get("rubika", {}))
             return "rubika", rubika.send_invoice(phone, pdf_path, info, short_link)
 
-        labels = {"sms": "پیامک", "whatsapp": "واتساپ", "bale": "بله", "rubika": "روبیکا"}
+        labels = {"sms": "پیامک", "whatsapp": "واتساپ", "bale": "بله (ربات)", "bale_user": "بله (شخصی)", "rubika": "روبیکا"}
 
         with ThreadPoolExecutor(max_workers=4) as executor:
             futures = {executor.submit(fn): fn.__name__ for fn in (send_sms, send_whatsapp, send_bale, send_rubika)}
