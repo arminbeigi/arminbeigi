@@ -5,3 +5,4 @@ __pycache__/
 invoice-automator/logs/
 invoice-automator/processed/
 invoice-automator/watch_folder/
+invoice-automator/*.bale

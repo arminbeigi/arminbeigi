@@ -1,127 +1,109 @@
 """
-ارسال پیش فاکتور از طریق پیام‌رسان بله با اکانت شخصی
-(دقیقاً مثل روبیکا — نه ربات)
+ارسال پیش فاکتور از طریق پیام‌رسان بله با اکانت شخصی (کتابخانه aiobale)
+چت واقعی دو‌طرفه — مثل روبیکا، نه ربات.
 
-مراحل راه‌اندازی:
-1. روی Mac: python3 rubika_login.py (یا اسکریپت نویی برای بله)
-2. وارد شدن با شماره تلفن + کد تأیید
-3. فایل session ذخیره می‌شود
-4. برنامه از آن session برای ارسال استفاده می‌کند
+راه‌اندازی: یک بار `python3 bale_login.py` تا session ساخته شود.
 
-⚠️ هشدار: این کتابخانه غیررسمی است. استفاده از اکانت شخصی برای ارسال انبوه
-          ممکن است اکانت شما را محدود کند. با احتیاط استفاده کنید.
+⚠️ این کتابخانه غیررسمی است. استفاده از اکانت شخصی برای ارسال انبوه
+   ممکن است اکانت شما را محدود کند. با احتیاط استفاده کنید.
 """
 
-import os
 import asyncio
 import logging
+from pathlib import Path
 
 logger = logging.getLogger(__name__)
+
+# پوشه‌ی پروژه (invoice-automator)
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+async def _maybe_await(x):
+    if asyncio.iscoroutine(x):
+        return await x
+    return x
 
 
 class BaleUserSender:
     """ارسال پیام/فایل از طریق اکانت شخصی بله (نه ربات)"""
 
     def __init__(self, config: dict):
-        self.session_file = config.get("session_file", "bale_session.json")
-        self.enabled = bool(self.session_file)
-        self._client = None
+        session = config.get("user_session_file") or ""
+        if session and not Path(session).is_absolute():
+            session = str(BASE_DIR / session)
+        self.session_file = session
+        self.enabled = bool(session) and Path(session).exists()
 
-    async def _get_client(self):
-        """ساخت/بازیابی کلاینت بله با session موجود"""
-        if self._client is None:
-            try:
-                from aiobale import Client
-                # فرض: session به‌صورت JSON در فایل ذخیره شده است
-                # (دقیق کردن راه‌اندازی باید روی Mac انجام شود)
-                self._client = Client(session_file=self.session_file)
-                await self._client.start()
-                logger.info("✅ اتصال بله برقرار شد")
-            except ImportError:
-                logger.error("کتابخانه aiobale نصب نیست: pip install aiobale")
-                raise
-            except Exception as e:
-                logger.error(f"خطا در اتصال به بله: {e}")
-                raise
-        return self._client
+    async def _resolve_peer(self, client, phone: str):
+        """تبدیل شماره تلفن مشتری به مخاطب بله (InfoPeer با id و type)"""
+        # تلاش ۱: جستجوی مستقیم در مخاطبین
+        peer = await client.search_contact(phone_number=phone)
+        if peer is not None:
+            return peer
 
-    def _format_phone(self, phone: str) -> str:
-        """فرمت شماره برای بله"""
-        if phone.startswith("09"):
-            return phone  # بله فرمت 09xx می‌خواهد
-        return phone
-
-    async def _send_document_async(self, phone: str, pdf_path: str, caption: str = "") -> dict:
-        """ارسال فایل PDF به‌صورت async"""
+        # تلاش ۲: افزودن به مخاطبین، سپس جستجوی دوباره
+        national = int(phone[1:]) if phone.startswith("0") else int(phone)
         try:
-            client = await self._get_client()
-            formatted_phone = self._format_phone(phone)
-
-            # ارسال فایل
-            # نام دقیق متد ممکن است متفاوت باشد — باید با aiobale تأیید شود
-            result = await client.send_document(
-                peer=formatted_phone,  # یا phone_number یا user_id
-                file_path=pdf_path,
-                caption=caption
-            )
-            logger.info(f"PDF به بله ارسال شد: {phone}")
-            return {"success": True, "data": str(result)}
-
+            await client.import_contacts([(national, "مشتری")])
         except Exception as e:
-            logger.error(f"خطا در ارسال به بله: {e}")
-            return {"success": False, "error": str(e)}
+            logger.debug(f"import_contacts: {e}")
+        return await client.search_contact(phone_number=phone)
 
-    async def _send_text_async(self, phone: str, text: str) -> dict:
-        """ارسال پیام متنی"""
+    async def _send_async(self, phone: str, pdf_path: str, caption: str) -> dict:
         try:
-            client = await self._get_client()
-            formatted_phone = self._format_phone(phone)
-            result = await client.send_message(
-                peer=formatted_phone,
-                text=text
+            from aiobale import Client
+            from aiobale.enums import ChatType
+            from aiobale.types import FileInput
+        except ImportError:
+            return {"success": False, "error": "aiobale نصب نیست (pip install aiobale)"}
+
+        client = Client(session_file=self.session_file)
+        await _maybe_await(client.start(run_in_background=True))
+        try:
+            peer = await self._resolve_peer(client, phone)
+            if peer is None:
+                return {"success": False, "error": f"مخاطب {phone} در بله پیدا نشد"}
+
+            chat_type = getattr(peer, "type", None) or ChatType.PRIVATE
+            file_input = FileInput(pdf_path)
+
+            await client.send_document(
+                file=file_input,
+                chat_id=peer.id,
+                chat_type=chat_type,
+                caption=caption,
             )
+            logger.info(f"PDF به بله (شخصی) ارسال شد: {phone}")
             return {"success": True}
+
         except Exception as e:
+            logger.error(f"خطا در ارسال به بله (شخصی): {e}")
             return {"success": False, "error": str(e)}
-
-    def send_document(self, phone: str, pdf_path: str, caption: str = "") -> dict:
-        """ارسال فایل (sync wrapper)"""
-        loop = asyncio.new_event_loop()
-        try:
-            return loop.run_until_complete(self._send_document_async(phone, pdf_path, caption))
         finally:
-            loop.close()
-
-    def send_text(self, phone: str, text: str) -> dict:
-        """ارسال متن (sync wrapper)"""
-        loop = asyncio.new_event_loop()
-        try:
-            return loop.run_until_complete(self._send_text_async(phone, text))
-        finally:
-            loop.close()
+            await _maybe_await(client.stop())
 
     def send_invoice(self, phone: str, pdf_path: str,
                      invoice_data: dict, short_link: str) -> dict:
-        """ارسال پیش فاکتور (دو طرفه، چت واقعی)"""
+        """ارسال پیش فاکتور (چت دو‌طرفه با اکانت شخصی)"""
         if not self.enabled:
-            return {"success": False, "error": "بله (اکانت شخصی) تنظیم نشده"}
+            return {
+                "success": False,
+                "error": "بله (اکانت شخصی) تنظیم نشده — اول bale_login.py را اجرا کنید",
+            }
 
         from .pdf_parser import format_amount
 
         caption = (
-            f"📄 پیش فاکتور شماره {invoice_data.get('serial', '')}\n"
-            f"💰 مبلغ: {format_amount(invoice_data.get('total', ''))} ریال\n"
-            f"🔗 لینک: {short_link}\n\n"
-            f"🏢 شوفاژ دات کام"
+            f"🔸 سلام و وقت بخیر 🔸\n\n"
+            f"احتراماً پیش فاکتور شماره {invoice_data.get('serial', '')} "
+            f"جهت مشاهده و بررسی خدمتتان ارسال می‌گردد.\n\n"
+            f"🔗 مشاهده آنلاین:\n{short_link}\n\n"
+            f"🏢 تاسیسات حرارتی و برودتی شوفاژ دات کام\n"
+            f"📞 02188302400"
         )
 
-        return self.send_document(phone, pdf_path, caption)
-
-    async def close(self):
-        """بستن اتصال"""
-        if self._client:
-            try:
-                await self._client.disconnect()
-            except Exception:
-                pass
-            self._client = None
+        loop = asyncio.new_event_loop()
+        try:
+            return loop.run_until_complete(self._send_async(phone, pdf_path, caption))
+        finally:
+            loop.close()

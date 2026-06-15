@@ -48,7 +48,7 @@ bale:
   bot_token: "1575264772:gSJ-bMk-yulaDaH4wVDQFXfq0uSXVhXnB3I"
 
   # روش ۲: اکانت شخصی (نیاز به setup و session)
-  user_session_file: "bale_session.json"  # خالی = تنها ربات استفاده شود
+  user_session_file: "bale_session.bale"  # خالی = تنها ربات استفاده شود
 
 # ── روبیکا ───────────────────────────────────────
 # نیاز به کتابخانه rubpy و لاگین با شماره تلفن
