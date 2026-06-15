@@ -18,6 +18,7 @@ import os
 import sys
 import time
 import json
+import queue
 import shutil
 import yaml
 import logging
@@ -184,22 +185,34 @@ def process_invoice(pdf_path: str, config: dict) -> dict:
 
         labels = {"sms": "پیامک", "whatsapp": "واتساپ", "bale": "بله (ربات)", "bale_user": "بله (شخصی)", "rubika": "روبیکا"}
 
-        with ThreadPoolExecutor(max_workers=4) as executor:
-            futures = {executor.submit(fn): fn.__name__ for fn in (send_sms, send_whatsapp, send_bale, send_rubika)}
+        def record(key, r):
+            label = labels.get(key, key)
+            if r.get("success"):
+                logger.info(f"✅ {label} → {phone}")
+                report["ok"].append(key)
+            else:
+                logger.warning(f"⚠️ {label}: {r.get('error')}")
+                report["fail"].append(f"{key}: {r.get('error','')}")
+
+        # پیامک، واتساپ، روبیکا را موازی می‌فرستیم
+        with ThreadPoolExecutor(max_workers=3) as executor:
+            futures = {executor.submit(fn): fn.__name__ for fn in (send_sms, send_whatsapp, send_rubika)}
             for future in as_completed(futures):
                 try:
                     key, r = future.result()
-                    label = labels.get(key, key)
-                    if r.get("success"):
-                        logger.info(f"✅ {label} → {phone}")
-                        report["ok"].append(key)
-                    else:
-                        logger.warning(f"⚠️ {label}: {r.get('error')}")
-                        report["fail"].append(f"{key}: {r.get('error','')}")
+                    record(key, r)
                 except Exception as e:
                     fn_name = futures[future]
                     logger.error(f"❌ {fn_name}: {e}")
                     report["fail"].append(f"{fn_name}: {e}")
+
+        # بله را در thread اصلی می‌فرستیم (aiobale در thread جانبی session را نمی‌خواند)
+        try:
+            key, r = send_bale()
+            record(key, r)
+        except Exception as e:
+            logger.error(f"❌ send_bale: {e}")
+            report["fail"].append(f"bale: {e}")
 
         # ── ۷. ثبت ارسال موفق (محافظ ضدِ تکرار) + انتقال فایل ──
         _mark_sent(dedup_key)
@@ -222,38 +235,25 @@ def process_invoice(pdf_path: str, config: dict) -> dict:
 
 
 class InvoiceHandler(FileSystemEventHandler):
-    def __init__(self, config, watch_dir):
-        self.config = config
+    """فقط مسیر فایل را به صف می‌دهد؛ پردازش در thread اصلی انجام می‌شود
+    (چون aiobale برای خواندن session به thread اصلی نیاز دارد)."""
+
+    def __init__(self, watch_dir, work_queue):
         self.watch_dir = str(Path(watch_dir).resolve())
-        self._done = set()
+        self.queue = work_queue
 
     def on_created(self, event):
-        if event.is_directory or not event.src_path.lower().endswith(".pdf"):
-            return
-        if str(Path(event.src_path).parent.resolve()) != self.watch_dir:
-            return
-        self._process(event.src_path)
+        self._enqueue(event.src_path, event.is_directory)
 
     def on_moved(self, event):
-        if event.is_directory or not event.dest_path.lower().endswith(".pdf"):
-            return
-        if str(Path(event.dest_path).parent.resolve()) != self.watch_dir:
-            return
-        self._process(event.dest_path)
+        self._enqueue(event.dest_path, event.is_directory)
 
-    def _process(self, path):
-        key = os.path.basename(path)
-        if key in self._done:
+    def _enqueue(self, path, is_dir):
+        if is_dir or not path.lower().endswith(".pdf"):
             return
-        self._done.add(key)
-        time.sleep(1)  # صبر تا کپی کامل شود
-        if os.path.exists(path):
-            try:
-                process_invoice(path, self.config)
-            except Exception as e:
-                logger.error(f"❌ خطا: {e}")
-        # آزادسازی حافظه بعد از پردازش
-        self._done.discard(key)
+        if str(Path(path).parent.resolve()) != self.watch_dir:
+            return
+        self.queue.put(path)
 
 
 def main():
@@ -279,18 +279,29 @@ def main():
 ╚══════════════════════════════════════════════════╝
 """)
 
-    # پردازش PDF های موجود
+    # پردازش PDF های موجود (در thread اصلی)
     for pdf in sorted(watch_dir.glob("*.pdf")):
         process_invoice(str(pdf), config)
 
-    # نظارت مداوم
+    # نظارت مداوم: watchdog فقط مسیر را به صف می‌دهد،
+    # پردازش واقعی اینجا در thread اصلی انجام می‌شود
+    work_queue = queue.Queue()
     observer = Observer()
-    observer.schedule(InvoiceHandler(config, watch_dir), str(watch_dir), recursive=False)
+    observer.schedule(InvoiceHandler(watch_dir, work_queue), str(watch_dir), recursive=False)
     observer.start()
 
     try:
         while True:
-            time.sleep(1)
+            try:
+                path = work_queue.get(timeout=1)
+            except queue.Empty:
+                continue
+            time.sleep(1)  # صبر تا کپی فایل کامل شود
+            if os.path.exists(path):
+                try:
+                    process_invoice(path, config)
+                except Exception as e:
+                    logger.error(f"❌ خطا: {e}")
     except KeyboardInterrupt:
         print("\n⏹️ متوقف شد.")
         observer.stop()
