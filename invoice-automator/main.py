@@ -17,9 +17,11 @@
 import os
 import sys
 import time
+import json
 import shutil
 import yaml
 import logging
+import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from pathlib import Path
@@ -37,6 +39,46 @@ from modules.bale_sender import BaleSender
 from modules.rubika_sender import RubikaSender
 
 logger = logging.getLogger("InvoiceBot")
+
+# ── محافظ ضدِ ارسال تکراری ──────────────────────
+# هر فاکتور فقط یک‌بار ارسال می‌شود. کلیدهای ارسال‌شده در این فایل ذخیره می‌شوند.
+_registry_lock = threading.Lock()
+_REGISTRY_FILE = BASE_DIR / "logs" / "sent_invoices.json"
+_in_progress: set = set()
+
+
+def _load_sent() -> set:
+    """خواندن لیست فاکتورهای ارسال‌شده از فایل"""
+    try:
+        return set(json.loads(_REGISTRY_FILE.read_text(encoding="utf-8")))
+    except Exception:
+        return set()
+
+
+def _mark_sent(key: str):
+    """ثبت یک فاکتور به‌عنوان ارسال‌شده"""
+    with _registry_lock:
+        sent = _load_sent()
+        sent.add(key)
+        _REGISTRY_FILE.parent.mkdir(exist_ok=True)
+        _REGISTRY_FILE.write_text(
+            json.dumps(sorted(sent), ensure_ascii=False), encoding="utf-8"
+        )
+
+
+def _claim(key: str) -> bool:
+    """رزرو یک فاکتور برای پردازش. اگر قبلاً ارسال شده یا در حال ارسال است → False"""
+    with _registry_lock:
+        if key in _in_progress or key in _load_sent():
+            return False
+        _in_progress.add(key)
+        return True
+
+
+def _release(key: str):
+    """آزادسازی رزرو فاکتور (در پایان پردازش)"""
+    with _registry_lock:
+        _in_progress.discard(key)
 
 
 def setup_logging(level="INFO"):
@@ -79,70 +121,93 @@ def process_invoice(pdf_path: str, config: dict) -> dict:
     serial = info.get("serial", "")
     name = info.get("name", "مشتری گرامی")
 
-    # ── ۲. آپلود وردپرس + لینک کوتاه ──
-    short_link = ""
+    # ── محافظ ضدِ تکرار: هر فاکتور فقط یک‌بار ارسال شود ──
+    dedup_key = serial or os.path.basename(pdf_path)
+    if not _claim(dedup_key):
+        logger.warning(f"⏭️ فاکتور {dedup_key} قبلاً ارسال شده — دوباره ارسال نشد")
+        return report
+
     try:
-        wp = WordPressUploader(config["wordpress"])
-        short_link = wp.upload_and_get_short_link(pdf_path, serial, config.get("shortener"))
-        logger.info(f"✅ لینک: {short_link}")
-        report["ok"].append("wordpress")
-    except Exception as e:
-        logger.error(f"❌ وردپرس: {e}")
-        report["fail"].append(f"wordpress: {e}")
-
-    # ── ۳-۶. ارسال موازی (پیامک، واتساپ، بله، روبیکا) ──
-    def send_sms():
-        sms = KavenegarSMS(config["kavenegar"])
-        return "sms", sms.send_invoice_sms(phone, info, short_link)
-
-    def send_whatsapp():
-        wa = WhatsAppSender(config.get("whatsapp", {}))
-        r = wa.send_invoice(phone, pdf_path, info, short_link)
-        if r.get("fallback_link"):
-            logger.info(f"📎 واتساپ دستی: {r['fallback_link']}")
-        return "whatsapp", r
-
-    def send_bale():
-        bale = BaleSender(config.get("bale", {}))
-        return "bale", bale.send_invoice(phone, pdf_path, info, short_link)
-
-    def send_rubika():
-        rubika = RubikaSender(config.get("rubika", {}))
-        return "rubika", rubika.send_invoice(phone, pdf_path, info, short_link)
-
-    labels = {"sms": "پیامک", "whatsapp": "واتساپ", "bale": "بله", "rubika": "روبیکا"}
-
-    with ThreadPoolExecutor(max_workers=4) as executor:
-        futures = {executor.submit(fn): fn.__name__ for fn in (send_sms, send_whatsapp, send_bale, send_rubika)}
-        for future in as_completed(futures):
-            try:
-                key, r = future.result()
-                label = labels.get(key, key)
-                if r.get("success"):
-                    logger.info(f"✅ {label} → {phone}")
-                    report["ok"].append(key)
-                else:
-                    logger.warning(f"⚠️ {label}: {r.get('error')}")
-                    report["fail"].append(f"{key}: {r.get('error','')}")
-            except Exception as e:
-                fn_name = futures[future]
-                logger.error(f"❌ {fn_name}: {e}")
-                report["fail"].append(f"{fn_name}: {e}")
-
-    # ── ۷. انتقال فایل ──
-    if config.get("general", {}).get("move_after_process", True):
+        # ── ۲. آپلود وردپرس + لینک کوتاه ──
+        short_link = ""
         try:
-            dest_dir = BASE_DIR / config["folders"]["processed"]
-            dest_dir.mkdir(exist_ok=True)
-            dest = dest_dir / os.path.basename(pdf_path)
-            shutil.move(pdf_path, str(dest))
-            logger.info(f"📁 منتقل شد → {dest.name}")
+            wp = WordPressUploader(config["wordpress"])
+            short_link = wp.upload_and_get_short_link(pdf_path, serial, config.get("shortener"))
+            logger.info(f"✅ لینک: {short_link}")
+            report["ok"].append("wordpress")
         except Exception as e:
-            logger.warning(f"⚠️ انتقال: {e}")
+            logger.error(f"❌ وردپرس: {e}")
+            report["fail"].append(f"wordpress: {e}")
 
-    logger.info(f"📊 {len(report['ok'])}/5 موفق | {len(report['fail'])} خطا")
-    logger.info(f"{'═'*50}\n")
-    return report
+        # ── اگر لینک ساخته نشد، هیچ پیامی ارسال نکن ──
+        # (تا مشتری پیامک/پیام بدونِ لینک نگیرد. فایل برای تلاش مجدد باقی می‌ماند.)
+        if not short_link:
+            logger.error(
+                "⛔ لینک دانلود ساخته نشد (خطای وردپرس) — هیچ پیامی ارسال نشد. "
+                "فایل در پوشه باقی ماند؛ پس از رفع مشکل وردپرس، دوباره برنامه را اجرا کنید."
+            )
+            report["fail"].append("aborted: no_link")
+            logger.info(f"📊 {len(report['ok'])}/5 موفق | {len(report['fail'])} خطا")
+            logger.info(f"{'═'*50}\n")
+            return report
+
+        # ── ۳-۶. ارسال موازی (پیامک، واتساپ، بله، روبیکا) ──
+        def send_sms():
+            sms = KavenegarSMS(config["kavenegar"])
+            return "sms", sms.send_invoice_sms(phone, info, short_link)
+
+        def send_whatsapp():
+            wa = WhatsAppSender(config.get("whatsapp", {}))
+            r = wa.send_invoice(phone, pdf_path, info, short_link)
+            if r.get("fallback_link"):
+                logger.info(f"📎 واتساپ دستی: {r['fallback_link']}")
+            return "whatsapp", r
+
+        def send_bale():
+            bale = BaleSender(config.get("bale", {}))
+            return "bale", bale.send_invoice(phone, pdf_path, info, short_link)
+
+        def send_rubika():
+            rubika = RubikaSender(config.get("rubika", {}))
+            return "rubika", rubika.send_invoice(phone, pdf_path, info, short_link)
+
+        labels = {"sms": "پیامک", "whatsapp": "واتساپ", "bale": "بله", "rubika": "روبیکا"}
+
+        with ThreadPoolExecutor(max_workers=4) as executor:
+            futures = {executor.submit(fn): fn.__name__ for fn in (send_sms, send_whatsapp, send_bale, send_rubika)}
+            for future in as_completed(futures):
+                try:
+                    key, r = future.result()
+                    label = labels.get(key, key)
+                    if r.get("success"):
+                        logger.info(f"✅ {label} → {phone}")
+                        report["ok"].append(key)
+                    else:
+                        logger.warning(f"⚠️ {label}: {r.get('error')}")
+                        report["fail"].append(f"{key}: {r.get('error','')}")
+                except Exception as e:
+                    fn_name = futures[future]
+                    logger.error(f"❌ {fn_name}: {e}")
+                    report["fail"].append(f"{fn_name}: {e}")
+
+        # ── ۷. ثبت ارسال موفق (محافظ ضدِ تکرار) + انتقال فایل ──
+        _mark_sent(dedup_key)
+
+        if config.get("general", {}).get("move_after_process", True):
+            try:
+                dest_dir = BASE_DIR / config["folders"]["processed"]
+                dest_dir.mkdir(exist_ok=True)
+                dest = dest_dir / os.path.basename(pdf_path)
+                shutil.move(pdf_path, str(dest))
+                logger.info(f"📁 منتقل شد → {dest.name}")
+            except Exception as e:
+                logger.warning(f"⚠️ انتقال: {e}")
+
+        logger.info(f"📊 {len(report['ok'])}/5 موفق | {len(report['fail'])} خطا")
+        logger.info(f"{'═'*50}\n")
+        return report
+    finally:
+        _release(dedup_key)
 
 
 class InvoiceHandler(FileSystemEventHandler):
