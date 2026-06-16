@@ -35,16 +35,17 @@ class BaleUserSender:
         self.enabled = bool(session) and Path(session).exists()
 
     async def _resolve_peer(self, client, phone: str):
-        """تبدیل شماره تلفن مشتری به مخاطب بله (InfoPeer با id و type)"""
+        """تبدیل شماره تلفن مشتری به مخاطب بله"""
         # تلاش ۱: جستجوی مستقیم در مخاطبین
         peer = await client.search_contact(phone_number=phone)
         if peer is not None:
             return peer
 
-        # تلاش ۲: افزودن به مخاطبین، سپس جستجوی دوباره
+        # تلاش ۲: افزودن شماره به مخاطبین با نام = شماره، سپس جستجوی دوباره
         national = int(phone[1:]) if phone.startswith("0") else int(phone)
         try:
-            await client.import_contacts([(national, "مشتری")])
+            await client.import_contacts([(national, phone)])
+            logger.info(f"مخاطب {phone} اضافه شد")
         except Exception as e:
             logger.debug(f"import_contacts: {e}")
         return await client.search_contact(phone_number=phone)
