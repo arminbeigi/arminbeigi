@@ -1,0 +1,52 @@
+/* هشدار قیمت محصولات متغیر شوفاژ — استایل باکس هشدار */
+.shofazh-price-notice{
+	--shofazh-vpn-color:#F57F17;
+	display:flex;
+	gap:12px;
+	align-items:flex-start;
+	direction:rtl;
+	text-align:right;
+	margin:14px 0 18px;
+	padding:14px 16px;
+	border:2px solid var(--shofazh-vpn-color);
+	border-radius:14px;
+	background:linear-gradient(135deg,#FFF8E1 0%,#FFFDF6 100%);
+	box-shadow:0 8px 22px rgba(245,127,23,.18);
+	font-family:Tahoma,"IRANSans","Vazirmatn",sans-serif;
+	animation:shofazhNoticeGlow 2.6s ease-in-out infinite;
+}
+.shofazh-price-notice__icon{
+	flex:0 0 auto;
+	width:38px;
+	height:38px;
+	border-radius:50%;
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	background:linear-gradient(135deg,var(--shofazh-vpn-color),#FF8F00);
+	color:#fff;
+	box-shadow:0 6px 16px rgba(245,127,23,.45);
+}
+.shofazh-price-notice__text strong{
+	display:block;
+	color:#B25E00;
+	font-size:15px;
+	margin-bottom:4px;
+}
+.shofazh-price-notice__text span{
+	display:block;
+	color:#7a5b00;
+	font-size:14px;
+	line-height:1.95;
+}
+@keyframes shofazhNoticeGlow{
+	0%,100%{box-shadow:0 8px 22px rgba(245,127,23,.18)}
+	50%{box-shadow:0 10px 28px rgba(245,127,23,.32)}
+}
+@media (max-width:480px){
+	.shofazh-price-notice{padding:12px}
+	.shofazh-price-notice__text span{font-size:13px}
+}
+@media (prefers-reduced-motion:reduce){
+	.shofazh-price-notice{animation:none}
+}
