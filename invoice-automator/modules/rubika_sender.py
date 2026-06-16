@@ -58,13 +58,14 @@ class RubikaSender:
         return self._client
 
     async def _get_guid(self, client, phone: str) -> str:
-        """دریافت GUID کاربر"""
+        """دریافت یا ایجاد GUID کاربر"""
         phone_intl = "+98" + phone[1:] if phone.startswith("0") else phone
 
         try:
-            result = await client.add_address_book(phone=phone_intl, first_name="مشتری")
+            result = await client.add_address_book(phone=phone_intl, first_name=phone)
             guid = getattr(result, "user_guid", None)
             if guid:
+                logger.info(f"مخاطب {phone} اضافه شد")
                 return guid
         except Exception as e:
             logger.debug(f"add_address_book: {e}")
