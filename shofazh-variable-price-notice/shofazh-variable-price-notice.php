@@ -3,7 +3,7 @@
  * Plugin Name:       هشدار قیمت محصولات متغیر شوفاژ
  * Plugin URI:        https://shofazh.com
  * Description:        روی صفحه‌ی محصولات متغیر ووکامرس (مثل دیگ سوپر ۴۰۰ با ۵ تا ۱۳ پره)، دقیقاً بالای کادر انتخاب مدل/پره، یک پیام هشدار نمایش می‌دهد تا مشتری در مورد قیمت اشتباه نکند. به هدر، فوتر، نوار پایین موبایل و دکمه افزودن به سبد دست نمی‌زند. متن و رنگ پیام از تنظیمات قابل ویرایش است.
- * Version:           1.0.0
+ * Version:           1.1.0
  * Requires at least: 5.6
  * Requires PHP:      7.2
  * Author:            Shofazh
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // جلوگیری از دسترسی مستقیم
 }
 
-define( 'SHOFAZH_VPN_VERSION', '1.0.0' );
+define( 'SHOFAZH_VPN_VERSION', '1.1.0' );
 define( 'SHOFAZH_VPN_OPTION', 'shofazh_vpn_settings' );
 define( 'SHOFAZH_VPN_FILE', __FILE__ );
 define( 'SHOFAZH_VPN_URL', plugin_dir_url( __FILE__ ) );
@@ -33,8 +33,10 @@ function shofazh_vpn_defaults() {
 	return array(
 		'enabled' => 1,
 		'title'   => 'توجه به قیمت مدل‌ها',
-		'message' => 'این محصول در چند مدل با قیمت متفاوت عرضه می‌شود. قیمتی که می‌بینید مربوط به همان مدلی است که در کادر زیر انتخاب کرده‌اید. لطفاً پیش از ثبت سفارش، مدل موردنظر (مثلاً تعداد پره) را انتخاب کنید تا قیمت دقیقِ همان مدل نمایش داده شود. در صورت تردید، پیش از خرید با کارشناسان شوفاژ تماس بگیرید.',
+		'message' => 'این محصول در چند مدل با قیمت متفاوت عرضه می‌شود. قیمتی که می‌بینید مربوط به همان مدلی است که در کادر بالا انتخاب کرده‌اید. لطفاً پیش از ثبت سفارش، مدل موردنظر (مثلاً تعداد پره) را انتخاب کنید.',
 		'color'   => '#F57F17',
+		// انتخاب‌گر CSS کادری که باکس باید بعد از آن قرار بگیرد. خالی = تشخیص خودکار.
+		'selector' => '',
 	);
 }
 
@@ -78,19 +80,22 @@ function shofazh_vpn_wc_missing_notice() {
 
 /* -------------------------------------------------------------------------
  *  نمایش هشدار در صفحه‌ی محصول متغیر
- *  هوک woocommerce_before_variations_form پیام را دقیقاً بالای کادر انتخاب
- *  مدل/پره و داخل محتوای اصلی صفحه قرار می‌دهد. این هوک به هدر، فوتر،
- *  نوار چسبان پایین موبایل یا دکمه‌ی «افزودن به سبد» دست نمی‌زند.
+ *  باکس در فوتر (مخفی) چاپ می‌شود و سپس با جاوااسکریپت دقیقاً بعد از کادر
+ *  انتخاب مدل/پره قرار می‌گیرد. این روش روی قالب‌های سفارشی هم درست کار می‌کند
+ *  و به هدر، فوتر، نوار چسبان پایین موبایل یا دکمه‌ی «افزودن به سبد» دست نمی‌زند.
  * ---------------------------------------------------------------------- */
-add_action( 'woocommerce_before_variations_form', 'shofazh_vpn_render_notice', 10 );
+add_action( 'wp_footer', 'shofazh_vpn_render_notice', 99 );
 function shofazh_vpn_render_notice() {
-	global $product;
+	if ( ! function_exists( 'is_product' ) || ! is_product() ) {
+		return;
+	}
 
 	$settings = shofazh_vpn_get_settings();
-
 	if ( empty( $settings['enabled'] ) ) {
 		return;
 	}
+
+	$product = wc_get_product( get_queried_object_id() );
 	if ( ! $product || ! is_a( $product, 'WC_Product' ) || ! $product->is_type( 'variable' ) ) {
 		return;
 	}
@@ -100,8 +105,10 @@ function shofazh_vpn_render_notice() {
 	if ( '' === $message && '' === $title ) {
 		return;
 	}
+
+	$selector = isset( $settings['selector'] ) ? trim( (string) $settings['selector'] ) : '';
 	?>
-	<div class="shofazh-price-notice" role="alert">
+	<div id="shofazh-vpn-notice" class="shofazh-price-notice" role="alert" style="display:none">
 		<span class="shofazh-price-notice__icon" aria-hidden="true">
 			<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.6 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.6a2 2 0 0 0-3.4 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
 		</span>
@@ -114,6 +121,43 @@ function shofazh_vpn_render_notice() {
 			<?php endif; ?>
 		</div>
 	</div>
+	<script>
+	(function(){
+		var custom = <?php echo wp_json_encode( $selector ); ?>;
+		function findAnchor(){
+			var list = [custom, '.variations', '.woo-variation-swatches', '.variations_form', 'form.cart'];
+			for (var i = 0; i < list.length; i++){
+				if (!list[i]) { continue; }
+				var el = document.querySelector(list[i]);
+				if (el) { return el; }
+			}
+			var sel = document.querySelector('select[name^="attribute_"], select[id^="pa_"], [data-attribute_name]');
+			if (sel) { return sel.closest('tr, .variation, .form-row, li, div') || sel.parentElement; }
+			// آخرین تلاش: کادری که شامل عبارت «تعداد پره» باشد
+			var labels = document.querySelectorAll('label, th, .label, legend, h3, h4, strong, span');
+			for (var j = 0; j < labels.length; j++){
+				if (labels[j].textContent && labels[j].textContent.indexOf('تعداد پره') !== -1){
+					return labels[j].closest('tr, .variation, .form-row, li, section, div') || labels[j].parentElement;
+				}
+			}
+			return null;
+		}
+		function place(){
+			var n = document.getElementById('shofazh-vpn-notice');
+			if (!n) { return; }
+			var a = findAnchor();
+			if (a && a.parentNode){ a.parentNode.insertBefore(n, a.nextSibling); }
+			n.style.display = 'flex';
+		}
+		if (document.readyState === 'loading'){
+			document.addEventListener('DOMContentLoaded', place);
+		} else {
+			place();
+		}
+		// در صورت بارگذاری دیرهنگام کادر متغیرها (AJAX)، یک‌بار دیگر تلاش کن
+		setTimeout(place, 1200);
+	})();
+	</script>
 	<?php
 }
 
@@ -192,6 +236,8 @@ function shofazh_vpn_sanitize( $input ) {
 	$color = isset( $input['color'] ) ? sanitize_hex_color( $input['color'] ) : '';
 	$out['color'] = $color ? $color : $defaults['color'];
 
+	$out['selector'] = isset( $input['selector'] ) ? sanitize_text_field( $input['selector'] ) : '';
+
 	return $out;
 }
 
@@ -203,7 +249,7 @@ function shofazh_vpn_settings_page() {
 	?>
 	<div class="wrap" dir="rtl" style="text-align:right">
 		<h1><?php esc_html_e( 'هشدار قیمت محصولات متغیر', 'shofazh-variable-price-notice' ); ?></h1>
-		<p><?php esc_html_e( 'این پیام به‌صورت خودکار فقط روی صفحه‌ی محصولات متغیر و دقیقاً بالای کادر انتخاب مدل/پره نمایش داده می‌شود. به هدر، فوتر، نوار پایین موبایل و دکمه افزودن به سبد دست نمی‌زند.', 'shofazh-variable-price-notice' ); ?></p>
+		<p><?php esc_html_e( 'این پیام به‌صورت خودکار فقط روی صفحه‌ی محصولات متغیر و دقیقاً بعد از کادر انتخاب مدل/پره نمایش داده می‌شود. به هدر، فوتر، نوار پایین موبایل و دکمه افزودن به سبد دست نمی‌زند.', 'shofazh-variable-price-notice' ); ?></p>
 		<form method="post" action="options.php">
 			<?php settings_fields( 'shofazh_vpn_group' ); ?>
 			<table class="form-table" role="presentation">
@@ -227,6 +273,13 @@ function shofazh_vpn_settings_page() {
 				<tr>
 					<th scope="row"><label for="shofazh-vpn-color"><?php esc_html_e( 'رنگ هشدار', 'shofazh-variable-price-notice' ); ?></label></th>
 					<td><input type="color" id="shofazh-vpn-color" name="<?php echo esc_attr( SHOFAZH_VPN_OPTION ); ?>[color]" value="<?php echo esc_attr( $s['color'] ); ?>" /></td>
+				</tr>
+				<tr>
+					<th scope="row"><label for="shofazh-vpn-selector"><?php esc_html_e( 'انتخاب‌گر کادر مدل (پیشرفته)', 'shofazh-variable-price-notice' ); ?></label></th>
+					<td>
+						<input type="text" id="shofazh-vpn-selector" class="regular-text" dir="ltr" placeholder=".variations" name="<?php echo esc_attr( SHOFAZH_VPN_OPTION ); ?>[selector]" value="<?php echo esc_attr( isset( $s['selector'] ) ? $s['selector'] : '' ); ?>" />
+						<p class="description"><?php esc_html_e( 'اگر خالی بماند، جای باکس به‌صورت خودکار تشخیص داده می‌شود. اگر باکس درست بعد از کادر انتخاب پره ننشست، انتخاب‌گر CSS آن کادر را اینجا وارد کنید (مثلاً ‎.variations‎).', 'shofazh-variable-price-notice' ); ?></p>
+					</td>
 				</tr>
 			</table>
 			<?php submit_button( __( 'ذخیره تغییرات', 'shofazh-variable-price-notice' ) ); ?>
