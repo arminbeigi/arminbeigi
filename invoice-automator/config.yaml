@@ -4,8 +4,8 @@
 
 # ── پوشه‌ها ──────────────────────────────────────
 folders:
-  watch: "/Users/armin/Desktop/ارسال پیش فاکتور"
-  processed: "/Users/armin/Desktop/ارسال پیش فاکتور/ارسال شده"
+  watch: "/home/user/arminbeigi/invoice-automator/watch_folder"
+  processed: "/home/user/arminbeigi/invoice-automator/watch_folder/ارسال شده"
 
 # ── وردپرس (آپلود PDF + لینک کوتاه) ─────────────
 # مراحل راه‌اندازی:
