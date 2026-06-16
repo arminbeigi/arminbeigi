@@ -87,15 +87,15 @@ class RubikaSender:
             client = await self._get_client()
             guid = await self._get_guid(client, phone)
             if not guid:
-                return {"success": False, "error": f"GUID برای {phone} پیدا نشد"}
+                logger.warning(f"روبیکا: شماره {phone} در مخاطبین یافت نشد - دستی بازی کنید")
+                return {"success": False, "error": f"شماره {phone} در مخاطبین روبیکا نیست"}
 
             result = await client.send_document(guid, pdf_path, caption=caption)
             logger.info(f"PDF به روبیکا ارسال شد: {phone}")
             return {"success": True}
 
         except EOFError:
-            # اگر session نیازمند interactive input باشد، skip کن
-            logger.warning("روبیکا نیاز به دوباره لاگین دارد. اسکریپت rubika_login.py را مجدداً اجرا کنید.")
+            logger.warning("روبیکا نیاز به دوباره لاگین دارد")
             return {"success": False, "error": "روبیکا نیاز به لاگین مجدد دارد"}
         except Exception as e:
             logger.error(f"خطا در ارسال به روبیکا: {e}")
