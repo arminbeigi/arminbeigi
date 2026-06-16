@@ -87,16 +87,25 @@ class RubikaSender:
             return {"success": False, "error": str(e)}
 
     def send_file(self, phone: str, pdf_path: str, caption: str = "") -> dict:
-        """ارسال فایل (sync wrapper)"""
+        """ارسال فایل (sync wrapper با timeout)"""
         loop = asyncio.new_event_loop()
         try:
-            return loop.run_until_complete(self._send_file_async(phone, pdf_path, caption))
+            # Timeout 8 ثانیه - اگر interactive prompt بود، timeout می‌شود
+            return loop.run_until_complete(
+                asyncio.wait_for(self._send_file_async(phone, pdf_path, caption), timeout=8.0)
+            )
+        except asyncio.TimeoutError:
+            logger.warning("روبیکا timeout شد - احتمالاً نیاز به دوباره لاگین")
+            return {"success": False, "error": "روبیکا timeout - دوباره لاگین کنید"}
+        except Exception as e:
+            logger.error(f"خطا در Rubika: {e}")
+            return {"success": False, "error": str(e)}
         finally:
             loop.close()
 
     def send_invoice(self, phone: str, pdf_path: str,
                      invoice_data: dict, short_link: str) -> dict:
-        """ارسال پیش فاکتور"""
+        """ارسال پیش فاکتور (با timeout برای جلوگیری از hanging)"""
         if not self.enabled:
             return {"success": False, "error": "روبیکا تنظیم نشده"}
 
@@ -108,6 +117,7 @@ class RubikaSender:
             f"🔗 لینک: {short_link}"
         )
 
+        # Timeout 8 ثانیه - اگر timeout شد، بقیه سیستم متوقف نمی‌شود
         return self.send_file(phone, pdf_path, caption)
 
     async def close(self):
