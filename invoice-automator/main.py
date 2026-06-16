@@ -166,18 +166,11 @@ def process_invoice(pdf_path: str, config: dict) -> dict:
             return "whatsapp", r
 
         def send_bale():
-            # اولویت ۱: اکانت شخصی (چت واقعی دو‌طرفه)
+            # فقط اکانت شخصی (ربات حذف شده)
             bale_config = config.get("bale", {})
-            if bale_config.get("user_session_file"):
-                bale = BaleUserSender(bale_config)
-                result = bale.send_invoice(phone, pdf_path, info, short_link)
-                key = "bale_user" if result.get("success") else "bale"
-            else:
-                # اولویت ۲: ربات (فقط برای مشتری‌های که ربات را استارت کردند)
-                bale = BaleSender(bale_config)
-                result = bale.send_invoice(phone, pdf_path, info, short_link)
-                key = "bale"
-            return key, result
+            bale = BaleUserSender(bale_config)
+            result = bale.send_invoice(phone, pdf_path, info, short_link)
+            return "bale_user", result
 
         def send_rubika():
             rubika = RubikaSender(config.get("rubika", {}))

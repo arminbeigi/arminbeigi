@@ -32,18 +32,23 @@ class BaleUserSender:
         if session and not Path(session).is_absolute():
             session = str(BASE_DIR / session)
 
-        # اگر فایل وجود ندارد، از دایرکتوری فعلی پیدا کن
+        # اگر فایل وجود ندارد، جستجو کن
         if session and not Path(session).exists():
+            # جستجو ۱: دایرکتوری فعلی
             fallback = Path.cwd() / Path(session).name
             if fallback.exists():
                 session = str(fallback)
-                logger.info(f"بله: session فایل از cwd پیدا شد: {session}")
+            else:
+                # جستجو ۲: پوشه والد دایرکتوری فعلی
+                fallback = Path.cwd().parent / Path(session).name
+                if fallback.exists():
+                    session = str(fallback)
 
         self.session_file = session
         self.enabled = bool(session) and Path(session).exists()
 
-        if session:
-            logger.info(f"بله (شخصی): session={session}, exists={Path(session).exists()}, enabled={self.enabled}")
+        # پرینت برای دیباگ
+        print(f"[BaleUserSender] session_file={session}, exists={Path(session).exists() if session else False}, enabled={self.enabled}")
 
     async def _resolve_peer(self, client, phone: str):
         """تبدیل شماره تلفن مشتری به مخاطب بله"""
