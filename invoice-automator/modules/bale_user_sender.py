@@ -37,9 +37,13 @@ class BaleUserSender:
             fallback = Path.cwd() / Path(session).name
             if fallback.exists():
                 session = str(fallback)
+                logger.info(f"بله: session فایل از cwd پیدا شد: {session}")
 
         self.session_file = session
         self.enabled = bool(session) and Path(session).exists()
+
+        if session:
+            logger.info(f"بله (شخصی): session={session}, exists={Path(session).exists()}, enabled={self.enabled}")
 
     async def _resolve_peer(self, client, phone: str):
         """تبدیل شماره تلفن مشتری به مخاطب بله"""
