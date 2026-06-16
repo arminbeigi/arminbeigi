@@ -31,6 +31,13 @@ class BaleUserSender:
         session = config.get("user_session_file") or ""
         if session and not Path(session).is_absolute():
             session = str(BASE_DIR / session)
+
+        # اگر فایل وجود ندارد، از دایرکتوری فعلی پیدا کن
+        if session and not Path(session).exists():
+            fallback = Path.cwd() / Path(session).name
+            if fallback.exists():
+                session = str(fallback)
+
         self.session_file = session
         self.enabled = bool(session) and Path(session).exists()
 
