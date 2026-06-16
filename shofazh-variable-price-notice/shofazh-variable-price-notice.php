@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       هشدار قیمت محصولات متغیر شوفاژ
  * Plugin URI:        https://shofazh.com
- * Description:        روی صفحه‌ی محصولات متغیر ووکامرس (مثل دیگ سوپر ۴۰۰ با ۵ تا ۱۳ پره)، درست بالای کادر انتخاب مدل و دکمه «افزودن به سبد»، یک پیام هشدار نمایش می‌دهد تا مشتری در مورد قیمت اشتباه نکند. متن و رنگ پیام از تنظیمات قابل ویرایش است.
+ * Description:        روی صفحه‌ی محصولات متغیر ووکامرس (مثل دیگ سوپر ۴۰۰ با ۵ تا ۱۳ پره)، دقیقاً بالای کادر انتخاب مدل/پره، یک پیام هشدار نمایش می‌دهد تا مشتری در مورد قیمت اشتباه نکند. به هدر، فوتر، نوار پایین موبایل و دکمه افزودن به سبد دست نمی‌زند. متن و رنگ پیام از تنظیمات قابل ویرایش است.
  * Version:           1.0.0
  * Requires at least: 5.6
  * Requires PHP:      7.2
@@ -78,8 +78,11 @@ function shofazh_vpn_wc_missing_notice() {
 
 /* -------------------------------------------------------------------------
  *  نمایش هشدار در صفحه‌ی محصول متغیر
+ *  هوک woocommerce_before_variations_form پیام را دقیقاً بالای کادر انتخاب
+ *  مدل/پره و داخل محتوای اصلی صفحه قرار می‌دهد. این هوک به هدر، فوتر،
+ *  نوار چسبان پایین موبایل یا دکمه‌ی «افزودن به سبد» دست نمی‌زند.
  * ---------------------------------------------------------------------- */
-add_action( 'woocommerce_before_add_to_cart_form', 'shofazh_vpn_render_notice', 10 );
+add_action( 'woocommerce_before_variations_form', 'shofazh_vpn_render_notice', 10 );
 function shofazh_vpn_render_notice() {
 	global $product;
 
@@ -200,7 +203,7 @@ function shofazh_vpn_settings_page() {
 	?>
 	<div class="wrap" dir="rtl" style="text-align:right">
 		<h1><?php esc_html_e( 'هشدار قیمت محصولات متغیر', 'shofazh-variable-price-notice' ); ?></h1>
-		<p><?php esc_html_e( 'این پیام به‌صورت خودکار فقط روی صفحه‌ی محصولات متغیر، بالای کادر انتخاب مدل و دکمه افزودن به سبد نمایش داده می‌شود.', 'shofazh-variable-price-notice' ); ?></p>
+		<p><?php esc_html_e( 'این پیام به‌صورت خودکار فقط روی صفحه‌ی محصولات متغیر و دقیقاً بالای کادر انتخاب مدل/پره نمایش داده می‌شود. به هدر، فوتر، نوار پایین موبایل و دکمه افزودن به سبد دست نمی‌زند.', 'shofazh-variable-price-notice' ); ?></p>
 		<form method="post" action="options.php">
 			<?php settings_fields( 'shofazh_vpn_group' ); ?>
 			<table class="form-table" role="presentation">
