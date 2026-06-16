@@ -12,6 +12,7 @@
 """
 
 import asyncio
+import json
 from pathlib import Path
 
 SESSION_FILE = Path(__file__).parent / "rubika_session.json"
@@ -40,9 +41,21 @@ async def login():
     try:
         # روبیکا خودش لاگین تعاملی را انجام می‌دهد
         await _maybe_await(client.start())
+
+        # Save session info
+        me = await _maybe_await(client.get_me())
+        user_data = {
+            "user_id": getattr(me, "user_id", None),
+            "phone": getattr(me, "phone", None),
+            "first_name": getattr(me, "first_name", ""),
+        }
+        SESSION_FILE.write_text(json.dumps(user_data, ensure_ascii=False, indent=2), encoding="utf-8")
+
         await asyncio.sleep(1)
         print("\n" + "=" * 50)
         print("✅ لاگین موفق!")
+        print(f"👤 نام: {user_data.get('first_name', 'Unknown')}")
+        print(f"📱 شماره: {user_data.get('phone', 'Unknown')}")
         print("✅ اکنون main.py را اجرا کن؛ روبیکا از این session استفاده می‌کند.")
         print("=" * 50)
         return True

@@ -28,9 +28,13 @@ class RubikaSender:
         if self._client is None:
             try:
                 from rubpy import Client
-                # rubpy بدون نیاز به تعامل (از session قبلی)
                 self._client = Client()
-                await self._client.start()
+                # اگر interactive پیامپت بود، timeout بده (10 ثانیه)
+                try:
+                    await asyncio.wait_for(self._client.start(), timeout=10.0)
+                except asyncio.TimeoutError:
+                    logger.warning("روبیکا timeout شد - احتمالاً نیاز به دوباره لاگین دارد")
+                    raise RuntimeError("روبیکا timeout - لاگین مجدد لازم است")
             except ImportError:
                 logger.error("کتابخانه rubpy نصب نیست: pip install rubpy")
                 raise
