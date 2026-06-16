@@ -58,10 +58,9 @@ class RubikaSender:
         return self._client
 
     async def _get_guid(self, client, phone: str) -> str:
-        """دریافت GUID یا ایجاد چت مستقیم"""
+        """دریافت GUID از مخاطبین موجود"""
         phone_intl = "+98" + phone[1:] if phone.startswith("0") else phone
 
-        # ۱. جستجو در مخاطبین موجود
         try:
             contacts = await client.get_contacts_updates()
             for user in getattr(contacts, "user_list", []):
@@ -72,25 +71,27 @@ class RubikaSender:
         except Exception as e:
             logger.debug(f"get_contacts_updates: {e}")
 
-        # ۲. اگر یافت نشد، سعی کن مستقیم ارسال کن (resolve_peer)
-        try:
-            peer = await client.resolve_peer(phone_intl)
-            if peer and hasattr(peer, 'user_id'):
-                logger.info(f"تماس مستقیم برای {phone}")
-                return str(peer.user_id)
-        except Exception as e:
-            logger.debug(f"resolve_peer: {e}")
-
         return None
 
     async def _send_file_async(self, phone: str, pdf_path: str, caption: str = "") -> dict:
-        """ارسال فایل"""
+        """ارسال فایل مستقیم به شماره"""
         try:
             client = await self._get_client()
+            phone_intl = "+98" + phone[1:] if phone.startswith("0") else phone
+
+            # تلاش ۱: جستجو در مخاطبین
             guid = await self._get_guid(client, phone)
+
+            # تلاش ۲: اگر GUID نیافتیم، سعی کن مستقیم ارسال کن
             if not guid:
-                logger.warning(f"روبیکا: شماره {phone} در مخاطبین یافت نشد - دستی بازی کنید")
-                return {"success": False, "error": f"شماره {phone} در مخاطبین روبیکا نیست"}
+                try:
+                    # برخی نسخه‌های rubpy از send_document مستقیم پشتیبانی می‌کنند
+                    result = await client.send_document(phone_intl, pdf_path, caption=caption)
+                    logger.info(f"PDF به روبیکا ارسال شد (مستقیم): {phone}")
+                    return {"success": True}
+                except Exception as e:
+                    logger.debug(f"ارسال مستقیم شکست: {e}")
+                    return {"success": False, "error": f"شماره {phone} در روبیکا یافت نشد"}
 
             result = await client.send_document(guid, pdf_path, caption=caption)
             logger.info(f"PDF به روبیکا ارسال شد: {phone}")
