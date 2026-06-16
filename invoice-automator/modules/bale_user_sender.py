@@ -10,12 +10,16 @@
 
 import asyncio
 import logging
+import sys
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
 # پوشه‌ی پروژه (invoice-automator)
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+print(f"[INIT] BaleUserSender loading... BASE_DIR={BASE_DIR}", file=sys.stderr)
+sys.stderr.flush()
 
 
 async def _maybe_await(x):
@@ -48,7 +52,10 @@ class BaleUserSender:
         self.enabled = bool(session) and Path(session).exists()
 
         # پرینت برای دیباگ
-        print(f"[BaleUserSender] session_file={session}, exists={Path(session).exists() if session else False}, enabled={self.enabled}")
+        msg = f"[BaleUserSender.__init__] session_file={session}, exists={Path(session).exists() if session else False}, enabled={self.enabled}"
+        print(msg, file=sys.stderr)
+        sys.stderr.flush()
+        logger.info(msg)
 
     async def _resolve_peer(self, client, phone: str):
         """تبدیل شماره تلفن مشتری به مخاطب بله"""
