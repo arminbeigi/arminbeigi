@@ -58,26 +58,28 @@ class RubikaSender:
         return self._client
 
     async def _get_guid(self, client, phone: str) -> str:
-        """دریافت یا ایجاد GUID کاربر"""
+        """دریافت GUID یا ایجاد چت مستقیم"""
         phone_intl = "+98" + phone[1:] if phone.startswith("0") else phone
 
-        try:
-            result = await client.add_address_book(phone=phone_intl, first_name=phone)
-            guid = getattr(result, "user_guid", None)
-            if guid:
-                logger.info(f"مخاطب {phone} اضافه شد")
-                return guid
-        except Exception as e:
-            logger.debug(f"add_address_book: {e}")
-
+        # ۱. جستجو در مخاطبین موجود
         try:
             contacts = await client.get_contacts_updates()
             for user in getattr(contacts, "user_list", []):
                 user_phone = getattr(user, "phone", "") or ""
                 if phone in user_phone or phone_intl in user_phone:
+                    logger.info(f"مخاطب یافت شد: {phone}")
                     return user.user_guid
         except Exception as e:
             logger.debug(f"get_contacts_updates: {e}")
+
+        # ۲. اگر یافت نشد، سعی کن مستقیم ارسال کن (resolve_peer)
+        try:
+            peer = await client.resolve_peer(phone_intl)
+            if peer and hasattr(peer, 'user_id'):
+                logger.info(f"تماس مستقیم برای {phone}")
+                return str(peer.user_id)
+        except Exception as e:
+            logger.debug(f"resolve_peer: {e}")
 
         return None
 
