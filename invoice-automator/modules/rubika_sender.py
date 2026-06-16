@@ -74,6 +74,10 @@ class RubikaSender:
             logger.info(f"PDF به روبیکا ارسال شد: {phone}")
             return {"success": True}
 
+        except EOFError:
+            # اگر session نیازمند interactive input باشد، skip کن
+            logger.warning("روبیکا نیاز به دوباره لاگین دارد. اسکریپت rubika_login.py را مجدداً اجرا کنید.")
+            return {"success": False, "error": "روبیکا نیاز به لاگین مجدد دارد"}
         except Exception as e:
             logger.error(f"خطا در ارسال به روبیکا: {e}")
             return {"success": False, "error": str(e)}
