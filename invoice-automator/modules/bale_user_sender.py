@@ -1,6 +1,6 @@
 """
 ارسال پیش فاکتور از طریق پیام‌رسان بله با اکانت شخصی (کتابخانه aiobale)
-چت واقعی دو‌طرفه — مثل روبیکا، نه ربات.
+چت واقعی دو‌طرفه — نه ربات.
 
 راه‌اندازی: یک بار `python3 bale_login.py` تا session ساخته شود.
 
@@ -10,7 +10,6 @@
 
 import asyncio
 import logging
-import sys
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
@@ -18,14 +17,23 @@ logger = logging.getLogger(__name__)
 # پوشه‌ی پروژه (invoice-automator)
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-print(f"[INIT] BaleUserSender loading... BASE_DIR={BASE_DIR}", file=sys.stderr)
-sys.stderr.flush()
-
 
 async def _maybe_await(x):
     if asyncio.iscoroutine(x):
         return await x
     return x
+
+
+def _to_international(phone: str) -> str:
+    """تبدیل 09121056345 → 989121056345 (فرمت موردنیاز بله: بدون + و بدون صفر اول)"""
+    phone = phone.strip().replace(" ", "").replace("+", "")
+    if phone.startswith("0098"):
+        return phone[2:]
+    if phone.startswith("98"):
+        return phone
+    if phone.startswith("0"):
+        return "98" + phone[1:]
+    return "98" + phone
 
 
 class BaleUserSender:
@@ -36,44 +44,49 @@ class BaleUserSender:
         if session and not Path(session).is_absolute():
             session = str(BASE_DIR / session)
 
-        # اگر فایل وجود ندارد، جستجو کن
+        # اگر فایل در مسیر پروژه نبود، در دایرکتوری فعلی هم بگرد
         if session and not Path(session).exists():
-            # جستجو ۱: دایرکتوری فعلی
             fallback = Path.cwd() / Path(session).name
             if fallback.exists():
                 session = str(fallback)
-            else:
-                # جستجو ۲: پوشه والد دایرکتوری فعلی
-                fallback = Path.cwd().parent / Path(session).name
-                if fallback.exists():
-                    session = str(fallback)
 
         self.session_file = session
         self.enabled = bool(session) and Path(session).exists()
 
-        # پرینت برای دیباگ
-        msg = f"[BaleUserSender.__init__] session_file={session}, exists={Path(session).exists() if session else False}, enabled={self.enabled}"
-        print(msg, file=sys.stderr)
-        sys.stderr.flush()
-        logger.info(msg)
-
     async def _resolve_peer(self, client, phone: str):
-        """تبدیل شماره تلفن مشتری به مخاطب بله"""
-        # تلاش ۱: جستجوی مستقیم در مخاطبین
-        peer = await client.search_contact(phone_number=phone)
-        if peer is not None:
-            return peer
+        """
+        پیدا کردن یا ساختن مخاطب بله از روی شماره تلفن.
+        نام مخاطب = شماره تلفن مشتری.
+        خروجی: InfoPeer (دارای id و type) یا None
+        """
+        intl = _to_international(phone)            # 989121056345
+        intl_int = int(intl)                       # 989121056345 (عدد)
 
-        # تلاش ۲: افزودن شماره به مخاطبین با نام = شماره، سپس جستجوی دوباره
-        national = int(phone[1:]) if phone.startswith("0") else int(phone)
+        # تلاش ۱: جستجوی مستقیم (شاید قبلاً مخاطب باشد)
         try:
-            await client.import_contacts([(national, phone)])
-            logger.info(f"مخاطب {phone} اضافه شد")
+            peer = await client.search_contact(phone_number=intl)
+            if peer is not None:
+                return peer
+        except Exception as e:
+            logger.debug(f"search_contact: {e}")
+
+        # تلاش ۲: افزودن به مخاطبین با نام = شماره تلفن، سپس استفاده از خروجی
+        try:
+            imported = await client.import_contacts([(intl_int, phone)])
+            if imported:
+                logger.info(f"بله: مخاطب {phone} ساخته شد")
+                return imported[0]
         except Exception as e:
             logger.debug(f"import_contacts: {e}")
-        return await client.search_contact(phone_number=phone)
 
-    async def _send_async(self, phone: str, pdf_path: str, caption: str) -> dict:
+        # تلاش ۳: جستجوی دوباره بعد از import
+        try:
+            return await client.search_contact(phone_number=intl)
+        except Exception as e:
+            logger.debug(f"search_contact(2): {e}")
+            return None
+
+    async def _send_async(self, phone: str, pdf_path: str, caption: str, doc_caption: str) -> dict:
         try:
             from aiobale import Client
             from aiobale.enums import ChatType
@@ -84,23 +97,29 @@ class BaleUserSender:
         client = Client(session_file=self.session_file)
         try:
             await _maybe_await(client.start(run_in_background=True))
+
             peer = await self._resolve_peer(client, phone)
             if peer is None:
-                return {"success": False, "error": f"مخاطب {phone} در بله پیدا نشد"}
+                return {"success": False,
+                        "error": f"شماره {phone} در بله یافت نشد (احتمالاً کاربر بله نیست)"}
 
+            chat_id = peer.id
             chat_type = getattr(peer, "type", None) or ChatType.PRIVATE
-            try:
-                file_input = FileInput(pdf_path)
-            except Exception:
-                file_input = FileInput(path=pdf_path)
 
+            # ابتدا متن کامل پیام
+            try:
+                await client.send_message(text=caption, chat_id=chat_id, chat_type=chat_type)
+            except Exception as e:
+                logger.debug(f"send_message: {e}")
+
+            # سپس فایل PDF با یک کپشن کوتاه (تا متن تکرار نشود)
             await client.send_document(
-                file=file_input,
-                chat_id=peer.id,
+                file=FileInput(pdf_path),
+                chat_id=chat_id,
                 chat_type=chat_type,
-                caption=caption,
+                caption=doc_caption,
             )
-            logger.info(f"PDF به بله (شخصی) ارسال شد: {phone}")
+            logger.info(f"PDF به بله (اکانت شخصی) ارسال شد: {phone}")
             return {"success": True}
 
         except Exception as e:
@@ -118,16 +137,16 @@ class BaleUserSender:
                 "error": "بله (اکانت شخصی) تنظیم نشده — اول bale_login.py را اجرا کنید",
             }
 
-        from .pdf_parser import format_amount
-
+        serial = invoice_data.get("serial", "")
         caption = (
             f"🔸 سلام و وقت بخیر 🔸\n\n"
-            f"احتراماً پیش فاکتور شماره {invoice_data.get('serial', '')} "
+            f"احتراماً پیش فاکتور شماره {serial} "
             f"جهت مشاهده و بررسی خدمتتان ارسال می‌گردد.\n\n"
             f"🔗 مشاهده آنلاین:\n{short_link}\n\n"
             f"🏢 تاسیسات حرارتی و برودتی شوفاژ دات کام\n"
             f"📞 02188302400"
         )
+        doc_caption = f"📄 پیش فاکتور شماره {serial}"
 
-        # asyncio.run مثل bale_test_send.py — ضروری برای لود شدن صحیح session
-        return asyncio.run(self._send_async(phone, pdf_path, caption))
+        # asyncio.run ضروری است تا session درست لود شود
+        return asyncio.run(self._send_async(phone, pdf_path, caption, doc_caption))

@@ -5,23 +5,18 @@
 استفاده:
   python3 rubika_login.py
 
-سپس شماره تلفن بین‌المللی را وارد کن: 98XXXXXXXXXX
-فایل session خودکار ذخیره می‌شود.
+روبیکا شماره تلفن و کد تأیید را می‌پرسد:
+  - شماره را این‌طور وارد کن:  989XXXXXXXXX  (با کد کشور 98، بدون + و بدون صفر)
+session در فایل rubika.rbs کنار پروژه ذخیره می‌شود و main.py از همان استفاده می‌کند.
 
 ⚠️ این کتابخانه غیررسمی است؛ استفاده‌ی انبوه ممکن است اکانت را محدود کند.
 """
 
 import asyncio
-import json
 from pathlib import Path
 
-SESSION_FILE = Path(__file__).parent / "rubika_session.json"
-
-
-async def _maybe_await(x):
-    if asyncio.iscoroutine(x):
-        return await x
-    return x
+# همان نام session که rubika_sender.py استفاده می‌کند
+SESSION_NAME = str(Path(__file__).resolve().parent / "rubika")
 
 
 async def login():
@@ -34,38 +29,24 @@ async def login():
     print("\n" + "=" * 50)
     print("🔐 لاگین روبیکا (اکانت شخصی)")
     print("=" * 50)
-    print("\nروبیکا شماره تلفن را می‌پرسد.")
-    print("شماره را این‌طور وارد کن:  98XXXXXXXXXX\n")
+    print("\nروبیکا شماره و کد را می‌پرسد.")
+    print("شماره را این‌طور وارد کن:  989XXXXXXXXX\n")
 
-    client = Client()
-    try:
-        # روبیکا خودش لاگین تعاملی را انجام می‌دهد
-        await _maybe_await(client.start())
-
-        # Save session info
-        me = await _maybe_await(client.get_me())
-        user_data = {
-            "user_id": getattr(me, "user_id", None),
-            "phone": getattr(me, "phone", None),
-            "first_name": getattr(me, "first_name", ""),
-        }
-        SESSION_FILE.write_text(json.dumps(user_data, ensure_ascii=False, indent=2), encoding="utf-8")
-
-        await asyncio.sleep(1)
+    async with Client(name=SESSION_NAME) as client:
+        me = await client.get_me()
+        name = getattr(me, "first_name", "") or ""
         print("\n" + "=" * 50)
         print("✅ لاگین موفق!")
-        print(f"👤 نام: {user_data.get('first_name', 'Unknown')}")
-        print(f"📱 شماره: {user_data.get('phone', 'Unknown')}")
+        print(f"👤 نام: {name}")
         print("✅ اکنون main.py را اجرا کن؛ روبیکا از این session استفاده می‌کند.")
         print("=" * 50)
         return True
-    except Exception as e:
-        print(f"\n❌ خطا: {e}")
-        return False
-    finally:
-        await _maybe_await(client.disconnect())
 
 
 if __name__ == "__main__":
-    ok = asyncio.run(login())
+    try:
+        ok = asyncio.run(login())
+    except Exception as e:
+        print(f"\n❌ خطا: {e}")
+        ok = False
     raise SystemExit(0 if ok else 1)

@@ -1,23 +1,37 @@
 """
-ارسال پیش فاکتور از طریق روبیکا (غیرفعال - نیاز به تنظیم دستی)
+ارسال پیش فاکتور از طریق روبیکا (اکانت شخصی - کتابخانه rubpy)
 
-مراحل راه‌اندازی:
-1. python3 rubika_login.py  (یک بار برای لاگین و ذخیره session)
-2. سپس config.yaml میں auth: "enabled" را تنظیم کن
+راه‌اندازی:
+1. python3 rubika_login.py   (یک بار برای لاگین و ذخیره session)
+2. در config.yaml مقدار rubika.auth را "enabled" بگذار
 3. main.py را اجرا کن
+
+روبیکا خودش مخاطب را با نام = شماره تلفن مشتری اضافه می‌کند (addAddressBook).
 
 ⚠️ rubpy کتابخانه غیررسمی است؛ استفاده‌ی انبوه ممکن است اکانت را محدود کند.
 """
 
-import asyncio
-import logging
 import os
 import sys
+import asyncio
+import logging
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+def _to_international(phone: str) -> str:
+    """تبدیل 09121056345 → 989121056345 (فرمت روبیکا)"""
+    phone = phone.strip().replace(" ", "").replace("+", "")
+    if phone.startswith("0098"):
+        return phone[2:]
+    if phone.startswith("98"):
+        return phone
+    if phone.startswith("0"):
+        return "98" + phone[1:]
+    return "98" + phone
 
 
 class RubikaSender:
@@ -26,47 +40,44 @@ class RubikaSender:
         self._client = None
 
     async def _get_client(self):
-        """کلاینت روبیکا"""
+        """کلاینت روبیکا (با ذخیره session؛ بدون prompt تعاملی)"""
         if self._client is None:
-            session_file = BASE_DIR / "rubika_session.json"
-            if not session_file.exists():
-                logger.warning("روبیکا: فایل session یافت نشد")
-                raise RuntimeError("روبیکا: ابتدا python3 rubika_login.py را اجرا کنید")
+            from rubpy import Client
+            self._client = Client(name=str(BASE_DIR / "rubika"))
 
+            # جلوگیری از prompt تعاملی: stdin را به /dev/null هدایت کن
+            old_stdin = sys.stdin
             try:
-                from rubpy import Client
-                self._client = Client()
-                try:
-                    old_stdin = sys.stdin
-                    sys.stdin = open(os.devnull, 'r')
-                    try:
-                        await asyncio.wait_for(self._client.start(), timeout=10.0)
-                    finally:
-                        sys.stdin = old_stdin
-                except asyncio.TimeoutError:
-                    logger.warning("روبیکا timeout")
-                    raise RuntimeError("روبیکا timeout - لاگین مجدد لازم است")
-                except EOFError:
-                    logger.warning("روبیکا نیاز به لاگین مجدد دارد")
-                    raise RuntimeError("روبیکا نیاز به لاگین است")
-            except ImportError:
-                logger.error("کتابخانه rubpy نصب نیست: pip install rubpy")
-                raise
-            except Exception as e:
-                logger.error(f"خطا در اتصال به روبیکا: {e}")
-                raise
+                sys.stdin = open(os.devnull, "r")
+                await asyncio.wait_for(self._client.start(), timeout=15.0)
+            finally:
+                sys.stdin = old_stdin
         return self._client
 
     async def _get_guid(self, client, phone: str) -> str:
-        """دریافت GUID از مخاطبین موجود"""
-        phone_intl = "+98" + phone[1:] if phone.startswith("0") else phone
+        """
+        گرفتن GUID کاربر روبیکا.
+        روش اصلی: addAddressBook — مخاطب را با نام = شماره تلفن می‌سازد و GUID برمی‌گرداند.
+        """
+        intl = _to_international(phone)   # 989121056345
 
+        # روش ۱: افزودن به دفترچه آدرس با نام = شماره تلفن
+        for candidate in (intl, "+" + intl):
+            try:
+                result = await client.add_address_book(phone=candidate, first_name=phone)
+                guid = result.user_guid
+                if guid:
+                    logger.info(f"روبیکا: مخاطب {phone} اضافه شد")
+                    return guid
+            except Exception as e:
+                logger.debug(f"add_address_book({candidate}): {e}")
+
+        # روش ۲: جستجو در مخاطبین موجود
         try:
             contacts = await client.get_contacts_updates()
-            for user in getattr(contacts, "user_list", []):
-                user_phone = getattr(user, "phone", "") or ""
-                if phone in user_phone or phone_intl in user_phone:
-                    logger.info(f"مخاطب یافت شد: {phone}")
+            for user in getattr(contacts, "users", []) or []:
+                user_phone = str(getattr(user, "phone", "") or "")
+                if phone[-10:] in user_phone:
                     return user.user_guid
         except Exception as e:
             logger.debug(f"get_contacts_updates: {e}")
@@ -74,75 +85,52 @@ class RubikaSender:
         return None
 
     async def _send_file_async(self, phone: str, pdf_path: str, caption: str = "") -> dict:
-        """ارسال فایل مستقیم به شماره"""
         try:
             client = await self._get_client()
-            phone_intl = "+98" + phone[1:] if phone.startswith("0") else phone
-
-            # تلاش ۱: جستجو در مخاطبین
             guid = await self._get_guid(client, phone)
-
-            # تلاش ۲: اگر GUID نیافتیم، سعی کن مستقیم ارسال کن
             if not guid:
-                try:
-                    # برخی نسخه‌های rubpy از send_document مستقیم پشتیبانی می‌کنند
-                    result = await client.send_document(phone_intl, pdf_path, caption=caption)
-                    logger.info(f"PDF به روبیکا ارسال شد (مستقیم): {phone}")
-                    return {"success": True}
-                except Exception as e:
-                    logger.debug(f"ارسال مستقیم شکست: {e}")
-                    return {"success": False, "error": f"شماره {phone} در روبیکا یافت نشد"}
+                return {"success": False,
+                        "error": f"شماره {phone} کاربر روبیکا نیست یا یافت نشد"}
 
-            result = await client.send_document(guid, pdf_path, caption=caption)
+            await client.send_document(guid, pdf_path, caption=caption)
             logger.info(f"PDF به روبیکا ارسال شد: {phone}")
             return {"success": True}
 
-        except EOFError:
-            logger.warning("روبیکا نیاز به دوباره لاگین دارد")
-            return {"success": False, "error": "روبیکا نیاز به لاگین مجدد دارد"}
+        except asyncio.TimeoutError:
+            logger.warning("روبیکا timeout - لاگین مجدد لازم است (python3 rubika_login.py)")
+            return {"success": False, "error": "روبیکا timeout - لاگین مجدد کنید"}
+        except ImportError:
+            logger.error("کتابخانه rubpy نصب نیست: pip install rubpy")
+            return {"success": False, "error": "rubpy نصب نیست"}
         except Exception as e:
             logger.error(f"خطا در ارسال به روبیکا: {e}")
             return {"success": False, "error": str(e)}
 
-    def send_file(self, phone: str, pdf_path: str, caption: str = "") -> dict:
-        """ارسال فایل (sync wrapper با timeout)"""
+    def send_invoice(self, phone: str, pdf_path: str,
+                     invoice_data: dict, short_link: str) -> dict:
+        """ارسال پیش فاکتور از طریق روبیکا"""
+        if not self.enabled:
+            return {"success": False, "error": "روبیکا تنظیم نشده"}
+
+        caption = (
+            f"🔸 سلام و وقت بخیر 🔸\n\n"
+            f"احتراماً پیش فاکتور شماره {invoice_data.get('serial', '')} "
+            f"جهت مشاهده و بررسی خدمتتان ارسال می‌گردد.\n\n"
+            f"🔗 مشاهده آنلاین:\n{short_link}\n\n"
+            f"🏢 تاسیسات حرارتی و برودتی شوفاژ دات کام\n"
+            f"📞 02188302400"
+        )
+
         loop = asyncio.new_event_loop()
         try:
-            # Timeout 8 ثانیه - اگر interactive prompt بود، timeout می‌شود
             return loop.run_until_complete(
-                asyncio.wait_for(self._send_file_async(phone, pdf_path, caption), timeout=8.0)
+                asyncio.wait_for(self._send_file_async(phone, pdf_path, caption), timeout=30.0)
             )
         except asyncio.TimeoutError:
-            logger.warning("روبیکا timeout شد - احتمالاً نیاز به دوباره لاگین")
-            return {"success": False, "error": "روبیکا timeout - دوباره لاگین کنید"}
+            logger.warning("روبیکا timeout شد")
+            return {"success": False, "error": "روبیکا timeout"}
         except Exception as e:
             logger.error(f"خطا در Rubika: {e}")
             return {"success": False, "error": str(e)}
         finally:
             loop.close()
-
-    def send_invoice(self, phone: str, pdf_path: str,
-                     invoice_data: dict, short_link: str) -> dict:
-        """ارسال پیش فاکتور (با timeout برای جلوگیری از hanging)"""
-        if not self.enabled:
-            return {"success": False, "error": "روبیکا تنظیم نشده"}
-
-        from .pdf_parser import format_amount
-
-        caption = (
-            f"📄 پیش فاکتور شماره {invoice_data.get('serial', '')}\n"
-            f"💰 مبلغ: {format_amount(invoice_data.get('total', ''))} ریال\n"
-            f"🔗 لینک: {short_link}"
-        )
-
-        # Timeout 8 ثانیه - اگر timeout شد، بقیه سیستم متوقف نمی‌شود
-        return self.send_file(phone, pdf_path, caption)
-
-    async def close(self):
-        """بستن اتصال"""
-        if self._client:
-            try:
-                await self._client.disconnect()
-            except Exception:
-                pass
-            self._client = None

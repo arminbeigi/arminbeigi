@@ -17,7 +17,6 @@
 import os
 import sys
 import time
-import json
 import queue
 import shutil
 import yaml
@@ -36,45 +35,38 @@ from modules.pdf_parser import extract_invoice_data, format_phone_international
 from modules.wp_uploader import WordPressUploader
 from modules.sms_kavenegar import KavenegarSMS
 from modules.whatsapp_sender import WhatsAppSender
-from modules.bale_sender import BaleSender
 from modules.bale_user_sender import BaleUserSender
 from modules.rubika_sender import RubikaSender
 
 logger = logging.getLogger("InvoiceBot")
 
 # ── محافظ ضدِ ارسال تکراری ──────────────────────
-# هر فاکتور فقط یک‌بار ارسال می‌شود. کلیدهای ارسال‌شده در این فایل ذخیره می‌شوند.
+# جلوگیری از ارسال دوباره به‌خاطر رویدادهای تکراری فایل‌سیستم (مک گاهی دو رویداد می‌دهد).
+# پنجره‌ی زمانی: یک فاکتور در این بازه دوباره ارسال نمی‌شود، اما بعد از آن آزاد است
+# (تا ارسال مجدد عمدی همان فاکتور ممکن بماند).
 _registry_lock = threading.Lock()
-_REGISTRY_FILE = BASE_DIR / "logs" / "sent_invoices.json"
+_DEDUP_WINDOW = 120  # ثانیه
 _in_progress: set = set()
-
-
-def _load_sent() -> set:
-    """خواندن لیست فاکتورهای ارسال‌شده از فایل"""
-    try:
-        return set(json.loads(_REGISTRY_FILE.read_text(encoding="utf-8")))
-    except Exception:
-        return set()
-
-
-def _mark_sent(key: str):
-    """ثبت یک فاکتور به‌عنوان ارسال‌شده"""
-    with _registry_lock:
-        sent = _load_sent()
-        sent.add(key)
-        _REGISTRY_FILE.parent.mkdir(exist_ok=True)
-        _REGISTRY_FILE.write_text(
-            json.dumps(sorted(sent), ensure_ascii=False), encoding="utf-8"
-        )
+_recent_sent: dict = {}  # key -> timestamp آخرین ارسال
 
 
 def _claim(key: str) -> bool:
-    """رزرو یک فاکتور برای پردازش. اگر قبلاً ارسال شده یا در حال ارسال است → False"""
+    """رزرو یک فاکتور برای پردازش. اگر در حال ارسال یا تازه ارسال شده → False"""
     with _registry_lock:
-        if key in _in_progress or key in _load_sent():
+        now = time.time()
+        if key in _in_progress:
+            return False
+        last = _recent_sent.get(key)
+        if last is not None and (now - last) < _DEDUP_WINDOW:
             return False
         _in_progress.add(key)
         return True
+
+
+def _mark_sent(key: str):
+    """ثبت زمان ارسال موفق"""
+    with _registry_lock:
+        _recent_sent[key] = time.time()
 
 
 def _release(key: str):
@@ -176,7 +168,7 @@ def process_invoice(pdf_path: str, config: dict) -> dict:
             rubika = RubikaSender(config.get("rubika", {}))
             return "rubika", rubika.send_invoice(phone, pdf_path, info, short_link)
 
-        labels = {"sms": "پیامک", "whatsapp": "واتساپ", "bale": "بله (ربات)", "bale_user": "بله (شخصی)", "rubika": "روبیکا"}
+        labels = {"sms": "پیامک", "whatsapp": "واتساپ", "bale_user": "بله", "rubika": "روبیکا"}
 
         def record(key, r):
             label = labels.get(key, key)

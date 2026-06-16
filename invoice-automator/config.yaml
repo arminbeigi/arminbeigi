@@ -4,8 +4,8 @@
 
 # ── پوشه‌ها ──────────────────────────────────────
 folders:
-  watch: "/home/user/arminbeigi/invoice-automator/watch_folder"
-  processed: "/home/user/arminbeigi/invoice-automator/watch_folder/ارسال شده"
+  watch: "/Users/armin/Desktop/ارسال پیش فاکتور"
+  processed: "/Users/armin/Desktop/ارسال پیش فاکتور/ارسال شده"
 
 # ── وردپرس (آپلود PDF + لینک کوتاه) ─────────────
 # مراحل راه‌اندازی:
@@ -36,19 +36,12 @@ whatsapp:
   phone_number_id: ""       # خالی = فقط لینک wa.me
   access_token: ""
 
-# ── بله ──────────────────────────────────────────
-# دو روش:
-#   الف) ربات (bot_token): فقط برای مشتری‌هایی که ربات را استارت کردند
-#   ب) اکانت شخصی (user_session): چت واقعی دو‌طرفه
-#       - روی Mac: python3 bale_login.py
-#       - بعد بگذارید session خودکار ذخیره شود
-#
+# ── بله (فقط اکانت شخصی - بدون ربات) ─────────────
+# چت واقعی دو‌طرفه با اکانت شخصی:
+#   - روی Mac یک‌بار: python3 bale_login.py
+#   - بعد session خودکار ذخیره می‌شود و سیستم از آن استفاده می‌کند
 bale:
-  # روش ۱: ربات (قدیمی)
-  bot_token: "1575264772:gSJ-bMk-yulaDaH4wVDQFXfq0uSXVhXnB3I"
-
-  # روش ۲: اکانت شخصی (نیاز به setup و session)
-  user_session_file: "bale_session.bale"  # خالی = تنها ربات استفاده شود
+  user_session_file: "bale_session.bale"
 
 # ── روبیکا ───────────────────────────────────────
 # نیاز به کتابخانه rubpy و لاگین با شماره تلفن

@@ -101,13 +101,36 @@ class WordPressUploader:
 
         if response.status_code in (200, 201):
             page = response.json()
-            short_link = f"{self.base_url}/{slug}"
-            logger.info(f"لینک کوتاه ساخته شد: {short_link}")
-            return short_link
+            # از لینک واقعی که وردپرس برگردانده استفاده کن (ممکن است slug تغییر کرده باشد)
+            short_link = page.get("link") or f"{self.base_url}/{slug}"
+            # اگر صفحه publish نشده باشد (مثلاً draft)، لینک کار نمی‌کند → لینک مستقیم
+            if page.get("status") != "publish":
+                logger.warning("صفحه ریدایرکت publish نشد، از لینک مستقیم استفاده می‌شود")
+                return target_url
+            # تأیید نهایی: مطمئن شو لینک کوتاه واقعاً باز می‌شود (۲۰۰)؛ وگرنه لینک مستقیم
+            if self._link_works(short_link):
+                logger.info(f"لینک کوتاه ساخته شد: {short_link}")
+                return short_link
+            logger.warning(f"لینک کوتاه {short_link} باز نشد (۴۰۴)، از لینک مستقیم استفاده می‌شود")
+            return target_url
 
         # --- روش ۲: فقط لینک مستقیم ---
         logger.warning("ساخت صفحه ریدایرکت ناموفق، از لینک مستقیم استفاده می‌شود")
         return target_url
+
+    def _link_works(self, url: str) -> bool:
+        """بررسی اینکه لینک واقعاً باز می‌شود (HTTP 200)"""
+        try:
+            r = requests.get(
+                url,
+                headers={"User-Agent": "Mozilla/5.0 InvoiceBot/1.0"},
+                timeout=15,
+                allow_redirects=True,
+            )
+            return r.status_code == 200
+        except Exception as e:
+            logger.debug(f"بررسی لینک کوتاه: {e}")
+            return False
 
     def create_short_link_yourls(self, target_url: str, yourls_url: str,
                                   yourls_signature: str, keyword: str = None) -> str:
