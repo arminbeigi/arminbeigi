@@ -28,6 +28,11 @@ class RubikaSender:
     async def _get_client(self):
         """کلاینت روبیکا"""
         if self._client is None:
+            session_file = BASE_DIR / "rubika_session.json"
+            if not session_file.exists():
+                logger.warning("روبیکا: فایل session یافت نشد")
+                raise RuntimeError("روبیکا: ابتدا python3 rubika_login.py را اجرا کنید")
+
             try:
                 from rubpy import Client
                 self._client = Client()
@@ -39,10 +44,10 @@ class RubikaSender:
                     finally:
                         sys.stdin = old_stdin
                 except asyncio.TimeoutError:
-                    logger.warning("روبیکا timeout - نیاز به لاگین مجدد")
+                    logger.warning("روبیکا timeout")
                     raise RuntimeError("روبیکا timeout - لاگین مجدد لازم است")
                 except EOFError:
-                    logger.warning("روبیکا نیاز به لاگین دارد - rubika_login.py را اجرا کنید")
+                    logger.warning("روبیکا نیاز به لاگین مجدد دارد")
                     raise RuntimeError("روبیکا نیاز به لاگین است")
             except ImportError:
                 logger.error("کتابخانه rubpy نصب نیست: pip install rubpy")
