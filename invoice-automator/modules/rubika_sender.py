@@ -11,6 +11,8 @@
 
 import asyncio
 import logging
+import os
+import sys
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
@@ -29,12 +31,19 @@ class RubikaSender:
             try:
                 from rubpy import Client
                 self._client = Client()
-                # اگر interactive پیامپت بود، timeout بده (10 ثانیه)
                 try:
-                    await asyncio.wait_for(self._client.start(), timeout=10.0)
+                    old_stdin = sys.stdin
+                    sys.stdin = open(os.devnull, 'r')
+                    try:
+                        await asyncio.wait_for(self._client.start(), timeout=10.0)
+                    finally:
+                        sys.stdin = old_stdin
                 except asyncio.TimeoutError:
-                    logger.warning("روبیکا timeout شد - احتمالاً نیاز به دوباره لاگین دارد")
+                    logger.warning("روبیکا timeout - نیاز به لاگین مجدد")
                     raise RuntimeError("روبیکا timeout - لاگین مجدد لازم است")
+                except EOFError:
+                    logger.warning("روبیکا نیاز به لاگین دارد - rubika_login.py را اجرا کنید")
+                    raise RuntimeError("روبیکا نیاز به لاگین است")
             except ImportError:
                 logger.error("کتابخانه rubpy نصب نیست: pip install rubpy")
                 raise
