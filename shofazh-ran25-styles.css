@@ -123,11 +123,11 @@
 .ran25-list li:nth-child(5){animation-delay:.33s}.ran25-list li:nth-child(6){animation-delay:.40s}
 .ran25-list li:nth-child(7){animation-delay:.47s}.ran25-list li:nth-child(8){animation-delay:.54s}
 .ran25-list li:nth-child(9){animation-delay:.61s}.ran25-list li:nth-child(10){animation-delay:.68s}
-.ran25-list li::before{content:"✓";position:absolute;right:10px;top:50%;transform:translateY(-50%);
+.ran25-list li::before{content:"\2713";position:absolute;right:10px;top:50%;transform:translateY(-50%);
   width:24px;height:24px;border-radius:50%;background:var(--blue);color:#fff;text-align:center;
   line-height:24px;font-size:14px;font-weight:bold;animation:pop .5s ease forwards}
 .ran25-pros li::before{background:var(--green)}
-.ran25-cons li::before{content:"✕";background:var(--danger)}
+.ran25-cons li::before{content:"\2715";background:var(--danger)}
 .ran25-num{list-style:none;counter-reset:n;padding:0}
 .ran25-num li{counter-increment:n;position:relative;padding:8px 46px 8px 8px;margin:8px 0;
   background:var(--card);border-radius:12px;box-shadow:0 4px 14px rgba(20,40,70,.06)}
@@ -166,7 +166,7 @@
 .ran25-faq summary::after{content:"+";position:absolute;left:16px;top:50%;transform:translateY(-50%);
   width:26px;height:26px;border-radius:50%;background:var(--orange);color:#fff;text-align:center;
   line-height:26px;font-size:18px;transition:transform .3s ease}
-.ran25-faq details[open] summary::after{content:"−";transform:translateY(-50%) rotate(180deg)}
+.ran25-faq details[open] summary::after{content:"\2212";transform:translateY(-50%) rotate(180deg)}
 .ran25-faq .ans{padding:4px 18px 18px;color:var(--muted)}
 .ran25-wrap a{color:var(--blue);text-decoration:none;border-bottom:1px dashed var(--blue);transition:color .2s ease,border-color .2s ease}
 .ran25-wrap a:hover{color:var(--orange);border-bottom-color:var(--orange)}
@@ -177,7 +177,7 @@
 .ran25-related li:hover{transform:translateY(-3px);background:#E1ECFE}
 .ran25-related a{display:block;padding:12px 16px;border:none;color:var(--blue);font-weight:bold;font-size:14px}
 .ran25-related a:hover{color:var(--orange)}
-.ran25-related a::before{content:"◄";margin-left:8px;color:var(--orange);font-size:12px}
+.ran25-related a::before{content:"\25C4";margin-left:8px;color:var(--orange);font-size:12px}
 
 /* ---------- CTA ---------- */
 .ran25-cta{background:linear-gradient(135deg,#0D2B52 0%,#0D47A1 55%,#1565C0 100%);
@@ -194,7 +194,7 @@
 .ran25-cta-feats{list-style:none;padding:0;margin:16px 0;display:flex;flex-wrap:wrap;
   justify-content:center;gap:10px 22px}
 .ran25-cta-feats li{position:relative;padding-right:26px;color:#eaf4ff;font-size:15px}
-.ran25-cta-feats li::before{content:"✓";position:absolute;right:0;top:0;width:20px;height:20px;
+.ran25-cta-feats li::before{content:"\2713";position:absolute;right:0;top:0;width:20px;height:20px;
   border-radius:50%;background:var(--green);color:#fff;text-align:center;line-height:20px;font-size:12px}
 .ran25-btn{display:inline-block;margin-top:14px;padding:16px 46px;border-radius:50px;
   background:linear-gradient(135deg,var(--orange),#FFA000);color:#fff;font-weight:bold;font-size:18px;
@@ -377,8 +377,8 @@
   background:rgba(255,255,255,.08);border-radius:50%;pointer-events:none}
 .ran25-calculator-promo::after{content:"";position:absolute;bottom:-60px;right:-40px;width:200px;height:200px;
   background:rgba(255,179,0,.1);border-radius:50%;pointer-events:none}
-.ran25-cp-grid{position:relative;z-index:2;display:flex;gap:26px;align-items:center;flex-wrap:wrap}
-.ran25-cp-text{flex:1 1 300px;min-width:280px}
+.ran25-cp-grid{position:relative;z-index:2}
+.ran25-cp-text{width:100%;margin-bottom:20px}
 .ran25-cp-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.16);
   border-radius:50px;padding:6px 16px;font-size:13px;font-weight:bold;margin-bottom:14px}
 .ran25-cp-badge svg{width:20px;height:20px;color:#FFD54F}
@@ -386,14 +386,14 @@
 .ran25-calculator-promo p{color:#eaf4ff;margin:0 0 14px;line-height:1.9}
 .ran25-cp-list{list-style:none;padding:0;margin:0 0 18px}
 .ran25-cp-list li{position:relative;padding:5px 28px 5px 0;color:#fff;font-size:14.5px}
-.ran25-cp-list li::before{content:"✓";position:absolute;right:0;top:5px;width:20px;height:20px;border-radius:50%;
+.ran25-cp-list li::before{content:"\2713";position:absolute;right:0;top:5px;width:20px;height:20px;border-radius:50%;
   background:#FFB300;color:#0d47a1;text-align:center;line-height:20px;font-size:12px;font-weight:bold}
-.ran25-cp-media{flex:1 1 280px;min-width:260px}
-.ran25-cp-media video{width:100%;max-width:100%;border-radius:12px;box-shadow:0 10px 28px rgba(0,0,0,.32);
-  background:#0a2f6b;display:block}
+.ran25-cp-media{width:100%}
+.ran25-cp-media video{width:100%;max-width:520px;border-radius:12px;box-shadow:0 10px 28px rgba(0,0,0,.32);
+  background:#0a2f6b;display:block;margin:0 auto}
 .ran25-cp-btn{display:inline-block;margin-top:6px;padding:15px 38px;border-radius:50px;background:#fff;color:#0d47a1;
   font-weight:bold;font-size:17px;text-decoration:none;border:none;animation:promoPulse 2.2s ease-in-out infinite;
   transition:transform .25s ease}
 .ran25-cp-btn:hover{transform:scale(1.05);color:#0d47a1}
-.ran25-cp-btn::after{content:"◄";margin-right:8px;font-size:13px;color:#FF6F00}
-@media(max-width:640px){.ran25-cp-grid{flex-direction:column}.ran25-calculator-promo h3{font-size:20px}}
+.ran25-cp-btn::after{content:"\25C4";margin-right:8px;font-size:13px;color:#FF6F00}
+@media(max-width:640px){.ran25-calculator-promo h3{font-size:20px}}
