@@ -1,0 +1,116 @@
+/* ====== پکیج دیواری و زمینی شوفاژکار — این کد را در: نمایش → سفارشی‌سازی → CSS اضافی بگذارید ====== */
+
+.shz-cat{
+  --shz-accent:#C62828;
+  --shz-accent-2:#FF6F00;
+  --shz-accent-3:#8E0000;
+  --shz-ink:#23272e;
+  --shz-muted:#5b626c;
+  --shz-line:#f0d9d0;
+  --shz-soft:#fff6f1;
+  --shz-card:#ffffff;
+  --shz-radius:16px;
+  --shz-shadow:0 10px 30px rgba(140,30,10,.10);
+  direction:rtl; text-align:right;
+  color:var(--shz-ink);
+  font-family:"Vazirmatn","IRANSans","Vazir","Yekan","Tahoma",sans-serif;
+  line-height:1.95; font-size:17px;
+  background:linear-gradient(180deg,#fffdfc 0%,#fff7f3 100%);
+  max-width:1100px; margin:0 auto; padding:0 16px 40px;
+  overflow-x:hidden;
+}
+.shz-cat *{box-sizing:border-box}
+.shz-cat h1,.shz-cat h2,.shz-cat h3{line-height:1.5; color:var(--shz-ink); font-weight:800}
+.shz-cat p{margin:0 0 16px}
+.shz-cat a{color:var(--shz-accent); text-decoration:none; font-weight:700}
+.shz-cat a:hover{text-decoration:underline}
+
+.shz-ticker{background:linear-gradient(90deg,var(--shz-accent-3),var(--shz-accent),var(--shz-accent-2));color:#fff;border-radius:999px;overflow:hidden;margin:18px 0 6px;box-shadow:var(--shz-shadow)}
+.shz-ticker__track{display:flex;gap:38px;white-space:nowrap;padding:10px 0;width:max-content;animation:shz-marquee 22s linear infinite}
+.shz-ticker span{font-weight:700;font-size:14.5px;opacity:.97}
+.shz-ticker span::before{content:"\1F525";margin-left:8px}
+@keyframes shz-marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+.shz-hero{position:relative;margin-top:14px;padding:34px 26px;border-radius:24px;color:#fff;overflow:hidden;background:radial-gradient(1200px 380px at 90% -20%,rgba(255,255,255,.18),transparent 60%),linear-gradient(135deg,var(--shz-accent-3) 0%,var(--shz-accent) 45%,var(--shz-accent-2) 100%);box-shadow:var(--shz-shadow)}
+.shz-hero h1{color:#fff;font-size:30px;margin:0 0 12px}
+.shz-hero p{color:#fff;opacity:.96;font-size:17.5px;margin:0;max-width:760px}
+.shz-badge{display:inline-block;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.35);color:#fff;font-size:13px;padding:6px 14px;border-radius:999px;margin-bottom:14px}
+
+.shz-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0 6px}
+.shz-stat{background:var(--shz-card);border:1px solid var(--shz-line);border-radius:var(--shz-radius);padding:16px 10px;text-align:center;box-shadow:0 6px 16px rgba(140,30,10,.06)}
+.shz-stat b{display:block;font-size:26px;color:var(--shz-accent);font-weight:800;line-height:1.2}
+.shz-stat small{display:block;color:var(--shz-muted);font-size:13px;margin-top:4px}
+
+.shz-cat .shz-body{counter-reset:shz-sec}
+.shz-sec{background:var(--shz-card);border:1px solid var(--shz-line);border-radius:var(--shz-radius);padding:24px 22px;margin:18px 0;box-shadow:0 6px 18px rgba(140,30,10,.05)}
+.shz-sec h2{counter-increment:shz-sec;font-size:23px;margin:0 0 14px;padding-bottom:12px;border-bottom:2px dashed var(--shz-line);display:flex;align-items:center;gap:12px}
+.shz-sec h2::before{content:counter(shz-sec);flex:0 0 auto;width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--shz-accent),var(--shz-accent-2));color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:18px;font-weight:800}
+.shz-sec h3{font-size:18.5px;margin:18px 0 8px;color:var(--shz-accent-3)}
+.shz-lead{font-size:18px;background:var(--shz-soft);border-right:5px solid var(--shz-accent);padding:14px 16px;border-radius:12px;font-weight:600}
+
+.shz-cat ul.shz-list{list-style:none;margin:8px 0 16px;padding:0}
+.shz-cat ul.shz-list li{position:relative;padding:6px 28px 6px 0;margin:0}
+.shz-cat ul.shz-list li::before{content:"\25FE";color:var(--shz-accent);position:absolute;right:6px;top:6px}
+
+.shz-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:8px 0}
+.shz-card{background:linear-gradient(180deg,#fff,#fff8f4);border:1px solid var(--shz-line);border-radius:var(--shz-radius);padding:18px;transition:transform .25s ease,box-shadow .25s ease}
+.shz-card:hover{transform:translateY(-6px);box-shadow:0 16px 30px rgba(198,40,40,.16)}
+.shz-card h3{margin:0 0 6px;font-size:17.5px;color:var(--shz-ink)}
+.shz-card p{font-size:14.5px;color:var(--shz-muted);margin:0}
+
+.shz-tablewrap{overflow-x:auto;border-radius:14px;border:1px solid var(--shz-line)}
+table.shz-table{width:100%;min-width:640px;border-collapse:collapse;background:#fff;font-size:15px;margin:0}
+table.shz-table th,table.shz-table td{padding:13px 12px;text-align:center;border-bottom:1px solid var(--shz-line)}
+table.shz-table thead th{background:linear-gradient(135deg,var(--shz-accent),var(--shz-accent-2));color:#fff;font-weight:800;font-size:14.5px}
+table.shz-table tbody tr:nth-child(even){background:var(--shz-soft)}
+table.shz-table tbody td:first-child{font-weight:800;color:var(--shz-accent-3);text-align:right}
+
+.shz-pc{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px}
+.shz-pc .box{border-radius:14px;padding:16px 18px;border:1px solid var(--shz-line)}
+.shz-pc .pro{background:linear-gradient(180deg,#f1fbf3,#fff)}
+.shz-pc .con{background:linear-gradient(180deg,#fff5f5,#fff)}
+.shz-pc h3{margin:0 0 8px}
+.shz-pc ul{list-style:none;margin:0;padding:0}
+.shz-pc li{padding:5px 26px 5px 0;position:relative;font-size:15px}
+.shz-pc .pro li::before{content:"\2714";color:#1b8a3a;position:absolute;right:4px}
+.shz-pc .con li::before{content:"\2716";color:#c62828;position:absolute;right:4px}
+
+.shz-calc-promo{position:relative;overflow:hidden;border-radius:22px;padding:30px 26px;margin:26px 0;color:#fff;box-shadow:0 18px 40px rgba(198,40,40,.28);background:radial-gradient(700px 240px at 10% -30%,rgba(255,255,255,.18),transparent 60%),linear-gradient(135deg,#8E0000 0%,#C62828 45%,#FF6F00 100%)}
+.shz-calc-inner{position:relative;z-index:2;display:grid;grid-template-columns:1.3fr 1fr;gap:22px;align-items:center}
+.shz-calc-promo h2{color:#fff;font-size:25px;margin:0 0 8px}
+.shz-calc-promo p{color:#fff;opacity:.96;font-size:16px;margin:0 0 14px}
+.shz-chips{display:flex;flex-wrap:wrap;gap:9px;margin:6px 0 18px}
+.shz-chips span{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.34);padding:7px 12px;border-radius:999px;font-size:13.5px;font-weight:700}
+.shz-cta{display:inline-flex;align-items:center;gap:10px;background:#fff;color:var(--shz-accent-3);font-weight:800;font-size:16px;padding:13px 26px;border-radius:999px}
+.shz-cta:hover{text-decoration:none;transform:translateY(-2px)}
+.shz-calc-visual{display:flex;align-items:center;justify-content:center}
+.shz-calc-visual img{width:100%;max-width:100%;border-radius:14px;box-shadow:0 12px 28px rgba(0,0,0,.3)}
+
+.shz-faq details{background:#fff;border:1px solid var(--shz-line);border-radius:12px;margin:10px 0;overflow:hidden}
+.shz-faq summary{cursor:pointer;padding:15px 18px;font-weight:800;font-size:16px;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px;color:var(--shz-accent-3)}
+.shz-faq summary::-webkit-details-marker{display:none}
+.shz-faq summary::after{content:"+";font-size:22px;color:var(--shz-accent)}
+.shz-faq details[open] summary::after{content:"\2212"}
+.shz-faq .ans{padding:0 18px 16px;color:var(--shz-muted);font-size:15.5px}
+
+.shz-final{margin-top:22px;border-radius:22px;padding:30px 24px;text-align:center;color:#fff;background:linear-gradient(135deg,var(--shz-accent-3),var(--shz-accent) 55%,var(--shz-accent-2));box-shadow:var(--shz-shadow)}
+.shz-final h2{color:#fff;font-size:24px;margin:0 0 10px}
+.shz-final p{color:#fff;opacity:.96;margin:0 0 18px}
+
+.shz-cat img,.shz-cat video{max-width:100%!important;height:auto!important}
+.shz-cat ul.shz-list{list-style:none!important}
+.shz-cat a{box-shadow:none!important}
+
+@media(max-width:768px){
+  .shz-cat{font-size:16px}
+  .shz-hero h1{font-size:24px}
+  .shz-stats{grid-template-columns:repeat(2,1fr)}
+  .shz-grid{grid-template-columns:1fr 1fr}
+  .shz-calc-inner{grid-template-columns:1fr}
+  .shz-pc{grid-template-columns:1fr}
+}
+@media(max-width:480px){
+  .shz-grid{grid-template-columns:1fr}
+  .shz-sec{padding:18px 15px}
+  .shz-hero{padding:26px 18px}
+}

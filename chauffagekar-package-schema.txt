@@ -1,0 +1,196 @@
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CollectionPage",
+      "@id": "https://shofazh.com/product-category/garmayesh/packages/chauffagekar-package/#collectionpage",
+      "url": "https://shofazh.com/product-category/garmayesh/packages/chauffagekar-package/",
+      "name": "پکیج دیواری و زمینی شوفاژکار | لیست قیمت و خرید",
+      "description": "خرید پکیج شوفاژکار شامل سری‌های دیواری کامفورت ۲۴ تا ۴۰ کیلووات و پکیج‌های زمینی سری P، رعد و هورخش با ظرفیت تا ۱۴۶ هزار کیلوکالری و گارانتی شرکتی.",
+      "inLanguage": "fa-IR",
+      "isPartOf": {
+        "@type": "WebSite",
+        "name": "شوفاژ دات کام",
+        "url": "https://shofazh.com/"
+      },
+      "about": [
+        {
+          "@type": "Brand",
+          "name": "شوفاژکار",
+          "alternateName": "Chauffagekar",
+          "url": "https://shofazh.com/product-category/garmayesh/packages/chauffagekar-package/"
+        },
+        {
+          "@type": "ProductGroup",
+          "name": "پکیج شوفاژکار",
+          "category": "گرمایش / پکیج"
+        }
+      ]
+    },
+    {
+      "@type": "ItemList",
+      "@id": "https://shofazh.com/product-category/garmayesh/packages/chauffagekar-package/#itemlist",
+      "name": "مدل‌های پکیج شوفاژکار",
+      "itemListOrder": "https://schema.org/ItemListOrderAscending",
+      "numberOfItems": 9,
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "url": "https://shofazh.com/product-category/garmayesh/packages/chauffagekar-package/",
+          "name": "پکیج دیواری شوفاژکار کامفورت ۲۴"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "url": "https://shofazh.com/product-category/garmayesh/packages/chauffagekar-package/",
+          "name": "پکیج دیواری شوفاژکار کامفورت ۲۸"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "url": "https://shofazh.com/product-category/garmayesh/packages/chauffagekar-package/",
+          "name": "پکیج دیواری شوفاژکار کامفورت ۳۲"
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "url": "https://shofazh.com/product-category/garmayesh/packages/chauffagekar-package/",
+          "name": "پکیج دیواری شوفاژکار کامفورت ۴۰"
+        },
+        {
+          "@type": "ListItem",
+          "position": 5,
+          "url": "https://shofazh.com/product-category/garmayesh/packages/chauffagekar-package/",
+          "name": "پکیج زمینی شوفاژکار سری P۵"
+        },
+        {
+          "@type": "ListItem",
+          "position": 6,
+          "url": "https://shofazh.com/product-category/garmayesh/packages/chauffagekar-package/",
+          "name": "پکیج زمینی شوفاژکار سری P۶"
+        },
+        {
+          "@type": "ListItem",
+          "position": 7,
+          "url": "https://shofazh.com/product-category/garmayesh/packages/chauffagekar-package/",
+          "name": "پکیج زمینی شوفاژکار سری P۷"
+        },
+        {
+          "@type": "ListItem",
+          "position": 8,
+          "url": "https://shofazh.com/product-category/garmayesh/packages/chauffagekar-package/",
+          "name": "پکیج زمینی شوفاژکار رعد"
+        },
+        {
+          "@type": "ListItem",
+          "position": 9,
+          "url": "https://shofazh.com/product-category/garmayesh/packages/chauffagekar-package/",
+          "name": "پکیج زمینی شوفاژکار هورخش"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://shofazh.com/product-category/garmayesh/packages/chauffagekar-package/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "پکیج شوفاژکار بهتر است یا ایران رادیاتور؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "هر دو برند ایرانی معتبر هستند و کیفیت رقابتی دارند. شوفاژکار به‌دلیل سابقه‌ی بیشتر در تولید مدل‌های زمینی چدنی و گارانتی ۱۰ ساله پره‌ها، در پکیج زمینی دست برتر دارد. ایران رادیاتور در پکیج دیواری تنوع مدل بیشتری ارائه می‌کند. انتخاب نهایی به نوع کاربری، متراژ و بودجه‌ی شما بستگی دارد."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "پکیج دیواری شوفاژکار برای چه متراژی مناسب است؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "پکیج دیواری کامفورت ۲۴ کیلووات برای واحدهای ۸۰ تا ۱۲۰ مترمربع، ۲۸ کیلووات برای ۱۲۰ تا ۱۶۰ مترمربع، ۳۲ کیلووات برای ۱۶۰ تا ۲۰۰ مترمربع و ۴۰ کیلووات برای ویلاها و دوبلکس‌های تا ۲۵۰ مترمربع مناسب است."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "تفاوت پکیج زمینی P۵ و P۶ و P۷ شوفاژکار چیست؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "پکیج P۵ مدل کوتاه ۸۵ سانتی‌متر با مبدل صفحه‌ای و آب گرم لحظه‌ای است. مدل‌های P۶ و P۷ بلند ۱۲۰ سانتی‌متر با منبع کویل‌دار ۲۰ تا ۳۰ لیتری برای ذخیره آب گرم طراحی شده‌اند و برای خانواده‌های پرمصرف مناسب‌ترند. P۷ بالاترین ظرفیت گرمایشی این سری را دارد."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "گارانتی پکیج شوفاژکار چند سال است؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "پکیج‌های دیواری شوفاژکار دارای دو سال گارانتی شرکتی و نصب رایگان توسط نماینده مجاز هستند. پکیج‌های زمینی سری P، رعد و هورخش علاوه بر یک سال گارانتی قطعات، از ۱۰ سال گارانتی شرکتی روی پره‌های دیگ چدنی برخوردارند."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "پکیج شوفاژکار با چه سوختی کار می‌کند؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "همه‌ی مدل‌های پکیج شوفاژکار به‌صورت استاندارد با گاز طبیعی شهری کار می‌کنند. در برخی از مدل‌ها با تعویض جت مشعل و تنظیم تکنسین، امکان تبدیل به گاز مایع LPG وجود دارد."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "قیمت پکیج شوفاژکار چقدر است؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "قیمت پکیج شوفاژکار بر اساس مدل دیواری یا زمینی، سری کامفورت، P، رعد یا هورخش و ظرفیت دستگاه تعیین می‌شود و با تغییرات بازار به‌روزرسانی می‌شود. برای قیمت روز به صفحه پکیج شوفاژکار در شوفاژ دات کام مراجعه کنید."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "آیا پکیج شوفاژکار برای گرمایش از کف مناسب است؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "بله؛ به‌خصوص مدل‌های زمینی سری P و رعد به‌دلیل توان حرارتی بالا و امکان تنظیم دقیق دما، گزینه‌ی مناسبی برای گرمایش از کف هستند. در پکیج‌های دیواری کامفورت نیز با نصب کلکتور و ترموستات هوشمند می‌توان از گرمایش از کف بهره برد."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "هر چند وقت یک‌بار باید پکیج شوفاژکار را سرویس کرد؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "سرویس کامل پکیج توسط تکنسین متخصص باید سالانه یک بار و ترجیحاً پیش از شروع فصل سرما انجام شود. این سرویس شامل تمیزکاری مشعل، رسوب‌زدایی مبدل، چک کردن فشار آب، آنالیز احتراق و بازدید دودکش است."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://shofazh.com/product-category/garmayesh/packages/chauffagekar-package/#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "خانه",
+          "item": "https://shofazh.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "گرمایش",
+          "item": "https://shofazh.com/product-category/garmayesh/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "پکیج",
+          "item": "https://shofazh.com/product-category/garmayesh/packages/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": "پکیج شوفاژکار",
+          "item": "https://shofazh.com/product-category/garmayesh/packages/chauffagekar-package/"
+        }
+      ]
+    }
+  ]
+}
+</script>
