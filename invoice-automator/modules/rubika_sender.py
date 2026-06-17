@@ -39,9 +39,21 @@ class RubikaSender:
         self.enabled = config.get("auth", "") == "enabled"
         self._client = None
 
+    def _check_session_exists(self) -> bool:
+        """بررسی اینکه فایل session روبیکا وجود داره یا نه"""
+        session_files = list(BASE_DIR.glob("rubika*"))
+        return len(session_files) > 0
+
     async def _get_client(self):
         """کلاینت روبیکا (با ذخیره session؛ بدون prompt تعاملی)"""
         if self._client is None:
+            # بررسی اینکه session فایل موجود است
+            if not self._check_session_exists():
+                raise FileNotFoundError(
+                    "فایل session روبیکا یافت نشد. "
+                    "اول `python3 rubika_login.py` رو اجرا کن تا session ساخته شود."
+                )
+
             from rubpy import Client
             self._client = Client(name=str(BASE_DIR / "rubika"))
 
@@ -50,6 +62,12 @@ class RubikaSender:
             try:
                 sys.stdin = open(os.devnull, "r")
                 await asyncio.wait_for(self._client.start(), timeout=15.0)
+            except EOFError:
+                raise RuntimeError(
+                    "خطای اتصال به روبیکا. "
+                    "فایل session ممکن است منقضی شده باشد. "
+                    "دوباره `python3 rubika_login.py` رو اجرا کن."
+                )
             finally:
                 sys.stdin = old_stdin
         return self._client
@@ -96,6 +114,12 @@ class RubikaSender:
             logger.info(f"PDF به روبیکا ارسال شد: {phone}")
             return {"success": True}
 
+        except FileNotFoundError as e:
+            logger.error(str(e))
+            return {"success": False, "error": str(e)}
+        except RuntimeError as e:
+            logger.error(str(e))
+            return {"success": False, "error": str(e)}
         except asyncio.TimeoutError:
             logger.warning("روبیکا timeout - لاگین مجدد لازم است (python3 rubika_login.py)")
             return {"success": False, "error": "روبیکا timeout - لاگین مجدد کنید"}
