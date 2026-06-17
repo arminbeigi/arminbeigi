@@ -2,50 +2,32 @@
 """
 اسکریپت لاگین روبیکا (یک بار)
 
-استفاده:
+معمولاً نیازی به اجرای دستی این فایل نیست؛ خودِ main.py در صورت نبودِ
+session، همان ابتدا لاگین را انجام می‌دهد. اما اگر خواستی دستی لاگین کنی:
+
   python3 rubika_login.py
 
-روبیکا شماره تلفن و کد تأیید را می‌پرسد:
-  - شماره را این‌طور وارد کن:  989XXXXXXXXX  (با کد کشور 98، بدون + و بدون صفر)
-session در فایل rubika.rbs کنار پروژه ذخیره می‌شود و main.py از همان استفاده می‌کند.
+شماره را این‌طور وارد کن:  989XXXXXXXXX  (با کد کشور ۹۸، بدون + و بدون صفر)
+session در فایل rubika.* کنار پروژه ذخیره می‌شود و main.py از همان استفاده می‌کند.
 
 ⚠️ این کتابخانه غیررسمی است؛ استفاده‌ی انبوه ممکن است اکانت را محدود کند.
 """
 
+import sys
 import asyncio
 from pathlib import Path
 
-# همان نام session که rubika_sender.py استفاده می‌کند
-SESSION_NAME = str(Path(__file__).resolve().parent / "rubika")
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-
-async def login():
-    try:
-        from rubpy import Client
-    except ImportError:
-        print("❌ کتابخانه rubpy نصب نیست → pip3 install rubpy")
-        return False
-
-    print("\n" + "=" * 50)
-    print("🔐 لاگین روبیکا (اکانت شخصی)")
-    print("=" * 50)
-    print("\nروبیکا شماره و کد را می‌پرسد.")
-    print("شماره را این‌طور وارد کن:  989XXXXXXXXX\n")
-
-    async with Client(name=SESSION_NAME) as client:
-        me = await client.get_me()
-        name = getattr(me, "first_name", "") or ""
-        print("\n" + "=" * 50)
-        print("✅ لاگین موفق!")
-        print(f"👤 نام: {name}")
-        print("✅ اکنون main.py را اجرا کن؛ روبیکا از این session استفاده می‌کند.")
-        print("=" * 50)
-        return True
+from modules.rubika_sender import interactive_login, session_exists
 
 
 if __name__ == "__main__":
+    if session_exists():
+        print("✅ روبیکا قبلاً لاگین شده است. (فایل session موجود است)")
+        raise SystemExit(0)
     try:
-        ok = asyncio.run(login())
+        ok = asyncio.run(interactive_login())
     except Exception as e:
         print(f"\n❌ خطا: {e}")
         ok = False

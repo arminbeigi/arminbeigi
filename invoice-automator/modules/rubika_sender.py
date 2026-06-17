@@ -1,10 +1,9 @@
 """
 ارسال پیش فاکتور از طریق روبیکا (اکانت شخصی - کتابخانه rubpy)
 
-راه‌اندازی:
-1. python3 rubika_login.py   (یک بار برای لاگین و ذخیره session)
-2. در config.yaml مقدار rubika.auth را "enabled" بگذار
-3. main.py را اجرا کن
+راه‌اندازی خودکار:
+  فقط `python3 main.py` را اجرا کن. اگر session روبیکا نباشد،
+  همان ابتدا یک‌بار شماره و کد را می‌پرسد و session را ذخیره می‌کند.
 
 روبیکا خودش مخاطب را با نام = شماره تلفن مشتری اضافه می‌کند (addAddressBook).
 
@@ -21,6 +20,9 @@ logger = logging.getLogger(__name__)
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# نام session مشترک بین لاگین و ارسال (همه از همین فایل استفاده می‌کنند)
+SESSION_NAME = str(BASE_DIR / "rubika")
+
 
 def _to_international(phone: str) -> str:
     """تبدیل 09121056345 → 989121056345 (فرمت روبیکا)"""
@@ -34,39 +36,67 @@ def _to_international(phone: str) -> str:
     return "98" + phone
 
 
+def session_exists() -> bool:
+    """آیا فایل session روبیکا ساخته شده؟ (rubika.rbs یا مشابه)"""
+    return any(BASE_DIR.glob("rubika.*")) or (BASE_DIR / "rubika").exists()
+
+
+async def interactive_login() -> bool:
+    """
+    لاگین تعاملی روبیکا (یک‌بار). شماره و کد را می‌پرسد و session را ذخیره می‌کند.
+    این تابع باید در thread اصلی با stdin واقعی اجرا شود.
+    """
+    try:
+        from rubpy import Client
+    except ImportError:
+        print("❌ کتابخانه rubpy نصب نیست → pip3 install rubpy")
+        return False
+
+    print("\n" + "=" * 52)
+    print("🔐 لاگین روبیکا (اکانت شخصی) — فقط همین یک‌بار")
+    print("=" * 52)
+    print("روبیکا شماره و کد تأیید را می‌پرسد.")
+    print("شماره را این‌طور وارد کن:  989XXXXXXXXX  (با ۹۸، بدون + و بدون صفر)\n")
+
+    try:
+        async with Client(name=SESSION_NAME) as client:
+            me = await client.get_me()
+            name = getattr(me, "first_name", "") or getattr(me, "username", "") or ""
+            print("\n" + "=" * 52)
+            print(f"✅ لاگین روبیکا موفق بود! {('👤 ' + name) if name else ''}")
+            print("=" * 52 + "\n")
+            return True
+    except Exception as e:
+        print(f"\n❌ لاگین روبیکا ناموفق: {e}\n")
+        return False
+
+
 class RubikaSender:
     def __init__(self, config: dict):
         self.enabled = config.get("auth", "") == "enabled"
         self._client = None
 
-    def _check_session_exists(self) -> bool:
-        """بررسی اینکه فایل session روبیکا وجود داره یا نه"""
-        session_files = list(BASE_DIR.glob("rubika*"))
-        return len(session_files) > 0
-
     async def _get_client(self):
-        """کلاینت روبیکا (با ذخیره session؛ بدون prompt تعاملی)"""
+        """کلاینت روبیکا با session ذخیره‌شده (بدون prompt تعاملی)"""
         if self._client is None:
-            # بررسی اینکه session فایل موجود است
-            if not self._check_session_exists():
+            if not session_exists():
                 raise FileNotFoundError(
-                    "فایل session روبیکا یافت نشد. "
-                    "اول `python3 rubika_login.py` رو اجرا کن تا session ساخته شود."
+                    "فایل session روبیکا یافت نشد — برنامه را دوباره اجرا کن "
+                    "تا یک‌بار لاگین انجام شود."
                 )
 
             from rubpy import Client
-            self._client = Client(name=str(BASE_DIR / "rubika"))
+            self._client = Client(name=SESSION_NAME)
 
-            # جلوگیری از prompt تعاملی: stdin را به /dev/null هدایت کن
+            # جلوگیری از prompt تعاملی هنگام ارسال: stdin را به /dev/null هدایت کن
             old_stdin = sys.stdin
             try:
                 sys.stdin = open(os.devnull, "r")
-                await asyncio.wait_for(self._client.start(), timeout=15.0)
-            except EOFError:
+                await asyncio.wait_for(self._client.start(), timeout=20.0)
+            except (EOFError, asyncio.TimeoutError):
                 raise RuntimeError(
-                    "خطای اتصال به روبیکا. "
-                    "فایل session ممکن است منقضی شده باشد. "
-                    "دوباره `python3 rubika_login.py` رو اجرا کن."
+                    "اتصال روبیکا برقرار نشد — session احتمالاً منقضی شده. "
+                    "فایل rubika.* را پاک کن و برنامه را دوباره اجرا کن تا لاگین شود."
                 )
             finally:
                 sys.stdin = old_stdin
@@ -83,7 +113,7 @@ class RubikaSender:
         for candidate in (intl, "+" + intl):
             try:
                 result = await client.add_address_book(phone=candidate, first_name=phone)
-                guid = result.user_guid
+                guid = getattr(result, "user_guid", None)
                 if guid:
                     logger.info(f"روبیکا: مخاطب {phone} اضافه شد")
                     return guid
@@ -114,15 +144,9 @@ class RubikaSender:
             logger.info(f"PDF به روبیکا ارسال شد: {phone}")
             return {"success": True}
 
-        except FileNotFoundError as e:
+        except (FileNotFoundError, RuntimeError) as e:
             logger.error(str(e))
             return {"success": False, "error": str(e)}
-        except RuntimeError as e:
-            logger.error(str(e))
-            return {"success": False, "error": str(e)}
-        except asyncio.TimeoutError:
-            logger.warning("روبیکا timeout - لاگین مجدد لازم است (python3 rubika_login.py)")
-            return {"success": False, "error": "روبیکا timeout - لاگین مجدد کنید"}
         except ImportError:
             logger.error("کتابخانه rubpy نصب نیست: pip install rubpy")
             return {"success": False, "error": "rubpy نصب نیست"}
@@ -148,7 +172,7 @@ class RubikaSender:
         loop = asyncio.new_event_loop()
         try:
             return loop.run_until_complete(
-                asyncio.wait_for(self._send_file_async(phone, pdf_path, caption), timeout=30.0)
+                asyncio.wait_for(self._send_file_async(phone, pdf_path, caption), timeout=40.0)
             )
         except asyncio.TimeoutError:
             logger.warning("روبیکا timeout شد")

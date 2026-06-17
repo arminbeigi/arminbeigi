@@ -20,6 +20,7 @@ import time
 import queue
 import shutil
 import yaml
+import asyncio
 import logging
 import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -36,7 +37,11 @@ from modules.wp_uploader import WordPressUploader
 from modules.sms_kavenegar import KavenegarSMS
 from modules.whatsapp_sender import WhatsAppSender
 from modules.bale_user_sender import BaleUserSender
-from modules.rubika_sender import RubikaSender
+from modules.rubika_sender import (
+    RubikaSender,
+    session_exists as rubika_session_exists,
+    interactive_login as rubika_interactive_login,
+)
 
 logger = logging.getLogger("InvoiceBot")
 
@@ -92,6 +97,30 @@ def load_config() -> dict:
     config_path = BASE_DIR / "config.yaml"
     with open(config_path, encoding="utf-8") as f:
         return yaml.safe_load(f)
+
+
+def ensure_rubika_login(config: dict):
+    """
+    اطمینان از لاگین روبیکا قبل از شروع نظارت.
+    اگر روبیکا فعال است ولی session ساخته نشده، همین‌جا یک‌بار
+    (در thread اصلی، با stdin واقعی) لاگین تعاملی انجام می‌شود.
+    """
+    if config.get("rubika", {}).get("auth", "") != "enabled":
+        return
+    if rubika_session_exists():
+        return
+
+    print("\n⚠️ روبیکا هنوز لاگین نشده. برای ارسال روبیکا یک‌بار باید وارد شوی.")
+    try:
+        ok = asyncio.run(rubika_interactive_login())
+    except Exception as e:
+        print(f"❌ لاگین روبیکا با خطا متوقف شد: {e}")
+        ok = False
+
+    if ok:
+        print("✅ روبیکا آماده است؛ از این پس خودکار ارسال می‌شود.\n")
+    else:
+        print("⏭️ بدون روبیکا ادامه می‌دهیم (بقیه کانال‌ها کار می‌کنند).\n")
 
 
 def process_invoice(pdf_path: str, config: dict) -> dict:
@@ -244,6 +273,9 @@ class InvoiceHandler(FileSystemEventHandler):
 def main():
     config = load_config()
     setup_logging(config.get("general", {}).get("log_level", "INFO"))
+
+    # اطمینان از لاگین روبیکا (یک‌بار، تعاملی) قبل از شروع
+    ensure_rubika_login(config)
 
     watch_dir = (BASE_DIR / config["folders"]["watch"]).resolve()
     watch_dir.mkdir(exist_ok=True)
