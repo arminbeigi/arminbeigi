@@ -1,0 +1,741 @@
+<style>
+.ran25-wrap{
+  --blue:#1565C0; --orange:#FF6F00; --green:#2E7D32; --warning:#F57F17;
+  --danger:#C62828; --bg:#F8FAFF; --card:#FFFFFF; --text:#243447; --muted:#5b6b7d;
+  --steel:#455A64; --steel-light:#607D8B;
+  direction:rtl; text-align:right; background:var(--bg); color:var(--text);
+  font-family:Tahoma,"IRANSans","Vazirmatn",sans-serif; line-height:2;
+  padding:18px; border-radius:18px; font-size:16px;
+  counter-reset:sec; position:relative; overflow:hidden;
+  background-image:
+    radial-gradient(circle at 20% 30%,rgba(21,101,192,.05) 1px,transparent 2px),
+    radial-gradient(circle at 80% 70%,rgba(255,111,0,.04) 1px,transparent 2px),
+    linear-gradient(var(--bg),var(--bg));
+  background-size:50px 50px,70px 70px,100% 100%;
+}
+.ran25-wrap *{box-sizing:border-box}
+
+/* ---------- Section header cards (H2 redesign) ---------- */
+.ran25-wrap > h2{
+  counter-increment:sec; position:relative;
+  background:linear-gradient(135deg,#fff 0%,#EAF2FF 100%);
+  border:none; border-top:5px solid var(--blue);
+  border-radius:18px; padding:26px 96px 26px 24px;
+  margin:70px 0 24px; font-size:22px; color:var(--blue);
+  box-shadow:0 12px 32px rgba(20,40,70,.09);
+  line-height:1.5;
+}
+.ran25-wrap > h2::before{
+  content:counter(sec,decimal-leading-zero);
+  position:absolute; right:22px; top:50%; transform:translateY(-50%);
+  width:62px; height:68px;
+  clip-path:polygon(25% 5%,75% 5%,100% 50%,75% 95%,25% 95%,0 50%);
+  background:linear-gradient(135deg,var(--orange) 0%,#E65100 60%,#FF8F00 100%);
+  color:#fff; text-align:center; line-height:68px; font-size:19px; font-weight:bold;
+  filter:drop-shadow(0 6px 14px rgba(255,111,0,.5));
+  letter-spacing:1px;
+}
+.ran25-wrap > h2::after{
+  content:""; position:absolute; top:-40px; right:50%;
+  transform:translateX(50%); width:140px; height:5px; border-radius:3px;
+  background:linear-gradient(90deg,transparent,var(--orange) 50%,transparent);
+  opacity:.7;
+}
+.ran25-wrap > h2:first-of-type::after{display:none}
+/* Alternating accent colors */
+.ran25-wrap > h2:nth-of-type(3n+2){border-top-color:var(--orange)}
+.ran25-wrap > h2:nth-of-type(3n+2)::before{background:linear-gradient(135deg,var(--blue) 0%,#0D47A1 60%,#1E88E5 100%);filter:drop-shadow(0 6px 14px rgba(21,101,192,.5))}
+.ran25-wrap > h2:nth-of-type(3n+2)::after{background:linear-gradient(90deg,transparent,var(--blue) 50%,transparent)}
+.ran25-wrap > h2:nth-of-type(3n){border-top-color:var(--green)}
+.ran25-wrap > h2:nth-of-type(3n)::before{background:linear-gradient(135deg,var(--green) 0%,#1B5E20 60%,#43A047 100%);filter:drop-shadow(0 6px 14px rgba(46,125,50,.5))}
+.ran25-wrap > h2:nth-of-type(3n)::after{background:linear-gradient(90deg,transparent,var(--green) 50%,transparent)}
+/* Reset for special boxes (summary + CTA) */
+.ran25-summary h2,.ran25-cta h2{
+  counter-increment:none; background:none; border:none; border-radius:0;
+  padding:0; margin:0 0 10px; color:#fff; box-shadow:none;
+}
+.ran25-summary h2::before,.ran25-summary h2::after,
+.ran25-cta h2::before,.ran25-cta h2::after{display:none}
+
+/* Content sections background zones - subtle alternating bands */
+.ran25-wrap > h2:nth-of-type(2n+1) ~ *:not(h2):not(h3):not(h4){}
+
+.ran25-wrap h3{color:var(--blue); font-size:20px; margin:26px 0 12px}
+.ran25-wrap h4{color:var(--orange); font-size:18px; margin:20px 0 10px}
+.ran25-wrap p{margin:12px 0; color:var(--text)}
+
+/* ---------- Animations ---------- */
+@keyframes fadeInUp{from{opacity:.01;transform:translateY(34px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulseBorder{0%,100%{box-shadow:-5px 0 0 0 currentColor inset}50%{box-shadow:-11px 0 0 0 currentColor inset}}
+@keyframes pop{0%{transform:scale(0) rotate(-45deg);opacity:0}60%{transform:scale(1.25) rotate(0)}100%{transform:scale(1) rotate(0);opacity:1}}
+@keyframes fillBar{from{width:0}to{width:var(--w,100%)}}
+@keyframes shimmer{0%{left:-60%}100%{left:130%}}
+@keyframes rotate{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@keyframes flicker{0%,100%{transform:scale(1) rotate(-2deg);opacity:.9}50%{transform:scale(1.08) rotate(2deg);opacity:1}}
+
+.ran25-wrap .anim{animation:fadeInUp .7s ease both}
+.ran25-wrap .d1{animation-delay:.05s}.ran25-wrap .d2{animation-delay:.15s}
+.ran25-wrap .d3{animation-delay:.25s}.ran25-wrap .d4{animation-delay:.35s}
+.ran25-wrap .d5{animation-delay:.45s}.ran25-wrap .d6{animation-delay:.55s}
+
+/* ---------- Summary box ---------- */
+.ran25-summary{
+  background:linear-gradient(135deg,#1565C0 0%,#1E88E5 60%,#42A5F5 100%);
+  color:#fff;border-radius:18px;padding:26px 28px;margin-bottom:8px;
+  box-shadow:0 14px 34px rgba(21,101,192,.28);position:relative;overflow:hidden;
+}
+.ran25-summary::after{content:"";position:absolute;top:-40px;left:-40px;width:160px;height:160px;
+  background:rgba(255,255,255,.12);border-radius:50%}
+.ran25-summary::before{content:"";position:absolute;top:18px;left:24px;width:64px;height:80px;z-index:2;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 80' fill='none'><path d='M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z' fill='%23FFB300'/><path d='M32 24 C34 32 44 38 42 50 C40 60 36 68 32 70 C28 68 24 60 22 50 C20 38 30 32 32 24 Z' fill='%23FF6F00'/><path d='M32 42 C33 48 38 52 36 60 C35 64 33 67 32 68 C31 67 29 64 28 60 C26 52 31 48 32 42 Z' fill='%23FFEB3B'/></svg>");
+  background-repeat:no-repeat;background-size:contain;
+  animation:flicker 1.6s ease-in-out infinite;
+  filter:drop-shadow(0 0 12px rgba(255,179,0,.6))}
+.ran25-summary h2{color:#fff;border:none;padding:0;margin:0 0 10px}
+.ran25-summary p{color:#eaf4ff;position:relative;z-index:1}
+
+/* ---------- Cards / boxes ---------- */
+.ran25-card{background:var(--card);border-radius:16px;padding:20px 24px;margin:18px 0;
+  box-shadow:0 8px 24px rgba(20,40,70,.07);transition:transform .3s ease,box-shadow .3s ease;
+  position:relative;overflow:hidden}
+.ran25-card::before{content:"";position:absolute;top:-20px;left:-20px;width:80px;height:80px;opacity:.08;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='%231565C0'><path d='M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z'/></svg>");
+  background-repeat:no-repeat;background-size:contain;animation:rotate 28s linear infinite;pointer-events:none}
+.ran25-card:hover{transform:translateY(-6px) scale(1.012);box-shadow:0 18px 40px rgba(20,40,70,.16)}
+
+.ran25-box{border-radius:14px;padding:16px 20px 16px 24px;margin:18px 0;position:relative;
+  border-right:6px solid;animation:pulseBorder 2.4s ease-in-out infinite}
+.ran25-tip{background:#FFF8E1;border-color:var(--warning);color:var(--warning)}
+.ran25-tip *{color:#7a5b00}
+.ran25-warn{background:#FDECEA;border-color:var(--danger);color:var(--danger)}
+.ran25-warn *{color:#8c1d18}
+.ran25-good{background:#E8F5E9;border-color:var(--green);color:var(--green)}
+.ran25-good *{color:#1b5e20}
+.ran25-box strong{display:block;margin-bottom:4px}
+
+/* ---------- Lists ---------- */
+.ran25-list{list-style:none;padding:0;margin:14px 0}
+.ran25-list li{position:relative;padding:8px 38px 8px 8px;margin:8px 0;background:var(--card);
+  border-radius:12px;box-shadow:0 4px 14px rgba(20,40,70,.06);
+  animation:fadeInUp .55s ease both;transition:transform .25s ease}
+.ran25-list li:hover{transform:translateX(-6px)}
+.ran25-list li:nth-child(1){animation-delay:.05s}.ran25-list li:nth-child(2){animation-delay:.12s}
+.ran25-list li:nth-child(3){animation-delay:.19s}.ran25-list li:nth-child(4){animation-delay:.26s}
+.ran25-list li:nth-child(5){animation-delay:.33s}.ran25-list li:nth-child(6){animation-delay:.40s}
+.ran25-list li:nth-child(7){animation-delay:.47s}.ran25-list li:nth-child(8){animation-delay:.54s}
+.ran25-list li:nth-child(9){animation-delay:.61s}.ran25-list li:nth-child(10){animation-delay:.68s}
+.ran25-list li::before{content:"✓";position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  width:24px;height:24px;border-radius:50%;background:var(--blue);color:#fff;text-align:center;
+  line-height:24px;font-size:14px;font-weight:bold;animation:pop .5s ease forwards}
+.ran25-pros li::before{background:var(--green)}
+.ran25-cons li::before{content:"✕";background:var(--danger)}
+.ran25-num{list-style:none;counter-reset:n;padding:0}
+.ran25-num li{counter-increment:n;position:relative;padding:8px 46px 8px 8px;margin:8px 0;
+  background:var(--card);border-radius:12px;box-shadow:0 4px 14px rgba(20,40,70,.06)}
+.ran25-num li::before{content:counter(n);position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--orange),#FFA000);
+  color:#fff;text-align:center;line-height:28px;font-weight:bold;font-size:14px}
+
+/* ---------- Specs animated bars ---------- */
+.ran25-bars{margin:16px 0}
+.ran25-bar{margin:14px 0}
+.ran25-bar .lbl{display:flex;justify-content:space-between;font-size:14px;margin-bottom:6px;color:var(--muted)}
+.ran25-bar .track{background:#E3ECF7;border-radius:20px;height:14px;overflow:hidden}
+.ran25-bar .fill{height:100%;border-radius:20px;
+  background:linear-gradient(90deg,var(--blue),var(--orange));
+  animation:fillBar 1.6s cubic-bezier(.2,.8,.3,1) forwards}
+
+/* ---------- Tables ---------- */
+.ran25-tablewrap{overflow-x:auto;margin:16px 0;border-radius:14px;box-shadow:0 8px 24px rgba(20,40,70,.08)}
+.ran25-wrap table{width:100%;border-collapse:collapse;background:var(--card);min-width:340px}
+.ran25-wrap th{background:linear-gradient(135deg,var(--blue),#1E88E5);color:#fff;padding:13px 14px;
+  font-size:15px;text-align:right}
+.ran25-wrap td{padding:12px 14px;border-bottom:1px solid #eef2f8;font-size:15px}
+.ran25-wrap tr:nth-child(even) td{background:#F5F9FF}
+.ran25-wrap tr:hover td{background:#EAF2FF}
+.ran25-wrap td:first-child{font-weight:bold;color:var(--blue)}
+
+/* ---------- FAQ ---------- */
+.ran25-faq details{background:var(--card);border-radius:12px;margin:10px 0;padding:0;
+  box-shadow:0 4px 14px rgba(20,40,70,.06);overflow:hidden;border-right:5px solid var(--blue);
+  transition:box-shadow .3s ease}
+.ran25-faq details[open]{box-shadow:0 12px 30px rgba(21,101,192,.16)}
+.ran25-faq summary{cursor:pointer;padding:15px 18px;font-weight:bold;color:var(--blue);
+  list-style:none;position:relative;padding-left:44px;transition:background .25s ease}
+.ran25-faq summary:hover{background:#F0F6FF}
+.ran25-faq summary::-webkit-details-marker{display:none}
+.ran25-faq summary::after{content:"+";position:absolute;left:16px;top:50%;transform:translateY(-50%);
+  width:26px;height:26px;border-radius:50%;background:var(--orange);color:#fff;text-align:center;
+  line-height:26px;font-size:18px;transition:transform .3s ease}
+.ran25-faq details[open] summary::after{content:"−";transform:translateY(-50%) rotate(180deg)}
+.ran25-faq .ans{padding:4px 18px 18px;color:var(--muted)}
+.ran25-wrap a{color:var(--blue);text-decoration:none;border-bottom:1px dashed var(--blue);transition:color .2s ease,border-color .2s ease}
+.ran25-wrap a:hover{color:var(--orange);border-bottom-color:var(--orange)}
+.ran25-related{background:var(--card);border-radius:16px;padding:20px 24px;margin:24px 0;box-shadow:0 8px 24px rgba(20,40,70,.07)}
+.ran25-related h3{margin-top:0}
+.ran25-related ul{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
+.ran25-related li{background:#F0F6FF;border-radius:10px;padding:0;transition:transform .25s ease,background .25s ease}
+.ran25-related li:hover{transform:translateY(-3px);background:#E1ECFE}
+.ran25-related a{display:block;padding:12px 16px;border:none;color:var(--blue);font-weight:bold;font-size:14px}
+.ran25-related a:hover{color:var(--orange)}
+.ran25-related a::before{content:"◄";margin-left:8px;color:var(--orange);font-size:12px}
+
+/* ---------- CTA ---------- */
+.ran25-cta{background:linear-gradient(135deg,#0D2B52 0%,#0D47A1 55%,#1565C0 100%);
+  color:#fff;border-radius:20px;padding:34px 28px;margin:34px 0 10px;text-align:center;
+  box-shadow:0 18px 44px rgba(13,43,82,.4);position:relative;overflow:hidden}
+.ran25-cta::before,.ran25-cta::after{content:"";position:absolute;width:120px;height:120px;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='rgba(255,255,255,0.08)'><path d='M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z'/></svg>");
+  background-repeat:no-repeat;background-size:contain;animation:rotate 18s linear infinite}
+.ran25-cta::before{top:-30px;right:-30px}
+.ran25-cta::after{bottom:-40px;left:-40px;width:160px;height:160px;animation-duration:24s;animation-direction:reverse}
+.ran25-cta h2{color:#fff;border:none;padding:0;justify-content:center;position:relative;z-index:2}
+.ran25-cta p,.ran25-cta ul{position:relative;z-index:2}
+.ran25-cta p{color:#cfe2ff}
+.ran25-cta-feats{list-style:none;padding:0;margin:16px 0;display:flex;flex-wrap:wrap;
+  justify-content:center;gap:10px 22px}
+.ran25-cta-feats li{position:relative;padding-right:26px;color:#eaf4ff;font-size:15px}
+.ran25-cta-feats li::before{content:"✓";position:absolute;right:0;top:0;width:20px;height:20px;
+  border-radius:50%;background:var(--green);color:#fff;text-align:center;line-height:20px;font-size:12px}
+.ran25-btn{display:inline-block;margin-top:14px;padding:16px 46px;border-radius:50px;
+  background:linear-gradient(135deg,var(--orange),#FFA000);color:#fff;font-weight:bold;font-size:18px;
+  text-decoration:none;position:relative;overflow:hidden;box-shadow:0 10px 26px rgba(255,111,0,.45);
+  transition:transform .25s ease}
+.ran25-btn:hover{transform:scale(1.06)}
+.ran25-btn::after{content:"";position:absolute;top:0;left:-60%;width:50%;height:100%;
+  background:linear-gradient(120deg,transparent,rgba(255,255,255,.55),transparent);
+  transform:skewX(-20deg);animation:shimmer 2.6s infinite}
+
+/* ---------- Interactive product photo with hotspots ---------- */
+.ran25-photo{position:relative;background:linear-gradient(135deg,#F0F6FF 0%,#E1ECFE 100%);
+  border-radius:18px;padding:24px;margin:24px 0;box-shadow:0 12px 32px rgba(20,40,70,.1);overflow:hidden}
+.ran25-photo::before{content:"";position:absolute;inset:0;opacity:.5;pointer-events:none;
+  background-image:linear-gradient(rgba(21,101,192,.06) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(21,101,192,.06) 1px,transparent 1px);
+  background-size:30px 30px}
+.ran25-photo-title{text-align:center;font-weight:bold;color:var(--blue);font-size:17px;margin-bottom:12px;position:relative;z-index:1}
+.ran25-photo-hint{text-align:center;font-size:13px;color:var(--muted);margin-top:14px;position:relative;z-index:1}
+.ran25-photo-stage{position:relative!important;max-width:760px;margin:0 auto;display:block;z-index:1;overflow:visible}
+.ran25-photo-stage img{width:100%;height:auto;display:block;border-radius:12px;box-shadow:0 8px 24px rgba(20,40,70,.18);background:#fff;position:relative;z-index:1}
+.ran25-photo-stage .ran25-spot,.ran25-photo-stage .ran25-callout{position:absolute!important}
+.ran25-spot{position:absolute;width:22px;height:22px;border-radius:50%;
+  background:radial-gradient(circle,#FF6F00 0%,#FF6F00 40%,transparent 70%);transform:translate(50%,-50%);z-index:3}
+.ran25-spot::before,.ran25-spot::after{content:"";position:absolute;inset:0;border-radius:50%;border:3px solid #FF6F00}
+.ran25-spot::before{animation:hotspot 2s ease-in-out infinite}
+.ran25-spot::after{animation:hotspot 2s ease-in-out infinite .8s;opacity:0}
+@keyframes hotspot{0%{transform:scale(1);opacity:.9}100%{transform:scale(2.6);opacity:0}}
+.ran25-spot.blue{background:radial-gradient(circle,#1565C0 0%,#1565C0 40%,transparent 70%)}
+.ran25-spot.blue::before,.ran25-spot.blue::after{border-color:#1565C0}
+.ran25-spot.green{background:radial-gradient(circle,#2E7D32 0%,#2E7D32 40%,transparent 70%)}
+.ran25-spot.green::before,.ran25-spot.green::after{border-color:#2E7D32}
+.ran25-spot.yellow{background:radial-gradient(circle,#F57F17 0%,#F57F17 40%,transparent 70%)}
+.ran25-spot.yellow::before,.ran25-spot.yellow::after{border-color:#F57F17}
+.ran25-spot.red{background:radial-gradient(circle,#C62828 0%,#C62828 40%,transparent 70%)}
+.ran25-spot.red::before,.ran25-spot.red::after{border-color:#C62828}
+
+.ran25-callout{position:absolute;background:#fff;border:2px solid #FF6F00;border-radius:10px;
+  padding:8px 12px;font-size:12px;font-weight:bold;color:#FF6F00;z-index:4;
+  box-shadow:0 6px 16px rgba(20,40,70,.18);min-width:120px;text-align:center;
+  opacity:0;animation:labelIn .6s ease forwards;line-height:1.4}
+.ran25-callout small{display:block;font-size:10px;color:var(--muted);font-weight:normal;margin-top:2px}
+.ran25-callout.blue{border-color:#1565C0;color:#1565C0}
+.ran25-callout.green{border-color:#2E7D32;color:#2E7D32}
+.ran25-callout.yellow{border-color:#F57F17;color:#F57F17}
+.ran25-callout.red{border-color:#C62828;color:#C62828}
+@keyframes labelIn{from{opacity:0;transform:translateY(8px) scale(.92)}to{opacity:1;transform:translateY(0) scale(1)}}
+
+.ran25-line{position:absolute;background:linear-gradient(90deg,currentColor,currentColor);
+  height:2px;transform-origin:right center;z-index:2;color:#FF6F00;
+  opacity:0;animation:lineGrow .8s ease-out forwards}
+.ran25-line.blue{color:#1565C0}.ran25-line.green{color:#2E7D32}
+.ran25-line.yellow{color:#F57F17}.ran25-line.red{color:#C62828}
+@keyframes lineGrow{from{opacity:0;transform:scaleX(0)}to{opacity:.8;transform:scaleX(1)}}
+
+.ran25-d1{animation-delay:.4s}.ran25-d2{animation-delay:.8s}.ran25-d3{animation-delay:1.2s}
+.ran25-d4{animation-delay:1.6s}.ran25-d5{animation-delay:2s}.ran25-d6{animation-delay:2.4s}
+.ran25-d7{animation-delay:2.8s}
+
+@media(max-width:640px){
+  .ran25-callout{font-size:10px;padding:6px 8px;min-width:90px}
+  .ran25-callout small{font-size:9px}
+  .ran25-spot{width:16px;height:16px}
+}
+
+/* ---------- Marquee ticker bar ---------- */
+.ran25-ticker{position:relative;overflow:hidden;border-radius:14px;padding:0;margin:28px 0;
+  background:radial-gradient(ellipse at center,#1B5E20 0%,#0B3D11 100%);
+  box-shadow:0 8px 22px rgba(11,61,17,.35),inset 0 0 0 1px rgba(255,255,255,.06)}
+.ran25-ticker.blue{background:radial-gradient(ellipse at center,#0D47A1 0%,#0A2F6B 100%);
+  box-shadow:0 8px 22px rgba(13,71,161,.35),inset 0 0 0 1px rgba(255,255,255,.06)}
+.ran25-ticker::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(circle at 20% 30%,rgba(255,255,255,.08) 1px,transparent 2px),
+    radial-gradient(circle at 70% 70%,rgba(255,255,255,.06) 1px,transparent 2px);
+  background-size:60px 60px,40px 40px}
+.ran25-ticker::after{content:"";position:absolute;top:0;bottom:0;left:0;width:50px;z-index:3;
+  background:linear-gradient(90deg,#0B3D11,transparent);pointer-events:none}
+.ran25-ticker.blue::after{background:linear-gradient(90deg,#0A2F6B,transparent)}
+.ran25-ticker .fade-r{position:absolute;top:0;bottom:0;right:0;width:50px;z-index:3;
+  background:linear-gradient(-90deg,#0B3D11,transparent);pointer-events:none}
+.ran25-ticker.blue .fade-r{background:linear-gradient(-90deg,#0A2F6B,transparent)}
+.ran25-ticker-track{display:flex;align-items:center;gap:48px;padding:18px 0;width:max-content;
+  animation:tickerSlide 38s linear infinite}
+.ran25-ticker:hover .ran25-ticker-track{animation-play-state:paused}
+.ran25-ticker-track span{color:#E8F5E9;font-size:15px;font-weight:bold;white-space:nowrap;display:flex;align-items:center;gap:14px}
+.ran25-ticker.blue .ran25-ticker-track span{color:#E3F2FD}
+.ran25-ticker-track span svg{flex-shrink:0;color:#FFB300}
+.ran25-ticker.blue .ran25-ticker-track span svg{color:#FF8F00}
+@keyframes tickerSlide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ---------- Industrial decorative bands ---------- */
+.ran25-machine{position:relative;height:96px;margin:36px 0;border-radius:16px;overflow:hidden;
+  background:linear-gradient(135deg,#0D2B52 0%,#1565C0 100%);
+  box-shadow:0 10px 28px rgba(13,43,82,.25);display:flex;align-items:center;justify-content:space-around;padding:0 20px;
+  direction:ltr;flex-wrap:nowrap}
+.ran25-machine::before{content:"";position:absolute;inset:0;opacity:.12;
+  background-image:repeating-linear-gradient(45deg,#fff 0 2px,transparent 2px 14px)}
+.ran25-machine svg{position:relative;z-index:2;flex-shrink:0}
+.ran25-gear{animation:rotate 10s linear infinite;color:#FFB300}
+.ran25-gear.rev{animation-direction:reverse;animation-duration:14s;color:#42A5F5}
+.ran25-gear.slow{animation-duration:22s;color:#A5D6A7}
+.ran25-pipe{stroke:#90CAF9;fill:none;stroke-width:3}
+.ran25-pipe-flow{stroke:#FFB300;stroke-width:3;fill:none;stroke-dasharray:6 10;animation:flow 1.5s linear infinite}
+@keyframes flow{from{stroke-dashoffset:32}to{stroke-dashoffset:0}}
+.ran25-needle{transform-origin:50% 50%;animation:swing 3.5s ease-in-out infinite;color:#FF6F00}
+@keyframes swing{0%,100%{transform:rotate(-50deg)}50%{transform:rotate(50deg)}}
+.ran25-flame-band{animation:flicker 1.4s ease-in-out infinite;transform-origin:50% 100%;color:#FFB300}
+.ran25-flame-band.b{animation-delay:.2s;color:#FF6F00}
+.ran25-flame-band.c{animation-delay:.4s;color:#FFEB3B}
+
+/* variant 2: machine bar with valves */
+.ran25-machine.valve-bar{background:linear-gradient(135deg,#1B5E20 0%,#2E7D32 100%);box-shadow:0 10px 28px rgba(27,94,32,.25)}
+/* variant 3: machine bar with flames */
+.ran25-machine.flame-bar{background:linear-gradient(135deg,#BF360C 0%,#E65100 100%);box-shadow:0 10px 28px rgba(191,54,12,.25)}
+
+/* Decorative section ornament */
+.ran25-ornament{display:flex;align-items:center;justify-content:center;gap:10px;margin:50px 0 20px;opacity:.6}
+.ran25-ornament span{display:block;width:8px;height:8px;border-radius:50%;background:var(--orange);animation:fadeInUp .8s ease both}
+.ran25-ornament span:nth-child(1){animation-delay:.1s}
+.ran25-ornament span:nth-child(2){animation-delay:.2s;background:var(--blue);width:12px;height:12px}
+.ran25-ornament span:nth-child(3){animation-delay:.3s;background:var(--green);width:16px;height:16px}
+.ran25-ornament span:nth-child(4){animation-delay:.4s;background:var(--blue);width:12px;height:12px}
+.ran25-ornament span:nth-child(5){animation-delay:.5s}
+
+/* ---------- WordPress theme conflict fixes ---------- */
+.ran25-wrap{max-width:100%!important;overflow-x:hidden!important;contain:layout paint!important;isolation:isolate!important}
+.ran25-wrap > *:not(.ran25-ticker-track){max-width:100%}
+.ran25-ticker-track{max-width:none!important;width:max-content!important}
+.ran25-machine,.ran25-ticker{position:relative!important;width:100%!important;max-width:100%!important;
+  overflow:hidden!important;contain:layout paint!important;isolation:isolate!important;box-sizing:border-box!important}
+.ran25-machine{height:96px!important}
+.ran25-machine::before,.ran25-ticker::before{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:100%!important}
+.ran25-ticker-track{max-width:none!important;width:max-content!important;position:relative!important}
+.ran25-summary,.ran25-cta,.ran25-card,.ran25-related{max-width:100%!important;box-sizing:border-box!important;contain:layout paint!important}
+.ran25-photo{max-width:100%!important;box-sizing:border-box!important;contain:layout!important;overflow:visible!important}
+.ran25-summary::before,.ran25-summary::after,.ran25-cta::before,.ran25-cta::after,.ran25-card::before{contain:strict!important;max-width:100%!important}
+
+@media(max-width:600px){
+  .ran25-wrap{padding:12px;font-size:15px}
+  .ran25-wrap > h2{font-size:19px;padding:22px 80px 22px 18px;margin-top:50px}
+  .ran25-wrap > h2::before{width:48px;height:48px;line-height:48px;font-size:17px;right:16px}
+  .ran25-wrap > h2::after{top:-28px;width:100px}
+  .ran25-summary,.ran25-cta{padding:22px 18px}
+  .ran25-btn{width:100%}
+}
+@media(prefers-reduced-motion:reduce){
+  .ran25-wrap *{animation:none!important;opacity:1!important}
+}
+
+/* ============ FINAL OVERRIDES — WordPress theme compatibility ============ */
+/* SVG sizing inside industrial machine bars (WP strips width/height attrs) */
+.ran25-machine svg{flex-shrink:0!important;height:56px!important;width:auto!important;
+  display:inline-block!important;vertical-align:middle!important;max-width:none!important}
+
+/* Ticker layout & SVG sizing */
+.ran25-ticker-track{display:flex!important;align-items:center!important;gap:48px!important;
+  width:max-content!important;max-width:none!important;padding:18px 24px!important;flex-wrap:nowrap!important}
+.ran25-ticker-track > span{display:inline-flex!important;align-items:center!important;
+  gap:14px!important;white-space:nowrap!important;flex-shrink:0!important}
+.ran25-ticker-track > span > svg{flex-shrink:0!important;width:18px!important;height:18px!important;
+  display:inline-block!important}
+
+/* Photo overlay: callouts/spots visible immediately regardless of animation state */
+.ran25-photo,.ran25-photo-stage{contain:none!important;overflow:visible!important}
+.ran25-callout{opacity:1!important}
+.ran25-spot,.ran25-callout{position:absolute!important;display:block!important}
+
+/* Counter for section badges — use descendant selector for WP wrapper compat */
+.ran25-wrap{counter-reset:sec!important}
+.ran25-wrap h2{counter-increment:sec!important}
+.ran25-summary h2,.ran25-cta h2{counter-increment:none!important}
+
+/* ---------- Calculator promo block (brand page) ---------- */
+@keyframes slideInUp{from{opacity:0;transform:translateY(48px)}to{opacity:1;transform:translateY(0)}}
+@keyframes promoPulse{0%,100%{box-shadow:0 8px 22px rgba(0,0,0,.18)}50%{box-shadow:0 8px 34px rgba(255,179,0,.6)}}
+.ran25-calculator-promo{position:relative;overflow:hidden;border-radius:20px;margin:40px 0;padding:30px 28px;
+  background:linear-gradient(135deg,#0d47a1 0%,#1565c0 50%,#1976d2 100%);color:#fff;
+  box-shadow:0 18px 44px rgba(13,43,82,.4);animation:slideInUp .8s ease-out both}
+.ran25-calculator-promo::before{content:"";position:absolute;top:-50px;left:-50px;width:180px;height:180px;
+  background:rgba(255,255,255,.08);border-radius:50%;pointer-events:none}
+.ran25-calculator-promo::after{content:"";position:absolute;bottom:-60px;right:-40px;width:200px;height:200px;
+  background:rgba(255,179,0,.1);border-radius:50%;pointer-events:none}
+.ran25-cp-grid{position:relative;z-index:2;display:flex;gap:26px;align-items:center;flex-wrap:wrap}
+.ran25-cp-text{flex:1 1 300px;min-width:280px}
+.ran25-cp-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.16);
+  border-radius:50px;padding:6px 16px;font-size:13px;font-weight:bold;margin-bottom:14px}
+.ran25-cp-badge svg{width:20px;height:20px;color:#FFD54F}
+.ran25-calculator-promo h3{color:#fff;font-size:23px;margin:0 0 12px}
+.ran25-calculator-promo p{color:#eaf4ff;margin:0 0 14px;line-height:1.9}
+.ran25-cp-list{list-style:none;padding:0;margin:0 0 18px}
+.ran25-cp-list li{position:relative;padding:5px 28px 5px 0;color:#fff;font-size:14.5px}
+.ran25-cp-list li::before{content:"✓";position:absolute;right:0;top:5px;width:20px;height:20px;border-radius:50%;
+  background:#FFB300;color:#0d47a1;text-align:center;line-height:20px;font-size:12px;font-weight:bold}
+.ran25-cp-media{flex:1 1 280px;min-width:260px}
+.ran25-cp-media video{width:100%;max-width:100%;border-radius:12px;box-shadow:0 10px 28px rgba(0,0,0,.32);
+  background:#0a2f6b;display:block}
+.ran25-cp-btn{display:inline-block;margin-top:6px;padding:15px 38px;border-radius:50px;background:#fff;color:#0d47a1;
+  font-weight:bold;font-size:17px;text-decoration:none;border:none;animation:promoPulse 2.2s ease-in-out infinite;
+  transition:transform .25s ease}
+.ran25-cp-btn:hover{transform:scale(1.05);color:#0d47a1}
+.ran25-cp-btn::after{content:"◄";margin-right:8px;font-size:13px;color:#FF6F00}
+@media(max-width:640px){.ran25-cp-grid{flex-direction:column}.ran25-calculator-promo h3{font-size:20px}}
+</style>
+
+<div class="ran25-wrap">
+
+  <!-- 1. SUMMARY -->
+  <div class="ran25-summary anim d1">
+    <h2>خلاصه سریع</h2>
+    <p>ایران رادیاتور (Iran Radiator) بزرگ‌ترین و قدیمی‌ترین تولیدکننده تجهیزات حرارتی و برودتی در ایران است که از سال ۱۳۴۲ فعالیت خود را آغاز کرده و امروز با تولید پکیج دیواری، دیگ موتورخانه، رادیاتور پنلی و آلومینیومی، مشعل گازی و گازوئیلی، کولر گازی و آبگرمکن، یکی از معتبرترین برندهای تأسیسات کشور به‌شمار می‌رود. محصولات این برند با استاندارد ملی ایران، گارانتی رسمی و شبکه گسترده خدمات پس از فروش، انتخابی مطمئن برای موتورخانه‌های خانگی، تجاری و صنعتی هستند. در فروشگاه شوفاژ می‌توانید همه محصولات اصل ایران رادیاتور را با ضمانت اصالت و قیمت رقابتی خریداری کنید.</p>
+  </div>
+
+  <!-- 2. KEY HIGHLIGHTS -->
+  <div class="ran25-card anim d2">
+    <h3>برند ایران رادیاتور در یک نگاه</h3>
+    <ul class="ran25-list">
+      <li>تأسیس: سال ۱۳۴۲ (یکی از قدیمی‌ترین برندهای تأسیسات ایران)</li>
+      <li>کشور سازنده: ایران (تولید داخلی با تکنولوژی روز)</li>
+      <li>دامنه محصولات: گرمایشی و سرمایشی (حرارتی و برودتی)</li>
+      <li>محصولات شاخص: پکیج، دیگ، رادیاتور، مشعل، کولر گازی</li>
+      <li>استاندارد: دارای استاندارد ملی ایران و تأییدیه‌های معتبر</li>
+      <li>گارانتی: ضمانت رسمی به همراه خدمات پس از فروش بلندمدت</li>
+      <li>شبکه خدمات: نمایندگی‌های مجاز در سراسر کشور</li>
+      <li>قطعات یدکی: فراوان، ارزان و به‌سادگی در دسترس</li>
+    </ul>
+  </div>
+
+  <!-- 3. TICKER -->
+  <div class="ran25-ticker anim d3" aria-hidden="true">
+    <div class="fade-r"></div>
+    <div class="ran25-ticker-track">
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>برند ایرانی با بیش از ۶ دهه سابقه</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>ضمانت اصالت کالا</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>گارانتی رسمی ایران رادیاتور</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>قطعات یدکی فراوان</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>قیمت رقابتی تولید ملی</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>مشاوره رایگان قبل از خرید</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>ارسال سریع به سراسر ایران</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>برند ایرانی با بیش از ۶ دهه سابقه</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>ضمانت اصالت کالا</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>گارانتی رسمی ایران رادیاتور</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>قطعات یدکی فراوان</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>قیمت رقابتی تولید ملی</span>
+    </div>
+  </div>
+
+  <!-- HERO PHOTO -->
+  <div class="ran25-photo anim d2">
+    <div class="ran25-photo-title">برند ایران رادیاتور؛ مجموعه کامل تجهیزات حرارتی و برودتی</div>
+    <div class="ran25-photo-stage">
+      <img src="https://shofazh.com/wp-content/uploads/2026/06/irg.png" alt="محصولات برند ایران رادیاتور شامل پکیج، رادیاتور و کولر گازی">
+
+      <!-- BRAND STRENGTH CALLOUTS — موقعیت‌ها قابل تنظیم با درصد -->
+      <span class="ran25-spot blue ran25-d1" style="top:24%;right:28%"></span>
+      <span class="ran25-spot green ran25-d2" style="top:60%;right:40%"></span>
+      <span class="ran25-spot yellow ran25-d3" style="top:40%;right:66%"></span>
+      <span class="ran25-spot red ran25-d4" style="top:70%;right:78%"></span>
+
+      <div class="ran25-callout blue ran25-d1" style="top:6%;right:6%">
+        تولید ملی
+        <small>ساخت ایران</small>
+      </div>
+      <div class="ran25-callout green ran25-d2" style="top:84%;right:10%">
+        گارانتی رسمی
+        <small>ضمانت اصالت</small>
+      </div>
+      <div class="ran25-callout yellow ran25-d3" style="top:6%;right:70%">
+        تنوع محصولات
+        <small>گرمایش و سرمایش</small>
+      </div>
+      <div class="ran25-callout red ran25-d4" style="top:84%;right:64%">
+        قطعات فراوان
+        <small>در سراسر کشور</small>
+      </div>
+    </div>
+    <div class="ran25-photo-hint">نشانگرهای رنگی، مزیت‌های کلیدی برند ایران رادیاتور را نشان می‌دهند</div>
+  </div>
+
+  <!-- SECTION 1: INTRO -->
+  <h2 class="anim d1">برند ایران رادیاتور؛ پیشگام تأسیسات حرارتی و برودتی ایران</h2>
+  <p>وقتی صحبت از <strong>خرید تجهیزات تأسیساتی مطمئن</strong> به میان می‌آید، نام <strong>ایران رادیاتور (Iran Radiator)</strong> یکی از اولین گزینه‌هایی است که در ذهن مصرف‌کنندگان و متخصصان نقش می‌بندد. این برند با بیش از شش دهه سابقه، توانسته جایگاه خود را به‌عنوان یکی از بزرگ‌ترین و معتبرترین تولیدکنندگان <a href="https://shofazh.com/product-category/garmayesh/">تجهیزات گرمایشی و سرمایشی</a> در ایران تثبیت کند. سبد محصولات گسترده، کیفیت قابل اعتماد و قیمت منطقی، ایران رادیاتور را به انتخابی محبوب برای موتورخانه‌های خانگی، ساختمان‌های مسکونی، واحدهای تجاری و حتی پروژه‌های صنعتی تبدیل کرده است.</p>
+  <p>هدف این صفحه آن است که شناختی کامل از برند ایران رادیاتور، خطوط تولید و مزیت‌های آن به دست آورید و در نهایت بتوانید با اطمینان، محصول موردنیاز خود را از فروشگاه <a href="https://shofazh.com/">شوفاژ</a> تهیه کنید. تمامی محصولات ایران رادیاتور در شوفاژ، اصل، دارای گارانتی رسمی و با ضمانت اصالت کالا عرضه می‌شوند.</p>
+  <div class="ran25-box ran25-tip anim d2">
+    <strong>نکته</strong>
+    ایران رادیاتور هم در حوزه گرمایش (پکیج، دیگ، رادیاتور، مشعل) و هم در حوزه سرمایش (کولر گازی) فعال است؛ بنابراین می‌توانید تمام نیازهای تأسیساتی خود را از یک برند معتبر تأمین کنید.
+  </div>
+
+  <!-- IMAGE PLACEHOLDER: after intro - factory/quality scene -->
+
+  <!-- SECTION 2: HISTORY -->
+  <h2 class="anim d1">تاریخچه و کشور سازنده ایران رادیاتور</h2>
+  <p>شرکت ایران رادیاتور فعالیت خود را از سال ۱۳۴۲ و با تولید رادیاتورهای شوفاژ آغاز کرد؛ نامی که ریشه در همین محصول اولیه دارد. این برند طی سال‌ها با سرمایه‌گذاری در خطوط تولید مدرن، انتقال دانش فنی و توسعه واحد تحقیق و توسعه، دامنه محصولات خود را به‌طور چشمگیری گسترش داد و از یک تولیدکننده رادیاتور به یک <strong>مجموعه جامع تولید تجهیزات تأسیساتی</strong> تبدیل شد.</p>
+  <p>محصولات ایران رادیاتور به‌طور کامل در <strong>کارخانه‌های داخل ایران</strong> تولید می‌شوند و همین موضوع، علاوه بر حمایت از تولید ملی، باعث در دسترس بودن قطعات یدکی، قیمت مناسب‌تر نسبت به نمونه‌های وارداتی و خدمات پس از فروش سریع‌تر شده است. این برند برای تأمین کیفیت، از استانداردهای ملی ایران پیروی می‌کند و بسیاری از محصولاتش دارای تأییدیه‌های معتبر کیفی هستند.</p>
+  <div class="ran25-bars ran25-card anim d3">
+    <div class="ran25-bar"><div class="lbl"><span>سابقه و اعتبار برند</span><span>بیش از ۶۰ سال</span></div><div class="track"><div class="fill" style="--w:96%"></div></div></div>
+    <div class="ran25-bar"><div class="lbl"><span>گستردگی سبد محصولات</span><span>گرمایشی + برودتی</span></div><div class="track"><div class="fill" style="--w:92%"></div></div></div>
+    <div class="ran25-bar"><div class="lbl"><span>در دسترس بودن قطعات یدکی</span><span>عالی</span></div><div class="track"><div class="fill" style="--w:98%"></div></div></div>
+  </div>
+
+  <!-- SECTION 3: PRODUCT LINES -->
+  <h2 class="anim d1">محصولات شاخص ایران رادیاتور</h2>
+  <p>یکی از مهم‌ترین مزیت‌های ایران رادیاتور، تنوع بالای محصولات آن است. در ادامه با مهم‌ترین خطوط تولید این برند آشنا می‌شوید:</p>
+  <h3 class="anim d2">پکیج دیواری و دیگ موتورخانه</h3>
+  <p><a href="https://shofazh.com/product-category/garmayesh/package/">پکیج‌های دیواری ایران رادیاتور</a> در مدل‌های فن‌دار و دودکش‌دار، با راندمان بالا و طراحی فشرده، گزینه‌ای مناسب برای گرمایش و تأمین آب گرم بهداشتی آپارتمان‌ها و ویلاها هستند. در کنار آن، <a href="https://shofazh.com/product-category/garmayesh/dig/">دیگ‌های چدنی و فولادی</a> این برند برای موتورخانه‌های مرکزی با ظرفیت‌های مختلف عرضه می‌شوند.</p>
+  <h3 class="anim d3">رادیاتور پنلی و آلومینیومی</h3>
+  <p>رادیاتور، محصولی است که نام برند از آن گرفته شده است. <a href="https://shofazh.com/product-category/garmayesh/">رادیاتورهای پنلی و آلومینیومی ایران رادیاتور</a> با انتقال حرارت بالا، مقاومت در برابر خوردگی و طراحی زیبا، یکی از پرفروش‌ترین محصولات بازار گرمایش ایران محسوب می‌شوند.</p>
+  <h3 class="anim d4">مشعل گازی و گازوئیلی</h3>
+  <p><a href="https://shofazh.com/product-category/garmayesh/burner/iran-radiator-burner/">مشعل‌های ایران رادیاتور</a> در انواع گازسوز، گازوئیلی و دوگانه‌سوز تولید می‌شوند و با احتراق پایدار و سیستم‌های ایمنی، حرارت موردنیاز دیگ موتورخانه را به‌صورت بهینه تأمین می‌کنند.</p>
+  <h3 class="anim d5">کولر گازی و محصولات برودتی</h3>
+  <p>ایران رادیاتور در حوزه سرمایش نیز فعال است و <strong>کولرهای گازی</strong> اسپلیت با راندمان انرژی مناسب و قابلیت سرمایش و گرمایش عرضه می‌کند تا کاربران بتوانند چهارفصل از یک دستگاه بهره ببرند.</p>
+  <div class="ran25-box ran25-good anim d5">
+    <strong>پیشنهاد شوفاژ</strong>
+    اگر نمی‌دانید کدام محصول ایران رادیاتور برای فضای شما مناسب است، کارشناسان شوفاژ به‌صورت رایگان شما را راهنمایی می‌کنند تا انتخابی دقیق و بدون اتلاف هزینه داشته باشید.
+  </div>
+
+  <!-- IMAGE PLACEHOLDER: after product lines - flagship product lineup -->
+
+  <!-- SECTION 4: WHY CHOOSE -->
+  <div class="ran25-machine anim d1" aria-hidden="true">
+    <svg class="ran25-gear" width="50" height="50" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+    <svg width="180" height="50" viewBox="0 0 180 50" aria-hidden="true">
+      <path class="ran25-pipe" d="M0 25 H180" />
+      <path class="ran25-pipe-flow" d="M0 25 H180" />
+      <circle cx="45" cy="25" r="6" fill="#FFB300"/>
+      <circle cx="135" cy="25" r="6" fill="#FFB300"/>
+    </svg>
+    <svg class="ran25-gear rev" width="68" height="68" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+    <svg width="180" height="50" viewBox="0 0 180 50" aria-hidden="true">
+      <path class="ran25-pipe" d="M0 25 H180" />
+      <path class="ran25-pipe-flow" d="M0 25 H180" />
+      <circle cx="45" cy="25" r="6" fill="#FFB300"/>
+      <circle cx="135" cy="25" r="6" fill="#FFB300"/>
+    </svg>
+    <svg class="ran25-gear slow" width="42" height="42" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+  </div>
+
+  <h2 class="anim d1">چرا ایران رادیاتور را انتخاب کنیم؟</h2>
+  <p>انتخاب یک برند تأسیساتی، تصمیمی بلندمدت است؛ چون با عمر، ایمنی و هزینه‌های جاری ساختمان شما گره می‌خورد. مهم‌ترین دلایلی که ایران رادیاتور را به انتخابی هوشمندانه تبدیل می‌کنند عبارت‌اند از:</p>
+  <ul class="ran25-list ran25-pros anim d2">
+    <li>برند ایرانی شناخته‌شده با بیش از ۶۰ سال سابقه و اعتماد عمومی</li>
+    <li>تنوع بالای محصولات گرمایشی و برودتی زیر یک برند</li>
+    <li>قیمت رقابتی به‌دلیل تولید داخلی و حذف هزینه‌های واردات</li>
+    <li>دسترسی آسان و فراوان به قطعات یدکی در سراسر کشور</li>
+    <li>شبکه گسترده نمایندگی‌ها و خدمات پس از فروش</li>
+    <li>تطابق با استاندارد ملی ایران و کنترل کیفیت مستمر</li>
+    <li>گارانتی رسمی و ضمانت اصالت کالا</li>
+    <li>پشتیبانی فنی و مشاوره تخصصی پیش و پس از خرید</li>
+  </ul>
+  <div class="ran25-box ran25-tip anim d3">
+    <strong>کیفیت، قیمت و خدمات در تعادل</strong>
+    مزیت اصلی ایران رادیاتور، برقراری تعادل میان «کیفیت قابل اعتماد»، «قیمت منصفانه» و «خدمات پس از فروش گسترده» است؛ سه عاملی که یک خرید تأسیساتی موفق را تضمین می‌کنند.
+  </div>
+
+  <!-- CALCULATOR PROMO -->
+  <div class="ran25-calculator-promo">
+    <div class="ran25-cp-grid">
+      <div class="ran25-cp-text">
+        <span class="ran25-cp-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="9" y2="10"/><line x1="12" y1="10" x2="13" y2="10"/><line x1="15" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="9" y2="14"/><line x1="12" y1="14" x2="13" y2="14"/><line x1="15" y1="14" x2="16" y2="18"/><line x1="8" y1="18" x2="9" y2="18"/><line x1="12" y1="18" x2="13" y2="18"/></svg>
+          ابزار رایگان شوفاژ
+        </span>
+        <h3>قبل از خرید، ظرفیت حرارتی موردنیازت را دقیق محاسبه کن!</h3>
+        <p>انتخاب محصول با ظرفیت نامناسب، یعنی اتلاف انرژی و هزینه اضافه. با محاسبه‌گر آنلاین و رایگان شوفاژ، در چند ثانیه بفهم چه ظرفیتی برای فضای تو مناسب است.</p>
+        <ul class="ran25-cp-list">
+          <li>محاسبه دقیق ظرفیت حرارتی بر اساس متراژ و عایق‌بندی</li>
+          <li>انتخاب صحیح پکیج، دیگ یا مشعل بدون اتلاف انرژی</li>
+          <li>کاملاً رایگان و آنلاین، بدون نیاز به نصب</li>
+          <li>جلوگیری از خرید محصول با ظرفیت کم یا زیاد</li>
+        </ul>
+        <a class="ran25-cp-btn" href="https://shofazh.com/shofazh-calculator.html">محاسبه ظرفیت حرارتی رایگان</a>
+      </div>
+      <div class="ran25-cp-media">
+        <video controls autoplay muted loop playsinline poster="https://shofazh.com/wp-content/uploads/2026/06/irg.png">
+          <source src="https://shofazh.com/wp-content/uploads/2026/05/cleaned_محاسبه_گر_ظرفیت_حرارتی.mp4" type="video/mp4">
+          مرورگر شما از پخش ویدئو پشتیبانی نمی‌کند.
+        </video>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: COMPARISON -->
+  <h2 class="anim d1">مقایسه ایران رادیاتور با سایر برندها</h2>
+  <p>برای آنکه جایگاه ایران رادیاتور را بهتر درک کنید، آن را با میانگین برندهای رقیب داخلی و وارداتی در چند معیار کلیدی مقایسه می‌کنیم:</p>
+  <div class="ran25-tablewrap anim d2">
+    <table>
+      <tr><th>معیار</th><th>ایران رادیاتور</th><th>سایر برندها</th></tr>
+      <tr><td>قیمت نسبت به کیفیت</td><td>اقتصادی و منصفانه</td><td>متغیر / اغلب بالاتر</td></tr>
+      <tr><td>تنوع محصولات</td><td>بسیار گسترده (گرمایشی و برودتی)</td><td>اغلب محدود به یک حوزه</td></tr>
+      <tr><td>در دسترس بودن قطعات</td><td>بسیار بالا</td><td>متوسط تا کم</td></tr>
+      <tr><td>شبکه خدمات پس از فروش</td><td>سراسری و گسترده</td><td>محدودتر</td></tr>
+      <tr><td>تولید داخلی</td><td>بله</td><td>اغلب وارداتی</td></tr>
+    </table>
+  </div>
+  <div class="ran25-box ran25-good anim d3">
+    <strong>جمع‌بندی مقایسه</strong>
+    اگر به‌دنبال ترکیبی از «قیمت منطقی»، «در دسترس بودن قطعات» و «خدمات پس از فروش مطمئن» هستید، ایران رادیاتور در بیشتر موارد انتخابی هوشمندانه‌تر از نمونه‌های وارداتی است؛ مگر آنکه نیاز خاصی به ویژگی‌های انحصاری یک برند خارجی داشته باشید.
+  </div>
+
+  <!-- SECTION 6: WARRANTY -->
+  <div class="ran25-machine valve-bar anim d1" aria-hidden="true">
+    <svg class="ran25-gear" width="56" height="56" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+    <svg width="200" height="60" viewBox="0 0 200 60" aria-hidden="true">
+      <path class="ran25-pipe" d="M0 30 H75 M125 30 H200" stroke="#C8E6C9" stroke-width="5"/>
+      <path class="ran25-pipe-flow" d="M0 30 H75 M125 30 H200" stroke="#FFEB3B" stroke-width="3"/>
+      <circle cx="100" cy="30" r="20" fill="#fff" stroke="#FFB300" stroke-width="3"/>
+      <line x1="100" y1="10" x2="100" y2="50" stroke="#0D2B52" stroke-width="3" stroke-linecap="round"/>
+      <line x1="80" y1="30" x2="120" y2="30" stroke="#0D2B52" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+    <svg class="ran25-gear rev" width="74" height="74" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+    <svg width="200" height="60" viewBox="0 0 200 60" aria-hidden="true">
+      <path class="ran25-pipe" d="M0 30 H75 M125 30 H200" stroke="#C8E6C9" stroke-width="5"/>
+      <path class="ran25-pipe-flow" d="M0 30 H75 M125 30 H200" stroke="#FFEB3B" stroke-width="3"/>
+      <circle cx="100" cy="30" r="20" fill="#fff" stroke="#FFB300" stroke-width="3"/>
+      <line x1="100" y1="10" x2="100" y2="50" stroke="#0D2B52" stroke-width="3" stroke-linecap="round"/>
+      <line x1="80" y1="30" x2="120" y2="30" stroke="#0D2B52" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+    <svg class="ran25-gear slow" width="48" height="48" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+  </div>
+
+  <h2 class="anim d1">گارانتی و خدمات پس از فروش ایران رادیاتور</h2>
+  <p>یکی از مهم‌ترین دلایل اعتماد به ایران رادیاتور، پشتیبانی قدرتمند پس از فروش است. این برند با شبکه‌ای گسترده از نمایندگی‌های مجاز، خیال مشتری را از بابت تعمیر، سرویس و تأمین قطعات راحت می‌کند.</p>
+  <ul class="ran25-list ran25-pros anim d2">
+    <li>گارانتی رسمی ایران رادیاتور روی محصولات اصل</li>
+    <li>برچسب اصالت و کد رهگیری معتبر روی کالا</li>
+    <li>تأمین قطعات یدکی برای سال‌های طولانی</li>
+    <li>شبکه گسترده نمایندگان مجاز در سراسر کشور</li>
+    <li>پشتیبانی فنی و مشاوره نصب و راه‌اندازی</li>
+  </ul>
+  <div class="ran25-box ran25-tip anim d3">
+    <strong>نکته مهم</strong>
+    برای حفظ اعتبار گارانتی، حتماً محصول را از فروشنده معتبر تهیه کنید، فاکتور خرید را نگه دارید و نصب و سرویس را به افراد دارای صلاحیت بسپارید.
+  </div>
+
+  <!-- IMAGE PLACEHOLDER: after warranty - service/support scene -->
+
+  <!-- SECTION 7: BUYING GUIDE -->
+  <h2 class="anim d1">راهنمای خرید محصولات ایران رادیاتور از شوفاژ</h2>
+  <p>برای آنکه خریدی مطمئن و بدون پشیمانی داشته باشید، مراحل و نکات زیر را دنبال کنید:</p>
+  <ol class="ran25-num anim d2">
+    <li>نیاز خود را مشخص کنید: گرمایش، سرمایش یا هر دو</li>
+    <li>ظرفیت حرارتی موردنیاز فضا را با محاسبه‌گر رایگان شوفاژ تعیین کنید</li>
+    <li>محصول متناسب (پکیج، دیگ، رادیاتور، مشعل یا کولر گازی) را انتخاب کنید</li>
+    <li>از اصالت کالا و وجود برچسب گارانتی اطمینان حاصل کنید</li>
+    <li>سفارش را ثبت کرده و از مشاوره رایگان کارشناسان شوفاژ بهره ببرید</li>
+  </ol>
+  <div class="ran25-box ran25-good anim d3">
+    <strong>چرا خرید از شوفاژ؟</strong>
+    در فروشگاه <a href="https://shofazh.com/">شوفاژ</a> همه محصولات ایران رادیاتور اصل، دارای گارانتی رسمی و با ضمانت اصالت کالا عرضه می‌شوند؛ به‌همراه مشاوره تخصصی رایگان و ارسال سریع به سراسر ایران.
+  </div>
+
+  <!-- SECTION 8: FAQ -->
+  <h2 class="anim d1">سوالات متداول درباره برند ایران رادیاتور</h2>
+  <div class="ran25-faq anim d2">
+    <details><summary>ایران رادیاتور محصولات خود را در کجا تولید می‌کند؟</summary><div class="ans">تمامی محصولات ایران رادیاتور در کارخانه‌های داخل ایران و با تکیه بر تولید ملی ساخته می‌شوند.</div></details>
+    <details><summary>ایران رادیاتور چه محصولاتی تولید می‌کند؟</summary><div class="ans">پکیج دیواری، دیگ موتورخانه، رادیاتور پنلی و آلومینیومی، مشعل گازی و گازوئیلی، کولر گازی و آبگرمکن از مهم‌ترین محصولات این برند هستند.</div></details>
+    <details><summary>آیا قطعات یدکی ایران رادیاتور به‌راحتی در دسترس است؟</summary><div class="ans">بله، به‌دلیل تولید داخلی و شبکه گسترده نمایندگی‌ها، قطعات یدکی ایران رادیاتور فراوان و به‌آسانی در سراسر کشور در دسترس است.</div></details>
+    <details><summary>گارانتی محصولات ایران رادیاتور چگونه است؟</summary><div class="ans">محصولات اصل ایران رادیاتور دارای گارانتی رسمی و برچسب اصالت کالا هستند و خدمات پس از فروش آن‌ها از طریق نمایندگان مجاز ارائه می‌شود.</div></details>
+    <details><summary>آیا ایران رادیاتور در حوزه سرمایش هم فعال است؟</summary><div class="ans">بله، علاوه بر محصولات گرمایشی، ایران رادیاتور کولر گازی اسپلیت با قابلیت سرمایش و گرمایش نیز تولید می‌کند.</div></details>
+    <details><summary>محصولات ایران رادیاتور بهتر است یا برندهای وارداتی؟</summary><div class="ans">ایران رادیاتور در ترکیب قیمت، در دسترس بودن قطعات و خدمات پس از فروش معمولاً انتخابی اقتصادی‌تر و کم‌دردسرتر از نمونه‌های وارداتی است.</div></details>
+    <details><summary>چطور مطمئن شوم محصول ایران رادیاتور اصل است؟</summary><div class="ans">با خرید از فروشندگان معتبر مانند شوفاژ، بررسی برچسب اصالت و کد رهگیری، و نگه‌داری فاکتور خرید می‌توانید از اصالت محصول مطمئن شوید.</div></details>
+    <details><summary>چگونه ظرفیت مناسب محصول ایران رادیاتور را انتخاب کنم؟</summary><div class="ans">با استفاده از محاسبه‌گر ظرفیت حرارتی رایگان شوفاژ می‌توانید ظرفیت موردنیاز فضای خود را دقیق محاسبه و محصول مناسب را انتخاب کنید.</div></details>
+  </div>
+
+  <!-- SECTION 9: CONCLUSION -->
+  <h2 class="anim d1">جمع‌بندی نهایی</h2>
+  <p>ایران رادیاتور با بیش از شش دهه سابقه، سبد محصولات گسترده در حوزه گرمایش و سرمایش، تولید داخلی، قیمت رقابتی و شبکه گسترده خدمات پس از فروش، یکی از مطمئن‌ترین انتخاب‌ها برای تجهیز موتورخانه و سیستم تأسیساتی ساختمان شماست. چه به‌دنبال یک پکیج دیواری اقتصادی باشید، چه دیگ موتورخانه، رادیاتور، مشعل یا کولر گازی، این برند گزینه‌ای متناسب با نیاز و بودجه شما ارائه می‌دهد.</p>
+  <p>برای خریدی مطمئن، کافی است محصول موردنظر خود را از فروشگاه <a href="https://shofazh.com/">شوفاژ</a> انتخاب کنید تا با ضمانت اصالت کالا، گارانتی رسمی و مشاوره تخصصی رایگان، تجربه‌ای بی‌دغدغه داشته باشید. فراموش نکنید که پیش از خرید، ظرفیت حرارتی موردنیاز خود را با محاسبه‌گر رایگان شوفاژ بسنجید تا انتخابی دقیق و بهینه داشته باشید.</p>
+
+  <!-- RELATED -->
+  <div class="ran25-related anim d1">
+    <h3>محصولات و دسته‌های مرتبط</h3>
+    <ul>
+      <li><a href="https://shofazh.com/product-category/garmayesh/package/">پکیج دیواری ایران رادیاتور</a></li>
+      <li><a href="https://shofazh.com/product-category/garmayesh/dig/">دیگ چدنی و فولادی موتورخانه</a></li>
+      <li><a href="https://shofazh.com/product-category/garmayesh/burner/iran-radiator-burner/">مشعل‌های ایران رادیاتور</a></li>
+      <li><a href="https://shofazh.com/product-category/garmayesh/">تجهیزات گرمایشی موتورخانه</a></li>
+      <li><a href="https://shofazh.com/shofazh-calculator.html">محاسبه‌گر ظرفیت حرارتی رایگان</a></li>
+      <li><a href="https://shofazh.com/">صفحه اصلی شوفاژ دات کام</a></li>
+    </ul>
+  </div>
+
+  <!-- CTA -->
+  <div class="ran25-cta anim d1">
+    <h2>همین حالا محصولات ایران رادیاتور را تهیه کنید</h2>
+    <p>کیفیت تولید ملی با ضمانت اصالت کالا و خدمات پس از فروش گسترده</p>
+    <ul class="ran25-cta-feats">
+      <li>ضمانت اصالت کالا</li>
+      <li>گارانتی رسمی</li>
+      <li>مشاوره تخصصی رایگان</li>
+      <li>ارسال سریع</li>
+    </ul>
+    <a class="ran25-btn" href="https://shofazh.com/%D8%A8%D8%B1%D9%86%D8%AF/%d8%a7%db%8c%d8%b1%d8%a7%d9%86-%d8%b1%d8%a7%d8%af%db%8c%d8%a7%d8%aa%d9%88%d8%b1/">مشاهده محصولات ایران رادیاتور</a>
+  </div>
+
+</div>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Brand",
+  "name": "ایران رادیاتور",
+  "alternateName": "Iran Radiator",
+  "url": "https://shofazh.com/%D8%A8%D8%B1%D9%86%D8%AF/%d8%a7%db%8c%d8%b1%d8%a7%d9%86-%d8%b1%d8%a7%d8%af%db%8c%d8%a7%d8%aa%d9%88%d8%b1/",
+  "logo": "https://shofazh.com/wp-content/uploads/2026/06/logo.png",
+  "image": "https://shofazh.com/wp-content/uploads/2026/06/irg.png",
+  "description": "ایران رادیاتور یکی از بزرگ‌ترین و قدیمی‌ترین تولیدکنندگان تجهیزات حرارتی و برودتی ایران است که از سال ۱۳۴۲ فعالیت می‌کند و پکیج، دیگ، رادیاتور، مشعل و کولر گازی تولید می‌کند.",
+  "foundingDate": "1963",
+  "foundingLocation": {
+    "@type": "Place",
+    "name": "ایران"
+  },
+  "slogan": "کیفیت تولید ملی در تأسیسات حرارتی و برودتی"
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question","name": "ایران رادیاتور محصولات خود را در کجا تولید می‌کند؟","acceptedAnswer": {"@type": "Answer","text": "تمامی محصولات ایران رادیاتور در کارخانه‌های داخل ایران و با تکیه بر تولید ملی ساخته می‌شوند."}},
+    {"@type": "Question","name": "ایران رادیاتور چه محصولاتی تولید می‌کند؟","acceptedAnswer": {"@type": "Answer","text": "پکیج دیواری، دیگ موتورخانه، رادیاتور پنلی و آلومینیومی، مشعل گازی و گازوئیلی، کولر گازی و آبگرمکن از مهم‌ترین محصولات این برند هستند."}},
+    {"@type": "Question","name": "آیا قطعات یدکی ایران رادیاتور به‌راحتی در دسترس است؟","acceptedAnswer": {"@type": "Answer","text": "بله، به‌دلیل تولید داخلی و شبکه گسترده نمایندگی‌ها، قطعات یدکی ایران رادیاتور فراوان و به‌آسانی در سراسر کشور در دسترس است."}},
+    {"@type": "Question","name": "گارانتی محصولات ایران رادیاتور چگونه است؟","acceptedAnswer": {"@type": "Answer","text": "محصولات اصل ایران رادیاتور دارای گارانتی رسمی و برچسب اصالت کالا هستند و خدمات پس از فروش آن‌ها از طریق نمایندگان مجاز ارائه می‌شود."}},
+    {"@type": "Question","name": "آیا ایران رادیاتور در حوزه سرمایش هم فعال است؟","acceptedAnswer": {"@type": "Answer","text": "بله، علاوه بر محصولات گرمایشی، ایران رادیاتور کولر گازی اسپلیت با قابلیت سرمایش و گرمایش نیز تولید می‌کند."}},
+    {"@type": "Question","name": "محصولات ایران رادیاتور بهتر است یا برندهای وارداتی؟","acceptedAnswer": {"@type": "Answer","text": "ایران رادیاتور در ترکیب قیمت، در دسترس بودن قطعات و خدمات پس از فروش معمولاً انتخابی اقتصادی‌تر و کم‌دردسرتر از نمونه‌های وارداتی است."}},
+    {"@type": "Question","name": "چطور مطمئن شوم محصول ایران رادیاتور اصل است؟","acceptedAnswer": {"@type": "Answer","text": "با خرید از فروشندگان معتبر مانند شوفاژ، بررسی برچسب اصالت و کد رهگیری، و نگه‌داری فاکتور خرید می‌توانید از اصالت محصول مطمئن شوید."}},
+    {"@type": "Question","name": "چگونه ظرفیت مناسب محصول ایران رادیاتور را انتخاب کنم؟","acceptedAnswer": {"@type": "Answer","text": "با استفاده از محاسبه‌گر ظرفیت حرارتی رایگان شوفاژ می‌توانید ظرفیت موردنیاز فضای خود را دقیق محاسبه و محصول مناسب را انتخاب کنید."}}
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem","position": 1,"name": "خانه","item": "https://shofazh.com/"},
+    {"@type": "ListItem","position": 2,"name": "برندها","item": "https://shofazh.com/%D8%A8%D8%B1%D9%86%D8%AF/"},
+    {"@type": "ListItem","position": 3,"name": "ایران رادیاتور","item": "https://shofazh.com/%D8%A8%D8%B1%D9%86%D8%AF/%d8%a7%db%8c%d8%b1%d8%a7%d9%86-%d8%b1%d8%a7%d8%af%db%8c%d8%a7%d8%aa%d9%88%d8%b1/"}
+  ]
+}
+</script>
