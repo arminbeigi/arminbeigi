@@ -1,0 +1,43 @@
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Brand",
+  "name": "شوفاژکار",
+  "alternateName": "Chauffagekar",
+  "url": "https://shofazh.com/brand/chauffagekar/",
+  "logo": "https://shofazh.com/wp-content/uploads/2026/06/Screen-Shot-1405-03-27-at-18.59.33.png",
+  "image": "https://shofazh.com/wp-content/uploads/2022/06/chauffagekar-slider-shofazh.com_-scaled.jpg",
+  "description": "شوفاژکار یکی از قدیمی‌ترین تولیدکنندگان تجهیزات گرمایشی ایران است که در تولید دیگ چدنی موتورخانه، پکیج دیواری، رادیاتور و مشعل تخصص دارد.",
+  "foundingLocation": { "@type": "Place", "name": "ایران" },
+  "slogan": "کیفیت تولید ملی در تجهیزات گرمایشی"
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question","name": "شوفاژکار محصولات خود را در کجا تولید می‌کند؟","acceptedAnswer": {"@type": "Answer","text": "تمامی محصولات شوفاژکار در کارخانه‌های داخل ایران و با تکیه بر تولید ملی ساخته می‌شوند."}},
+    {"@type": "Question","name": "شوفاژکار چه محصولاتی تولید می‌کند؟","acceptedAnswer": {"@type": "Answer","text": "دیگ چدنی موتورخانه، پکیج دیواری، رادیاتور و مشعل گازی و گازوئیلی از مهم‌ترین محصولات این برند هستند."}},
+    {"@type": "Question","name": "نقطه قوت اصلی برند شوفاژکار چیست؟","acceptedAnswer": {"@type": "Answer","text": "شوفاژکار به‌طور ویژه در تولید دیگ‌های چدنی بادوام موتورخانه تخصص و شهرت دارد."}},
+    {"@type": "Question","name": "آیا قطعات یدکی شوفاژکار به‌راحتی در دسترس است؟","acceptedAnswer": {"@type": "Answer","text": "بله، به‌دلیل تولید داخلی و شبکه گسترده نمایندگی‌ها، قطعات یدکی شوفاژکار به‌آسانی در سراسر کشور در دسترس است."}},
+    {"@type": "Question","name": "گارانتی محصولات شوفاژکار چگونه است؟","acceptedAnswer": {"@type": "Answer","text": "محصولات اصل شوفاژکار دارای گارانتی رسمی و برچسب اصالت کالا هستند و خدمات پس از فروش آن‌ها از طریق نمایندگان مجاز ارائه می‌شود."}},
+    {"@type": "Question","name": "محصولات شوفاژکار بهتر است یا برندهای وارداتی؟","acceptedAnswer": {"@type": "Answer","text": "شوفاژکار در ترکیب قیمت، در دسترس بودن قطعات و خدمات پس از فروش معمولاً انتخابی اقتصادی‌تر و کم‌دردسرتر از نمونه‌های وارداتی است."}},
+    {"@type": "Question","name": "چطور مطمئن شوم محصول شوفاژکار اصل است؟","acceptedAnswer": {"@type": "Answer","text": "با خرید از فروشندگان معتبر مانند شوفاژ، بررسی برچسب اصالت و کد رهگیری، و نگه‌داری فاکتور خرید می‌توانید از اصالت محصول مطمئن شوید."}},
+    {"@type": "Question","name": "چگونه ظرفیت مناسب محصول شوفاژکار را انتخاب کنم؟","acceptedAnswer": {"@type": "Answer","text": "با استفاده از محاسبه‌گر ظرفیت حرارتی رایگان شوفاژ می‌توانید ظرفیت موردنیاز فضای خود را دقیق محاسبه و محصول مناسب را انتخاب کنید."}}
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem","position": 1,"name": "خانه","item": "https://shofazh.com/"},
+    {"@type": "ListItem","position": 2,"name": "برندها","item": "https://shofazh.com/brand/"},
+    {"@type": "ListItem","position": 3,"name": "شوفاژکار","item": "https://shofazh.com/brand/chauffagekar/"}
+  ]
+}
+</script>
