@@ -1,0 +1,491 @@
+<!-- =========================================================
+  Shofazh.com — صفحه دسته‌بندی «دیگ چدنی شوفاژکار»
+  SEO + GEO | Persian | Warm palette | WordPress-ready
+  Paste this whole block into a WordPress "Custom HTML" block.
+  ========================================================= -->
+<div class="shz-cat" dir="rtl" lang="fa">
+  <style>
+  /* ---------- پالت و پایه ---------- */
+  .shz-cat{
+    --shz-accent:#C62828;        /* قرمز گرمایشی */
+    --shz-accent-2:#FF6F00;      /* نارنجی */
+    --shz-accent-3:#8E0000;      /* قرمز تیره */
+    --shz-ink:#23272e;
+    --shz-muted:#5b626c;
+    --shz-line:#f0d9d0;
+    --shz-soft:#fff6f1;
+    --shz-card:#ffffff;
+    --shz-radius:16px;
+    --shz-shadow:0 10px 30px rgba(140,30,10,.10);
+    direction:rtl; text-align:right;
+    color:var(--shz-ink);
+    font-family:"Vazirmatn","IRANSans","Vazir","Yekan","Tahoma",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    line-height:1.95; font-size:17px;
+    background:linear-gradient(180deg,#fffdfc 0%,#fff7f3 100%);
+    max-width:1100px; margin:0 auto; padding:0 16px 40px;
+    -webkit-font-smoothing:antialiased; overflow-x:hidden;
+  }
+  .shz-cat *{box-sizing:border-box}
+  .shz-cat h1,.shz-cat h2,.shz-cat h3{line-height:1.5; color:var(--shz-ink); font-weight:800}
+  .shz-cat p{margin:0 0 16px}
+  .shz-cat a{color:var(--shz-accent); text-decoration:none; font-weight:700}
+  .shz-cat a:hover{text-decoration:underline}
+
+  /* ---------- نوار متحرک (ticker) ---------- */
+  .shz-ticker{
+    background:linear-gradient(90deg,var(--shz-accent-3),var(--shz-accent),var(--shz-accent-2));
+    color:#fff; border-radius:999px; overflow:hidden; margin:18px 0 6px;
+    box-shadow:var(--shz-shadow); position:relative;
+  }
+  .shz-ticker__track{display:flex; gap:38px; white-space:nowrap; padding:10px 0;
+    width:max-content; animation:shz-marquee 22s linear infinite;}
+  .shz-ticker span{font-weight:700; font-size:14.5px; opacity:.97}
+  .shz-ticker span::before{content:"🔥"; margin-left:8px}
+  @keyframes shz-marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  /* ---------- HERO ---------- */
+  .shz-hero{
+    position:relative; margin-top:14px; padding:34px 26px;
+    border-radius:24px; color:#fff; overflow:hidden;
+    background:
+      radial-gradient(1200px 380px at 90% -20%,rgba(255,255,255,.18),transparent 60%),
+      linear-gradient(135deg,var(--shz-accent-3) 0%,var(--shz-accent) 45%,var(--shz-accent-2) 100%);
+    box-shadow:var(--shz-shadow);
+  }
+  .shz-hero::after{content:""; position:absolute; inset:auto -60px -90px auto;
+    width:260px; height:260px; border-radius:50%;
+    background:radial-gradient(circle,rgba(255,255,255,.22),transparent 70%); pointer-events:none;}
+  .shz-hero h1{color:#fff; font-size:30px; margin:0 0 12px}
+  .shz-hero p{color:#fff; opacity:.96; font-size:17.5px; margin:0; max-width:760px}
+  .shz-badge{display:inline-block; background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.35);
+    color:#fff; font-size:13px; padding:6px 14px; border-radius:999px; margin-bottom:14px; backdrop-filter:blur(4px)}
+
+  /* ---------- آمار شمارنده ---------- */
+  .shz-stats{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin:18px 0 6px}
+  .shz-stat{background:var(--shz-card); border:1px solid var(--shz-line); border-radius:var(--shz-radius);
+    padding:16px 10px; text-align:center; box-shadow:0 6px 16px rgba(140,30,10,.06)}
+  .shz-stat b{display:block; font-size:26px; color:var(--shz-accent); font-weight:800; line-height:1.2}
+  .shz-stat small{display:block; color:var(--shz-muted); font-size:13px; margin-top:4px}
+
+  /* ---------- بخش‌ها با شماره‌گذاری ---------- */
+  .shz-cat .shz-body{counter-reset:shz-sec}
+  .shz-sec{background:var(--shz-card); border:1px solid var(--shz-line); border-radius:var(--shz-radius);
+    padding:24px 22px; margin:18px 0; box-shadow:0 6px 18px rgba(140,30,10,.05)}
+  .shz-sec h2{counter-increment:shz-sec; font-size:23px; margin:0 0 14px; padding-bottom:12px;
+    border-bottom:2px dashed var(--shz-line); display:flex; align-items:center; gap:12px}
+  .shz-sec h2::before{content:counter(shz-sec); flex:0 0 auto; width:38px; height:38px; border-radius:12px;
+    background:linear-gradient(135deg,var(--shz-accent),var(--shz-accent-2)); color:#fff;
+    display:inline-flex; align-items:center; justify-content:center; font-size:18px; font-weight:800;
+    box-shadow:0 6px 14px rgba(198,40,40,.35)}
+  .shz-sec h3{font-size:18.5px; margin:18px 0 8px; color:var(--shz-accent-3)}
+  .shz-lead{font-size:18px; background:var(--shz-soft); border-right:5px solid var(--shz-accent);
+    padding:14px 16px; border-radius:12px; font-weight:600}
+
+  .shz-cat ul.shz-list{list-style:none; margin:8px 0 16px; padding:0}
+  .shz-cat ul.shz-list li{position:relative; padding:6px 28px 6px 0; margin:0}
+  .shz-cat ul.shz-list li::before{content:"◾"; color:var(--shz-accent); position:absolute; right:6px; top:6px}
+
+  /* ---------- کارت‌های زیرمحصول ---------- */
+  .shz-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:8px 0}
+  .shz-card{background:linear-gradient(180deg,#fff,#fff8f4); border:1px solid var(--shz-line);
+    border-radius:var(--shz-radius); padding:18px; transition:transform .25s ease,box-shadow .25s ease}
+  .shz-card:hover{transform:translateY(-6px); box-shadow:0 16px 30px rgba(198,40,40,.16)}
+  .shz-card .ic{width:46px; height:46px; border-radius:12px; display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(135deg,var(--shz-accent),var(--shz-accent-2)); margin-bottom:10px}
+  .shz-card h3{margin:0 0 6px; font-size:17.5px; color:var(--shz-ink)}
+  .shz-card p{font-size:14.5px; color:var(--shz-muted); margin:0}
+
+  /* ---------- جدول مقایسه ---------- */
+  .shz-tablewrap{overflow-x:auto; -webkit-overflow-scrolling:touch; border-radius:14px; border:1px solid var(--shz-line)}
+  table.shz-table{width:100%; min-width:640px; border-collapse:collapse; background:#fff; font-size:15px}
+  table.shz-table th,table.shz-table td{padding:13px 12px; text-align:center; border-bottom:1px solid var(--shz-line)}
+  table.shz-table thead th{background:linear-gradient(135deg,var(--shz-accent),var(--shz-accent-2)); color:#fff; font-weight:800; font-size:14.5px}
+  table.shz-table tbody tr:nth-child(even){background:var(--shz-soft)}
+  table.shz-table tbody td:first-child{font-weight:800; color:var(--shz-accent-3); text-align:right}
+  .shz-tag{display:inline-block; font-size:12px; padding:3px 9px; border-radius:999px; background:#e8f5e9; color:#1b5e20; font-weight:700}
+
+  /* ---------- مزایا/معایب ---------- */
+  .shz-pc{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:8px}
+  .shz-pc .box{border-radius:14px; padding:16px 18px; border:1px solid var(--shz-line)}
+  .shz-pc .pro{background:linear-gradient(180deg,#f1fbf3,#fff)}
+  .shz-pc .con{background:linear-gradient(180deg,#fff5f5,#fff)}
+  .shz-pc h3{margin:0 0 8px}
+  .shz-pc ul{list-style:none; margin:0; padding:0}
+  .shz-pc li{padding:5px 26px 5px 0; position:relative; font-size:15px}
+  .shz-pc .pro li::before{content:"✔"; color:#1b8a3a; position:absolute; right:4px}
+  .shz-pc .con li::before{content:"✖"; color:#c62828; position:absolute; right:4px}
+
+  /* ---------- بلوک محاسبه‌گر (تبلیغ ویژه) ---------- */
+  .shz-calc-promo{position:relative; overflow:hidden; border-radius:22px; padding:30px 26px; margin:26px 0;
+    color:#fff; box-shadow:0 18px 40px rgba(198,40,40,.28);
+    background:
+      radial-gradient(700px 240px at 10% -30%,rgba(255,255,255,.18),transparent 60%),
+      linear-gradient(135deg,#8E0000 0%,#C62828 45%,#FF6F00 100%);}
+  .shz-calc-promo::before{content:""; position:absolute; left:-50px; bottom:-70px; width:220px; height:220px;
+    border-radius:50%; background:radial-gradient(circle,rgba(255,255,255,.18),transparent 70%)}
+  .shz-calc-inner{position:relative; z-index:2; display:grid; grid-template-columns:1.3fr 1fr; gap:22px; align-items:center}
+  .shz-calc-promo h2{color:#fff; font-size:25px; margin:0 0 8px; display:flex; align-items:center; gap:12px}
+  .shz-calc-promo h2::before{display:none}
+  .shz-calc-promo p{color:#fff; opacity:.96; font-size:16px; margin:0 0 14px}
+  .shz-chips{display:flex; flex-wrap:wrap; gap:9px; margin:6px 0 18px}
+  .shz-chips span{background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.34);
+    padding:7px 12px; border-radius:999px; font-size:13.5px; font-weight:700; backdrop-filter:blur(3px)}
+  .shz-cta{display:inline-flex; align-items:center; gap:10px; background:#fff; color:var(--shz-accent-3);
+    font-weight:800; font-size:16px; padding:13px 26px; border-radius:999px; box-shadow:0 0 0 0 rgba(255,255,255,.6);
+    animation:shz-pulse 2.1s infinite}
+  .shz-cta:hover{text-decoration:none; transform:translateY(-2px)}
+  @keyframes shz-pulse{0%{box-shadow:0 0 0 0 rgba(255,255,255,.55)}70%{box-shadow:0 0 0 16px rgba(255,255,255,0)}100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}}
+  .shz-calc-visual{display:flex; align-items:center; justify-content:center}
+  .shz-calc-visual video{width:100%; max-width:100%; border-radius:14px; box-shadow:0 12px 28px rgba(0,0,0,.3)}
+  .shz-calc-svgbox{width:100%; max-width:230px; aspect-ratio:1/1; background:rgba(255,255,255,.10);
+    border:1px solid rgba(255,255,255,.3); border-radius:18px; display:flex; align-items:center; justify-content:center}
+
+  /* ---------- FAQ ---------- */
+  .shz-faq details{background:#fff; border:1px solid var(--shz-line); border-radius:12px; margin:10px 0; overflow:hidden}
+  .shz-faq summary{cursor:pointer; padding:15px 18px; font-weight:800; font-size:16px; list-style:none;
+    display:flex; justify-content:space-between; align-items:center; gap:10px; color:var(--shz-accent-3)}
+  .shz-faq summary::-webkit-details-marker{display:none}
+  .shz-faq summary::after{content:"+"; font-size:22px; color:var(--shz-accent); transition:transform .2s}
+  .shz-faq details[open] summary::after{transform:rotate(45deg)}
+  .shz-faq details[open]{box-shadow:0 8px 20px rgba(198,40,40,.08)}
+  .shz-faq .ans{padding:0 18px 16px; color:var(--shz-muted); font-size:15.5px}
+
+  /* ---------- CTA پایانی ---------- */
+  .shz-final{margin-top:22px; border-radius:22px; padding:30px 24px; text-align:center; color:#fff;
+    background:linear-gradient(135deg,var(--shz-accent-3),var(--shz-accent) 55%,var(--shz-accent-2));
+    box-shadow:var(--shz-shadow)}
+  .shz-final h2{color:#fff; font-size:24px; margin:0 0 10px}
+  .shz-final p{color:#fff; opacity:.96; margin:0 0 18px}
+  .shz-final .shz-cta{animation:none}
+
+  /* ---------- انیمیشن ظهور هنگام اسکرول ---------- */
+  .shz-reveal{opacity:0; transform:translateY(24px); transition:opacity .6s ease,transform .6s ease}
+  .shz-reveal.in{opacity:1; transform:none}
+
+  /* ---------- ریسپانسیو ---------- */
+  @media(max-width:768px){
+    .shz-cat{font-size:16px}
+    .shz-hero h1{font-size:24px}
+    .shz-stats{grid-template-columns:repeat(2,1fr)}
+    .shz-grid{grid-template-columns:1fr 1fr}
+    .shz-calc-inner{grid-template-columns:1fr}
+    .shz-pc{grid-template-columns:1fr}
+  }
+  @media(max-width:480px){
+    .shz-grid{grid-template-columns:1fr}
+    .shz-sec{padding:18px 15px}
+    .shz-hero{padding:26px 18px}
+  }
+  /* احترام به ترجیح کاهش حرکت */
+  @media (prefers-reduced-motion: reduce){
+    .shz-cat *{animation:none !important; transition:none !important}
+    .shz-reveal{opacity:1 !important; transform:none !important}
+  }
+  </style>
+
+  <!-- نوار متحرک ویژگی‌ها -->
+  <div class="shz-ticker" aria-hidden="true">
+    <div class="shz-ticker__track">
+      <span>گارانتی ۱۰ ساله شرکتی</span><span>چدن ریخته‌گری مرغوب</span><span>ظرفیت ۴۳٬۰۰۰ تا ۵۶۰٬۰۰۰ کیلوکالری</span>
+      <span>پره‌های جداشدنی و قابل افزایش</span><span>سازگار با گاز و گازوئیل</span><span>مناسب موتورخانه خانگی و تجاری</span>
+      <span>گارانتی ۱۰ ساله شرکتی</span><span>چدن ریخته‌گری مرغوب</span><span>ظرفیت ۴۳٬۰۰۰ تا ۵۶۰٬۰۰۰ کیلوکالری</span>
+      <span>پره‌های جداشدنی و قابل افزایش</span><span>سازگار با گاز و گازوئیل</span><span>مناسب موتورخانه خانگی و تجاری</span>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <header class="shz-hero shz-reveal">
+    <span class="shz-badge">شوفاژ دات کام · نمایندگی رسمی شوفاژکار</span>
+    <h1>دیگ چدنی شوفاژکار؛ قلب تپنده‌ی گرمایش مرکزی ساختمان شما</h1>
+    <p>دیگ چدنی شوفاژکار یک دیگ آب‌گرم چدنی ساخت شرکت صنعتی شوفاژکار است که از پره‌های جداشدنی چدن ریخته‌گری ساخته می‌شود و در ظرفیت‌های ۴۳٬۰۰۰ تا ۵۶۰٬۰۰۰ کیلوکالری بر ساعت برای گرمایش مرکزی ساختمان‌های مسکونی، تجاری و صنعتی به کار می‌رود. این دیگ‌ها با سوخت گاز طبیعی و گازوئیل کار می‌کنند و دارای ۱۰ سال گارانتی هستند.</p>
+  </header>
+
+  <!-- آمار -->
+  <div class="shz-stats">
+    <div class="shz-stat shz-reveal"><b data-count="4">۰</b><small>سری اصلی: سولار، سوپر، توربو، استار</small></div>
+    <div class="shz-stat shz-reveal"><b data-count="20">۰</b><small>حداکثر تعداد پره</small></div>
+    <div class="shz-stat shz-reveal"><b data-count="10">۰</b><small>سال گارانتی شرکتی</small></div>
+    <div class="shz-stat shz-reveal"><b data-count="105">۰</b><small>حداکثر دمای کاری (°C)</small></div>
+  </div>
+
+  <div class="shz-body">
+
+    <!-- ۱ -->
+    <section class="shz-sec shz-reveal">
+      <h2>دیگ چدنی شوفاژکار چیست و چه کاربردی دارد؟</h2>
+      <p class="shz-lead">دیگ چدنی شوفاژکار یک منبع حرارت مرکزی است که آب را گرم کرده و از طریق لوله‌کشی، رادیاتورها، فن‌کویل‌ها یا سیستم گرمایش از کف، حرارت را در سراسر ساختمان توزیع می‌کند.</p>
+      <p>برند <strong>شوفاژکار</strong> یکی از قدیمی‌ترین و شناخته‌شده‌ترین تولیدکنندگان تجهیزات حرارت مرکزی در ایران است و دیگ‌های چدنی آن به‌دلیل دوام بالا، راندمان مناسب و قطعات در دسترس، انتخابی محبوب برای موتورخانه‌ها به‌شمار می‌روند. ساختار این دیگ‌ها از <strong>پره‌های مجزای چدنی</strong> تشکیل شده که به‌صورت ریخته‌گری تولید می‌شوند؛ همین ویژگی باعث می‌شود در صورت نیاز بتوان تعداد پره‌ها را تغییر داد و ظرفیت حرارتی دیگ را متناسب با ساختمان تنظیم کرد.</p>
+      <p>مهم‌ترین مزیت چدن نسبت به فولاد، <strong>مقاومت بالا در برابر خوردگی و طول عمر چند ده‌ساله</strong> است. به همین دلیل دیگ چدنی شوفاژکار برای ساختمان‌هایی که به یک سیستم گرمایشی پایدار و کم‌دردسر نیاز دارند، گزینه‌ای مطمئن محسوب می‌شود.</p>
+      <ul class="shz-list">
+        <li>تأمین گرمایش رادیاتوری و گرمایش از کف در ساختمان‌های مسکونی، اداری و تجاری</li>
+        <li>تأمین آب گرم بهداشتی در ترکیب با منبع کویل‌دار یا منبع دوجداره</li>
+        <li>گرمایش مجتمع‌های مسکونی، مدارس، مساجد، استخر و فضاهای صنعتی</li>
+        <li>سازگاری با انواع مشعل گازی، گازوئیلی و دوگانه‌سوز</li>
+      </ul>
+    </section>
+
+    <!-- ۲ -->
+    <section class="shz-sec shz-reveal">
+      <h2>انواع مدل‌های دیگ چدنی شوفاژکار</h2>
+      <p>شرکت شوفاژکار خانواده‌ای کامل از دیگ‌های چدنی را در سری‌های مختلف تولید می‌کند تا برای هر متراژ و هر کاربری، گزینه‌ی متناسبی وجود داشته باشد. در ادامه مهم‌ترین سری‌ها را مرور می‌کنیم:</p>
+      <div class="shz-grid">
+        <div class="shz-card shz-reveal">
+          <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 14a8 8 0 0116 0" stroke="#fff" stroke-width="2" stroke-linecap="round"/><path d="M12 14V7M12 7l3 3M12 7L9 10" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <h3>سری سولار (Solar)</h3>
+          <p>مدل‌های سولار ۳۰۰ و سولار ۴۰۰ در ۵ تا ۱۰ پره و ظرفیت ۴۳٬۰۰۰ تا ۸۹٬۰۰۰ کیلوکالری. به‌دلیل کارکرد در دمای پایین، گزینه‌ی ایده‌آل برای <strong>گرمایش از کف</strong> و استخر است.</p>
+        </div>
+        <div class="shz-card shz-reveal">
+          <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="5" y="5" width="14" height="14" rx="3" stroke="#fff" stroke-width="2"/><path d="M9 12h6M12 9v6" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></div>
+          <h3>سری سوپر (Super)</h3>
+          <p>سوپر ۳۰۰ با ۵ تا ۹ پره و سوپر ۴۰۰ با ۵ تا ۱۲ پره و ظرفیت تا ۳۱۱٬۰۰۰ کیلوکالری. ابعاد جمع‌وجورتر، مناسب موتورخانه‌هایی با فضای محدود.</p>
+        </div>
+        <div class="shz-card shz-reveal">
+          <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 3v18M5 8l7-5 7 5M5 16l7 5 7-5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <h3>سری توربو (Turbo)</h3>
+          <p>مدل‌های ۸ تا ۱۵ پره با ظرفیت ۲۴۳٬۰۰۰ تا ۵۶۰٬۰۰۰ کیلوکالری؛ مناسب پروژه‌های بزرگ مسکونی، تجاری و صنعتی با بار حرارتی بالا.</p>
+        </div>
+      </div>
+      <p style="margin-top:14px">برای مشاهده‌ی همه‌ی مدل‌ها و قیمت روز می‌توانید به صفحه‌ی <a href="https://shofazh.com/product-category/garmayesh/boilers/chauffagekar-boiler/">دیگ چدنی شوفاژکار</a> مراجعه کنید. همچنین مدل‌های پرفروشی مانند <a href="https://shofazh.com/product/chauffagekar-solar300/">دیگ سولار ۳۰۰</a> و <a href="https://shofazh.com/product/chauffagekar-solar400/">دیگ سولار ۴۰۰</a> به‌صورت اختصاصی در دسترس هستند.</p>
+    </section>
+
+    <!-- ۳ -->
+    <section class="shz-sec shz-reveal">
+      <h2>راهنمای انتخاب و خرید دیگ چدنی شوفاژکار</h2>
+      <p>انتخاب درست دیگ، مهم‌ترین گام پیش از خرید است. اگر ظرفیت دیگ کمتر از نیاز ساختمان باشد، گرمایش کافی نخواهید داشت و اگر بیش از حد بزرگ باشد، هزینه‌ی خرید و مصرف سوخت بی‌دلیل بالا می‌رود. عوامل کلیدی در انتخاب عبارت‌اند از:</p>
+      <h3>۱) محاسبه‌ی بار حرارتی (متراژ و عایق‌بندی)</h3>
+      <p>به‌عنوان یک تخمین سرانگشتی، برای هر مترمربع فضای مسکونی با عایق‌بندی متوسط حدود ۱۰۰ کیلوکالری بر ساعت حرارت نیاز است؛ اما متغیرهایی مانند ارتفاع سقف، تعداد پنجره‌ها، اقلیم منطقه و کیفیت عایق، این عدد را تغییر می‌دهند. برای محاسبه‌ی دقیق، حتماً از ابزار محاسبه‌گر ظرفیت حرارتی استفاده کنید (بخش بعد).</p>
+      <h3>۲) انتخاب تعداد پره</h3>
+      <p>تعداد پره مستقیماً ظرفیت دیگ را تعیین می‌کند. پس از مشخص‌شدن بار حرارتی، تعداد پره‌ی متناسب با همان ظرفیت را انتخاب می‌کنید. مزیت دیگ‌های پره‌ای شوفاژکار این است که در آینده با افزودن پره می‌توان ظرفیت را بالا برد.</p>
+      <h3>۳) نوع سوخت و مشعل</h3>
+      <p>دیگ‌های چدنی شوفاژکار با گاز طبیعی و گازوئیل سازگارند و باید با <strong>مشعل متناسب</strong> (گازی، گازوئیلی یا دوگانه‌سوز) تجهیز شوند. هماهنگی ظرفیت مشعل با ظرفیت دیگ برای رسیدن به راندمان مطلوب ضروری است.</p>
+      <h3>۴) متعلقات موتورخانه</h3>
+      <p>یک موتورخانه‌ی کامل علاوه بر دیگ و مشعل به منبع انبساط، پمپ سیرکولاتور، منبع کویلی برای آب گرم بهداشتی و سیستم کنترل نیاز دارد. هنگام خرید، تأمین یکجای این اقلام در زمان و هزینه صرفه‌جویی می‌کند.</p>
+    </section>
+
+    <!-- ۴ جدول مقایسه -->
+    <section class="shz-sec shz-reveal">
+      <h2>جدول مقایسه مدل‌های دیگ چدنی شوفاژکار</h2>
+      <p>جدول زیر مهم‌ترین سری‌های دیگ چدنی شوفاژکار را از نظر بازه‌ی پره، ظرفیت حرارتی و کاربری مقایسه می‌کند تا انتخاب سریع‌تری داشته باشید:</p>
+      <div class="shz-tablewrap">
+        <table class="shz-table">
+          <thead>
+            <tr>
+              <th>مدل</th><th>بازه‌ی پره</th><th>ظرفیت حرارتی (kcal/h)</th><th>ویژگی شاخص</th><th>مناسب برای</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>سولار ۳۰۰</td><td>۵ تا ۱۰ پره</td><td>۴۳٬۰۰۰ – ۸۹٬۰۰۰</td><td>کارکرد در دمای پایین</td><td>گرمایش از کف، استخر، آپارتمان</td></tr>
+            <tr><td>سولار ۴۰۰</td><td>۷ پره به‌بالا</td><td>تا حدود ۱۵۰٬۰۰۰</td><td>راندمان بالا، بدنه بزرگ‌تر</td><td>ساختمان‌های متوسط و بزرگ</td></tr>
+            <tr><td>سوپر ۳۰۰</td><td>۵ تا ۹ پره</td><td>۴۳٬۰۰۰ – ۸۳٬۰۰۰</td><td>ابعاد جمع‌وجور</td><td>موتورخانه با فضای محدود</td></tr>
+            <tr><td>سوپر ۴۰۰</td><td>۵ تا ۱۲ پره</td><td>۱۱۸٬۰۰۰ – ۳۱۱٬۰۰۰</td><td>ظرفیت بالا</td><td>مجتمع‌ها و کاربری تجاری</td></tr>
+            <tr><td>توربو</td><td>۸ تا ۱۵ پره</td><td>۲۴۳٬۰۰۰ – ۵۶۰٬۰۰۰</td><td>بار حرارتی سنگین</td><td>پروژه‌های بزرگ و صنعتی</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:12px; font-size:14px; color:var(--shz-muted)">مشخصات فنی مشترک همه‌ی مدل‌ها: حداکثر فشار کاری <strong>۴ بار</strong>، حداکثر دمای کاری <strong>۱۰۵ درجه سانتی‌گراد</strong>، سوخت گاز/گازوئیل، گارانتی <strong>۱۰ ساله</strong>. ارقام ظرفیت‌ها تقریبی و بر اساس کاتالوگ سازنده است؛ پیش از خرید با کارشناسان شوفاژ تأیید بگیرید.</p>
+    </section>
+
+    <!-- ۵ مزایا و معایب -->
+    <section class="shz-sec shz-reveal">
+      <h2>مزایا و معایب دیگ چدنی شوفاژکار</h2>
+      <p>مانند هر تجهیزی، دیگ چدنی هم نقاط قوت و محدودیت‌های خود را دارد. شناخت این موارد به انتخاب آگاهانه کمک می‌کند:</p>
+      <div class="shz-pc">
+        <div class="box pro shz-reveal">
+          <h3>مزایا</h3>
+          <ul>
+            <li>طول عمر بسیار بالا و مقاومت چدن در برابر خوردگی</li>
+            <li>قابلیت تغییر ظرفیت با کم/زیاد کردن پره‌ها</li>
+            <li>قطعات یدکی فراوان و خدمات پس‌از‌فروش گسترده</li>
+            <li>سازگاری با گاز و گازوئیل و انواع مشعل</li>
+            <li>گارانتی ۱۰ ساله و دوام برای موتورخانه‌های پرکار</li>
+          </ul>
+        </div>
+        <div class="box con shz-reveal">
+          <h3>نکات و محدودیت‌ها</h3>
+          <ul>
+            <li>وزن بالا و نیاز به فضای موتورخانه‌ی مستقل</li>
+            <li>زمان گرم‌شدن کمی بیشتر نسبت به دیگ‌های فولادی سبک</li>
+            <li>نیاز به نصب تخصصی و دودکش استاندارد</li>
+            <li>سرمایه‌گذاری اولیه بالاتر از پکیج دیواری (با بازده بلندمدت)</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ۶ بلوک محاسبه‌گر (تبلیغ ویژه) -->
+    <section class="shz-calc-promo shz-reveal" aria-label="محاسبه‌گر ظرفیت حرارتی شوفاژ">
+      <div class="shz-calc-inner">
+        <div>
+          <h2>🔥 قبل از خرید، ظرفیت دقیق را رایگان محاسبه کنید!</h2>
+          <p>انتخاب دیگ با ظرفیت نامناسب یعنی اتلاف انرژی و هزینه‌ی اضافه. با <strong>محاسبه‌گر ظرفیت حرارتی شوفاژ</strong> تنها در چند ثانیه و به‌صورت کاملاً آنلاین و رایگان، ظرفیت حرارتی موردنیاز فضای خود را بر اساس متراژ، عایق‌بندی و شرایط آب‌وهوایی به‌دست می‌آورید و دقیقاً می‌دانید چند پره و کدام مدل دیگ شوفاژکار برای شما مناسب است.</p>
+          <div class="shz-chips">
+            <span>محاسبه بر اساس متراژ</span>
+            <span>لحاظ‌کردن عایق‌بندی</span>
+            <span>متناسب با اقلیم</span>
+            <span>پیشنهاد تعداد پره</span>
+            <span>کاملاً رایگان</span>
+            <span>بدون نصب</span>
+          </div>
+          <a class="shz-cta" href="https://shofazh.com/shofazh-calculator.html">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="4" y="3" width="16" height="18" rx="3" stroke="#8E0000" stroke-width="2"/><path d="M8 7h8M8 11h2M12 11h4M8 15h2M12 15h4" stroke="#8E0000" stroke-width="2" stroke-linecap="round"/></svg>
+            محاسبه ظرفیت حرارتی رایگان
+          </a>
+        </div>
+        <div class="shz-calc-visual">
+          <video controls muted loop playsinline preload="metadata"
+            poster="https://shofazh.com/wp-content/uploads/2026/05/calc-poster.jpg">
+            <source src="https://shofazh.com/wp-content/uploads/2026/05/cleaned_محاسبه_گر_ظرفیت_حرارتی.mp4" type="video/mp4">
+            مرورگر شما از پخش ویدیو پشتیبانی نمی‌کند.
+          </video>
+        </div>
+      </div>
+    </section>
+
+    <!-- ۷ نصب و نگهداری -->
+    <section class="shz-sec shz-reveal">
+      <h2>نصب، نگهداری و سرویس دیگ چدنی</h2>
+      <p>برای رسیدن به بیشترین راندمان و طول عمر، نصب و نگهداری اصولی اهمیت زیادی دارد:</p>
+      <ul class="shz-list">
+        <li><strong>نصب تخصصی:</strong> چیدمان پره‌ها، نصب مشعل، اتصال دودکش استاندارد و راه‌اندازی باید توسط تکنسین مجرب انجام شود.</li>
+        <li><strong>تنظیم مشعل:</strong> آنالیز احتراق و تنظیم نسبت هوا به سوخت، مصرف را کاهش و راندمان را افزایش می‌دهد.</li>
+        <li><strong>رسوب‌زدایی سالانه:</strong> تخلیه‌ی رسوب و دوده از سطوح حرارتی، انتقال حرارت را حفظ می‌کند.</li>
+        <li><strong>کنترل فشار و منبع انبساط:</strong> فشار سیستم را در محدوده‌ی مجاز (تا ۴ بار) نگه دارید.</li>
+        <li><strong>سرویس دوره‌ای:</strong> بازدید سالانه پیش از فصل سرما از خرابی‌های ناگهانی جلوگیری می‌کند.</li>
+      </ul>
+    </section>
+
+    <!-- ۸ FAQ -->
+    <section class="shz-sec shz-reveal">
+      <h2>سوالات متداول درباره دیگ چدنی شوفاژکار</h2>
+      <div class="shz-faq">
+        <details open>
+          <summary>دیگ چدنی شوفاژکار چیست؟</summary>
+          <div class="ans">دیگ چدنی شوفاژکار یک دیگ آب‌گرم ساخته‌شده از پره‌های چدن ریخته‌گری است که در سیستم گرمایش مرکزی، آب را گرم کرده و از طریق رادیاتور، فن‌کویل یا گرمایش از کف، حرارت را در ساختمان توزیع می‌کند. این دیگ‌ها با گاز و گازوئیل کار می‌کنند و ۱۰ سال گارانتی دارند.</div>
+        </details>
+        <details>
+          <summary>چه تعداد پره برای ساختمان من مناسب است؟</summary>
+          <div class="ans">تعداد پره به بار حرارتی ساختمان (متراژ، عایق‌بندی و اقلیم) بستگی دارد. ابتدا ظرفیت حرارتی موردنیاز را با محاسبه‌گر ظرفیت حرارتی شوفاژ مشخص کنید، سپس مدل و تعداد پره‌ای را انتخاب کنید که همان ظرفیت را پوشش دهد.</div>
+        </details>
+        <details>
+          <summary>تفاوت دیگ سولار و سوپر شوفاژکار چیست؟</summary>
+          <div class="ans">سری سولار به‌دلیل توانایی کارکرد در دمای پایین برای گرمایش از کف و استخر مناسب‌تر است، در حالی‌که سری سوپر ابعاد جمع‌وجورتری دارد و سوپر ۴۰۰ ظرفیت‌های بسیار بالاتری (تا ۳۱۱٬۰۰۰ کیلوکالری) را پوشش می‌دهد. انتخاب بین این دو به نوع سیستم گرمایشی و فضای موتورخانه بستگی دارد.</div>
+        </details>
+        <details>
+          <summary>گارانتی دیگ چدنی شوفاژکار چند سال است؟</summary>
+          <div class="ans">دیگ‌های چدنی شوفاژکار دارای ۱۰ سال گارانتی شرکتی روی بدنه‌ی چدنی هستند که نشان‌دهنده‌ی دوام و کیفیت بالای این محصولات است.</div>
+        </details>
+        <details>
+          <summary>دیگ چدنی شوفاژکار با چه سوختی کار می‌کند؟</summary>
+          <div class="ans">این دیگ‌ها با گاز طبیعی و گازوئیل کار می‌کنند و باید با مشعل متناسب (گازی، گازوئیلی یا دوگانه‌سوز) تجهیز شوند. ظرفیت مشعل باید با ظرفیت دیگ هماهنگ باشد.</div>
+        </details>
+        <details>
+          <summary>قیمت دیگ چدنی شوفاژکار چقدر است؟</summary>
+          <div class="ans">قیمت بر اساس مدل (سولار، سوپر، توربو) و تعداد پره تعیین می‌شود و با تغییرات بازار به‌روزرسانی می‌شود. برای مشاهده‌ی قیمت روز و خرید، به صفحه‌ی دیگ چدنی شوفاژکار در شوفاژ دات کام مراجعه کنید یا با کارشناسان فروش تماس بگیرید.</div>
+        </details>
+        <details>
+          <summary>آیا دیگ چدنی شوفاژکار برای گرمایش از کف مناسب است؟</summary>
+          <div class="ans">بله؛ به‌ویژه سری سولار که برای کارکرد در دمای پایین طراحی شده، برای سیستم‌های گرمایش از کف و استخر گزینه‌ی بسیار مناسبی است.</div>
+        </details>
+      </div>
+    </section>
+
+  </div><!-- /shz-body -->
+
+  <!-- CTA پایانی -->
+  <section class="shz-final shz-reveal">
+    <h2>برای خرید دیگ چدنی شوفاژکار، مشاوره‌ی تخصصی بگیرید</h2>
+    <p>کارشناسان شوفاژ دات کام، مناسب‌ترین مدل و تعداد پره را متناسب با ساختمان شما پیشنهاد می‌دهند. اول ظرفیت را محاسبه کنید، بعد با خیال راحت خرید کنید.</p>
+    <a class="shz-cta" href="https://shofazh.com/product-category/garmayesh/boilers/chauffagekar-boiler/">مشاهده مدل‌ها و قیمت دیگ شوفاژکار</a>
+  </section>
+
+  <!-- ===== Schema JSON-LD ===== -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"CollectionPage",
+    "name":"دیگ چدنی شوفاژکار | قیمت، مشخصات و خرید",
+    "description":"دسته‌بندی دیگ چدنی شوفاژکار در شوفاژ دات کام؛ مدل‌های سولار، سوپر و توربو با ظرفیت ۴۳٬۰۰۰ تا ۵۶۰٬۰۰۰ کیلوکالری، گارانتی ۱۰ ساله، سازگار با گاز و گازوئیل.",
+    "url":"https://shofazh.com/product-category/garmayesh/boilers/chauffagekar-boiler/",
+    "inLanguage":"fa-IR",
+    "isPartOf":{"@type":"WebSite","name":"شوفاژ دات کام","url":"https://shofazh.com"},
+    "about":{"@type":"Product","name":"دیگ چدنی شوفاژکار","brand":{"@type":"Brand","name":"شوفاژکار"},"category":"تاسیسات حرارتی"}
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"ItemList",
+    "name":"مدل‌های دیگ چدنی شوفاژکار",
+    "itemListElement":[
+      {"@type":"ListItem","position":1,"name":"دیگ چدنی شوفاژکار سولار ۳۰۰","url":"https://shofazh.com/product/chauffagekar-solar300/"},
+      {"@type":"ListItem","position":2,"name":"دیگ چدنی شوفاژکار سولار ۴۰۰","url":"https://shofazh.com/product/chauffagekar-solar400/"},
+      {"@type":"ListItem","position":3,"name":"دیگ چدنی شوفاژکار سوپر ۳۰۰","url":"https://shofazh.com/product-category/garmayesh/boilers/chauffagekar-boiler/"},
+      {"@type":"ListItem","position":4,"name":"دیگ چدنی شوفاژکار سوپر ۴۰۰","url":"https://shofazh.com/product-category/garmayesh/boilers/chauffagekar-boiler/"},
+      {"@type":"ListItem","position":5,"name":"دیگ چدنی شوفاژکار توربو","url":"https://shofazh.com/product/chauffagekar-turbo/"}
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"FAQPage",
+    "mainEntity":[
+      {"@type":"Question","name":"دیگ چدنی شوفاژکار چیست؟","acceptedAnswer":{"@type":"Answer","text":"دیگ چدنی شوفاژکار یک دیگ آب‌گرم ساخته‌شده از پره‌های چدن ریخته‌گری است که در سیستم گرمایش مرکزی آب را گرم کرده و از طریق رادیاتور، فن‌کویل یا گرمایش از کف حرارت را در ساختمان توزیع می‌کند. با گاز و گازوئیل کار می‌کند و ۱۰ سال گارانتی دارد."}},
+      {"@type":"Question","name":"چه تعداد پره برای ساختمان من مناسب است؟","acceptedAnswer":{"@type":"Answer","text":"تعداد پره به بار حرارتی ساختمان شامل متراژ، عایق‌بندی و اقلیم بستگی دارد. ابتدا ظرفیت حرارتی موردنیاز را با محاسبه‌گر ظرفیت حرارتی شوفاژ مشخص کنید و سپس مدل و تعداد پره‌ی متناسب را انتخاب کنید."}},
+      {"@type":"Question","name":"تفاوت دیگ سولار و سوپر شوفاژکار چیست؟","acceptedAnswer":{"@type":"Answer","text":"سری سولار برای کارکرد در دمای پایین و گرمایش از کف و استخر مناسب‌تر است، اما سری سوپر ابعاد جمع‌وجورتری دارد و سوپر ۴۰۰ ظرفیت‌های بسیار بالاتری تا ۳۱۱٬۰۰۰ کیلوکالری را پوشش می‌دهد."}},
+      {"@type":"Question","name":"گارانتی دیگ چدنی شوفاژکار چند سال است؟","acceptedAnswer":{"@type":"Answer","text":"دیگ‌های چدنی شوفاژکار دارای ۱۰ سال گارانتی شرکتی روی بدنه‌ی چدنی هستند."}},
+      {"@type":"Question","name":"دیگ چدنی شوفاژکار با چه سوختی کار می‌کند؟","acceptedAnswer":{"@type":"Answer","text":"با گاز طبیعی و گازوئیل کار می‌کند و باید با مشعل متناسب گازی، گازوئیلی یا دوگانه‌سوز تجهیز شود."}},
+      {"@type":"Question","name":"قیمت دیگ چدنی شوفاژکار چقدر است؟","acceptedAnswer":{"@type":"Answer","text":"قیمت بر اساس مدل و تعداد پره تعیین می‌شود و با بازار به‌روز می‌شود. برای قیمت روز به صفحه‌ی دیگ چدنی شوفاژکار در شوفاژ دات کام مراجعه کنید."}},
+      {"@type":"Question","name":"آیا دیگ چدنی شوفاژکار برای گرمایش از کف مناسب است؟","acceptedAnswer":{"@type":"Answer","text":"بله، به‌ویژه سری سولار که برای کارکرد در دمای پایین طراحی شده و برای گرمایش از کف و استخر بسیار مناسب است."}}
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"BreadcrumbList",
+    "itemListElement":[
+      {"@type":"ListItem","position":1,"name":"خانه","item":"https://shofazh.com"},
+      {"@type":"ListItem","position":2,"name":"گرمایش","item":"https://shofazh.com/product-category/garmayesh/"},
+      {"@type":"ListItem","position":3,"name":"دیگ","item":"https://shofazh.com/product-category/garmayesh/boilers/"},
+      {"@type":"ListItem","position":4,"name":"دیگ چدنی شوفاژکار","item":"https://shofazh.com/product-category/garmayesh/boilers/chauffagekar-boiler/"}
+    ]
+  }
+  </script>
+
+  <!-- ===== انیمیشن: ظهور هنگام اسکرول + شمارنده ===== -->
+  <script>
+  (function(){
+    var root=document.currentScript.closest('.shz-cat'); if(!root) return;
+    var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var reveals=root.querySelectorAll('.shz-reveal');
+    if(reduce||!('IntersectionObserver'in window)){
+      reveals.forEach(function(el){el.classList.add('in');}); animateAll();
+      return;
+    }
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in');
+        var c=e.target.querySelector('[data-count]'); if(c) countUp(c); io.unobserve(e.target);} });
+    },{threshold:.18});
+    reveals.forEach(function(el){io.observe(el);});
+    function animateAll(){root.querySelectorAll('[data-count]').forEach(countUp);}
+    function toFa(n){return String(n).replace(/[0-9]/g,function(d){return '۰۱۲۳۴۵۶۷۸۹'[d];});}
+    function countUp(el){
+      if(el.dataset.done) return; el.dataset.done=1;
+      var target=parseInt(el.getAttribute('data-count'),10)||0, cur=0,
+          step=Math.max(1,Math.round(target/40));
+      var t=setInterval(function(){ cur+=step; if(cur>=target){cur=target; clearInterval(t);}
+        el.textContent=toFa(cur);},26);
+    }
+  })();
+  </script>
+
+  <!-- ===== WordPress override (محافظت چیدمان) ===== -->
+  <style>
+  .shz-cat, .shz-cat *{ box-sizing:border-box !important; }
+  .shz-cat img, .shz-cat video{ max-width:100% !important; height:auto !important; }
+  .shz-cat ul.shz-list{ list-style:none !important; }
+  .shz-cat a{ box-shadow:none !important; }
+  .shz-cat table.shz-table{ margin:0 !important; }
+  </style>
+</div>
