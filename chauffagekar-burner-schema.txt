@@ -1,0 +1,190 @@
+<!-- ====== مشعل شوفاژکار — JSON-LD ======
+این کد را در افزونهٔ سئو (Rank Math / Yoast) به‌صورت اسکیمای سفارشی، یا در اسنیپت <head> قالب قرار دهید.
+هرگز داخل فیلد «توضیح» دسته‌بندی قرار ندهید (به‌خاطر فایروال سرور).
+شامل: CollectionPage + ItemList + FAQPage + BreadcrumbList -->
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CollectionPage",
+      "@id": "https://shofazh.com/product-category/garmayesh/burner/chauffagekar-burner/#webpage",
+      "url": "https://shofazh.com/product-category/garmayesh/burner/chauffagekar-burner/",
+      "name": "مشعل شوفاژکار | لیست قیمت و خرید انواع مشعل گازی، گازوئیلی و دوگانه‌سوز",
+      "description": "خرید انواع مشعل شوفاژکار (CKI) گازی، گازوئیلی و دوگانه‌سوز در بازهٔ توان ۳۰ تا ۶۰۰ کیلووات و بالاتر؛ تک‌مرحله‌ای و دومرحله‌ای، با گارانتی شرکتی و استاندارد ملی، CE و ISO 9001.",
+      "inLanguage": "fa-IR",
+      "isPartOf": {
+        "@type": "WebSite",
+        "@id": "https://shofazh.com/#website",
+        "name": "شوفاژ دات کام",
+        "url": "https://shofazh.com/"
+      },
+      "about": [
+        {
+          "@type": "Brand",
+          "name": "شوفاژکار",
+          "alternateName": "Chauffagekar (CKI)",
+          "url": "https://www.chauffagekar.com/"
+        },
+        {
+          "@type": "Product",
+          "name": "مشعل شوفاژکار",
+          "category": "تجهیزات گرمایشی موتورخانه - مشعل"
+        }
+      ],
+      "mainEntity": {
+        "@id": "https://shofazh.com/product-category/garmayesh/burner/chauffagekar-burner/#productlist"
+      },
+      "breadcrumb": {
+        "@id": "https://shofazh.com/product-category/garmayesh/burner/chauffagekar-burner/#breadcrumb"
+      }
+    },
+    {
+      "@type": "ItemList",
+      "@id": "https://shofazh.com/product-category/garmayesh/burner/chauffagekar-burner/#productlist",
+      "name": "مدل‌های مشعل شوفاژکار",
+      "itemListOrder": "https://schema.org/ItemListOrderAscending",
+      "numberOfItems": 7,
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "مشعل گازسوز شوفاژکار CKI-G65 (۳۰ تا ۶۵ کیلووات)"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "مشعل گازسوز شوفاژکار CKI-G85 (۳۰ تا ۸۵ کیلووات)"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "مشعل گازسوز شوفاژکار CKI-G120 (۴۶ تا ۱۲۴ کیلووات)"
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": "مشعل گازسوز شوفاژکار CKI-G180 (۷۰ تا ۱۸۰ کیلووات)"
+        },
+        {
+          "@type": "ListItem",
+          "position": 5,
+          "name": "مشعل گازسوز شوفاژکار CKI-G260 (۱۰۰ تا ۲۶۰ کیلووات)",
+          "url": "https://shofazh.com/product/chuaffage-cki-g260/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 6,
+          "name": "مشعل گازسوز شوفاژکار CKI-G380 (۱۰۰ تا ۳۸۰ کیلووات)"
+        },
+        {
+          "@type": "ListItem",
+          "position": 7,
+          "name": "مشعل شوفاژکار CKI-G600 و سری دومرحله‌ای ۲S (تا بیش از ۶۰۰ کیلووات)"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://shofazh.com/product-category/garmayesh/burner/chauffagekar-burner/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "مشعل شوفاژکار چیست؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "مشعل شوفاژکار دستگاهی است که روی دیگ موتورخانه نصب می‌شود و با مخلوط‌کردن سوخت (گاز یا گازوئیل) و هوا و سوزاندن کنترل‌شدهٔ آن، حرارت لازم برای گرم‌کردن آب دیگ را تأمین می‌کند. این مشعل‌ها با نام تجاری CKI و در سه نوع گازی، گازوئیلی و دوگانه‌سوز ساخته می‌شوند."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "تفاوت مشعل گازی، گازوئیلی و دوگانه‌سوز شوفاژکار چیست؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "مشعل گازی فقط با گاز طبیعی کار می‌کند و اقتصادی‌ترین گزینه برای مناطق دارای گاز شهری است. مشعل گازوئیلی با گازوئیل کار می‌کند و مناسب مناطق بدون گاز است. مشعل دوگانه‌سوز هر دو سوخت را به‌صورت غیرهم‌زمان پشتیبانی می‌کند و در صورت قطع یکی، به سوخت دیگر سوییچ می‌شود."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "چطور ظرفیت مناسب مشعل را برای دیگ انتخاب کنم؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "توان مشعل باید کمی بیشتر از ظرفیت اسمی دیگ باشد و بازهٔ توان مدل، ظرفیت دیگ را پوشش دهد. ابتدا بار حرارتی ساختمان را با محاسبه‌گر ظرفیت حرارتی شوفاژ مشخص کنید، سپس دیگ و در نهایت مشعلی را انتخاب کنید که با ظرفیت آن دیگ هماهنگ باشد."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "تفاوت مشعل تک‌مرحله‌ای و دومرحله‌ای چیست؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "مشعل تک‌مرحله‌ای فقط حالت خاموش/روشن دارد و برای ظرفیت‌های کوچک و متوسط مناسب است. مشعل دومرحله‌ای (سری ۲S) با دو سطح توان کار می‌کند و در بارهای کم با توان پایین‌تر می‌سوزد؛ این ویژگی در ظرفیت‌های بالا، مصرف سوخت و استهلاک را کاهش می‌دهد."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "گارانتی مشعل شوفاژکار چند ماه است؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "مشعل شوفاژکار در صورت نصب صحیح توسط تکنسین مجاز، ۱۲ ماه گارانتی و خدمات پس‌از‌فروش دارد. اگر مشعل هم‌زمان با دیگ شوفاژکار خریداری شود، مدت گارانتی به ۱۵ ماه افزایش می‌یابد."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "مشعل شوفاژکار چه استانداردهایی دارد؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "محصولات شوفاژکار دارای گواهینامهٔ استاندارد ملی ایران (شماره‌های ۴۴۷۲ و ۴۴۷۳)، گواهی CE اروپا و سیستم مدیریت کیفیت ISO 9001 هستند که نشان‌دهندهٔ کیفیت ساخت و ایمنی احتراق این مشعل‌ها است."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "قیمت مشعل شوفاژکار چقدر است؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "قیمت بر اساس نوع سوخت (گازی، گازوئیلی، دوگانه‌سوز)، ظرفیت مدل و تک یا دومرحله‌ای‌بودن تعیین می‌شود و با تغییرات بازار به‌روزرسانی می‌گردد. برای مشاهدهٔ قیمت روز و خرید، به صفحهٔ مشعل شوفاژکار در شوفاژ دات کام مراجعه کنید یا با کارشناسان فروش تماس بگیرید."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "آیا مشعل شوفاژکار روی دیگ سایر برندها هم نصب می‌شود؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "بله؛ مشعل‌های شوفاژکار با اکثر دیگ‌های چدنی و فولادی رایج بازار سازگارند، به‌شرطی که ظرفیت مشعل با ظرفیت دیگ و طول شعله با عمق کورهٔ دیگ هماهنگ باشد. هماهنگی این موارد را پیش از خرید با کارشناس بررسی کنید."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://shofazh.com/product-category/garmayesh/burner/chauffagekar-burner/#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "خانه",
+          "item": "https://shofazh.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "گرمایش",
+          "item": "https://shofazh.com/product-category/garmayesh/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "مشعل",
+          "item": "https://shofazh.com/product-category/garmayesh/burner/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": "مشعل شوفاژکار",
+          "item": "https://shofazh.com/product-category/garmayesh/burner/chauffagekar-burner/"
+        }
+      ]
+    }
+  ]
+}
+</script>
