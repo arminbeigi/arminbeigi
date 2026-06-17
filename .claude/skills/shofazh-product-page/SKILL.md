@@ -1,11 +1,29 @@
 ---
 name: shofazh-product-page
-description: Build a complete SEO + GEO product page (Persian) for shofazh.com products using the established RAN25 template. Use when user provides product name, URL, competitor brand, image, and category. Hands the user an image-generation prompt and pauses for them to supply the photo, then produces WordPress-ready HTML with animations, schema markup, and a separate SEO metadata file.
+description: Build a complete SEO + GEO product page (Persian) for shofazh.com products using the established RAN25 template. Use when user provides product name, URL, competitor brand, image, and category. Hands the user an image-generation prompt and pauses for them to supply the photo, then produces a WAF-safe split deliverable — Additional CSS + plain HTML — plus a separate SEO metadata file.
 ---
 
 # Shofazh.com Product Page Builder
 
 You are building a complete, WordPress-ready Persian product page for shofazh.com (heating equipment e-commerce) following the exact standard established in `ran25-product-content.html`.
+
+## ⚠️ CRITICAL — WAF-Safe Split Output (learned from production)
+
+shofazh.com runs a server-level firewall (mod_security/WAF) that **silently blocks and reverts** any WordPress term/post save whose body contains large `<style>`, `<script>`, `<svg>`, or `<video>` blocks, or large JSON-LD. Encoding tricks (base64, hex) and chunked AJAX did NOT reliably get past it. A single self-contained HTML file with inline CSS/JS will be rejected on save and the previous content comes back.
+
+**Therefore the final deliverable is ALWAYS split into separate pieces:**
+
+1. **`[slug]-additional-css.txt`** → the user pastes this into **نمایش → سفارشی‌سازی → CSS اضافی** (Appearance → Customize → Additional CSS). This save path bypasses the WAF entirely.
+2. **`[slug]-content.html`** → plain HTML markup only, pasted into the product/category description (Text/Code editor). It must contain **NO** `<style>`, **NO** `<script>`, **NO** `<svg>`, **NO** `<video>`, and **NO** JSON-LD — those are exactly what the WAF blocks.
+3. **`[slug]-seo.md`** → SEO metadata (unchanged).
+4. **Schema JSON-LD** → delivered as a separate snippet for the user's SEO plugin (Rank Math / Yoast) FAQ & Product schema blocks, NOT inlined in the HTML.
+
+To keep the design intact without inline JS/SVG:
+- **Counters / `data-count` animations** → replace with the final hardcoded Persian numbers (e.g. `<b>۱۰</b>`), since there is no JS.
+- **Scroll-reveal animations** → make elements visible by default; any entrance animation lives as CSS `@keyframes` in the Additional CSS file (CSS-only, no JS trigger).
+- **Inline SVG icons** → drop them or replace with CSS shapes / emoji; never inline `<svg>` in the description.
+- **`<video>`** → replace with a poster `<img>` linking to the calculator page.
+- All visual styling (gradients, cards, ticker marquee, FAQ accordion via `<details>`) stays — it just lives in the Additional CSS file instead of an inline `<style>`.
 
 ## Interactive Intake (MANDATORY)
 
@@ -199,33 +217,39 @@ The file MUST contain these fields (Persian labels):
 - **توضیحات شبکه‌های اجتماعی (Open Graph / Twitter Description)** — social-optimized description
 - **عنوان نان‌مایه (Breadcrumb Title)** — short breadcrumb label
 
-### Step 4: Schema JSON-LD
-Embed inside `<script type="application/ld+json">` blocks:
+### Step 4: Schema JSON-LD (delivered separately — NEVER inlined)
+Generate these schema blocks but DO NOT put them in the HTML file (the WAF blocks inline `<script>`). Instead, hand them to the user as a separate copy-paste snippet for their SEO plugin (Rank Math / Yoast) or a head-injection snippet:
 - `Product` (with offers, aggregateRating, brand)
 - `FAQPage` (mirror all FAQs from accordion)
 - `BreadcrumbList` (Home > Category > Subcategory > Product)
 
-### Step 5: Build HTML
-- Copy `.ran25-wrap` CSS framework exactly as-is from RAN25 template
-- Only modify:
-  - Product content
-  - Photo URL(s) — the user-supplied image(s) from Step 2b
-  - Hotspot positions on photo (4-6 callouts on actual product parts)
-  - Ticker bar items (product-specific features)
-  - Schema JSON-LD values
-  - Accent color if category requires it
-  - **Mid-content images** (from Step 3.5): Insert collected images at their designated positions between sections. Each image must:
-    - Use `<figure>` with `<img>` inside, styled consistently with `.ran25-wrap`
-    - Include descriptive Persian `alt` text for SEO
-    - Use `loading="lazy"` and `width="100%"` for performance
-    - Have a subtle `<figcaption>` in Persian if appropriate
-    - If no images were provided, insert `<!-- IMAGE PLACEHOLDER: [section name] -->` comments instead
-- Keep ALL animations, industrial bars, gear SVGs, counter system unchanged
-- Include the WordPress override block (`!important` rules) at the end
+Save them to `[slug]-schema.txt` and send via `SendUserFile`, and also show them in chat per the Output section.
+
+### Step 5: Build the Split Deliverable
+
+Produce TWO files (plus the schema snippet from Step 4). Do NOT build one self-contained HTML file — it will be blocked by the WAF.
+
+**File A — `[slug]-additional-css.txt` (for Customizer → Additional CSS):**
+- Take the `.ran25-wrap` CSS framework from the RAN25 template and put ALL of it here as plain CSS (no surrounding `<style>` tag).
+- Keep gradients, cards, ticker marquee, FAQ `<details>` styling, responsive `@media` blocks, and the `!important` WordPress-override rules.
+- Convert scroll-reveal effects to CSS-only: elements visible by default; any entrance animation as `@keyframes` running on load (no JS, no `IntersectionObserver`).
+- Adjust the accent color per category if required.
+
+**File B — `[slug]-content.html` (for the description Text/Code editor):**
+- Plain HTML markup only. **NO** `<style>`, **NO** `<script>`, **NO** `<svg>`, **NO** `<video>`, **NO** JSON-LD.
+- Wrap everything in `<div class="ran25-wrap" dir="rtl" lang="fa">` so the Additional CSS targets it.
+- Replace every `data-count` counter with its final hardcoded Persian number.
+- Replace inline SVG icons with CSS-class placeholders or emoji (or omit).
+- Replace the calculator `<video>` with a poster `<img>` linking to the calculator page.
+- **Mid-content images** (from Step 3.5): insert at designated positions using `<figure><img loading="lazy" width="100%" alt="..."></figure>` with Persian `alt`; if none provided, leave `<!-- IMAGE PLACEHOLDER: [section name] -->`.
+- Hotspot callouts that depended on JS positioning become static positioned elements via CSS classes (defined in File A) — no inline styles beyond simple positional `style` attributes if unavoidable.
 
 ### Step 6: Save, Commit, Push
-- File path: `[product-slug]-product-content.html` (e.g. `pgn0-product-content.html`)
-- Also commit the SEO metadata file created in Step 3b: `[product-slug]-seo.md`
+- File paths:
+  - `[product-slug]-additional-css.txt`
+  - `[product-slug]-content.html`
+  - `[product-slug]-schema.txt` (from Step 4)
+  - `[product-slug]-seo.md` (from Step 3c)
 - Slug: lowercase Latin transliteration of product model
 - Commit message format:
   ```
@@ -237,20 +261,23 @@ Embed inside `<script type="application/ld+json">` blocks:
 
 ## Output to User
 
-After push, reply with:
-1. Filename and repo path (both the HTML page and the `[product-slug]-seo.md` SEO file)
-2. Three-line summary of what was generated (word count, schema types, image count)
-3. Confirmation that the SEO metadata file was already sent to the user in Step 3c
-4. Note about hotspot positions needing visual verification in browser
-5. **Schema JSON-LD preview**: Display the full generated Schema JSON-LD code blocks (Product, FAQPage, BreadcrumbList) in the chat so the user can review and verify them before publishing
+Send the deliverable files with `SendUserFile`, then reply with:
+1. The repo paths of all four files (CSS, HTML, schema, SEO)
+2. **Clear installation steps in Persian:**
+   - فایل CSS → نمایش → سفارشی‌سازی → CSS اضافی → پیست → انتشار
+   - فایل HTML → فیلد توضیح محصول/دسته‌بندی (تب کد) → پیست → بروزرسانی
+   - فایل Schema → افزونه سئو (Rank Math / Yoast) یا اسنیپت head
+3. Three-line summary of what was generated (word count, schema types, image count)
+4. Confirmation that the SEO metadata file was already sent in Step 3c
+5. Note about hotspot positions needing visual verification in browser
+6. **Schema JSON-LD preview**: display the full Product / FAQPage / BreadcrumbList blocks in chat for review
 
-Do NOT paste the full HTML in chat — the file in the repo IS the deliverable. But DO show the Schema JSON-LD separately.
+Do NOT paste the full HTML/CSS in chat — the files ARE the deliverable. But DO show the Schema JSON-LD.
 
 ## Constraints
 
 - Never modify `ran25-product-content.html` itself — it is the canonical template
-- Never change the `.ran25-wrap` CSS structure or animation keyframes
+- Preserve the `.ran25-wrap` visual design; it just lives in Additional CSS now instead of an inline `<style>`
+- The description HTML must be WAF-safe: no `<style>`, `<script>`, `<svg>`, `<video>`, or JSON-LD
 - Never add new external dependencies (fonts, CDN scripts)
-- All graphics must remain inline SVG or CSS
-- File must be self-contained and paste-ready into WordPress Text/Code editor
 - Persian text only in content; English allowed in schema, CSS, and code comments
