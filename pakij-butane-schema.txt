@@ -1,0 +1,181 @@
+<script type="application/ld+json">
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "پکیج بوتان",
+    "description": "راهنمای کامل خرید پکیج دیواری بوتان: مقایسه سری بیتا، پارما و پرلا پرو، مشخصات فنی، ظرفیت‌ها و قیمت روز در شوفاژ دات کام.",
+    "url": "https://shofazh.com/product-category/garmayesh/packages/butane/",
+    "inLanguage": "fa",
+    "about": {
+      "@type": "Brand",
+      "name": "بوتان",
+      "alternateName": "Butane",
+      "description": "شرکت صنعتی بوتان، تولیدکننده پکیج دیواری و تجهیزات حرارتی در ایران از سال ۱۳۵۲"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "شوفاژ دات کام",
+      "url": "https://shofazh.com"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "مدل‌های پکیج بوتان",
+    "url": "https://shofazh.com/product-category/garmayesh/packages/butane/",
+    "numberOfItems": 7,
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "پکیج بوتان بیتا ۲۲۰۰۰",
+        "url": "https://shofazh.com/product-category/garmayesh/packages/butane/",
+        "description": "پکیج دیواری بوتان سری بیتا با ظرفیت ۲۲٬۰۰۰ کیلوکالری بر ساعت، مدل اقتصادی با کنترل آنالوگ، مناسب تا ۱۲۰ مترمربع"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "پکیج بوتان بیتا ۲۴۰۰۰",
+        "url": "https://shofazh.com/product-category/garmayesh/packages/butane/",
+        "description": "پکیج دیواری بوتان سری بیتا با ظرفیت ۲۴٬۰۰۰ کیلوکالری بر ساعت، کنترل آنالوگ، مناسب تا ۱۳۵ مترمربع"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "پکیج بوتان پارما ۲۴۰۰۰ RSI",
+        "url": "https://shofazh.com/product-category/garmayesh/packages/butane/",
+        "description": "پکیج دیواری بوتان سری پارما با ظرفیت ۲۴٬۰۰۰ کیلوکالری، کنترل دیجیتال و سیستم فن‌دار، راندمان بالای ۹۳٪"
+      },
+      {
+        "@type": "ListItem",
+        "position": 4,
+        "name": "پکیج بوتان پارما ۲۶۰۰۰ RSI",
+        "url": "https://shofazh.com/product-category/garmayesh/packages/butane/",
+        "description": "پکیج دیواری بوتان سری پارما با ظرفیت ۲۶٬۰۰۰ کیلوکالری، راندمان بالای ۹۳٪، مناسب تا ۱۵۰ مترمربع"
+      },
+      {
+        "@type": "ListItem",
+        "position": 5,
+        "name": "پکیج بوتان پرلا پرو ۲۴۰۰۰",
+        "url": "https://shofazh.com/product-category/garmayesh/packages/butane/",
+        "description": "پکیج دیواری بوتان پرلا پرو با ظرفیت ۲۴٬۰۰۰ کیلوکالری، موجود در مدل i (بدون فن) و RSI (فن‌دار)"
+      },
+      {
+        "@type": "ListItem",
+        "position": 6,
+        "name": "پکیج بوتان پرلا پرو ۲۸۰۰۰",
+        "url": "https://shofazh.com/product-category/garmayesh/packages/butane/",
+        "description": "پکیج دیواری بوتان پرلا پرو با ظرفیت ۲۸٬۰۰۰ کیلوکالری، مناسب تا ۱۸۰ مترمربع، موجود در مدل i و RSI"
+      },
+      {
+        "@type": "ListItem",
+        "position": 7,
+        "name": "پکیج بوتان پرلا پرو ۳۲۰۰۰",
+        "url": "https://shofazh.com/product-category/garmayesh/packages/butane/",
+        "description": "قوی‌ترین مدل پکیج بوتان با ظرفیت ۳۲٬۰۰۰ کیلوکالری بر ساعت، مناسب فضاهای تا ۲۵۰ مترمربع"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "پکیج بوتان چیست و چه تفاوتی با دیگ دارد؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "پکیج بوتان یک دستگاه کمبی گازسوز دیواری است که به‌طور همزمان گرمایش فضا و آب گرم بهداشتی را تأمین می‌کند و بدون نیاز به موتورخانه روی دیوار نصب می‌شود. دیگ چدنی برای ساختمان‌های بزرگ با موتورخانه مستقل مناسب‌تر است، در حالی که پکیج برای آپارتمان‌ها و واحدهای مستقل ایده‌آل است."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "تفاوت پکیج بوتان بیتا و پارما چیست؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "پکیج بیتا با کنترل آنالوگ و قیمت پایین‌تر گزینه اقتصادی برند بوتان است. پارما نسل بعدی است با کنترل دیجیتال، سیستم فن‌دار (RSI)، راندمان بالاتر از ۹۳٪ و دقت بهتر در تنظیم دما. اگر بودجه اولویت اصلی است بیتا و اگر عملکرد بلندمدت مهم‌تر است پارما مناسب‌تر است."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "پکیج بوتان پرلا پرو چه ویژگی‌هایی دارد؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "پرلا پرو جدیدترین و پیشرفته‌ترین سری پکیج بوتان است. در دو مدل i (بدون فن) و RSI (فن‌دار) و سه ظرفیت ۲۴٬۰۰۰، ۲۸٬۰۰۰ و ۳۲٬۰۰۰ کیلوکالری عرضه می‌شود. دارای راندمان بالای ۹۲٪، کنترل دیجیتال پیشرفته و طراحی مدرن‌تر نسبت به مدل‌های قبلی است."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "گارانتی پکیج بوتان چند سال است؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "پکیج‌های بوتان دارای ۲ سال گارانتی شرکتی هستند و شرکت بوتان خدمات پس از فروش را تا ۱۰ سال ارائه می‌دهد که دسترسی به قطعات یدکی اصلی را تضمین می‌کند."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "پکیج بوتان برای چند مترمربع مناسب است؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "به‌طور تقریبی برای ساختمان با عایق‌بندی متوسط: بیتا ۲۲۰۰۰ تا ۱۲۰ متر، بیتا/پارما ۲۴۰۰۰ تا ۱۳۵ متر، پارما ۲۶۰۰۰ تا ۱۵۰ متر، پرلا پرو ۲۸۰۰۰ تا ۱۸۰ متر، پرلا پرو ۳۲۰۰۰ تا ۲۵۰ مترمربع. برای محاسبه دقیق از محاسبه‌گر ظرفیت حرارتی شوفاژ استفاده کنید."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "سرویس دوره‌ای پکیج بوتان چند وقت یک‌بار لازم است؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "پکیج بوتان باید سالانه یک‌بار، ترجیحاً پیش از فصل سرما، توسط تکنسین مجرب سرویس شود. سرویس شامل تمیزکاری مبدل حرارتی، بررسی مشعل، کنترل فشار سیستم و بررسی اتصالات گاز است."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "آیا پکیج بوتان برای گرمایش از کف مناسب است؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "استفاده از پکیج بوتان برای گرمایش از کف با تنظیم دمای برگشت آب امکان‌پذیر است اما برای فضاهای بزرگ با گرمایش از کف، مشاوره با کارشناس و انتخاب مدل مناسب ضروری است. برای کاربری گرمایش از کف در مقیاس بزرگ، دیگ چدنی گزینه مطمئن‌تری است."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "قیمت پکیج بوتان چقدر است؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "قیمت پکیج بوتان بسته به مدل و ظرفیت متفاوت است. سری بیتا اقتصادی‌ترین گزینه، پارما در رده میانی و پرلا پرو با ویژگی‌های پیشرفته‌تر قیمت بالاتری دارد. برای مشاهده قیمت روز با مشاوران شوفاژ دات کام تماس بگیرید."
+        }
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "خانه",
+        "item": "https://shofazh.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "گرمایش",
+        "item": "https://shofazh.com/product-category/garmayesh/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "پکیج دیواری",
+        "item": "https://shofazh.com/product-category/garmayesh/packages/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 4,
+        "name": "پکیج بوتان",
+        "item": "https://shofazh.com/product-category/garmayesh/packages/butane/"
+      }
+    ]
+  }
+]
+</script>
