@@ -1,0 +1,44 @@
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Brand",
+  "name": "ایران رادیاتور",
+  "alternateName": "Iran Radiator",
+  "url": "https://shofazh.com/%D8%A8%D8%B1%D9%86%D8%AF/%d8%a7%db%8c%d8%b1%d8%a7%d9%86-%d8%b1%d8%a7%d8%af%db%8c%d8%a7%d8%aa%d9%88%d8%b1/",
+  "logo": "https://shofazh.com/wp-content/uploads/2026/06/logo.png",
+  "image": "https://shofazh.com/wp-content/uploads/2026/06/irg.png",
+  "description": "ایران رادیاتور یکی از بزرگ‌ترین و قدیمی‌ترین تولیدکنندگان تجهیزات حرارتی و برودتی ایران است که از سال ۱۳۴۲ فعالیت می‌کند و پکیج، دیگ، رادیاتور، مشعل و کولر گازی تولید می‌کند.",
+  "foundingDate": "1963",
+  "foundingLocation": { "@type": "Place", "name": "ایران" },
+  "slogan": "کیفیت تولید ملی در تأسیسات حرارتی و برودتی"
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question","name": "ایران رادیاتور محصولات خود را در کجا تولید می‌کند؟","acceptedAnswer": {"@type": "Answer","text": "تمامی محصولات ایران رادیاتور در کارخانه‌های داخل ایران و با تکیه بر تولید ملی ساخته می‌شوند."}},
+    {"@type": "Question","name": "ایران رادیاتور چه محصولاتی تولید می‌کند؟","acceptedAnswer": {"@type": "Answer","text": "پکیج دیواری، دیگ موتورخانه، رادیاتور پنلی و آلومینیومی، مشعل گازی و گازوئیلی، کولر گازی و آبگرمکن از مهم‌ترین محصولات این برند هستند."}},
+    {"@type": "Question","name": "آیا قطعات یدکی ایران رادیاتور به‌راحتی در دسترس است؟","acceptedAnswer": {"@type": "Answer","text": "بله، به‌دلیل تولید داخلی و شبکه گسترده نمایندگی‌ها، قطعات یدکی ایران رادیاتور فراوان و به‌آسانی در سراسر کشور در دسترس است."}},
+    {"@type": "Question","name": "گارانتی محصولات ایران رادیاتور چگونه است؟","acceptedAnswer": {"@type": "Answer","text": "محصولات اصل ایران رادیاتور دارای گارانتی رسمی و برچسب اصالت کالا هستند و خدمات پس از فروش آن‌ها از طریق نمایندگان مجاز ارائه می‌شود."}},
+    {"@type": "Question","name": "آیا ایران رادیاتور در حوزه سرمایش هم فعال است؟","acceptedAnswer": {"@type": "Answer","text": "بله، علاوه بر محصولات گرمایشی، ایران رادیاتور کولر گازی اسپلیت با قابلیت سرمایش و گرمایش نیز تولید می‌کند."}},
+    {"@type": "Question","name": "محصولات ایران رادیاتور بهتر است یا برندهای وارداتی؟","acceptedAnswer": {"@type": "Answer","text": "ایران رادیاتور در ترکیب قیمت، در دسترس بودن قطعات و خدمات پس از فروش معمولاً انتخابی اقتصادی‌تر و کم‌دردسرتر از نمونه‌های وارداتی است."}},
+    {"@type": "Question","name": "چطور مطمئن شوم محصول ایران رادیاتور اصل است؟","acceptedAnswer": {"@type": "Answer","text": "با خرید از فروشندگان معتبر مانند شوفاژ، بررسی برچسب اصالت و کد رهگیری، و نگه‌داری فاکتور خرید می‌توانید از اصالت محصول مطمئن شوید."}},
+    {"@type": "Question","name": "چگونه ظرفیت مناسب محصول ایران رادیاتور را انتخاب کنم؟","acceptedAnswer": {"@type": "Answer","text": "با استفاده از محاسبه‌گر ظرفیت حرارتی رایگان شوفاژ می‌توانید ظرفیت موردنیاز فضای خود را دقیق محاسبه و محصول مناسب را انتخاب کنید."}}
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem","position": 1,"name": "خانه","item": "https://shofazh.com/"},
+    {"@type": "ListItem","position": 2,"name": "برندها","item": "https://shofazh.com/%D8%A8%D8%B1%D9%86%D8%AF/"},
+    {"@type": "ListItem","position": 3,"name": "ایران رادیاتور","item": "https://shofazh.com/%D8%A8%D8%B1%D9%86%D8%AF/%d8%a7%db%8c%d8%b1%d8%a7%d9%86-%d8%b1%d8%a7%d8%af%db%8c%d8%a7%d8%aa%d9%88%d8%b1/"}
+  ]
+}
+</script>

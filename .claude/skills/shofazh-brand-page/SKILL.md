@@ -9,6 +9,16 @@ You are building a complete, WordPress-ready Persian **brand (manufacturer) land
 
 > This skill is for **BRAND** pages (a hub page that introduces a manufacturer and all its product lines). It is NOT the single-product skill (`shofazh-product-page`). Do not edit or reuse that skill's output rules — brand pages have their own structure, word count (1000–2000), and schema (Brand/Organization).
 
+> ⚠️ **PUBLISHING TARGET (learned in production).** shofazh.com brand pages live in a **WooCommerce `product_brand` taxonomy term description**, edited with the **classic editor** (تب «کد»). That editor **strips `<style>`, `<script>` and `<svg>` on save** (CSS then renders as raw text on the page). Therefore the deliverable is split into TWO files, NOT one combined HTML:
+> 1. **`[brand-slug]-styles.css`** — the CSS only (no `<style>` tags). The user pastes it ONCE into **نمایش → سفارشی‌سازی → CSS اضافی (Appearance → Customize → Additional CSS)** and clicks Publish. It is reusable across every RAN25 page.
+> 2. **`[brand-slug]-body.html`** — the `<div class="ran25-wrap">…</div>` body only, with **no `<style>` block and no `<script>` JSON-LD**. The user pastes this into the brand description «کد» tab.
+> A combined single-file version may still be saved to the repo for reference, but the user must be told to use the two split files.
+> Extra production rules baked into every build:
+> - In CSS `content:"…"` declarations, write special glyphs as **unicode escapes** (`\2713` ✓, `\2715` ✕, `\2212` −, `\25C4` ◄) — raw glyphs become mojibake (`âœ"`) when pasted into the editor/Customizer.
+> - The calculator promo must use a **stacked block layout** (text on top, video centered below), never a fragile flex row — narrow theme containers squeeze flex children to one word per line.
+> - Never embed `<script type="application/ld+json">` in the body; the editor strips it and it shows as texturized plain text. Deliver schema separately (see Step 4) and tell the user to register it via Rank Math/Yoast.
+> - If the site has **WP Rocket** with *Remove Unused CSS*, the user must add `.ran25-*` classes to the CSS Safelist and run **Clear Used CSS** after editing.
+
 ## Interactive Intake (MANDATORY)
 
 When this skill is invoked, you MUST collect inputs from the user through `AskUserQuestion` calls — one question at a time, in Persian. Do NOT ask all at once, and do NOT proceed to Step 1 until all required answers are collected. If the user already supplied an answer earlier in the conversation, skip that question.
@@ -121,9 +131,10 @@ Insert a visually striking, animated promotional block **after section 4 (چرا
 - Background gradient adapted to the accent color (e.g. `linear-gradient(135deg,#0d47a1,#1565c0,#1976d2)`)
 - White text; animated entry via `@keyframes slideInUp` (`animation: slideInUp 0.8s ease-out`)
 - Inline SVG calculator/thermometer icon (geometric, industrial)
-- `<video controls autoplay muted loop playsinline>` with `poster`, `border-radius:12px`, box-shadow, `max-width:100%`
+- `<video controls autoplay muted loop playsinline>` with `poster`, `border-radius:12px`, box-shadow, `max-width:520px`, centered (`margin:0 auto`)
 - CTA pill button "محاسبه ظرفیت حرارتی رایگان" → calculator page, with hover glow + `@keyframes pulse`
-- Premium, magazine-ad feel; mobile responsive (stack vertically)
+- **Stacked block layout** (`.ran25-cp-grid` is a normal block; `.ran25-cp-text{width:100%}` on top, `.ran25-cp-media{width:100%}` with the centered video below). Do NOT use a side-by-side flex row — it collapses to one-word-per-line inside narrow theme containers.
+- Premium, magazine-ad feel; mobile responsive
 
 **Tone**: Professional, EEAT-compliant, no ⚠️ markers, no placeholder text. Friendly persuasive tone for the calculator block.
 **Internal linking**: 3–5 contextual links to related shofazh.com categories/products.
@@ -153,46 +164,54 @@ Required fields (Persian labels):
 - **توضیحات شبکه‌های اجتماعی (Open Graph / Twitter Description)**
 - **عنوان نان‌مایه (Breadcrumb Title)** — short label
 
-### Step 4: Schema JSON-LD
-Embed inside `<script type="application/ld+json">` blocks:
+### Step 4: Schema JSON-LD (DELIVERED SEPARATELY — never inlined in the body)
+Generate the JSON-LD but save it to a standalone file **`[brand-slug]-schema.txt`** (three `<script type="application/ld+json">` blocks) and tell the user to add it via **Rank Math/Yoast** (Custom Schema) — because the brand-description editor strips `<script>` and would otherwise show it as plain texturized text on the page.
 - `Brand` (or `Organization` with `brand`) — name, logo, url, description, sameAs if available
 - `FAQPage` (mirror all FAQs from the accordion)
 - `BreadcrumbList` (Home > برندها > [Brand])
+- Validate every block is parseable JSON before saving.
 
-### Step 5: Build HTML
-- Copy `.ran25-wrap` CSS framework exactly as-is from RAN25 template.
-- Only modify: brand content; hero image URL (user-supplied from Step 2b); optional 3–4 callouts on the hero; ticker bar items (brand strengths); Schema JSON-LD values; accent color if category requires; mid-content images (from Step 3.5).
+### Step 5: Build the split deliverables
+Build the page once, then split it into the two production files (see the Publishing Target note above). It is fine to also write a combined reference file, but the SPLIT files are what the user actually pastes.
+
+- Copy `.ran25-wrap` CSS framework exactly as-is from RAN25 template + the calculator-promo CSS (stacked layout) + use unicode-escape glyphs in all `content:"…"`.
+- Only modify: brand content; hero image URL (user-supplied from Step 2b); optional 3–4 callouts on the hero; ticker bar items (brand strengths); accent color if category requires; mid-content images (from Step 3.5).
 - Each mid-content image: `<figure>` with `<img>` (Persian `alt`, `loading="lazy"`, `width="100%"`), optional Persian `<figcaption>`. If none provided, insert `<!-- IMAGE PLACEHOLDER: [section name] -->`.
 - Keep ALL animations, industrial bars, gear SVGs, counter system unchanged.
-- Include the WordPress override block (`!important` rules) at the end.
+- Include the WordPress override block (`!important` rules) inside the CSS.
+- The body file must contain **no `<style>` and no `<script>`** — it starts with `<div class="ran25-wrap">` and ends with the matching `</div>`.
 
 ### Step 6: Save, Commit, Push
-- HTML file path: `[brand-slug]-brand-content.html` (e.g. `bosch-brand-content.html`)
-- Also commit the SEO file from Step 3c: `[brand-slug]-brand-seo.md`
-- Slug: lowercase Latin transliteration of brand name.
+Write and commit these files (slug = lowercase Latin transliteration of brand name):
+- **`[brand-slug]-styles.css`** — CSS only, starts with `.ran25-wrap{`. → Additional CSS.
+- **`[brand-slug]-body.html`** — body only, starts with `<div class="ran25-wrap">`, no style/script. → brand description «کد» tab.
+- **`[brand-slug]-brand-seo.md`** — SEO metadata (from Step 3c).
+- **`[brand-slug]-schema.txt`** — the three JSON-LD blocks (from Step 4). → Rank Math/Yoast.
+- (optional) `[brand-slug]-brand-content.html` — combined reference copy.
 - Commit message format:
   ```
   Add brand page: [Brand Name]
 
   https://claude.ai/code/session_<session_id>
   ```
-- Push to current working branch (do NOT switch branches).
+- Push to current working branch (do NOT switch branches). Then `SendUserFile` the `-styles.css` and `-body.html` files.
 
 ## Output to User
 After push, reply with:
-1. Filenames and repo paths (both the HTML page and the `[brand-slug]-brand-seo.md` file)
-2. Three-line summary (word count, schema types, image count)
-3. Confirmation that the SEO metadata file was already sent in Step 3c
-4. Note about hotspot/callout positions needing visual verification in browser (if used)
-5. **Schema JSON-LD preview**: display the full generated Brand/Organization, FAQPage, BreadcrumbList code blocks in chat for review.
+1. The two paste targets in a clear table: `-styles.css` → **CSS اضافی (Customizer) → Publish**; `-body.html` → **brand description «کد» tab → Update**.
+2. Three-line summary (word count, schema types, image count).
+3. Confirmation that the SEO + schema files were sent.
+4. Note about hotspot/callout positions needing visual verification in browser (if used).
+5. WP Rocket reminder: if *Remove Unused CSS* is on, safelist `.ran25-*` and run **Clear Used CSS**.
 
-Do NOT paste the full HTML in chat — the file in the repo IS the deliverable. But DO show the Schema JSON-LD separately.
+Do NOT paste the full HTML in chat — the files in the repo are the deliverable.
 
 ## Constraints
 - Never modify `ran25-product-content.html` itself — it is the canonical template.
 - Never change the `.ran25-wrap` CSS structure or animation keyframes.
 - Never add new external dependencies (fonts, CDN scripts).
 - All graphics must remain inline SVG or CSS.
-- File must be self-contained and paste-ready into the WordPress Text/Code editor.
+- The body file must be paste-ready into the classic editor «کد» tab — **no `<style>`, no `<script>`** (they get stripped). CSS ships separately for Additional CSS.
+- Use unicode escapes (`\2713` etc.) for non-ASCII glyphs in CSS `content:`.
 - Persian text only in content; English allowed in schema, CSS, and code comments.
 - Keep total body content within 1000–2000 Persian words (brand pages are leaner than product pages).
