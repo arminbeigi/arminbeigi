@@ -24,7 +24,7 @@
       "description": "نمایندگی برتر و رسمی شوفاژکار در تهران؛ فروش دیگ چدنی، مشعل، پکیج و رادیاتور شوفاژکار با تضمین اصالت، گارانتی شرکتی و خدمات پس از فروش.",
       "url": "https://shofazh.com/product-tag/نمایندگی-شوفاژکار-در-تهران/",
       "image": "https://shofazh.com/wp-content/uploads/2026/05/calc-poster.jpg",
-      "hasMap": "https://www.google.com/maps/place/Shofazhkar/@35.7068493,51.4236974,17z/data=!3m1!4b1!4m6!3m5!1s0x3f8e0143603656df:0x829027bb55d82eb5!8m2!3d35.706845!4d51.4262723!16s%2Fg%2F11l3mxbclq",
+      "hasMap": "https://www.google.com/maps?q=35.706845,51.4262723",
       "address": {
         "@type": "PostalAddress",
         "addressLocality": "تهران",
