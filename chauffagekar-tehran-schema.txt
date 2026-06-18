@@ -18,6 +18,32 @@
       }
     },
     {
+      "@type": "LocalBusiness",
+      "@id": "https://shofazh.com/product-tag/نمایندگی-شوفاژکار-در-تهران/#localbusiness",
+      "name": "نمایندگی شوفاژکار در تهران - شوفاژ دات کام",
+      "description": "نمایندگی برتر و رسمی شوفاژکار در تهران؛ فروش دیگ چدنی، مشعل، پکیج و رادیاتور شوفاژکار با تضمین اصالت، گارانتی شرکتی و خدمات پس از فروش.",
+      "url": "https://shofazh.com/product-tag/نمایندگی-شوفاژکار-در-تهران/",
+      "image": "https://shofazh.com/wp-content/uploads/2026/05/calc-poster.jpg",
+      "hasMap": "https://www.google.com/maps/place/Shofazhkar/@35.7068493,51.4236974,17z/data=!3m1!4b1!4m6!3m5!1s0x3f8e0143603656df:0x829027bb55d82eb5!8m2!3d35.706845!4d51.4262723!16s%2Fg%2F11l3mxbclq",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "تهران",
+        "addressRegion": "تهران",
+        "addressCountry": "IR"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 35.706845,
+        "longitude": 51.4262723
+      },
+      "brand": {
+        "@type": "Brand",
+        "name": "شوفاژکار",
+        "alternateName": "Chauffagekar"
+      },
+      "areaServed": "تهران"
+    },
+    {
       "@type": "ItemList",
       "@id": "https://shofazh.com/product-tag/نمایندگی-شوفاژکار-در-تهران/#itemlist",
       "name": "محصولات شوفاژکار قابل ارائه در نمایندگی تهران",
@@ -114,6 +140,14 @@
           "acceptedAnswer": {
             "@type": "Answer",
             "text": "پکیج دیواری جمع‌وجور است و روی دیوار نصب می‌شود و برای واحدهای کوچک و متوسط مناسب است؛ پکیج زمینی به‌دلیل داشتن مخزن آبگرمکن داخلی، آب گرم بهداشتی بیشتری تأمین می‌کند و برای واحدهای با مصرف آب گرم بالاتر مناسب است."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "آدرس نمایندگی شوفاژکار در تهران کجاست؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "موقعیت نمایندگی شوفاژکار در تهران روی گوگل مپ قابل مشاهده و مسیریابی است. برای دیدن آدرس دقیق و مسیر رسیدن، روی دکمه‌ی مشاهده آدرس روی گوگل مپ در صفحه کلیک کنید. همچنین خرید آنلاین با ارسال به سراسر کشور از طریق شوفاژ دات کام امکان‌پذیر است."
           }
         },
         {

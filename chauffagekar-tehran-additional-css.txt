@@ -97,6 +97,9 @@ table.shz-table tbody td:first-child{font-weight:800;color:var(--shz-accent-3);t
 .shz-final h2{color:#fff;font-size:24px;margin:0 0 10px}
 .shz-final p{color:#fff;opacity:.96;margin:0 0 18px}
 
+.shz-map{text-align:center;margin-top:18px}
+.shz-map-final{margin-top:16px}
+.shz-map-final a{color:#fff!important;text-decoration:underline}
 .shz-cat img,.shz-cat video{max-width:100%!important;height:auto!important}
 .shz-cat ul.shz-list{list-style:none!important}
 .shz-cat a{box-shadow:none!important}
