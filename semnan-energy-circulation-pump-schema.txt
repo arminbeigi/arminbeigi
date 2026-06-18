@@ -1,0 +1,158 @@
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "پمپ سمنان انرژی (نوید موتور)",
+  "description": "نمایندگی رسمی پمپ سمنان انرژی (نوید موتور) شامل پمپ‌های سیرکولاتور خطی سری AA و A6، پمپ‌های خطی موتور خشک اتاترم (ETATHERM) و پمپ‌های محیطی و تحت‌فشار سری PM؛ تک‌فاز و سه‌فاز، بدنه چدن GG25 و استیل، مناسب موتورخانه و گرمایش مرکزی.",
+  "url": "https://shofazh.com/product-category/pumps/circulation-pump/semnan-energy-circulation-pump/",
+  "inLanguage": "fa-IR",
+  "about": {
+    "@type": "Brand",
+    "name": "سمنان انرژی (نوید موتور)",
+    "manufacturer": {
+      "@type": "Organization",
+      "name": "شرکت صنایع نوید موتور"
+    }
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "شوفاژ دات کام",
+    "url": "https://shofazh.com/"
+  }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "مدل‌های پمپ سمنان انرژی (نوید موتور)",
+  "itemListOrder": "https://schema.org/ItemListOrderAscending",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "پمپ سیرکولاتور خطی سمنان انرژی مدل AA دو اینچ",
+      "url": "https://shofazh.com/product/semnan-energy-aa-2-in/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "پمپ سیرکولاتور خطی سمنان انرژی مدل A6 تک‌فاز",
+      "url": "https://shofazh.com/product/semnan-energy-a6-1f/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "پمپ محیطی (تحت‌فشار) سمنان انرژی مدل PM80",
+      "url": "https://shofazh.com/product/water-pressure-pump-pm-80/"
+    }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "پمپ سمنان انرژی محصول کدام شرکت است؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "برند سمنان انرژی در سال ۱۳۸۹ با همکاری نوید موتور و پمپیران شکل گرفت و امروز محصولات آن زیر مجموعه‌ی شرکت صنایع نوید موتور — یکی از بزرگ‌ترین تولیدکنندگان پمپ در خاورمیانه — تولید و عرضه می‌شوند."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "تفاوت پمپ خطی، اتاترم و محیطی سمنان انرژی چیست؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "سری خطی AA و A6 پمپ‌های سیرکولاتور استاندارد برای گردش آب گرم ساختمان‌های کوچک تا متوسط هستند. سری اتاترم پمپ‌های خطی موتور خشک، کم‌صدا و بدون نیاز به روان‌کاری برای موتورخانه‌های پرکار با هد بالاترند. سری محیطی PM برای آبرسانی و افزایش فشار آب مصرفی ساختمان به کار می‌رود."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "چطور دبی و هد پمپ مناسب را انتخاب کنم؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "دبی پمپ به بار حرارتی سیستم بستگی دارد و هد باید بر افت فشار کل لوله‌کشی و ارتفاع ساختمان غلبه کند. ابتدا ظرفیت حرارتی موردنیاز را با محاسبه‌گر ظرفیت حرارتی شوفاژ مشخص کنید، سپس با کارشناسان شوفاژ دات کام مدل و سری متناسب را انتخاب کنید."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "پمپ موتور خشک اتاترم چه مزیتی دارد؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "پمپ‌های موتور خشک اتاترم بدون کوپلینگ و با آب‌بندی مکانیکال سیل کار می‌کنند، کم‌صدا هستند و نیازی به روان‌کاری دوره‌ای ندارند. به همین دلیل برای کارکرد مداوم در موتورخانه‌های مسکونی، تجاری و صنعتی گزینه‌ی مطمئنی محسوب می‌شوند."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "تفاوت پمپ تک‌فاز و سه‌فاز سمنان انرژی در چیست؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "نسخه‌ی تک‌فاز با برق ۲۲۰ ولت برای مصارف خانگی و ساختمان‌های کوچک کافی است، در حالی‌که نسخه‌ی سه‌فاز با برق ۳۸۰ ولت راندمان و دوام بالاتری دارد و برای موتورخانه‌های بزرگ و کاربری صنعتی توصیه می‌شود. نسخه‌ی سه‌فاز به تابلو برق و انشعاب سه‌فاز نیاز دارد."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "بدنه و پروانه‌ی پمپ سمنان انرژی از چه جنسی است؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "بدنه‌ی پمپ‌ها از چدن GG25 یا استیل ضدزنگ ساخته می‌شود و پروانه می‌تواند برنزی یا چدنی باشد. این ترکیب، مقاومت بالا در برابر خوردگی و طول عمر مناسب را تضمین می‌کند. برای سیستم‌های با شرایط خورنده، نسخه‌ی استیل پیشنهاد می‌شود."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "قیمت پمپ سمنان انرژی چقدر است؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "قیمت بر اساس سری (خطی، اتاترم، محیطی)، سایز اتصال، توان موتور و نوع فاز تعیین می‌شود و با تغییرات بازار به‌روزرسانی می‌شود. برای مشاهده‌ی قیمت روز و خرید، به صفحه‌ی پمپ سمنان انرژی در شوفاژ دات کام مراجعه کنید یا با کارشناسان فروش تماس بگیرید."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "آیا پمپ سمنان انرژی برای گرمایش از کف مناسب است؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "بله؛ پمپ‌های سیرکولاتور سمنان انرژی برای گردش آب در مدارهای گرمایش از کف، رادیاتوری و فن‌کویل مناسب‌اند. کافی است دبی و هد پمپ متناسب با طول مدار و افت فشار سیستم گرمایش از کف انتخاب شود."
+      }
+    }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "خانه",
+      "item": "https://shofazh.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "پمپ",
+      "item": "https://shofazh.com/product-category/pumps/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "پمپ سیرکولاتور",
+      "item": "https://shofazh.com/product-category/pumps/circulation-pump/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 4,
+      "name": "پمپ سمنان انرژی",
+      "item": "https://shofazh.com/product-category/pumps/circulation-pump/semnan-energy-circulation-pump/"
+    }
+  ]
+}
+</script>
