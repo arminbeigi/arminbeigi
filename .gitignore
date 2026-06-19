@@ -14,3 +14,5 @@ invoice-automator/*.spec.bak
 *.session
 *.session-journal
 invoice-automator/windows-installer/build/
+invoice-automator/macos-installer/build/
+invoice-automator/dist/
