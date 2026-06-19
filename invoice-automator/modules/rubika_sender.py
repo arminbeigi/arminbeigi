@@ -49,7 +49,9 @@ class RubikaSender:
         from rubpy import Client
         client = Client(name=self.session_name)
         try:
-            await client.connect()
+            # start() نشست ذخیره‌شده را کامل بارگذاری و احراز هویت می‌کند
+            # (چون قبلاً لاگین شده، پرسش تعاملی نمی‌آید)
+            await client.start()
             # یافتن GUID مشتری از روی شماره (افزودن به مخاطبین با نام یا شماره)
             phone_intl = "+98" + phone[1:] if phone.startswith("0") else phone
             guid = None

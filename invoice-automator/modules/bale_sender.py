@@ -38,11 +38,26 @@ class BaleSender:
         # aiobale نیازی به connect ندارد
         client = Client(session_file=self.session_file)
         try:
-            # افزودن مشتری به مخاطبین (با نام مشتری یا شماره) برای ساخت چت دوطرفه
-            peers = await client.import_contacts([(_to_intl_int(phone), contact_name)])
-            if not peers:
-                return {"success": False, "error": f"شماره {phone} در بله یافت نشد"}
-            chat_id = peers[0].id
+            intl_int = _to_intl_int(phone)
+            intl_str = str(intl_int)
+            chat_id = None
+            # ۱. ساخت مخاطب (با نام مشتری یا شماره) — چت دوطرفه
+            try:
+                peers = await client.import_contacts([(intl_int, contact_name)])
+                if peers:
+                    chat_id = peers[0].id
+            except Exception as e:
+                logger.debug(f"import_contacts: {e}")
+            # ۲. در صورت نبود، جستجوی مخاطب بر اساس شماره
+            if chat_id is None:
+                try:
+                    peer = await client.search_contact(intl_str)
+                    if peer:
+                        chat_id = peer.id
+                except Exception as e:
+                    logger.debug(f"search_contact: {e}")
+            if chat_id is None:
+                return {"success": False, "error": f"ساخت/یافتن مخاطب بله ناموفق بود ({phone})"}
 
             if text:
                 await client.send_message(text=text, chat_id=chat_id,
