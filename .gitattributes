@@ -3,3 +3,5 @@
 *.cmd text eol=crlf
 # اسکریپت Inno Setup هم روی ویندوز کامپایل می‌شود
 *.iss text eol=crlf
+# اسکریپت PowerShell — CRLF (و BOM به‌صورت محتوا حفظ می‌شود)
+*.ps1 text eol=crlf
