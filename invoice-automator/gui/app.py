@@ -68,7 +68,13 @@ class ChannelCard(ctk.CTkFrame):
             progress_color=COLORS["accent"], command=self._on_toggle)
         self.switch.grid(row=0, column=2, rowspan=2, padx=(12, 0))
 
-        # ── فیلدهای ورودی ──
+        # ── بدنه: یا فیلدهای ورودی، یا UI لاگین تلفنی ──
+        if channel.get("login"):
+            self._build_login_ui()
+            self._build_help_footer()
+            self._on_toggle()
+            return
+
         body = ctk.CTkFrame(self, fg_color="transparent")
         body.grid(row=1, column=0, sticky="ew", padx=18, pady=(4, 8))
         body.grid_columnconfigure(0, weight=1)
@@ -97,14 +103,18 @@ class ChannelCard(ctk.CTkFrame):
                     show="•" if secret else "")
                 entry.grid(row=i * 2 + 1, column=0, sticky="ew")
 
+        self._build_help_footer()
+        self._on_toggle()
+
+    def _build_help_footer(self):
         # ── راهنما ──
-        if channel.get("help"):
-            ctk.CTkLabel(self, text="ℹ " + channel["help"], font=_font(11),
+        if self.channel.get("help"):
+            ctk.CTkLabel(self, text="ℹ " + self.channel["help"], font=_font(11),
                          text_color=COLORS["text_dim"], anchor="e",
                          wraplength=560, justify="right").grid(
                 row=2, column=0, sticky="ew", padx=18, pady=(0, 8))
 
-        # ── دکمه‌ی تست اتصال ──
+        # ── دکمه‌ی تست/وضعیت ──
         footer = ctk.CTkFrame(self, fg_color="transparent")
         footer.grid(row=3, column=0, sticky="ew", padx=18, pady=(0, 16))
         footer.grid_columnconfigure(0, weight=1)
@@ -112,11 +122,138 @@ class ChannelCard(ctk.CTkFrame):
         self.status_lbl = ctk.CTkLabel(footer, text="", font=_font(12), anchor="e")
         self.status_lbl.grid(row=0, column=0, sticky="ew", padx=(0, 10))
 
-        ctk.CTkButton(footer, text="تست اتصال", width=110, font=_font(13),
+        ctk.CTkButton(footer, text="بررسی وضعیت", width=110, font=_font(13),
                       fg_color=COLORS["accent_dim"], hover_color=COLORS["accent"],
                       command=self._test).grid(row=0, column=1)
 
-        self._on_toggle()
+    # ──────────────────────────── UI لاگین تلفنی (بله/روبیکا)
+    def _build_login_ui(self):
+        from gui.messenger_login import rubika_login, bale_login
+        self._manager = {"rubika": rubika_login, "bale": bale_login}[self.key]
+
+        body = ctk.CTkFrame(self, fg_color="transparent")
+        body.grid(row=1, column=0, sticky="ew", padx=18, pady=(4, 8))
+        body.grid_columnconfigure(0, weight=1)
+
+        # وضعیت لاگین
+        self.login_status = ctk.CTkLabel(body, font=_font(13, "bold"), anchor="e")
+        self.login_status.grid(row=0, column=0, sticky="ew", pady=(4, 8))
+
+        # شماره
+        ctk.CTkLabel(body, text="شماره موبایل (همین اکانت)", font=_font(12, "bold"),
+                     text_color=COLORS["text_dim"], anchor="e").grid(
+            row=1, column=0, sticky="ew", pady=(4, 2))
+        self.login_phone = ctk.StringVar(value=self.settings[self.key].get("phone", ""))
+        self.phone_entry = ctk.CTkEntry(
+            body, textvariable=self.login_phone, placeholder_text="09xxxxxxxxx",
+            font=_font(13), fg_color=COLORS["input"], justify="right",
+            border_color=COLORS["border"], corner_radius=8, height=38)
+        self.phone_entry.grid(row=2, column=0, sticky="ew")
+
+        self.send_code_btn = ctk.CTkButton(
+            body, text="ارسال کد تأیید", height=38, font=_font(13),
+            fg_color=COLORS["accent"], hover_color=COLORS["accent_hover"],
+            command=self._send_code)
+        self.send_code_btn.grid(row=3, column=0, sticky="ew", pady=(8, 4))
+
+        # کد تأیید (ابتدا غیرفعال)
+        ctk.CTkLabel(body, text="کد تأیید پیامک‌شده", font=_font(12, "bold"),
+                     text_color=COLORS["text_dim"], anchor="e").grid(
+            row=4, column=0, sticky="ew", pady=(8, 2))
+        self.login_code = ctk.StringVar()
+        self.code_entry = ctk.CTkEntry(
+            body, textvariable=self.login_code, placeholder_text="------",
+            font=_font(13), fg_color=COLORS["input"], justify="right",
+            border_color=COLORS["border"], corner_radius=8, height=38)
+        self.code_entry.grid(row=5, column=0, sticky="ew")
+        self.code_entry.configure(state="disabled")
+
+        self.verify_btn = ctk.CTkButton(
+            body, text="تأیید و ورود", height=38, font=_font(13),
+            fg_color=COLORS["success"], hover_color="#1ea34f",
+            command=self._verify_code, state="disabled")
+        self.verify_btn.grid(row=6, column=0, sticky="ew", pady=(8, 4))
+
+        self.logout_btn = ctk.CTkButton(
+            body, text="خروج از حساب", height=34, font=_font(12),
+            fg_color="transparent", border_width=1, border_color=COLORS["danger"],
+            text_color=COLORS["danger"], hover_color=COLORS["card_hover"],
+            command=self._do_logout)
+        self.logout_btn.grid(row=7, column=0, sticky="ew", pady=(2, 4))
+
+        self._refresh_login_state()
+
+    def _refresh_login_state(self):
+        info = self.settings[self.key]
+        if info.get("logged_in"):
+            self.login_status.configure(
+                text=f"✅ وارد شده با شماره {info.get('phone','')}",
+                text_color=COLORS["success"])
+            self.logout_btn.grid()
+        else:
+            self.login_status.configure(text="⚠ هنوز وارد نشده‌اید",
+                                        text_color=COLORS["warning"])
+            self.logout_btn.grid_remove()
+
+    def _busy(self, btn, text):
+        btn.configure(state="disabled", text=text)
+
+    def _send_code(self):
+        phone = self.login_phone.get().strip()
+        if not core.is_valid_phone(phone):
+            self.login_status.configure(text="⚠ شماره باید 09xxxxxxxxx باشد",
+                                        text_color=COLORS["danger"])
+            return
+        self._busy(self.send_code_btn, "در حال ارسال کد…")
+
+        def worker():
+            ok, msg = self._manager.send_code(phone)
+            def done():
+                self.send_code_btn.configure(state="normal", text="ارسال مجدد کد")
+                color = COLORS["success"] if ok else COLORS["danger"]
+                self.login_status.configure(text=("📩 " if ok else "❌ ") + msg, text_color=color)
+                if ok:
+                    self.code_entry.configure(state="normal")
+                    self.verify_btn.configure(state="normal")
+            self.after(0, done)
+        threading.Thread(target=worker, daemon=True).start()
+
+    def _verify_code(self):
+        code = self.login_code.get().strip()
+        if not code:
+            return
+        self._busy(self.verify_btn, "در حال ورود…")
+
+        def worker():
+            ok, msg, phone = self._manager.verify_code(code)
+            def done():
+                self.verify_btn.configure(state="normal", text="تأیید و ورود")
+                if ok:
+                    self.settings[self.key].update(
+                        enabled=True, logged_in=True,
+                        phone=phone or self.login_phone.get().strip())
+                    self.enabled_var.set(True)
+                    try:
+                        store.save_settings(self.settings)
+                    except Exception:
+                        pass
+                    self.code_entry.configure(state="disabled")
+                    self.verify_btn.configure(state="disabled")
+                    self._refresh_login_state()
+                    self._on_toggle()
+                else:
+                    self.login_status.configure(text="❌ " + msg, text_color=COLORS["danger"])
+            self.after(0, done)
+        threading.Thread(target=worker, daemon=True).start()
+
+    def _do_logout(self):
+        ok, msg = self._manager.logout()
+        self.settings[self.key].update(logged_in=False, phone="")
+        try:
+            store.save_settings(self.settings)
+        except Exception:
+            pass
+        self._refresh_login_state()
 
     def _on_toggle(self):
         # کم‌رنگ کردن کارت در حالت غیرفعال (صرفاً ظاهری)
@@ -125,6 +262,11 @@ class ChannelCard(ctk.CTkFrame):
 
     def collect(self) -> dict:
         """جمع‌آوری مقادیر فعلی فیلدها."""
+        if self.channel.get("login"):
+            # برای کانال‌های لاگین، وضعیت لاگین حفظ می‌شود
+            data = dict(self.settings.get(self.key, {}))
+            data["enabled"] = self.enabled_var.get()
+            return data
         data = {"enabled": self.enabled_var.get()}
         for fkey, widget in self.field_vars.items():
             if isinstance(widget, ctk.CTkTextbox):
@@ -134,7 +276,7 @@ class ChannelCard(ctk.CTkFrame):
         return data
 
     def _test(self):
-        self.status_lbl.configure(text="در حال تست…", text_color=COLORS["text_dim"])
+        self.status_lbl.configure(text="در حال بررسی…", text_color=COLORS["text_dim"])
         data = self.collect()
         self.settings[self.key].update(data)
         self.on_test(self.key, self.status_lbl)
@@ -149,7 +291,7 @@ class InvoiceApp(ctk.CTk):
         global _FONT_FAMILY
         _FONT_FAMILY = load_persian_font()
 
-        ctk.set_appearance_mode(self.settings.get("appearance", "dark"))
+        ctk.set_appearance_mode(self.settings.get("appearance", "system"))
         ctk.set_default_color_theme("blue")
 
         self.title("سامانه ارسال پیش‌فاکتور")
@@ -207,7 +349,7 @@ class InvoiceApp(ctk.CTk):
             theme_frame, values=["dark", "light", "system"],
             command=self._change_theme, font=_font(12),
             fg_color=COLORS["card"], button_color=COLORS["accent"])
-        self.theme_menu.set(self.settings.get("appearance", "dark"))
+        self.theme_menu.set(self.settings.get("appearance", "system"))
         self.theme_menu.pack(fill="x")
         ctk.CTkLabel(theme_frame, text="حالت نمایش", font=_font(11),
                      text_color=COLORS["text_dim"]).pack(pady=(4, 0))
@@ -500,10 +642,27 @@ class InvoiceApp(ctk.CTk):
         scroll.grid(row=1, column=0, sticky="nsew")
         scroll.grid_columnconfigure(0, weight=1)
 
+        # ── کارت متن خوش‌آمدگویی پیش‌فرض ──
+        wcard = ctk.CTkFrame(scroll, fg_color=COLORS["card"], corner_radius=14,
+                             border_width=1, border_color=COLORS["border"])
+        wcard.grid(row=0, column=0, sticky="ew", pady=(0, 16))
+        wcard.grid_columnconfigure(0, weight=1)
+        ctk.CTkLabel(wcard, text="💬  متن خوش‌آمدگویی پیش‌فرض", font=_font(15, "bold"),
+                     text_color=COLORS["text"], anchor="e").grid(
+            row=0, column=0, sticky="ew", padx=18, pady=(16, 2))
+        ctk.CTkLabel(wcard, text="این متن پیش از لینک/فایل برای مشتری در پیام‌رسان‌ها ارسال می‌شود.",
+                     font=_font(11), text_color=COLORS["text_dim"], anchor="e",
+                     wraplength=600, justify="right").grid(row=1, column=0, sticky="ew", padx=18)
+        self.welcome_box = ctk.CTkTextbox(wcard, height=70, font=_font(13),
+                                          fg_color=COLORS["input"], corner_radius=8,
+                                          border_width=1, border_color=COLORS["border"])
+        self.welcome_box.grid(row=2, column=0, sticky="ew", padx=18, pady=(6, 16))
+        self.welcome_box.insert("1.0", self.settings.get("welcome_message", ""))
+
         self.cards: dict[str, ChannelCard] = {}
         for i, ch in enumerate(CHANNELS):
             card = ChannelCard(scroll, ch, self.settings, on_test=self._test_channel)
-            card.grid(row=i, column=0, sticky="ew", pady=(0, 16))
+            card.grid(row=i + 1, column=0, sticky="ew", pady=(0, 16))
             self.cards[ch["key"]] = card
 
         # دکمه‌ی ذخیره (ثابت پایین)
@@ -521,6 +680,7 @@ class InvoiceApp(ctk.CTk):
         for key, card in self.cards.items():
             self.settings[key].update(card.collect())
         self.settings["appearance"] = self.theme_menu.get()
+        self.settings["welcome_message"] = self.welcome_box.get("1.0", "end").strip()
         try:
             store.save_settings(self.settings)
             self.save_status.configure(text="✅ تنظیمات ذخیره شد.",

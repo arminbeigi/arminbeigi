@@ -44,10 +44,25 @@ SP="$P/Lib/site-packages"
 pip install --target "$SP" --platform win_amd64 --python-version 312 \
     --abi abi3 --abi cp312 --abi none --only-binary=:all: --upgrade \
     customtkinter cryptography requests darkdetect packaging
-# روبیکا (اختیاری) — در صورت خطا، نصب بدون آن ادامه می‌یابد
+# روبیکا (rubpy) — اکانت شخصی
 pip install --target "$SP" --platform win_amd64 --python-version 312 \
     --abi abi3 --abi cp312 --abi none --only-binary=:all: rubpy || \
     echo "⚠ rubpy نصب نشد؛ بقیه‌ی کانال‌ها کار می‌کنند."
+
+# بله (aiobale) — اکانت شخصی. وابستگی‌های باینری به‌صورت wheel ویندوزی:
+pip install --target "$SP" --platform win_amd64 --python-version 312 \
+    --abi abi3 --abi cp312 --abi none --only-binary=:all: \
+    aiohttp aiofiles colorama pydantic pydantic-core typing_extensions \
+    magic-filter protobuf six || echo "⚠ برخی وابستگی‌های بله نصب نشد."
+# aiobale و blackboxprotobuf فقط sdist دارند و پایتون خالص‌اند؛ به‌جای ساخت
+# wheel (که با setuptools سیستم خطا می‌دهد) سورس را مستقیم کپی می‌کنیم.
+SRCDL="$BUILD/srcdl"; mkdir -p "$SRCDL"
+pip download --no-deps --no-binary :all: -d "$SRCDL" aiobale blackboxprotobuf || true
+for tgz in "$SRCDL"/*.tar.gz; do tar xzf "$tgz" -C "$SRCDL"; done
+for pkg in aiobale blackboxprotobuf; do
+    d=$(find "$SRCDL" -maxdepth 2 -type d -name "$pkg" | head -1)
+    if [ -n "$d" ]; then cp -r "$d" "$SP/"; echo "   ✅ کپی $pkg"; else echo "   ⚠ $pkg یافت نشد"; fi
+done
 
 echo "▶ چیدن کد برنامه در payload"
 cp -r "$APP_ROOT/gui" "$APP_ROOT/modules" "$APP_ROOT/assets" "$PAYLOAD/"

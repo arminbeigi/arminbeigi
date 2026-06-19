@@ -42,9 +42,9 @@ def available_channels(settings: dict) -> list[str]:
     wa = settings.get("whatsapp", {})
     if wa.get("enabled"):
         result.append("whatsapp")  # حتی بدون API می‌تواند لینک wa.me بسازد
-    if settings.get("bale", {}).get("enabled") and settings["bale"].get("bot_token"):
+    if settings.get("bale", {}).get("enabled") and settings["bale"].get("logged_in"):
         result.append("bale")
-    if settings.get("rubika", {}).get("enabled") and settings["rubika"].get("auth"):
+    if settings.get("rubika", {}).get("enabled") and settings["rubika"].get("logged_in"):
         result.append("rubika")
     return result
 
@@ -117,6 +117,13 @@ def process_pdf(pdf_path: str, settings: dict, channels: list[str], log=print,
             log(f"❌ وردپرس: {e}")
             report["fail"].append(f"wordpress: {e}")
 
+    # متن خوش‌آمدگویی پیش‌فرض (برای پیام‌رسان‌های چت‌محور)
+    welcome = (settings.get("welcome_message") or "").strip()
+
+    # مسیر نشست‌های لاگین‌شده
+    from gui import settings_store as _store
+    sess = _store.sessions_dir()
+
     # ── ساخت توابع ارسال برای کانال‌های انتخاب‌شده ──
     tasks = {}
 
@@ -135,14 +142,18 @@ def process_pdf(pdf_path: str, settings: dict, channels: list[str], log=print,
 
     if "bale" in channels:
         def send_bale():
-            bale = BaleSender(settings.get("bale", {}))
-            return "bale", bale.send_invoice(phone, pdf_path, info, short_link)
+            cfg = dict(settings.get("bale", {}))
+            cfg["session_file"] = str(sess / "bale.bale")
+            bale = BaleSender(cfg)
+            return "bale", bale.send_invoice(phone, pdf_path, info, short_link, welcome)
         tasks["bale"] = send_bale
 
     if "rubika" in channels:
         def send_rubika():
-            rubika = RubikaSender(settings.get("rubika", {}))
-            return "rubika", rubika.send_invoice(phone, pdf_path, info, short_link)
+            cfg = dict(settings.get("rubika", {}))
+            cfg["session_name"] = str(sess / "rubika")
+            rubika = RubikaSender(cfg)
+            return "rubika", rubika.send_invoice(phone, pdf_path, info, short_link, welcome)
         tasks["rubika"] = send_rubika
 
     # ── ارسال موازی ──
@@ -193,13 +204,9 @@ def test_channel(channel: str, settings: dict) -> tuple[bool, str]:
             return False, f"کلید نامعتبر: {data.get('return', {}).get('message', '')}"
 
         if channel == "bale":
-            import requests
-            url = f"https://tapi.bale.ai/bot{cfg['bot_token']}/getMe"
-            resp = requests.get(url, timeout=15)
-            data = resp.json()
-            if data.get("ok"):
-                return True, f"ربات معتبر: @{data['result'].get('username', '')}"
-            return False, "توکن ربات نامعتبر است."
+            if cfg.get("logged_in"):
+                return True, f"وارد شده با شماره {cfg.get('phone','')}"
+            return False, "وارد نشده‌اید — ابتدا با شماره لاگین کنید."
 
         if channel == "whatsapp":
             if not (cfg.get("phone_number_id") and cfg.get("access_token")):
@@ -214,9 +221,9 @@ def test_channel(channel: str, settings: dict) -> tuple[bool, str]:
             return False, f"خطا (کد {resp.status_code})"
 
         if channel == "rubika":
-            if not cfg.get("auth"):
-                return False, "نشست (auth) روبیکا وارد نشده است."
-            return True, "اطلاعات روبیکا ثبت شده — تست واقعی هنگام ارسال انجام می‌شود."
+            if cfg.get("logged_in"):
+                return True, f"وارد شده با شماره {cfg.get('phone','')}"
+            return False, "وارد نشده‌اید — ابتدا با شماره لاگین کنید."
 
     except Exception as e:
         return False, f"خطا: {e}"

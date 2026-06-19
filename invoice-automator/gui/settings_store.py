@@ -31,7 +31,9 @@ APP_NAME = "InvoiceAutomator"
 
 # ── ساختار پیش‌فرض تنظیمات ─────────────────────────────────────────
 DEFAULT_SETTINGS = {
-    "appearance": "dark",          # dark | light | system
+    "appearance": "system",        # dark | light | system (پیش‌فرض: تبعیت از سیستم)
+    # متن خوش‌آمدگویی پیش‌فرض که پیش از لینک/فایل برای مشتری ارسال می‌شود
+    "welcome_message": "سلام، پیش‌فاکتور شما آماده است:",
     "wordpress": {
         "enabled": False,
         "url": "",
@@ -54,15 +56,26 @@ DEFAULT_SETTINGS = {
         "phone_number_id": "",
         "access_token": "",
     },
+    # بله — اکانت شخصی (لاگین با شماره + کد تأیید، نه ربات)
     "bale": {
         "enabled": False,
-        "bot_token": "",
+        "phone": "",
+        "logged_in": False,
     },
+    # روبیکا — اکانت شخصی (لاگین با شماره + کد تأیید)
     "rubika": {
         "enabled": False,
-        "auth": "",
+        "phone": "",
+        "logged_in": False,
     },
 }
+
+
+def sessions_dir() -> Path:
+    """پوشه‌ی نگه‌داری فایل‌های نشست لاگین پیام‌رسان‌ها."""
+    path = config_dir() / "sessions"
+    path.mkdir(parents=True, exist_ok=True)
+    return path
 
 
 def config_dir() -> Path:
