@@ -35,9 +35,15 @@ class BaleSender:
                           contact_name: str) -> dict:
         from aiobale import Client
         from aiobale.enums import ChatType
-        # aiobale نیازی به connect ندارد
         client = Client(session_file=self.session_file)
+        started = False
         try:
+            # برقراری اتصال و handshake کامل (نشست اجراشونده) — برای ارسال لازم است.
+            # run_in_background=True پس از اتصال برمی‌گردد؛ signal_handling=False
+            # چون در ترد فرعی اجرا می‌شویم.
+            await client.start(run_in_background=True, signal_handling=False)
+            started = True
+
             intl_int = _to_intl_int(phone)
             intl_str = str(intl_int)
             chat_id = None
@@ -69,6 +75,11 @@ class BaleSender:
             logger.error(f"خطا در ارسال بله: {e}")
             return {"success": False, "error": str(e)}
         finally:
+            if started:
+                try:
+                    await client.stop()
+                except Exception:
+                    pass
             try:
                 await client.session.close()
             except Exception:
