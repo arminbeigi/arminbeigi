@@ -1,0 +1,45 @@
+# ╔══════════════════════════════════════════════════╗
+# ║   نمونه‌ی تنظیمات نسخه‌ی خط فرمان (main.py)        ║
+# ╚══════════════════════════════════════════════════╝
+#
+# توجه: نسخه‌ی گرافیکی (run_gui.py) به این فایل نیازی ندارد و اطلاعات
+# ورود را به‌صورت رمزنگاری‌شده روی همان کامپیوتر ذخیره می‌کند.
+#
+# اگر می‌خواهید نسخه‌ی خط فرمان را اجرا کنید، این فایل را به
+# config.yaml کپی کرده و مقادیر را با اطلاعات خودتان پر کنید.
+# هرگز اطلاعات واقعی را در گیت قرار ندهید.
+
+folders:
+  watch: "C:/Users/<user>/Desktop/ارسال پیش فاکتور"
+  processed: "C:/Users/<user>/Desktop/ارسال پیش فاکتور/ارسال شده"
+
+wordpress:
+  url: "https://example.com"
+  username: "admin"
+  app_password: "xxxx xxxx xxxx xxxx"
+
+kavenegar:
+  api_key: "YOUR_KAVENEGAR_API_KEY"
+  sender: "10008663"
+  template: |
+    مشتری گرامی
+    پیش فاکتور شماره {invoice_number} صادر شد.
+    مشاهده و دانلود:
+    {link}
+
+whatsapp:
+  phone_number_id: ""       # خالی = فقط لینک wa.me
+  access_token: ""
+
+bale:
+  bot_token: "YOUR_BALE_BOT_TOKEN"
+
+rubika:
+  auth: "YOUR_RUBIKA_SESSION_NAME"
+
+shortener:
+  method: "wordpress"       # wordpress | yourls
+
+general:
+  log_level: "INFO"
+  move_after_process: true

@@ -5,3 +5,11 @@ __pycache__/
 invoice-automator/logs/*.log
 invoice-automator/processed/*.pdf
 invoice-automator/watch_folder/*.pdf
+
+# اطلاعات حساس و خروجی‌های ساخت — هرگز در گیت قرار نگیرند
+invoice-automator/config.yaml
+invoice-automator/build/
+invoice-automator/dist/
+invoice-automator/*.spec.bak
+*.session
+*.session-journal
