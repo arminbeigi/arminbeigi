@@ -161,7 +161,7 @@ class ChannelCard(ctk.CTkFrame):
         """به‌روزرسانی متن و دکمه‌ها بر اساس وضعیت ورود فعلی."""
         if not hasattr(self, "login_status_lbl"):
             return
-        logged_in = core.rubika_is_logged_in(self.settings)
+        logged_in = core.channel_is_logged_in(self.key, self.settings)
         phone = self.settings.get(self.key, {}).get("phone", "")
         if logged_in:
             txt = "✅ وارد شده‌اید" + (f" — {phone}" if phone else "")
@@ -171,7 +171,7 @@ class ChannelCard(ctk.CTkFrame):
         else:
             self.login_status_lbl.configure(
                 text="هنوز وارد نشده‌اید", text_color=COLORS["text_dim"])
-            self.login_btn.configure(text="ورود به روبیکا")
+            self.login_btn.configure(text=f"ورود به {self.channel['title']}")
             self.logout_btn.grid_remove()
 
     def _login_clicked(self):
@@ -180,10 +180,10 @@ class ChannelCard(ctk.CTkFrame):
 
     def _logout_clicked(self):
         if not messagebox.askyesno(
-                "خروج از روبیکا",
+                f"خروج از {self.channel['title']}",
                 "نشست ذخیره‌شده حذف می‌شود و برای ارسال بعدی باید دوباره وارد شوید.\nادامه می‌دهید؟"):
             return
-        core.rubika_logout(self.settings)
+        core.channel_logout(self.key, self.settings)
         self.settings[self.key]["logged_in"] = False
         self.settings[self.key]["phone"] = ""
         try:
@@ -572,7 +572,7 @@ class InvoiceApp(ctk.CTk):
         self.cards: dict[str, ChannelCard] = {}
         for i, ch in enumerate(CHANNELS):
             card = ChannelCard(scroll, ch, self.settings, on_test=self._test_channel,
-                               on_login=self._rubika_login)
+                               on_login=self._open_login)
             card.grid(row=i, column=0, sticky="ew", pady=(0, 16))
             self.cards[ch["key"]] = card
 
@@ -619,27 +619,30 @@ class InvoiceApp(ctk.CTk):
         except Exception:
             pass
 
-    # ── دیالوگ ورود به روبیکا ────────────────────────────────────────
-    def _rubika_login(self, card):
-        RubikaLoginDialog(self, card)
+    # ── دیالوگ ورود (روبیکا / بله) ───────────────────────────────────
+    def _open_login(self, card):
+        LoginDialog(self, card)
 
 
-class RubikaLoginDialog(ctk.CTkToplevel):
+class LoginDialog(ctk.CTkToplevel):
     """
-    پنجره‌ی ورود یک‌باره به روبیکا.
+    پنجره‌ی ورود یک‌باره به پیام‌رسان مبتنی بر اکانت شخصی (روبیکا یا بله).
 
-    مرحله ۱: کاربر شماره‌ی اکانت روبیکا را وارد و «ارسال کد» را می‌زند.
-    مرحله ۲: کد تأییدی که در روبیکا دریافت کرده را وارد و «تأیید» می‌زند.
+    مرحله ۱: کاربر شماره‌ی اکانت را وارد و «ارسال کد» را می‌زند.
+    مرحله ۲: کد تأییدی که در پیام‌رسان دریافت کرده را وارد و «تأیید» می‌زند.
     در صورت فعال بودن رمز دومرحله‌ای، فیلد رمز نیز نمایش داده می‌شود.
     """
 
     def __init__(self, master, card):
         super().__init__(master)
         self.card = card
-        self.login: core.RubikaLogin | None = None
+        self.key = card.key
+        self.title_fa = card.channel["title"]
+        self.icon = card.channel.get("icon", "")
+        self.login = None
         self._await_kind = None   # "code" | "password"
 
-        self.title("ورود به روبیکا")
+        self.title(f"ورود به {self.title_fa}")
         self.geometry("440x340")
         self.resizable(False, False)
         self.configure(fg_color=COLORS["bg"])
@@ -648,15 +651,16 @@ class RubikaLoginDialog(ctk.CTkToplevel):
 
         self.grid_columnconfigure(0, weight=1)
 
-        ctk.CTkLabel(self, text="🟣  ورود به روبیکا", font=_font(18, "bold"),
-                     text_color=COLORS["text"]).grid(row=0, column=0, pady=(20, 4), padx=24)
+        ctk.CTkLabel(self, text=f"{self.icon}  ورود به {self.title_fa}",
+                     font=_font(18, "bold"), text_color=COLORS["text"]).grid(
+            row=0, column=0, pady=(20, 4), padx=24)
         ctk.CTkLabel(self,
-                     text="شماره‌ی اکانت روبیکای خود را وارد کنید. کد تأیید در روبیکای شما ارسال می‌شود.",
+                     text=f"شماره‌ی اکانت {self.title_fa} خود را وارد کنید. کد تأیید در {self.title_fa} شما ارسال می‌شود.",
                      font=_font(12), text_color=COLORS["text_dim"], wraplength=380,
                      justify="right").grid(row=1, column=0, pady=(0, 12), padx=24)
 
         # فیلد شماره
-        prev_phone = card.settings.get("rubika", {}).get("phone", "")
+        prev_phone = card.settings.get(self.key, {}).get("phone", "")
         self.phone_var = ctk.StringVar(value=prev_phone)
         self.phone_entry = ctk.CTkEntry(
             self, textvariable=self.phone_var, placeholder_text="09xxxxxxxxx",
@@ -698,9 +702,9 @@ class RubikaLoginDialog(ctk.CTkToplevel):
             return
         self.phone_entry.configure(state="disabled")
         self.action_btn.configure(state="disabled", text="در حال ارسال کد…")
-        self.status_lbl.configure(text="در حال اتصال به روبیکا…",
+        self.status_lbl.configure(text=f"در حال اتصال به {self.title_fa}…",
                                   text_color=COLORS["text_dim"])
-        self.login = core.RubikaLogin(phone)
+        self.login = core.make_login(self.key, phone)
         self.login.start()
         self._poll_events()
 
@@ -721,11 +725,8 @@ class RubikaLoginDialog(ctk.CTkToplevel):
         try:
             while True:
                 kind, payload = self.login.events.get_nowait()
-                if kind == "code":
-                    self._prompt_for("code")
-                    return
-                elif kind == "password":
-                    self._prompt_for("password")
+                if kind in ("code", "password"):
+                    self._prompt_for(kind, payload)
                     return
                 elif kind == "success":
                     self._on_success(payload)
@@ -737,31 +738,35 @@ class RubikaLoginDialog(ctk.CTkToplevel):
             pass
         self.after(150, self._poll_events)
 
-    def _prompt_for(self, kind):
+    def _prompt_for(self, kind, message=""):
         self._await_kind = kind
         self.code_var.set("")
         self.code_entry.grid(row=3, column=0, sticky="ew", padx=24, pady=(10, 0))
+        # رنگ پیام بر اساس اینکه خطا/هشدار باشد یا نه
+        if message.startswith("❌"):
+            color = COLORS["danger"]
+        elif kind == "password":
+            color = COLORS["warning"]
+        else:
+            color = COLORS["success"]
         if kind == "password":
             self.code_entry.configure(placeholder_text="رمز عبور دومرحله‌ای", show="•")
-            self.status_lbl.configure(
-                text="این حساب رمز دومرحله‌ای دارد؛ رمز را وارد کنید.",
-                text_color=COLORS["warning"])
             self.action_btn.configure(state="normal", text="تأیید رمز")
+            default = "این حساب رمز دومرحله‌ای دارد؛ رمز را وارد کنید."
         else:
             self.code_entry.configure(placeholder_text="کد تأیید", show="")
-            self.status_lbl.configure(
-                text="✅ کد تأیید به روبیکای شما ارسال شد. آن را وارد کنید.",
-                text_color=COLORS["success"])
             self.action_btn.configure(state="normal", text="تأیید و ورود")
+            default = "کد تأیید را وارد کنید."
+        self.status_lbl.configure(text=message or default, text_color=color)
         self.code_entry.focus_set()
 
     def _on_success(self, phone):
-        rb = self.card.settings.setdefault("rubika", {})
-        rb["logged_in"] = True
-        rb["phone"] = phone or self.phone_var.get().strip()
-        rb["auth"] = core.rubika_session_path()
-        rb.setdefault("enabled", True)
-        rb["enabled"] = True
+        cfg = self.card.settings.setdefault(self.key, {})
+        cfg["logged_in"] = True
+        cfg["phone"] = phone or self.phone_var.get().strip()
+        if self.key == "rubika":
+            cfg["auth"] = core.rubika_session_path()
+        cfg["enabled"] = True
         try:
             store.save_settings(self.card.settings)
         except Exception:
@@ -770,7 +775,7 @@ class RubikaLoginDialog(ctk.CTkToplevel):
         self.card.refresh_login_status()
         self.status_lbl.configure(text="✅ ورود با موفقیت انجام شد.",
                                   text_color=COLORS["success"])
-        messagebox.showinfo("روبیکا", "ورود با موفقیت انجام شد.")
+        messagebox.showinfo(self.title_fa, "ورود با موفقیت انجام شد.")
         self.destroy()
 
     def _on_error(self, msg):

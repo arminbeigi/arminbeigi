@@ -56,7 +56,8 @@ DEFAULT_SETTINGS = {
     },
     "bale": {
         "enabled": False,
-        "bot_token": "",
+        "phone": "",           # شماره‌ای که با آن وارد شده‌اید (برای نمایش)
+        "logged_in": False,    # آیا ورود یک‌باره انجام شده است؟
     },
     "rubika": {
         "enabled": False,

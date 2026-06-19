@@ -19,7 +19,7 @@ from modules.pdf_parser import extract_invoice_data
 from modules.wp_uploader import WordPressUploader
 from modules.sms_kavenegar import KavenegarSMS
 from modules.whatsapp_sender import WhatsAppSender
-from modules.bale_sender import BaleSender
+from modules.bale_user_sender import BaleUserSender
 from modules.rubika_sender import RubikaSender
 
 from gui import settings_store as _store
@@ -60,6 +60,30 @@ def rubika_is_logged_in(settings: dict = None) -> bool:
         return False
 
 
+# ── نشست بله (اکانت شخصی، aiobale) ──────────────────────────────────
+BALE_SESSION_NAME = "bale_account.bale"
+
+
+def bale_session_path() -> str:
+    """مسیر فایل نشست بله (aiobale همین مسیر را مستقیم استفاده می‌کند)."""
+    return str(_store.config_dir() / BALE_SESSION_NAME)
+
+
+def bale_is_logged_in(settings: dict = None) -> bool:
+    """
+    آیا ورود یک‌باره‌ی بله انجام شده است؟
+
+    aiobale فایل نشست را فقط پس از تأیید موفق کد (validate_code) می‌نویسد،
+    پس وجود فایلِ غیرخالی نشانه‌ی ورود موفق است.
+    """
+    from pathlib import Path as _P
+    f = _P(bale_session_path())
+    try:
+        return f.exists() and f.stat().st_size > 0
+    except OSError:
+        return False
+
+
 CHANNEL_LABELS = {
     "wordpress": "وردپرس",
     "kavenegar": "پیامک",
@@ -79,7 +103,7 @@ def available_channels(settings: dict) -> list[str]:
     wa = settings.get("whatsapp", {})
     if wa.get("enabled"):
         result.append("whatsapp")  # حتی بدون API می‌تواند لینک wa.me بسازد
-    if settings.get("bale", {}).get("enabled") and settings["bale"].get("bot_token"):
+    if settings.get("bale", {}).get("enabled") and bale_is_logged_in(settings):
         result.append("bale")
     if settings.get("rubika", {}).get("enabled") and rubika_is_logged_in(settings):
         result.append("rubika")
@@ -172,7 +196,10 @@ def process_pdf(pdf_path: str, settings: dict, channels: list[str], log=print,
 
     if "bale" in channels:
         def send_bale():
-            bale = BaleSender(settings.get("bale", {}))
+            # ارسال با اکانت شخصی بله از طریق نشست ذخیره‌شده‌ی ورود یک‌باره
+            bl_cfg = dict(settings.get("bale", {}))
+            bl_cfg["session_file"] = bale_session_path()
+            bale = BaleUserSender(bl_cfg)
             return "bale", bale.send_invoice(phone, pdf_path, info, short_link)
         tasks["bale"] = send_bale
 
@@ -233,13 +260,10 @@ def test_channel(channel: str, settings: dict) -> tuple[bool, str]:
             return False, f"کلید نامعتبر: {data.get('return', {}).get('message', '')}"
 
         if channel == "bale":
-            import requests
-            url = f"https://tapi.bale.ai/bot{cfg['bot_token']}/getMe"
-            resp = requests.get(url, timeout=15)
-            data = resp.json()
-            if data.get("ok"):
-                return True, f"ربات معتبر: @{data['result'].get('username', '')}"
-            return False, "توکن ربات نامعتبر است."
+            if not bale_is_logged_in(settings):
+                return False, "هنوز وارد بله نشده‌اید — روی «ورود به بله» بزنید."
+            phone = cfg.get("phone", "")
+            return True, f"وارد شده{' با ' + phone if phone else ''} — تست واقعی هنگام ارسال انجام می‌شود."
 
         if channel == "whatsapp":
             if not (cfg.get("phone_number_id") and cfg.get("access_token")):
@@ -362,3 +386,152 @@ def rubika_logout(settings: dict = None) -> None:
                 f.unlink()
         except OSError:
             pass
+
+
+# ── ورود یک‌باره به بله با شماره و کد تأیید (اکانت شخصی) ────────────────
+class BaleLogin:
+    """
+    مدیریت ورود تعاملی بله برای رابط گرافیکی (کتابخانه‌ی aiobale).
+
+    رابط آن دقیقاً مثل RubikaLogin است تا همان دیالوگ ورود بتواند هر دو را
+    مدیریت کند:
+        events: ("code"|"password", message) / ("success", phone) / ("error", msg)
+        submit(value): کد تأیید یا رمز عبور واردشده را تحویل می‌دهد.
+    aiobale برخلاف rubpy متدهای صریح دارد، پس بدون جایگزینی input کار می‌کنیم.
+    """
+
+    def __init__(self, phone: str):
+        import queue
+        self.phone = (phone or "").strip()
+        self.events: "queue.Queue" = queue.Queue()
+        self._inputs: "queue.Queue" = queue.Queue()
+        self._thread = None
+
+    def submit(self, value: str):
+        self._inputs.put(value)
+
+    def start(self):
+        import threading
+        self._thread = threading.Thread(target=self._run, daemon=True)
+        self._thread.start()
+
+    def _intl_int(self) -> int:
+        p = self.phone.replace(" ", "").replace("-", "")
+        if p.startswith("0098"):
+            p = p[2:]
+        if p.startswith("+"):
+            p = p[1:]
+        if p.startswith("0"):
+            p = "98" + p[1:]
+        return int(p)
+
+    @staticmethod
+    def _auth_err_msg(err) -> str:
+        name = getattr(err, "name", str(err))
+        return {
+            "NUMBER_BANNED": "این شماره مسدود شده است.",
+            "RATE_LIMIT": "تعداد تلاش‌ها زیاد شد؛ کمی بعد دوباره امتحان کنید.",
+            "INVALID": "قالب شماره نامعتبر است.",
+        }.get(name, "خطا در شروع احراز هویت بله.")
+
+    def _run(self):
+        import asyncio
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        try:
+            from aiobale import Client
+            from aiobale.enums import AuthErrors
+
+            async def _flow():
+                client = Client(session_file=bale_session_path())
+                try:
+                    resp = await client.start_phone_auth(self._intl_int())
+                    if isinstance(resp, AuthErrors):
+                        raise RuntimeError(self._auth_err_msg(resp))
+
+                    tx = resp.transaction_hash
+                    prompt = "✅ کد تأیید به بله‌ی شما ارسال شد. آن را وارد کنید."
+                    while True:
+                        self.events.put(("code", prompt))
+                        code = str(self._inputs.get()).strip()
+                        res = await client.validate_code(code, tx)
+
+                        if not isinstance(res, AuthErrors):
+                            break
+                        if res == AuthErrors.WRONG_CODE:
+                            prompt = "❌ کد اشتباه بود، دوباره وارد کنید."
+                            continue
+                        if res == AuthErrors.PASSWORD_NEEDED:
+                            res = await self._password_flow(client, tx, AuthErrors)
+                            break
+                        if res == AuthErrors.SIGN_UP_NEEDED:
+                            raise RuntimeError(
+                                "این شماره هنوز در بله ثبت‌نام نشده است.")
+                        raise RuntimeError("خطای نامشخص در ورود به بله.")
+
+                    user = getattr(res, "user", None)
+                    return getattr(user, "phone", None) or self.phone
+                finally:
+                    try:
+                        await client.session.close()
+                    except Exception:
+                        pass
+
+            phone = loop.run_until_complete(_flow())
+            self.events.put(("success", phone or self.phone))
+        except Exception as e:
+            self.events.put(("error", str(e)))
+        finally:
+            try:
+                loop.close()
+            except Exception:
+                pass
+
+    async def _password_flow(self, client, tx, AuthErrors):
+        prompt = "🔐 این حساب رمز دومرحله‌ای دارد؛ رمز را وارد کنید."
+        while True:
+            self.events.put(("password", prompt))
+            pwd = str(self._inputs.get()).strip()
+            res = await client.validate_password(pwd, tx)
+            if not isinstance(res, AuthErrors):
+                return res
+            if res == AuthErrors.WRONG_PASSWORD:
+                prompt = "❌ رمز اشتباه بود، دوباره وارد کنید."
+                continue
+            raise RuntimeError("خطا در بررسی رمز عبور بله.")
+
+
+def bale_logout(settings: dict = None) -> None:
+    """حذف نشست ذخیره‌شده‌ی بله (خروج از حساب)."""
+    from pathlib import Path as _P
+    f = _P(bale_session_path())
+    try:
+        if f.exists():
+            f.unlink()
+    except OSError:
+        pass
+
+
+# ── واسط یکپارچه‌ی ورود برای کانال‌های مبتنی بر لاگین (روبیکا/بله) ───────
+def channel_is_logged_in(channel: str, settings: dict = None) -> bool:
+    if channel == "rubika":
+        return rubika_is_logged_in(settings)
+    if channel == "bale":
+        return bale_is_logged_in(settings)
+    return False
+
+
+def channel_logout(channel: str, settings: dict = None) -> None:
+    if channel == "rubika":
+        rubika_logout(settings)
+    elif channel == "bale":
+        bale_logout(settings)
+
+
+def make_login(channel: str, phone: str):
+    """ساخت شیء ورود مناسب کانال (هر دو رابط یکسانی دارند)."""
+    if channel == "rubika":
+        return RubikaLogin(phone)
+    if channel == "bale":
+        return BaleLogin(phone)
+    raise ValueError(f"کانال ورود پشتیبانی نمی‌شود: {channel}")
