@@ -23,11 +23,15 @@ if str(BASE_DIR) not in sys.path:
 
 from gui import settings_store as store
 from gui import core
+from gui.fonts import load_persian_font
 from gui.theme import COLORS, CHANNELS, FONT_FALLBACK
+
+# خانواده‌ی فونت فعال؛ پس از فراخوانی load_persian_font مقداردهی می‌شود
+_FONT_FAMILY = FONT_FALLBACK
 
 
 def _font(size=14, weight="normal"):
-    return ctk.CTkFont(family=FONT_FALLBACK, size=size, weight=weight)
+    return ctk.CTkFont(family=_FONT_FAMILY, size=size, weight=weight)
 
 
 class ChannelCard(ctk.CTkFrame):
@@ -140,6 +144,10 @@ class InvoiceApp(ctk.CTk):
     def __init__(self):
         super().__init__()
         self.settings = store.load_settings()
+
+        # بارگذاری فونت فارسی باندل‌شده پیش از ساخت رابط
+        global _FONT_FAMILY
+        _FONT_FAMILY = load_persian_font()
 
         ctk.set_appearance_mode(self.settings.get("appearance", "dark"))
         ctk.set_default_color_theme("blue")

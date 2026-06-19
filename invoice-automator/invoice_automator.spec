@@ -16,6 +16,8 @@ a = Analysis(
     datas=[
         # فایل‌های assets کاستوم‌تی‌کینتر باید همراه برنامه باشند
         (ctk_path, 'customtkinter'),
+        # فونت فارسی باندل‌شده
+        ('gui/assets/fonts', 'gui/assets/fonts'),
     ],
     hiddenimports=[
         'rubpy',
