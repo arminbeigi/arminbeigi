@@ -71,28 +71,28 @@ function Refresh-Path {
 }
 
 # ── ۱. پایتون ──
+# نکته: عمداً از winget استفاده نمی‌کنیم؛ روی بعضی سیستم‌ها خطای گواهی
+# (0x8a15005e) می‌دهد. دانلود مستقیم از python.org مطمئن‌تر است.
 $py = Find-Python
 if (-not $py) {
-    Write-Host 'پایتون یافت نشد؛ در حال نصب خودکار...'
-    $installed = $false
-    if (Get-Command winget -ErrorAction SilentlyContinue) {
-        try {
-            winget install -e --id Python.Python.3.12 --silent --accept-package-agreements --accept-source-agreements --scope user
-            $installed = $true
-        } catch { Write-Host 'winget موفق نبود، تلاش با دانلود مستقیم...' }
-    }
-    if (-not $installed -or -not (Find-Python)) {
-        $pv  = '3.12.4'
-        $arch = if ($env:PROCESSOR_ARCHITECTURE -eq 'ARM64') { 'arm64' } else { 'amd64' }
-        $url = "https://www.python.org/ftp/python/$pv/python-$pv-$arch.exe"
-        $out = Join-Path $env:TEMP "python-$pv.exe"
-        Write-Host 'دانلود نصب‌کننده پایتون از python.org ...'
+    Write-Host 'پایتون یافت نشد؛ در حال دانلود و نصب از python.org ...'
+    $pv  = '3.12.4'
+    $arch = if ($env:PROCESSOR_ARCHITECTURE -eq 'ARM64') { 'arm64' } else { 'amd64' }
+    $url = "https://www.python.org/ftp/python/$pv/python-$pv-$arch.exe"
+    $out = Join-Path $env:TEMP "python-$pv.exe"
+    try {
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+        $ProgressPreference = 'SilentlyContinue'   # دانلود بسیار سریع‌تر
         Invoke-WebRequest -Uri $url -OutFile $out -UseBasicParsing
-        Write-Host 'نصب پایتون...'
-        Start-Process $out -ArgumentList '/quiet','InstallAllUsers=0','PrependPath=1','Include_pip=1','Include_launcher=1' -Wait
-        Remove-Item $out -Force -ErrorAction SilentlyContinue
+    } catch {
+        Write-Host "[خطا] دانلود پایتون ناموفق بود: $_"
+        Write-Host 'پایتون را دستی از https://www.python.org/downloads/ نصب کنید'
+        Write-Host '(هنگام نصب تیک «Add Python to PATH» را بزنید) و دوباره INSTALL.bat را اجرا کنید.'
+        Pause-Exit 1
     }
+    Write-Host 'نصب پایتون... (چند لحظه صبر کنید)'
+    Start-Process $out -ArgumentList '/quiet','InstallAllUsers=0','PrependPath=1','Include_pip=1','Include_launcher=1' -Wait
+    Remove-Item $out -Force -ErrorAction SilentlyContinue
     Refresh-Path
     $py = Find-Python
 }
