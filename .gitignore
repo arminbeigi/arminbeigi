@@ -13,3 +13,4 @@ invoice-automator/dist/
 invoice-automator/*.spec.bak
 *.session
 *.session-journal
+invoice-automator/windows-installer/build/
