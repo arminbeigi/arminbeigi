@@ -27,14 +27,15 @@ class BaleSender:
         self.logged_in = bool(config.get("logged_in"))
         self.enabled = self.logged_in and bool(self.session_file)
 
-    async def _send_async(self, phone: str, pdf_path: str, text: str) -> dict:
+    async def _send_async(self, phone: str, pdf_path: str, text: str,
+                          contact_name: str) -> dict:
         from aiobale import Client
         from aiobale.enums import ChatType
+        # aiobale نیازی به connect ندارد
         client = Client(session_file=self.session_file)
         try:
-            await client.connect()
-            # افزودن مشتری به مخاطبین برای ساخت چت دوطرفه
-            peers = await client.import_contacts([(_to_intl_int(phone), "مشتری")])
+            # افزودن مشتری به مخاطبین (با نام مشتری یا شماره) برای ساخت چت دوطرفه
+            peers = await client.import_contacts([(_to_intl_int(phone), contact_name)])
             if not peers:
                 return {"success": False, "error": f"شماره {phone} در بله یافت نشد"}
             chat_id = peers[0].id
@@ -50,7 +51,7 @@ class BaleSender:
             return {"success": False, "error": str(e)}
         finally:
             try:
-                await client.disconnect()
+                await client.session.close()
             except Exception:
                 pass
 
@@ -69,9 +70,12 @@ class BaleSender:
         if short_link:
             parts.append(short_link)
         text = "\n".join(parts)
+        # نام مخاطب: نام مشتری اگر باشد، وگرنه شماره تماس
+        contact_name = (invoice_data.get("name") or "").strip() or phone
 
         loop = asyncio.new_event_loop()
         try:
-            return loop.run_until_complete(self._send_async(phone, pdf_path, text))
+            return loop.run_until_complete(
+                self._send_async(phone, pdf_path, text, contact_name))
         finally:
             loop.close()

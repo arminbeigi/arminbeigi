@@ -157,13 +157,13 @@ class BaleLogin:
     async def _send_code(self, phone: str):
         from aiobale import Client
         norm = _normalize_ir(phone)
+        # aiobale نیازی به connect ندارد؛ متدها مستقیم از طریق session.post کار می‌کنند
         self._client = Client(session_file=self._session_file())
-        await self._client.connect()
         resp = await self._client.start_phone_auth(int(norm))
-        self._pending = {
-            "raw_phone": phone.strip(),
-            "transaction_hash": getattr(resp, "transaction_hash", None),
-        }
+        thash = getattr(resp, "transaction_hash", None)
+        if not thash:
+            return False, f"خطا در شروع احراز هویت: {resp}"
+        self._pending = {"raw_phone": phone.strip(), "transaction_hash": thash}
         return True, "کد تأیید پیامک شد."
 
     def verify_code(self, code: str):
@@ -173,13 +173,21 @@ class BaleLogin:
             return False, f"خطا: {e}", None
 
     async def _verify_code(self, code: str):
+        from aiobale.enums.auth_errors import AuthErrors
         resp = await self._client.validate_code(
-            transaction_hash=self._pending["transaction_hash"],
             code=code.strip(),
+            transaction_hash=self._pending["transaction_hash"],
         )
-        # نشست به‌صورت خودکار در session_file ذخیره می‌شود
+        if isinstance(resp, AuthErrors):
+            msgs = {
+                AuthErrors.WRONG_CODE: "کد واردشده نادرست است.",
+                AuthErrors.PASSWORD_NEEDED: "این حساب رمز دومرحله‌ای دارد (پشتیبانی نشده).",
+                AuthErrors.SIGN_UP_NEEDED: "این شماره در بله ثبت‌نام نشده است.",
+            }
+            return False, msgs.get(resp, f"خطا: {resp}"), None
+        # توکن به‌صورت خودکار در session_file ذخیره می‌شود
         try:
-            await self._client.disconnect()
+            await self._client.session.close()
         except Exception:
             pass
         return True, "ورود موفق بود.", self._pending.get("raw_phone")

@@ -18,21 +18,55 @@ class RubikaSender:
         self.logged_in = bool(config.get("logged_in"))
         self.enabled = self.logged_in and bool(self.session_name)
 
-    async def _send_async(self, phone: str, pdf_path: str, text: str) -> dict:
+    @staticmethod
+    def _extract_guid(res):
+        """استخراج GUID کاربر از پاسخ addAddressBook با مسیرهای مختلف."""
+        if res is None:
+            return None
+        candidates = [
+            lambda r: r.user.user_guid,
+            lambda r: r.user_guid,
+            lambda r: r.contact_user.user_guid,
+            lambda r: r.abuser_user.user_guid,
+            lambda r: r["user"]["user_guid"],
+            lambda r: r["user_guid"],
+        ]
+        for fn in candidates:
+            try:
+                g = fn(res)
+                if g:
+                    return g
+            except Exception:
+                pass
+        return None
+
+    async def _send_async(self, phone: str, pdf_path: str, text: str,
+                          contact_name: str) -> dict:
         from rubpy import Client
         client = Client(name=self.session_name)
         try:
             await client.connect()
-            # یافتن GUID مشتری از روی شماره (افزودن به مخاطبین)
+            # یافتن GUID مشتری از روی شماره (افزودن به مخاطبین با نام یا شماره)
             phone_intl = "+98" + phone[1:] if phone.startswith("0") else phone
             guid = None
             try:
-                res = await client.add_address_book(phone=phone_intl, first_name="مشتری")
-                guid = getattr(res, "user_guid", None)
+                res = await client.add_address_book(phone=phone_intl, first_name=contact_name)
+                guid = self._extract_guid(res)
             except Exception as e:
                 logger.debug(f"add_address_book: {e}")
+            # fallback: جستجو در مخاطبین موجود
             if not guid:
-                return {"success": False, "error": f"شماره {phone} در روبیکا یافت نشد"}
+                try:
+                    contacts = await client.get_contacts()
+                    for u in getattr(contacts, "users", None) or getattr(contacts, "user", []) or []:
+                        up = getattr(u, "phone", "") or ""
+                        if phone[1:] in up:
+                            guid = getattr(u, "user_guid", None)
+                            break
+                except Exception as e:
+                    logger.debug(f"get_contacts: {e}")
+            if not guid:
+                return {"success": False, "error": f"یافتن مخاطب روبیکا ناموفق بود (شماره {phone})"}
 
             # ارسال متن خوش‌آمد + سپس فایل
             if text:
@@ -66,9 +100,11 @@ class RubikaSender:
         if short_link:
             parts.append(short_link)
         text = "\n".join(parts)
+        contact_name = (invoice_data.get("name") or "").strip() or phone
 
         loop = asyncio.new_event_loop()
         try:
-            return loop.run_until_complete(self._send_async(phone, pdf_path, text))
+            return loop.run_until_complete(
+                self._send_async(phone, pdf_path, text, contact_name))
         finally:
             loop.close()

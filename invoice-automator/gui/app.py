@@ -26,6 +26,19 @@ from gui import core
 from gui.fonts import load_persian_font, app_icon_path
 from gui.theme import COLORS, CHANNELS, FONT_FALLBACK
 
+# کشیدن‌ورهاکردن فایل (اختیاری؛ اگر نبود، بی‌خطا نادیده گرفته می‌شود)
+try:
+    from tkinterdnd2 import TkinterDnD, DND_FILES
+    _DND_OK = True
+except Exception:
+    _DND_OK = False
+
+if _DND_OK:
+    class _AppBase(ctk.CTk, TkinterDnD.DnDWrapper):
+        pass
+else:
+    _AppBase = ctk.CTk
+
 # خانواده‌ی فونت فعال؛ پس از فراخوانی load_persian_font مقداردهی می‌شود
 _FONT_FAMILY = FONT_FALLBACK
 
@@ -189,11 +202,13 @@ class ChannelCard(ctk.CTkFrame):
             self.login_status.configure(
                 text=f"✅ وارد شده با شماره {info.get('phone','')}",
                 text_color=COLORS["success"])
-            self.logout_btn.grid()
+            self.logout_btn.configure(state="normal")
         else:
             self.login_status.configure(text="⚠ هنوز وارد نشده‌اید",
                                         text_color=COLORS["warning"])
-            self.logout_btn.grid_remove()
+            self.logout_btn.configure(state="disabled")
+        # دکمه خروج همیشه دیده می‌شود (در حالت غیرلاگین غیرفعال است)
+        self.logout_btn.grid()
 
     def _busy(self, btn, text):
         btn.configure(state="disabled", text=text)
@@ -282,7 +297,7 @@ class ChannelCard(ctk.CTkFrame):
         self.on_test(self.key, self.status_lbl)
 
 
-class InvoiceApp(ctk.CTk):
+class InvoiceApp(_AppBase):
     def __init__(self):
         super().__init__()
         self.settings = store.load_settings()
@@ -314,6 +329,30 @@ class InvoiceApp(ctk.CTk):
         self._build_layout()
         self._show_send()
         self._poll_log()
+        self._setup_dnd()
+
+    def _setup_dnd(self):
+        """فعال‌سازی کشیدن‌ورهاکردن فایل روی پنجره."""
+        if not _DND_OK:
+            return
+        try:
+            self.TkdndVersion = TkinterDnD._require(self)
+            self.drop_target_register(DND_FILES)
+            self.dnd_bind("<<Drop>>", self._on_drop)
+        except Exception:
+            pass
+
+    def _on_drop(self, event):
+        import re
+        data = getattr(event, "data", "") or ""
+        matches = re.findall(r"\{[^}]*\}|\S+", data)
+        if not matches:
+            return
+        path = matches[0].strip("{}").strip()
+        if path:
+            self.selected_file = path
+            self._show_send()           # نمایش صفحه‌ی ارسال و پیش‌پر شدن فیلدها
+            self._refresh_file_label()
 
     # ──────────────────────────────────────────────── چیدمان کلی
     def _build_layout(self):
@@ -395,8 +434,8 @@ class InvoiceApp(ctk.CTk):
         file_card.grid_columnconfigure(0, weight=1)
 
         self.file_label = ctk.CTkLabel(
-            file_card, text="هنوز فایلی انتخاب نشده است", font=_font(14),
-            text_color=COLORS["text_dim"], anchor="e")
+            file_card, text="هنوز فایلی انتخاب نشده است  —  فایل را می‌توانید اینجا رها کنید (Drag & Drop)",
+            font=_font(14), text_color=COLORS["text_dim"], anchor="e")
         self.file_label.grid(row=0, column=0, sticky="ew", padx=20, pady=(18, 4))
 
         self.info_label = ctk.CTkLabel(
@@ -521,8 +560,13 @@ class InvoiceApp(ctk.CTk):
 
     def _pick_file(self):
         path = filedialog.askopenfilename(
-            title="انتخاب فایل پیش‌فاکتور",
-            filetypes=[("PDF files", "*.pdf"), ("All files", "*.*")])
+            title="انتخاب فایل پیش‌فاکتور یا عکس",
+            filetypes=[
+                ("فایل‌های مجاز", "*.pdf *.jpg *.jpeg *.png *.webp *.gif *.bmp *.tif *.tiff"),
+                ("PDF", "*.pdf"),
+                ("تصویر", "*.jpg *.jpeg *.png *.webp *.gif *.bmp *.tif *.tiff"),
+                ("همه فایل‌ها", "*.*"),
+            ])
         if path:
             self.selected_file = path
             self._refresh_file_label()
