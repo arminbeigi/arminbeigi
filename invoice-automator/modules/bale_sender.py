@@ -35,6 +35,7 @@ class BaleSender:
                           contact_name: str) -> dict:
         from aiobale import Client
         from aiobale.enums import ChatType
+        from aiobale.types import FileInput
         client = Client(session_file=self.session_file)
         started = False
         try:
@@ -68,7 +69,9 @@ class BaleSender:
             if text:
                 await client.send_message(text=text, chat_id=chat_id,
                                           chat_type=ChatType.PRIVATE)
-            await client.send_document(file=pdf_path, chat_id=chat_id,
+            # send_document آبجکت FileInput می‌خواهد (نه رشته‌ی مسیر)؛
+            # خودِ کتابخانه فایل را آپلود می‌کند. برای PDF و عکس کار می‌کند.
+            await client.send_document(file=FileInput(pdf_path), chat_id=chat_id,
                                        chat_type=ChatType.PRIVATE, caption=text or None)
             return {"success": True}
         except Exception as e:
