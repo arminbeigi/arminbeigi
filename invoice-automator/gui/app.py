@@ -234,7 +234,7 @@ class InvoiceApp(ctk.CTk):
         ctk.CTkLabel(page, text="ارسال پیش‌فاکتور", font=_font(24, "bold"),
                      text_color=COLORS["text"], anchor="e").grid(
             row=0, column=0, sticky="ew")
-        ctk.CTkLabel(page, text="فایل PDF را انتخاب کنید و پیام‌رسان‌های مقصد را مشخص کنید.",
+        ctk.CTkLabel(page, text="فایل PDF را انتخاب کنید، شماره مشتری را وارد یا تأیید کنید و پیام‌رسان‌ها را مشخص کنید.",
                      font=_font(13), text_color=COLORS["text_dim"], anchor="e").grid(
             row=1, column=0, sticky="ew", pady=(0, 18))
 
@@ -259,10 +259,46 @@ class InvoiceApp(ctk.CTk):
                       command=self._pick_file).grid(row=2, column=0, padx=20,
                                                      pady=(0, 18), sticky="e")
 
+        # کارت اطلاعات مشتری (ورود دستی / تأیید)
+        info_card = ctk.CTkFrame(page, fg_color=COLORS["card"], corner_radius=14,
+                                 border_width=1, border_color=COLORS["border"])
+        info_card.grid(row=3, column=0, sticky="ew", pady=18)
+        info_card.grid_columnconfigure(0, weight=1)
+
+        ctk.CTkLabel(info_card, text="اطلاعات مشتری", font=_font(15, "bold"),
+                     text_color=COLORS["text"], anchor="e").grid(
+            row=0, column=0, sticky="ew", padx=20, pady=(16, 2))
+        ctk.CTkLabel(info_card,
+                     text="در صورت انتخاب فایل، این فیلدها از روی نام فایل پیش‌پر می‌شوند؛ می‌توانید تغییر دهید.",
+                     font=_font(11), text_color=COLORS["text_dim"], anchor="e",
+                     wraplength=600, justify="right").grid(
+            row=1, column=0, sticky="ew", padx=20, pady=(0, 8))
+
+        fields_box = ctk.CTkFrame(info_card, fg_color="transparent")
+        fields_box.grid(row=2, column=0, sticky="ew", padx=20, pady=(0, 18))
+        fields_box.grid_columnconfigure(0, weight=1)
+
+        self.phone_var = ctk.StringVar()
+        self.serial_var = ctk.StringVar()
+        self.name_var = ctk.StringVar()
+
+        for i, (var, label, placeholder) in enumerate([
+            (self.phone_var, "شماره موبایل مشتری *", "09xxxxxxxxx"),
+            (self.serial_var, "شماره فاکتور (اختیاری)", "مثلاً 1821"),
+            (self.name_var, "نام مشتری (اختیاری)", "مثلاً آقای مشیری"),
+        ]):
+            ctk.CTkLabel(fields_box, text=label, font=_font(12, "bold"),
+                         text_color=COLORS["text_dim"], anchor="e").grid(
+                row=i * 2, column=0, sticky="ew", pady=(8, 2))
+            ctk.CTkEntry(fields_box, textvariable=var, placeholder_text=placeholder,
+                         font=_font(14), fg_color=COLORS["input"], justify="right",
+                         border_color=COLORS["border"], corner_radius=8, height=40).grid(
+                row=i * 2 + 1, column=0, sticky="ew")
+
         # کارت انتخاب کانال‌ها
         ch_card = ctk.CTkFrame(page, fg_color=COLORS["card"], corner_radius=14,
                                border_width=1, border_color=COLORS["border"])
-        ch_card.grid(row=3, column=0, sticky="ew", pady=18)
+        ch_card.grid(row=4, column=0, sticky="ew", pady=(0, 18))
         ch_card.grid_columnconfigure(0, weight=1)
 
         ctk.CTkLabel(ch_card, text="ارسال از طریق:", font=_font(15, "bold"),
@@ -299,16 +335,16 @@ class InvoiceApp(ctk.CTk):
             page, text="🚀 شروع ارسال", height=52, font=_font(16, "bold"),
             corner_radius=12, fg_color=COLORS["success"], hover_color="#1ea34f",
             command=self._start_send)
-        self.send_btn.grid(row=4, column=0, sticky="ew", pady=(6, 14))
+        self.send_btn.grid(row=5, column=0, sticky="ew", pady=(6, 14))
 
         # ناحیه‌ی لاگ زنده
         ctk.CTkLabel(page, text="گزارش زنده", font=_font(15, "bold"),
                      text_color=COLORS["text"], anchor="e").grid(
-            row=5, column=0, sticky="ew", pady=(8, 4))
+            row=6, column=0, sticky="ew", pady=(8, 4))
         self.log_box = ctk.CTkTextbox(page, height=200, font=_font(13),
                                       fg_color=COLORS["input"], corner_radius=10,
                                       border_width=1, border_color=COLORS["border"])
-        self.log_box.grid(row=6, column=0, sticky="ew")
+        self.log_box.grid(row=7, column=0, sticky="ew")
         self.log_box.configure(state="disabled")
 
         if self.selected_file:
@@ -329,14 +365,19 @@ class InvoiceApp(ctk.CTk):
     def _refresh_file_label(self):
         self.file_label.configure(text=os.path.basename(self.selected_file),
                                   text_color=COLORS["text"])
+        # تلاش برای پیش‌پرکردن فیلدهای مشتری از روی نام فایل (بدون اجبار)
         try:
             info = core.analyze_file(self.selected_file)
-            name = info.get("name") or "—"
+            self.phone_var.set(info.get("phone") or "")
+            self.serial_var.set(info.get("serial") or "")
+            self.name_var.set(info.get("name") or "")
             self.info_label.configure(
-                text=f"☎ {info['phone']}   |   📄 فاکتور: {info.get('serial') or '—'}   |   👤 {name}",
-                text_color=COLORS["accent"])
-        except ValueError as e:
-            self.info_label.configure(text=f"⚠ {e}", text_color=COLORS["warning"])
+                text="✅ اطلاعات از نام فایل پیش‌پر شد (در صورت نیاز ویرایش کنید).",
+                text_color=COLORS["success"])
+        except ValueError:
+            self.info_label.configure(
+                text="⚠ شماره‌ای در نام فایل یافت نشد — لطفاً شماره مشتری را دستی وارد کنید.",
+                text_color=COLORS["warning"])
 
     def _log(self, msg: str):
         self.log_queue.put(msg)
@@ -357,10 +398,27 @@ class InvoiceApp(ctk.CTk):
         if not self.selected_file:
             messagebox.showwarning("توجه", "ابتدا یک فایل PDF انتخاب کنید.")
             return
+
+        phone = self.phone_var.get().strip()
+        if not phone:
+            messagebox.showwarning("توجه", "شماره موبایل مشتری را وارد کنید.")
+            return
+        if not core.is_valid_phone(phone):
+            if not messagebox.askyesno(
+                "بررسی شماره",
+                f"شماره «{phone}» در قالب استاندارد 09xxxxxxxxx نیست.\nمی‌خواهید با همین شماره ادامه دهید؟"):
+                return
+
         channels = [k for k, v in self.channel_check_vars.items() if v.get()]
         if not channels:
             messagebox.showwarning("توجه", "حداقل یک پیام‌رسان را انتخاب کنید.")
             return
+
+        info = {
+            "phone": phone,
+            "serial": self.serial_var.get().strip(),
+            "name": self.name_var.get().strip() or None,
+        }
 
         self.send_btn.configure(state="disabled", text="در حال ارسال…")
         self.log_box.configure(state="normal")
@@ -369,7 +427,8 @@ class InvoiceApp(ctk.CTk):
 
         def worker():
             try:
-                core.process_pdf(self.selected_file, self.settings, channels, log=self._log)
+                core.process_pdf(self.selected_file, self.settings, channels,
+                                 log=self._log, info=info)
             except Exception as e:
                 self._log(f"❌ خطای غیرمنتظره: {e}")
             finally:

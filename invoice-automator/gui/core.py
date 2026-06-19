@@ -54,7 +54,14 @@ def analyze_file(pdf_path: str) -> dict:
     return extract_invoice_data(pdf_path)
 
 
-def process_pdf(pdf_path: str, settings: dict, channels: list[str], log=print) -> dict:
+def is_valid_phone(phone: str) -> bool:
+    """بررسی قالب استاندارد شماره موبایل ایران (09xxxxxxxxx)."""
+    import re
+    return bool(re.fullmatch(r"09\d{9}", (phone or "").strip()))
+
+
+def process_pdf(pdf_path: str, settings: dict, channels: list[str], log=print,
+                info: dict = None) -> dict:
     """
     پردازش یک فایل PDF برای کانال‌های انتخاب‌شده.
 
@@ -63,6 +70,8 @@ def process_pdf(pdf_path: str, settings: dict, channels: list[str], log=print) -
         settings : دیکشنری تنظیمات (از settings_store)
         channels : لیست کانال‌های انتخاب‌شده، مثل ["kavenegar", "bale"]
         log      : تابعی برای نمایش پیام‌های زنده در رابط گرافیکی
+        info     : اطلاعات دستی مشتری {"phone", "serial", "name"}.
+                   اگر None باشد، از نام فایل استخراج می‌شود.
 
     Returns:
         dict: {"file", "ok": [...], "fail": [...], "short_link"}
@@ -71,16 +80,25 @@ def process_pdf(pdf_path: str, settings: dict, channels: list[str], log=print) -
 
     log(f"📄 پردازش فایل: {os.path.basename(pdf_path)}")
 
-    # ── استخراج اطلاعات ──
-    try:
-        info = analyze_file(pdf_path)
-    except ValueError as e:
-        log(f"❌ {e}")
-        report["fail"].append(f"parse: {e}")
+    # ── تعیین اطلاعات مشتری (دستی یا از روی نام فایل) ──
+    if info is None:
+        try:
+            info = analyze_file(pdf_path)
+        except ValueError as e:
+            log(f"❌ {e}")
+            report["fail"].append(f"parse: {e}")
+            return report
+
+    phone = (info.get("phone") or "").strip()
+    if not phone:
+        log("❌ شماره موبایل مشتری وارد نشده است.")
+        report["fail"].append("phone: شماره موبایل خالی است")
         return report
 
-    phone = info["phone"]
-    serial = info.get("serial", "")
+    # تکمیل فیلدهای موردنیاز ماژول‌ها
+    info.setdefault("filename", os.path.basename(pdf_path))
+    info["phone"] = phone
+    serial = info.get("serial", "") or ""
     name = info.get("name") or "مشتری گرامی"
     log(f"☎ {phone}  |  📄 فاکتور: {serial or '—'}  |  👤 {name}")
 
