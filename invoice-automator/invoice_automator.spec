@@ -18,6 +18,8 @@ a = Analysis(
         (ctk_path, 'customtkinter'),
         # فونت فارسی باندل‌شده
         ('gui/assets/fonts', 'gui/assets/fonts'),
+        # آیکن برنامه
+        ('assets', 'assets'),
     ],
     hiddenimports=[
         'rubpy',
@@ -50,7 +52,7 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=None,               # در صورت داشتن آیکن: 'assets/icon.ico'
+    icon='assets/icon.ico',
 )
 
 coll = COLLECT(

@@ -19,13 +19,22 @@ FALLBACK_FAMILY = "Tahoma"
 _loaded_family: str | None = None
 
 
-def _assets_dir() -> Path:
-    """مسیر پوشه‌ی منابع، چه در اجرای عادی و چه در حالت باندل‌شده‌ی PyInstaller."""
+def _base_dir() -> Path:
+    """ریشه‌ی منابع، چه در اجرای عادی و چه در حالت باندل‌شده‌ی PyInstaller."""
     if getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS"):
-        base = Path(sys._MEIPASS)
-    else:
-        base = Path(__file__).resolve().parent.parent
-    return base / "gui" / "assets" / "fonts"
+        return Path(sys._MEIPASS)
+    return Path(__file__).resolve().parent.parent
+
+
+def _assets_dir() -> Path:
+    """مسیر پوشه‌ی فونت‌ها."""
+    return _base_dir() / "gui" / "assets" / "fonts"
+
+
+def app_icon_path() -> str | None:
+    """مسیر آیکن برنامه (.ico) اگر موجود باشد."""
+    ico = _base_dir() / "assets" / "icon.ico"
+    return str(ico) if ico.exists() else None
 
 
 def load_persian_font() -> str:

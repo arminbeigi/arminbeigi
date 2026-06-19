@@ -23,7 +23,7 @@ if str(BASE_DIR) not in sys.path:
 
 from gui import settings_store as store
 from gui import core
-from gui.fonts import load_persian_font
+from gui.fonts import load_persian_font, app_icon_path
 from gui.theme import COLORS, CHANNELS, FONT_FALLBACK
 
 # خانواده‌ی فونت فعال؛ پس از فراخوانی load_persian_font مقداردهی می‌شود
@@ -156,6 +156,14 @@ class InvoiceApp(ctk.CTk):
         self.geometry("1040x720")
         self.minsize(900, 640)
         self.configure(fg_color=COLORS["bg"])
+
+        # آیکن پنجره و نوار وظیفه
+        icon = app_icon_path()
+        if icon:
+            try:
+                self.iconbitmap(icon)
+            except Exception:
+                pass
 
         self.selected_file: str | None = None
         self.channel_check_vars: dict[str, ctk.BooleanVar] = {}
