@@ -281,19 +281,34 @@ class InvoiceApp(ctk.CTk):
         self.phone_var = ctk.StringVar()
         self.serial_var = ctk.StringVar()
         self.name_var = ctk.StringVar()
+        self.phone_entry = None
 
-        for i, (var, label, placeholder) in enumerate([
+        r = 0
+        for var, label, placeholder in [
             (self.phone_var, "شماره موبایل مشتری *", "09xxxxxxxxx"),
             (self.serial_var, "شماره فاکتور (اختیاری)", "مثلاً 1821"),
             (self.name_var, "نام مشتری (اختیاری)", "مثلاً آقای مشیری"),
-        ]):
+        ]:
             ctk.CTkLabel(fields_box, text=label, font=_font(12, "bold"),
                          text_color=COLORS["text_dim"], anchor="e").grid(
-                row=i * 2, column=0, sticky="ew", pady=(8, 2))
-            ctk.CTkEntry(fields_box, textvariable=var, placeholder_text=placeholder,
-                         font=_font(14), fg_color=COLORS["input"], justify="right",
-                         border_color=COLORS["border"], corner_radius=8, height=40).grid(
-                row=i * 2 + 1, column=0, sticky="ew")
+                row=r, column=0, sticky="ew", pady=(8, 2))
+            r += 1
+            entry = ctk.CTkEntry(fields_box, textvariable=var, placeholder_text=placeholder,
+                                 font=_font(14), fg_color=COLORS["input"], justify="right",
+                                 border_color=COLORS["border"], corner_radius=8, height=40)
+            entry.grid(row=r, column=0, sticky="ew")
+            r += 1
+            if var is self.phone_var:
+                self.phone_entry = entry
+                # پیام راهنمای اعتبارسنجی زنده، درست زیر فیلد شماره
+                self.phone_hint = ctk.CTkLabel(fields_box, text="", font=_font(11),
+                                               text_color=COLORS["text_dim"], anchor="e")
+                self.phone_hint.grid(row=r, column=0, sticky="ew", pady=(2, 0))
+                r += 1
+
+        # اعتبارسنجی زنده هنگام تایپ
+        self.phone_var.trace_add("write", lambda *_: self._validate_phone_live())
+        self._validate_phone_live()
 
         # کارت انتخاب کانال‌ها
         ch_card = ctk.CTkFrame(page, fg_color=COLORS["card"], corner_radius=14,
@@ -378,6 +393,23 @@ class InvoiceApp(ctk.CTk):
             self.info_label.configure(
                 text="⚠ شماره‌ای در نام فایل یافت نشد — لطفاً شماره مشتری را دستی وارد کنید.",
                 text_color=COLORS["warning"])
+
+    def _validate_phone_live(self):
+        """تغییر رنگ حاشیه و پیام راهنمای فیلد شماره هنگام تایپ."""
+        if not getattr(self, "phone_entry", None):
+            return
+        phone = self.phone_var.get().strip()
+        if not phone:
+            self.phone_entry.configure(border_color=COLORS["border"])
+            self.phone_hint.configure(text="", text_color=COLORS["text_dim"])
+        elif core.is_valid_phone(phone):
+            self.phone_entry.configure(border_color=COLORS["success"])
+            self.phone_hint.configure(text="✅ شماره معتبر است.", text_color=COLORS["success"])
+        else:
+            self.phone_entry.configure(border_color=COLORS["danger"])
+            self.phone_hint.configure(
+                text="⚠ شماره باید با 09 شروع شود و ۱۱ رقم باشد.",
+                text_color=COLORS["danger"])
 
     def _log(self, msg: str):
         self.log_queue.put(msg)
