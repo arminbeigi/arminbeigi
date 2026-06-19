@@ -9,6 +9,10 @@
 import asyncio
 import logging
 
+from . import disable_ssl_verify
+
+disable_ssl_verify()  # رفع خطای گواهی TLS در شبکه‌ی ایران
+
 logger = logging.getLogger(__name__)
 
 

@@ -482,17 +482,27 @@ class InvoiceApp(_AppBase):
                          text_color=COLORS["text_dim"], anchor="e").grid(
                 row=r, column=0, sticky="ew", pady=(8, 2))
             r += 1
-            entry = ctk.CTkEntry(fields_box, textvariable=var, placeholder_text=placeholder,
-                                 font=_font(14), fg_color=COLORS["input"], justify="right",
-                                 border_color=COLORS["border"], corner_radius=8, height=40)
-            entry.grid(row=r, column=0, sticky="ew")
-            r += 1
             if var is self.phone_var:
+                # فیلد شماره به‌صورت combobox با تاریخچه‌ی شماره‌های قبلی (اتوفیل)
+                history = list(self.settings.get("phone_history", []))
+                entry = ctk.CTkComboBox(
+                    fields_box, variable=var, values=history,
+                    font=_font(14), fg_color=COLORS["input"], justify="right",
+                    border_color=COLORS["border"], corner_radius=8, height=40,
+                    button_color=COLORS["accent"], button_hover_color=COLORS["accent_hover"],
+                    command=lambda _v: self._validate_phone_live())
+                entry.grid(row=r, column=0, sticky="ew")
+                r += 1
                 self.phone_entry = entry
-                # پیام راهنمای اعتبارسنجی زنده، درست زیر فیلد شماره
                 self.phone_hint = ctk.CTkLabel(fields_box, text="", font=_font(11),
                                                text_color=COLORS["text_dim"], anchor="e")
                 self.phone_hint.grid(row=r, column=0, sticky="ew", pady=(2, 0))
+                r += 1
+            else:
+                entry = ctk.CTkEntry(fields_box, textvariable=var, placeholder_text=placeholder,
+                                     font=_font(14), fg_color=COLORS["input"], justify="right",
+                                     border_color=COLORS["border"], corner_radius=8, height=40)
+                entry.grid(row=r, column=0, sticky="ew")
                 r += 1
 
         # اعتبارسنجی زنده هنگام تایپ
@@ -605,6 +615,23 @@ class InvoiceApp(_AppBase):
                 text="⚠ شماره باید با 09 شروع شود و ۱۱ رقم باشد.",
                 text_color=COLORS["danger"])
 
+    def _record_phone_history(self, phone: str):
+        """افزودن شماره به ابتدای تاریخچه (یکتا، حداکثر ۲۰ مورد) و ذخیره."""
+        hist = list(self.settings.get("phone_history", []))
+        if phone in hist:
+            hist.remove(phone)
+        hist.insert(0, phone)
+        self.settings["phone_history"] = hist[:20]
+        try:
+            store.save_settings(self.settings)
+        except Exception:
+            pass
+        # به‌روزرسانی مقادیر combobox
+        try:
+            self.phone_entry.configure(values=self.settings["phone_history"])
+        except Exception:
+            pass
+
     def _log(self, msg: str):
         self.log_queue.put(msg)
 
@@ -645,6 +672,9 @@ class InvoiceApp(_AppBase):
             "serial": self.serial_var.get().strip(),
             "name": self.name_var.get().strip() or None,
         }
+
+        # ثبت شماره در تاریخچه‌ی اتوفیل
+        self._record_phone_history(phone)
 
         self.send_btn.configure(state="disabled", text="در حال ارسال…")
         self.log_box.configure(state="normal")

@@ -14,6 +14,9 @@ import threading
 from pathlib import Path
 
 from gui import settings_store as store
+from modules import disable_ssl_verify
+
+disable_ssl_verify()  # رفع خطای گواهی TLS در شبکه‌ی ایران
 
 
 def _normalize_ir(phone: str) -> str:
