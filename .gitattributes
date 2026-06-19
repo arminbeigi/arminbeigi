@@ -1,0 +1,5 @@
+# فایل‌های batch ویندوز باید همیشه خط‌پایان CRLF داشته باشند
+*.bat text eol=crlf
+*.cmd text eol=crlf
+# اسکریپت Inno Setup هم روی ویندوز کامپایل می‌شود
+*.iss text eol=crlf
