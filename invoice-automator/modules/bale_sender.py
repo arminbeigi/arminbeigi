@@ -66,11 +66,9 @@ class BaleSender:
             if chat_id is None:
                 return {"success": False, "error": f"ساخت/یافتن مخاطب بله ناموفق بود ({phone})"}
 
-            if text:
-                await client.send_message(text=text, chat_id=chat_id,
-                                          chat_type=ChatType.PRIVATE)
-            # send_document آبجکت FileInput می‌خواهد (نه رشته‌ی مسیر)؛
-            # خودِ کتابخانه فایل را آپلود می‌کند. برای PDF و عکس کار می‌کند.
+            # فقط یک پیام: فایل به‌همراه کپشن (متن خوش‌آمد). از ارسال
+            # جداگانه‌ی متن خودداری می‌کنیم تا پیام دوبار ارسال نشود.
+            # send_document آبجکت FileInput می‌خواهد؛ خودِ کتابخانه آپلود می‌کند.
             await client.send_document(file=FileInput(pdf_path), chat_id=chat_id,
                                        chat_type=ChatType.PRIVATE, caption=text or None)
             return {"success": True}
@@ -94,15 +92,8 @@ class BaleSender:
         if not self.enabled:
             return {"success": False, "error": "بله لاگین نشده"}
 
-        serial = invoice_data.get("serial", "")
-        parts = []
-        if welcome:
-            parts.append(welcome)
-        if serial:
-            parts.append(f"پیش‌فاکتور شماره {serial}")
-        if short_link:
-            parts.append(short_link)
-        text = "\n".join(parts)
+        # متن، از قبل در core با متغیرها رندر شده است (یک پیام، بدون تکرار)
+        text = welcome or ""
         # نام مخاطب: نام مشتری اگر باشد، وگرنه شماره تماس
         contact_name = (invoice_data.get("name") or "").strip() or phone
 

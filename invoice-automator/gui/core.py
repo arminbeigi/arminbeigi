@@ -60,6 +60,26 @@ def is_valid_phone(phone: str) -> bool:
     return bool(re.fullmatch(r"09\d{9}", (phone or "").strip()))
 
 
+# متغیرهای قابل‌استفاده در متن پیام (برای نمایش راهنما در رابط)
+MESSAGE_VARIABLES = [
+    ("{name}", "نام مشتری (اگر خالی باشد: مشتری)"),
+    ("{invoice}", "شماره فاکتور"),
+    ("{link}", "لینک کوتاه پیش‌فاکتور"),
+]
+
+
+def render_message(template: str, name: str = "", invoice: str = "", link: str = "") -> str:
+    """جایگزینی متغیرها در متن پیام."""
+    if not template:
+        return ""
+    out = template
+    out = out.replace("{name}", name or "مشتری")
+    out = out.replace("{invoice}", invoice or "")
+    out = out.replace("{invoice_number}", invoice or "")
+    out = out.replace("{link}", link or "")
+    return out.strip()
+
+
 def process_pdf(pdf_path: str, settings: dict, channels: list[str], log=print,
                 info: dict = None) -> dict:
     """
@@ -117,8 +137,10 @@ def process_pdf(pdf_path: str, settings: dict, channels: list[str], log=print,
             log(f"❌ وردپرس: {e}")
             report["fail"].append(f"wordpress: {e}")
 
-    # متن خوش‌آمدگویی پیش‌فرض (برای پیام‌رسان‌های چت‌محور)
-    welcome = (settings.get("welcome_message") or "").strip()
+    # متن خوش‌آمدگویی با جایگزینی متغیرها ({name}, {invoice}, {link})
+    customer_name = (info.get("name") or "").strip() or "مشتری"
+    welcome = render_message(settings.get("welcome_message", ""),
+                             name=customer_name, invoice=serial, link=short_link)
 
     # مسیر نشست‌های لاگین‌شده
     from gui import settings_store as _store

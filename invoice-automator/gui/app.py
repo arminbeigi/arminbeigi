@@ -693,6 +693,17 @@ class InvoiceApp(_AppBase):
 
         threading.Thread(target=worker, daemon=True).start()
 
+    def _insert_welcome(self, text: str):
+        """درج متغیر/ایموجی در محل مکان‌نما در باکس متن خوش‌آمد."""
+        try:
+            self.welcome_box.insert("insert", text)
+            self.welcome_box.focus_set()
+        except Exception:
+            try:
+                self.welcome_box.insert("end", text)
+            except Exception:
+                pass
+
     # ──────────────────────────────────────────────── صفحه‌ی تنظیمات
     def _show_settings(self):
         self._navigate_buttons("settings")
@@ -724,14 +735,41 @@ class InvoiceApp(_AppBase):
         ctk.CTkLabel(wcard, text="💬  متن خوش‌آمدگویی پیش‌فرض", font=_font(15, "bold"),
                      text_color=COLORS["text"], anchor="e").grid(
             row=0, column=0, sticky="ew", padx=18, pady=(16, 2))
-        ctk.CTkLabel(wcard, text="این متن پیش از لینک/فایل برای مشتری در پیام‌رسان‌ها ارسال می‌شود.",
+        ctk.CTkLabel(wcard, text="این متن به‌همراه فایل برای مشتری ارسال می‌شود (یک پیام).",
                      font=_font(11), text_color=COLORS["text_dim"], anchor="e",
                      wraplength=600, justify="right").grid(row=1, column=0, sticky="ew", padx=18)
         self.welcome_box = ctk.CTkTextbox(wcard, height=70, font=_font(13),
                                           fg_color=COLORS["input"], corner_radius=8,
                                           border_width=1, border_color=COLORS["border"])
-        self.welcome_box.grid(row=2, column=0, sticky="ew", padx=18, pady=(6, 16))
+        self.welcome_box.grid(row=2, column=0, sticky="ew", padx=18, pady=(6, 4))
         self.welcome_box.insert("1.0", self.settings.get("welcome_message", ""))
+
+        # راهنمای متغیرها (کلیک = درج در متن)
+        ctk.CTkLabel(wcard, text="متغیرها (کلیک کنید تا در متن درج شود):", font=_font(11, "bold"),
+                     text_color=COLORS["text_dim"], anchor="e").grid(
+            row=3, column=0, sticky="ew", padx=18, pady=(4, 2))
+        varbar = ctk.CTkFrame(wcard, fg_color="transparent")
+        varbar.grid(row=4, column=0, sticky="e", padx=18)
+        for i, (var, desc) in enumerate(core.MESSAGE_VARIABLES):
+            ctk.CTkButton(varbar, text=f"{var}  ({desc})", height=28, font=_font(11),
+                          fg_color=COLORS["accent_dim"], hover_color=COLORS["accent"],
+                          text_color=COLORS["text"], anchor="e",
+                          command=lambda v=var: self._insert_welcome(v)).grid(
+                row=i, column=0, sticky="ew", pady=2)
+        varbar.grid_columnconfigure(0, weight=1)
+
+        # نوار ایموجی (کلیک = درج)
+        ctk.CTkLabel(wcard, text="ایموجی:", font=_font(11, "bold"),
+                     text_color=COLORS["text_dim"], anchor="e").grid(
+            row=5, column=0, sticky="ew", padx=18, pady=(8, 2))
+        emoji_bar = ctk.CTkFrame(wcard, fg_color="transparent")
+        emoji_bar.grid(row=6, column=0, sticky="e", padx=18, pady=(0, 16))
+        emojis = ["🌹", "😊", "🙏", "✅", "📄", "🧾", "👋", "💐", "🛍️", "📌", "🔗", "❤️", "🌷", "⭐"]
+        for i, em in enumerate(emojis):
+            ctk.CTkButton(emoji_bar, text=em, width=38, height=34, font=_font(16),
+                          fg_color=COLORS["card_hover"], hover_color=COLORS["accent_dim"],
+                          command=lambda e=em: self._insert_welcome(e)).grid(
+                row=0, column=i, padx=2)
 
         self.cards: dict[str, ChannelCard] = {}
         for i, ch in enumerate(CHANNELS):

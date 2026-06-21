@@ -74,12 +74,7 @@ class RubikaSender:
             if not guid:
                 return {"success": False, "error": f"یافتن مخاطب روبیکا ناموفق بود (شماره {phone})"}
 
-            # ارسال متن خوش‌آمد + سپس فایل
-            if text:
-                try:
-                    await client.send_message(guid, text)
-                except Exception as e:
-                    logger.debug(f"send_message: {e}")
+            # فقط یک پیام: فایل به‌همراه کپشن (متن خوش‌آمد) تا دوبار ارسال نشود
             await client.send_document(guid, pdf_path, caption=text or "")
             return {"success": True}
         except Exception as e:
@@ -97,15 +92,8 @@ class RubikaSender:
         if not self.enabled:
             return {"success": False, "error": "روبیکا لاگین نشده"}
 
-        serial = invoice_data.get("serial", "")
-        parts = []
-        if welcome:
-            parts.append(welcome)
-        if serial:
-            parts.append(f"پیش‌فاکتور شماره {serial}")
-        if short_link:
-            parts.append(short_link)
-        text = "\n".join(parts)
+        # متن از قبل در core با متغیرها رندر شده (یک پیام، بدون تکرار)
+        text = welcome or ""
         contact_name = (invoice_data.get("name") or "").strip() or phone
 
         loop = asyncio.new_event_loop()
