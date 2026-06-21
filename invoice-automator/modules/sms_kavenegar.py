@@ -44,19 +44,29 @@ class KavenegarSMS:
             logger.error(f"خطا در اتصال به کاوه‌نگار: {e}")
             return {"success": False, "error": str(e)}
 
-    def send_invoice_sms(self, phone: str, invoice_data: dict, link: str) -> dict:
-        """ارسال پیامک پیش فاکتور با قالب پیش‌فرض"""
-        from .pdf_parser import format_amount
+    def send_invoice_sms(self, phone: str, invoice_data: dict, link: str,
+                         message: str = "") -> dict:
+        """
+        ارسال پیامک پیش‌فاکتور.
 
-        link_line = link if link else "لینک متعاقباً ارسال می‌شود"
+        متن از باکس «متن پیام» مشترک گرفته می‌شود (مثل بله/روبیکا). اگر متن
+        خالی بود، از قالب پیش‌فرض استفاده می‌شود. برای پیامک، اگر لینک در متن
+        نباشد به انتهای آن افزوده می‌شود (چون پیامک فایل ندارد).
+        """
+        text = (message or "").strip()
+        if not text:
+            from .pdf_parser import format_amount
+            link_line = link if link else "لینک متعاقباً ارسال می‌شود"
+            text = self.template.format(
+                invoice_number=invoice_data.get("serial", ""),
+                total_amount=format_amount(invoice_data.get("total", "")),
+                link=link_line,
+            )
+        # پیامک فایل ندارد؛ اگر لینک در متن نیست، اضافه‌اش کن
+        if link and link not in text:
+            text = f"{text}\n{link}"
 
-        message = self.template.format(
-            invoice_number=invoice_data.get("serial", ""),
-            total_amount=format_amount(invoice_data.get("total", "")),
-            link=link_line,
-        )
-
-        return self.send_sms(phone, message)
+        return self.send_sms(phone, text)
 
     def check_status(self, message_id: str) -> dict:
         """بررسی وضعیت ارسال پیامک"""

@@ -152,7 +152,7 @@ def process_pdf(pdf_path: str, settings: dict, channels: list[str], log=print,
     if "kavenegar" in channels:
         def send_sms():
             sms = KavenegarSMS(settings["kavenegar"])
-            return "kavenegar", sms.send_invoice_sms(phone, info, short_link)
+            return "kavenegar", sms.send_invoice_sms(phone, info, short_link, welcome)
         tasks["kavenegar"] = send_sms
 
     if "whatsapp" in channels:

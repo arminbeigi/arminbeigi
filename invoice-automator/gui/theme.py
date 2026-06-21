@@ -41,13 +41,12 @@ CHANNELS = [
         "key": "kavenegar",
         "title": "پیامک (کاوه‌نگار)",
         "icon": "📱",
-        "desc": "ارسال لینک پیش‌فاکتور با پیامک",
+        "desc": "ارسال متن + لینک پیش‌فاکتور با پیامک",
         "fields": [
             ("api_key", "کلید API", "کلید API کاوه‌نگار", True),
             ("sender", "شماره فرستنده", "10008663", False),
-            ("template", "قالب پیام", "متن پیامک با {invoice_number} و {link}", False),
         ],
-        "help": "panel.kavenegar.com > تنظیمات > کلید API",
+        "help": "متن پیامک از همان «متن پیام» بالای صفحه گرفته می‌شود (لینک خودکار اضافه می‌شود). panel.kavenegar.com > تنظیمات > کلید API",
     },
     {
         "key": "whatsapp",

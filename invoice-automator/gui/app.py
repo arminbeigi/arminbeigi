@@ -732,10 +732,10 @@ class InvoiceApp(_AppBase):
                              border_width=1, border_color=COLORS["border"])
         wcard.grid(row=0, column=0, sticky="ew", pady=(0, 16))
         wcard.grid_columnconfigure(0, weight=1)
-        ctk.CTkLabel(wcard, text="💬  متن خوش‌آمدگویی پیش‌فرض", font=_font(15, "bold"),
+        ctk.CTkLabel(wcard, text="💬  متن پیام (برای همه‌ی پیام‌رسان‌ها)", font=_font(15, "bold"),
                      text_color=COLORS["text"], anchor="e").grid(
             row=0, column=0, sticky="ew", padx=18, pady=(16, 2))
-        ctk.CTkLabel(wcard, text="این متن به‌همراه فایل برای مشتری ارسال می‌شود (یک پیام).",
+        ctk.CTkLabel(wcard, text="این متن برای پیامک، بله و روبیکا استفاده می‌شود. در پیامک لینک خودکار اضافه می‌شود.",
                      font=_font(11), text_color=COLORS["text_dim"], anchor="e",
                      wraplength=600, justify="right").grid(row=1, column=0, sticky="ew", padx=18)
         self.welcome_box = ctk.CTkTextbox(wcard, height=70, font=_font(13),
