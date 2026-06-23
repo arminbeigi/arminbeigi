@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name: Yara SMS (Kavenegar)
- * Description: یکپارچه‌سازی پیامک کاوه‌نگار با یارا — تحویل کلید لایسنس و اطلاع وضعیت سفارش با پیامک.
- * Version: 1.0.0
+ * Description: یکپارچه‌سازی پیامک کاوه‌نگار با یارا — تحویل کلید لایسنس، اطلاع وضعیت سفارش و اطلاع‌رسانی به مدیر.
+ * Version: 1.1.0
  * Author: Yara
  *
  * تنظیمات: پیشخوان → تنظیمات → پیامک یارا (کلید API و خط فرستنده را وارد کنید).
@@ -20,6 +20,8 @@ add_action('admin_init', function () {
     register_setting('yara_sms', 'yara_sms_sender');
     register_setting('yara_sms', 'yara_sms_order');
     register_setting('yara_sms', 'yara_sms_license');
+    register_setting('yara_sms', 'yara_sms_admin');
+    register_setting('yara_sms', 'yara_sms_admin_phone');
 });
 
 function yara_sms_settings_page() {
@@ -45,6 +47,14 @@ function yara_sms_settings_page() {
           <tr>
             <th>تحویل لایسنس با پیامک</th>
             <td><label><input type="checkbox" name="yara_sms_license" value="1" <?php checked(get_option('yara_sms_license'), '1'); ?>> ارسال خودکار کلید لایسنس پس از خرید</label></td>
+          </tr>
+          <tr>
+            <th>اطلاع‌رسانی به مدیر</th>
+            <td><label><input type="checkbox" name="yara_sms_admin" value="1" <?php checked(get_option('yara_sms_admin'), '1'); ?>> پیامک به مدیر هنگام ثبت سفارش جدید</label></td>
+          </tr>
+          <tr>
+            <th>شماره موبایل مدیر</th>
+            <td><input type="text" name="yara_sms_admin_phone" value="<?php echo esc_attr(get_option('yara_sms_admin_phone')); ?>" style="width:240px" dir="ltr" placeholder="09xxxxxxxxx (برای چند شماره با ، جدا کنید)"></td>
           </tr>
         </table>
         <?php submit_button('ذخیره تنظیمات'); ?>
@@ -152,3 +162,21 @@ add_action('woocommerce_order_status_changed', function ($order_id, $from, $to, 
     if (!isset($map[$to])) return;
     yara_sms_send($phone, "یارا\n" . $map[$to] . "\nسفارش #{$order_id}");
 }, 20, 4);
+
+// ───────────────────────── اطلاع‌رسانی به مدیر (سفارش جدید) ─────────────────────────
+add_action('woocommerce_checkout_order_processed', function ($order_id, $posted, $order) {
+    if (get_option('yara_sms_admin') !== '1') return;
+    $admins = array_filter(array_map('yara_sms_norm', preg_split('/[,،]+/', (string)get_option('yara_sms_admin_phone'))));
+    if (!$admins) return;
+    if (!is_object($order)) $order = wc_get_order($order_id);
+    if (!$order) return;
+
+    $items = [];
+    foreach ($order->get_items() as $it) $items[] = $it->get_name();
+    $total = number_format((float)$order->get_total());
+    $cphone = yara_sms_norm($order->get_billing_phone());
+
+    $msg = "یارا — سفارش جدید 🛒\n#{$order_id}\n" . implode('، ', $items)
+         . "\nمبلغ: {$total} تومان\nمشتری: {$cphone}";
+    foreach ($admins as $a) yara_sms_send($a, $msg);
+}, 20, 3);
