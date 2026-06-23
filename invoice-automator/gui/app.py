@@ -453,6 +453,7 @@ class InvoiceApp(_AppBase):
 
         self.nav_buttons = {}
         for key, label, icon in [("send", "ارسال فاکتور", "📤"),
+                                  ("history", "تاریخچه ارسال‌ها", "📜"),
                                   ("settings", "تنظیمات پیام‌رسان‌ها", "⚙")]:
             btn = ctk.CTkButton(
                 sidebar, text=f"  {icon}  {label}", anchor="e", height=46,
@@ -491,6 +492,8 @@ class InvoiceApp(_AppBase):
             btn.configure(fg_color=COLORS["accent"] if k == key else "transparent")
         if key == "send":
             self._show_send()
+        elif key == "history":
+            self._show_history()
         else:
             self._show_settings()
 
@@ -775,8 +778,13 @@ class InvoiceApp(_AppBase):
 
         def worker():
             try:
-                core.process_pdf(self.selected_file, self.settings, channels,
-                                 log=self._log, info=info)
+                report = core.process_pdf(self.selected_file, self.settings, channels,
+                                          log=self._log, info=info)
+                try:
+                    from gui import history
+                    history.add_record(self.selected_file, info, channels, report)
+                except Exception:
+                    pass
             except Exception as e:
                 self._log(f"❌ خطای غیرمنتظره: {e}")
             finally:
@@ -795,6 +803,93 @@ class InvoiceApp(_AppBase):
                 self.welcome_box.insert("end", text)
             except Exception:
                 pass
+
+    # ──────────────────────────────────────────────── صفحه‌ی تاریخچه
+    def _show_history(self):
+        self._navigate_buttons("history")
+        self._clear_content()
+        from gui import history
+        import time as _t
+
+        wrapper = ctk.CTkFrame(self.content, fg_color="transparent")
+        wrapper.grid(row=0, column=0, sticky="nsew", padx=30, pady=24)
+        wrapper.grid_columnconfigure(0, weight=1)
+        wrapper.grid_rowconfigure(2, weight=1)
+
+        ctk.CTkLabel(wrapper, text="تاریخچه ارسال‌ها", font=_font(24, "bold"),
+                     text_color=COLORS["text"], anchor="e").grid(row=0, column=0, sticky="ew")
+
+        bar = ctk.CTkFrame(wrapper, fg_color="transparent")
+        bar.grid(row=1, column=0, sticky="ew", pady=(8, 12))
+        bar.grid_columnconfigure(0, weight=1)
+        search_var = ctk.StringVar()
+        ctk.CTkEntry(bar, textvariable=search_var, placeholder_text="جستجو (شماره، نام یا فایل)…",
+                     font=_font(13), fg_color=COLORS["input"], justify="right",
+                     border_color=COLORS["border"], height=38).grid(row=0, column=0, sticky="ew", padx=(0, 10))
+        ctk.CTkButton(bar, text="🗑 پاک کردن همه", width=130, font=_font(12),
+                      fg_color=COLORS["card"], hover_color=COLORS["danger"],
+                      command=lambda: (history.clear(), self._show_history())).grid(row=0, column=1)
+
+        scroll = ctk.CTkScrollableFrame(wrapper, fg_color="transparent")
+        scroll.grid(row=2, column=0, sticky="nsew")
+        scroll.grid_columnconfigure(0, weight=1)
+
+        records = history.get_records()
+
+        def render(filter_text=""):
+            for w in scroll.winfo_children():
+                w.destroy()
+            ft = filter_text.strip()
+            shown = [r for r in records
+                     if not ft or ft in r.get("phone", "") or ft in (r.get("name") or "")
+                     or ft in r.get("filename", "")]
+            if not shown:
+                ctk.CTkLabel(scroll, text="موردی یافت نشد." if ft else "هنوز ارسالی ثبت نشده است.",
+                             font=_font(14), text_color=COLORS["text_dim"], anchor="e").grid(
+                    row=0, column=0, sticky="ew", pady=20)
+                return
+            for i, r in enumerate(shown):
+                card = ctk.CTkFrame(scroll, fg_color=COLORS["card"], corner_radius=12,
+                                    border_width=1, border_color=COLORS["border"])
+                card.grid(row=i, column=0, sticky="ew", pady=(0, 10))
+                card.grid_columnconfigure(0, weight=1)
+                when = _t.strftime("%Y/%m/%d  %H:%M", _t.localtime(r.get("time", 0)))
+                name = r.get("name") or "—"
+                ctk.CTkLabel(card, text=f"🕒 {when}    📄 {r.get('filename','')}",
+                             font=_font(13, "bold"), text_color=COLORS["text"], anchor="e").grid(
+                    row=0, column=0, sticky="ew", padx=16, pady=(12, 2))
+                ctk.CTkLabel(card, text=f"☎ {r.get('phone','')}    👤 {name}",
+                             font=_font(12), text_color=COLORS["text_dim"], anchor="e").grid(
+                    row=1, column=0, sticky="ew", padx=16)
+                # کانال‌ها با وضعیت
+                ok = set(r.get("ok", []))
+                chans = " ".join(
+                    f"{'✅' if c in ok else '⚠️'} {core.CHANNEL_LABELS.get(c, c)}"
+                    for c in r.get("channels", []))
+                ctk.CTkLabel(card, text=chans, font=_font(12),
+                             text_color=COLORS["text_dim"], anchor="e").grid(
+                    row=2, column=0, sticky="ew", padx=16, pady=(2, 4))
+                ctk.CTkButton(card, text="🔁 ارسال مجدد", width=120, font=_font(12),
+                              fg_color=COLORS["accent_dim"], hover_color=COLORS["accent"],
+                              command=lambda rec=r: self._resend(rec)).grid(
+                    row=3, column=0, sticky="e", padx=16, pady=(0, 12))
+
+        search_var.trace_add("write", lambda *_: render(search_var.get()))
+        render()
+
+    def _resend(self, rec):
+        import os
+        if not os.path.exists(rec.get("file", "")):
+            messagebox.showwarning("فایل یافت نشد",
+                                   "فایل اصلی پیدا نشد. لطفاً آن را دوباره انتخاب و ارسال کنید.")
+            return
+        self.selected_file = rec["file"]
+        self._show_send()
+        self.phone_var.set(rec.get("phone", ""))
+        self.serial_var.set(rec.get("serial", ""))
+        self.name_var.set(rec.get("name", ""))
+        self._validate_phone_live()
+        self._start_send()
 
     # ──────────────────────────────────────────────── صفحه‌ی تنظیمات
     def _show_settings(self):
