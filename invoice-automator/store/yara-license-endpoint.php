@@ -41,21 +41,36 @@ function yara_plan_name($product_id) {
     return $map[$product_id] ?? 'حرفه‌ای';
 }
 
+/**
+ * گرفتن لایسنس از دیتابیس (سازگار با Digital License Manager + License Manager for WooCommerce).
+ * چون نام تابع‌های دو افزونه متفاوت است، مستقیماً از دیتابیس کوئری می‌زنیم.
+ * این کار افزونه را از تغییرات نسخه‌های آینده‌ی هر دو افزونه مستقل می‌کند.
+ */
 function yara_get_license_or_error($key) {
-    if (!function_exists('lmfwc_get_license')) {
-        return new WP_Error('no_lmfwc', 'افزونه License Manager نصب نیست.');
+    global $wpdb;
+    // اول جدول Digital License Manager را امتحان کن، بعد lmfwc قدیمی
+    $tables = [$wpdb->prefix . 'dlm_licenses', $wpdb->prefix . 'lmfwc_licenses'];
+    foreach ($tables as $table) {
+        $exists = $wpdb->get_var($wpdb->prepare(
+            "SELECT 1 FROM information_schema.tables WHERE table_schema = %s AND table_name = %s",
+            DB_NAME, $table));
+        if (!$exists) continue;
+        // کلید در دیتابیس به‌صورت hash یا plain ذخیره می‌شود
+        $row = $wpdb->get_row($wpdb->prepare(
+            "SELECT * FROM `{$table}` WHERE license_key = %s OR hash = %s LIMIT 1",
+            $key, hash('sha256', $key)));
+        if ($row) {
+            $row->_table = $table;
+            return $row;
+        }
     }
-    $license = lmfwc_get_license($key);
-    if (!$license) {
-        return new WP_Error('not_found', 'کلید لایسنس یافت نشد.');
-    }
-    return $license;
+    return new WP_Error('not_found', 'کلید لایسنس یافت نشد یا افزونه‌ی مدیریت لایسنس نصب نیست.');
 }
 
 function yara_license_payload($license) {
-    $expires = method_exists($license, 'getExpiresAt') ? $license->getExpiresAt() : null;
-    $expires_epoch = $expires ? strtotime($expires) : null;
-    $product_id = method_exists($license, 'getProductId') ? $license->getProductId() : 0;
+    // فیلد expires_at در هر دو افزونه یکسان است
+    $expires_epoch = !empty($license->expires_at) ? strtotime($license->expires_at) : null;
+    $product_id = !empty($license->product_id) ? (int)$license->product_id : 0;
     return [
         'expires_at' => $expires_epoch,
         'plan'       => yara_plan_name($product_id),
@@ -81,7 +96,8 @@ function yara_activate_license(WP_REST_Request $req) {
     }
 
     // مدیریت دستگاه‌ها (محدودیت تعداد فعال‌سازی)
-    $max = method_exists($license, 'getTimesActivatedMax') ? (int)$license->getTimesActivatedMax() : 1;
+    $max = !empty($license->activations_limit) ? (int)$license->activations_limit
+        : (!empty($license->times_activated_max) ? (int)$license->times_activated_max : 1);
     if ($max <= 0) $max = 1;
 
     $devices = get_option("yara_devices_{$key}", []);
