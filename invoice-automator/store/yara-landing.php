@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Yara Landing Page
  * Description: نمایش صفحه‌ی فروش یارا روی صفحه‌ی اصلی سایت (دور زدن قالب پیش‌فرض).
- * Version: 1.1.0
+ * Version: 1.2.0
  * Author: Yara
  */
 if (!defined('ABSPATH')) exit;
@@ -13,9 +13,9 @@ add_action('template_redirect', function () {
     if (isset($_GET['wp'])) return;
     $html = yara_landing_html();
     $map = [
-        '{{YARA_BASIC_URL}}' => yara_cart_url('YARA-BASIC'),
-        '{{YARA_PRO_URL}}'   => yara_cart_url('YARA-PRO'),
-        '{{YARA_BIZ_URL}}'   => yara_cart_url('YARA-BIZ'),
+        '{{YARA_BASIC_URL}}' => esc_url(home_url('/buy/?plan=basic')),
+        '{{YARA_PRO_URL}}'   => esc_url(home_url('/buy/?plan=pro')),
+        '{{YARA_BIZ_URL}}'   => esc_url(home_url('/buy/?plan=biz')),
     ];
     $html = strtr($html, $map);
     status_header(200);
@@ -23,14 +23,6 @@ add_action('template_redirect', function () {
     echo $html;
     exit;
 });
-
-function yara_cart_url($sku) {
-    if (function_exists('wc_get_product_id_by_sku')) {
-        $id = wc_get_product_id_by_sku($sku);
-        if ($id) return esc_url(home_url('/?add-to-cart=' . $id));
-    }
-    return esc_url(home_url('/?post_type=product'));
-}
 
 function yara_landing_html() {
     return <<<'YARA_LANDING_HTML'
