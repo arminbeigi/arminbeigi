@@ -2,48 +2,33 @@
 /**
  * Plugin Name: Yara Landing Page
  * Description: نمایش صفحه‌ی فروش یارا روی صفحه‌ی اصلی سایت (دور زدن قالب پیش‌فرض).
- * Version: 1.0.0
+ * Version: 1.1.0
  * Author: Yara
- *
- * نصب: از پنل وردپرس → افزونه‌ها → بارگذاری افزونه (فایل zip) → فعال‌سازی.
- * صفحه‌ی اصلی سایت به‌طور خودکار لندینگ یارا را نشان می‌دهد.
- * بقیه‌ی صفحات (فروشگاه، سبد خرید، پیشخوان و ...) دست‌نخورده می‌مانند.
  */
-
 if (!defined('ABSPATH')) exit;
 
 add_action('template_redirect', function () {
-    // فقط روی صفحه‌ی اول سایت، و نه در پیشخوان/فید/جستجو
     if (is_admin() || is_feed() || is_search()) return;
     if (!(is_front_page() || is_home())) return;
-    // اگر کاربر مدیر است و پارامتر ?wp اضافه کرد، اجازه‌ی دیدن قالب پیش‌فرض بده
     if (isset($_GET['wp'])) return;
-
     $html = yara_landing_html();
-
-    // جایگزینی دکمه‌های خرید با لینک افزودن-به-سبدِ محصولات واقعی (بر اساس SKU)
     $map = [
         '{{YARA_BASIC_URL}}' => yara_cart_url('YARA-BASIC'),
         '{{YARA_PRO_URL}}'   => yara_cart_url('YARA-PRO'),
         '{{YARA_BIZ_URL}}'   => yara_cart_url('YARA-BIZ'),
     ];
     $html = strtr($html, $map);
-
     status_header(200);
     header('Content-Type: text/html; charset=utf-8');
     echo $html;
     exit;
 });
 
-/** ساخت لینک افزودن به سبد خرید از روی SKU (در صورت نبود ووکامرس، لینک فروشگاه) */
 function yara_cart_url($sku) {
     if (function_exists('wc_get_product_id_by_sku')) {
         $id = wc_get_product_id_by_sku($sku);
-        if ($id) {
-            return esc_url(home_url('/?add-to-cart=' . $id));
-        }
+        if ($id) return esc_url(home_url('/?add-to-cart=' . $id));
     }
-    // fallback: آرشیو فروشگاه
     return esc_url(home_url('/?post_type=product'));
 }
 
@@ -116,6 +101,8 @@ nav.links a:hover::after{transform:scaleX(1)}
 .menu-btn:hover{background:rgba(255,255,255,.06)}
 .menu-btn svg{width:26px;height:26px}
 .header-cta{padding:10px 22px;font-size:.95rem}
+.header-actions{display:flex;align-items:center;gap:10px}
+.header-login{padding:10px 18px}
 @media(max-width:820px){
   nav.links{position:fixed;top:70px;right:0;left:0;flex-direction:column;background:rgba(15,17,23,.98);
     backdrop-filter:blur(14px);padding:14px 22px 22px;gap:0;border-bottom:1px solid var(--line);
@@ -324,9 +311,13 @@ footer{padding:40px 0;border-top:1px solid var(--line);color:var(--dim);text-ali
       <a href="#how">چطور کار می‌کند</a>
       <a href="#pricing">قیمت‌ها</a>
       <a href="#faq">سؤالات</a>
+      <a href="/my-account/">ورود / ثبت‌نام</a>
       <a href="#pricing" class="btn" style="margin-top:10px;display:none">شروع رایگان</a>
     </nav>
-    <a href="#pricing" class="btn header-cta">شروع رایگان</a>
+    <div class="header-actions">
+      <a href="/my-account/" class="btn ghost header-cta header-login">ورود</a>
+      <a href="#pricing" class="btn header-cta">شروع رایگان</a>
+    </div>
     <button class="menu-btn" id="menuBtn" aria-label="منوی ناوبری" aria-expanded="false">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
         <path d="M4 7h16M4 12h16M4 17h16" id="menuIcon"/>

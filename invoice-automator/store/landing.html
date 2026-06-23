@@ -65,6 +65,8 @@ nav.links a:hover::after{transform:scaleX(1)}
 .menu-btn:hover{background:rgba(255,255,255,.06)}
 .menu-btn svg{width:26px;height:26px}
 .header-cta{padding:10px 22px;font-size:.95rem}
+.header-actions{display:flex;align-items:center;gap:10px}
+.header-login{padding:10px 18px}
 @media(max-width:820px){
   nav.links{position:fixed;top:70px;right:0;left:0;flex-direction:column;background:rgba(15,17,23,.98);
     backdrop-filter:blur(14px);padding:14px 22px 22px;gap:0;border-bottom:1px solid var(--line);
@@ -273,9 +275,13 @@ footer{padding:40px 0;border-top:1px solid var(--line);color:var(--dim);text-ali
       <a href="#how">چطور کار می‌کند</a>
       <a href="#pricing">قیمت‌ها</a>
       <a href="#faq">سؤالات</a>
+      <a href="/my-account/">ورود / ثبت‌نام</a>
       <a href="#pricing" class="btn" style="margin-top:10px;display:none">شروع رایگان</a>
     </nav>
-    <a href="#pricing" class="btn header-cta">شروع رایگان</a>
+    <div class="header-actions">
+      <a href="/my-account/" class="btn ghost header-cta header-login">ورود</a>
+      <a href="#pricing" class="btn header-cta">شروع رایگان</a>
+    </div>
     <button class="menu-btn" id="menuBtn" aria-label="منوی ناوبری" aria-expanded="false">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
         <path d="M4 7h16M4 12h16M4 17h16" id="menuIcon"/>
