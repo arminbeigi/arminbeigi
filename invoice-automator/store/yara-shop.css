@@ -1,0 +1,107 @@
+/* ===== یارا — استایل برند برای صفحات فروشگاه (Astra + WooCommerce) =====
+   این کد را در: نمایش ← سفارشی‌سازی ← CSS اضافه (Additional CSS) جای‌گذاری کنید.
+   روی صفحه‌ی اصلی (لندینگ) اثری ندارد؛ فقط صفحات فروشگاه/سبد/حساب/پرداخت. */
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap');
+
+:root{
+  --y-indigo:#5B6CFF; --y-violet:#7C4DFF; --y-teal:#22D3B4;
+  --y-grad:linear-gradient(135deg,#5B6CFF,#7C4DFF);
+  --y-ink:#1A1C23; --y-dim:#6b7280; --y-line:#e7e9f0; --y-radius:16px;
+}
+
+/* فونت سراسری */
+body, button, input, select, textarea,
+h1,h2,h3,h4,h5,h6, .site-title{
+  font-family:'Vazirmatn', Tahoma, sans-serif !important;
+}
+
+/* ===== دکمه‌ها — گرادیان برند ===== */
+.woocommerce a.button, .woocommerce button.button, .woocommerce input.button,
+.woocommerce #respond input#submit, .woocommerce a.button.alt,
+.woocommerce button.button.alt, .woocommerce input.button.alt,
+.wc-block-components-button, button.single_add_to_cart_button,
+.woocommerce-account button, .ast-custom-button{
+  background:var(--y-grad) !important; background-color:#5B6CFF !important;
+  border:none !important; color:#fff !important; border-radius:12px !important;
+  padding:12px 26px !important; font-weight:700 !important;
+  box-shadow:0 8px 20px rgba(91,108,255,.25) !important;
+  transition:transform .2s, box-shadow .2s !important; text-shadow:none !important;
+}
+.woocommerce a.button:hover, .woocommerce button.button:hover,
+.woocommerce input.button:hover, .woocommerce #respond input#submit:hover,
+.woocommerce a.button.alt:hover, .woocommerce button.button.alt:hover,
+.wc-block-components-button:hover, button.single_add_to_cart_button:hover{
+  transform:translateY(-2px) !important;
+  box-shadow:0 14px 30px rgba(91,108,255,.4) !important; opacity:1 !important;
+}
+
+/* ===== قیمت ===== */
+.woocommerce .price, .woocommerce-Price-amount,
+.woocommerce ul.products li.product .price{
+  color:var(--y-violet) !important; font-weight:900 !important;
+}
+
+/* ===== کارت محصول ===== */
+.woocommerce ul.products li.product{
+  background:#fff; border:1px solid var(--y-line); border-radius:var(--y-radius);
+  padding:18px !important; text-align:center; box-shadow:0 2px 10px rgba(0,0,0,.03);
+  transition:transform .3s, box-shadow .3s, border-color .3s;
+}
+.woocommerce ul.products li.product:hover{
+  transform:translateY(-6px); border-color:var(--y-indigo);
+  box-shadow:0 18px 40px rgba(91,108,255,.18);
+}
+.woocommerce ul.products li.product img{ border-radius:12px; margin-bottom:12px; }
+.woocommerce ul.products li.product .woocommerce-loop-product__title{
+  font-weight:700; font-size:1.02rem; color:var(--y-ink);
+}
+
+/* ===== عنوان‌ها و breadcrumb و لینک‌ها ===== */
+.woocommerce-products-header__title, .entry-title{ font-weight:900 !important; }
+.woocommerce-breadcrumb a{ color:var(--y-indigo) !important; }
+.woocommerce a:not(.button){ color:var(--y-indigo); }
+
+/* ===== حساب کاربری — منوی کناری کارتی/تب‌دار ===== */
+.woocommerce-account .woocommerce-MyAccount-navigation ul{
+  list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px;
+}
+.woocommerce-account .woocommerce-MyAccount-navigation ul li{
+  border:1px solid var(--y-line); border-radius:12px; overflow:hidden; transition:.2s;
+}
+.woocommerce-account .woocommerce-MyAccount-navigation ul li a{
+  display:block; padding:14px 18px; color:var(--y-ink) !important;
+  font-weight:600; text-decoration:none;
+}
+.woocommerce-account .woocommerce-MyAccount-navigation ul li:hover{ border-color:var(--y-indigo); }
+.woocommerce-account .woocommerce-MyAccount-navigation ul li.is-active{
+  background:var(--y-grad); border-color:transparent;
+}
+.woocommerce-account .woocommerce-MyAccount-navigation ul li.is-active a{ color:#fff !important; }
+
+/* ===== جعبه‌های سبد/تسویه/فرم ===== */
+.woocommerce-cart table.cart, .woocommerce table.shop_table,
+.woocommerce-checkout #order_review, .woocommerce .cart_totals{
+  border-radius:var(--y-radius); border:1px solid var(--y-line) !important; overflow:hidden;
+}
+.woocommerce table.shop_table thead th{ background:#f7f8fc; }
+.woocommerce form .form-row input.input-text,
+.woocommerce form .form-row textarea,
+.woocommerce .select2-container .select2-selection,
+.woocommerce-account input[type="text"],
+.woocommerce-account input[type="email"],
+.woocommerce-account input[type="password"]{
+  border-radius:10px !important; border:1px solid var(--y-line) !important;
+  padding:10px 12px !important; min-height:44px !important;
+}
+
+/* ===== هدر سایت ===== */
+.site-title a{ font-weight:900 !important; color:var(--y-ink) !important; }
+
+/* ===== خالی‌بودن سبد ===== */
+.cart-empty.woocommerce-info{ border-top-color:var(--y-indigo) !important; }
+
+/* ===== ریسپانسیو موبایل ===== */
+@media(max-width:600px){
+  .woocommerce ul.products li.product{ padding:14px !important; }
+  .woocommerce a.button, button.single_add_to_cart_button{ width:100%; }
+}
