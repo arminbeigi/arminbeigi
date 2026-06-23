@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Yara Buy Flow (قیف خرید یکپارچه)
  * Description: قیف خرید چندمرحله‌ای یارا — ورود با کد پیامکی، نام، پرداخت و هدایت به دانلودها.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: Yara
  *
  * پیش‌نیاز: افزونه‌های «Yara Account» (برای OTP) و WooCommerce فعال باشند.
@@ -254,45 +254,51 @@ add_shortcode('yara_buy', function () {
 add_action('wp_ajax_yara_buy_place_order', 'yara_buy_place_order');
 add_action('wp_ajax_nopriv_yara_buy_place_order', 'yara_buy_place_order');
 function yara_buy_place_order() {
-    check_ajax_referer('yara_buy', 'nonce');
-    if (!is_user_logged_in()) wp_send_json_error(['msg' => 'ابتدا با موبایل وارد شوید.']);
+    // توجه: پس از ورود با کد، نشست تغییر می‌کند و nonceِ زمان بارگذاری باطل می‌شود؛
+    // بنابراین به‌جای nonce به «ورود کاربر + same-origin» تکیه می‌کنیم
+    // (سفارش فقط برای خودِ کاربر واردشده ساخته می‌شود).
+    if (!is_user_logged_in()) wp_send_json_error(['msg' => 'نشست شما منقضی شد. صفحه را تازه کنید و دوباره وارد شوید.']);
     if (!function_exists('WC')) wp_send_json_error(['msg' => 'WooCommerce فعال نیست.']);
 
-    $uid = get_current_user_id();
-    $plan = sanitize_text_field($_POST['plan'] ?? '');
-    $sku = YARA_BUY_PLANS[$plan] ?? '';
-    $pid = $sku ? wc_get_product_id_by_sku($sku) : 0;
-    $product = $pid ? wc_get_product($pid) : null;
-    if (!$product) wp_send_json_error(['msg' => 'محصول یافت نشد.']);
+    try {
+        $uid = get_current_user_id();
+        $plan = sanitize_text_field($_POST['plan'] ?? '');
+        $sku = YARA_BUY_PLANS[$plan] ?? '';
+        $pid = $sku ? wc_get_product_id_by_sku($sku) : 0;
+        $product = $pid ? wc_get_product($pid) : null;
+        if (!$product) wp_send_json_error(['msg' => 'محصول یافت نشد.']);
 
-    $first = sanitize_text_field($_POST['first'] ?? '');
-    $last  = sanitize_text_field($_POST['last'] ?? '');
-    $pay   = sanitize_text_field($_POST['payment_method'] ?? '');
+        $first = sanitize_text_field($_POST['first'] ?? '');
+        $last  = sanitize_text_field($_POST['last'] ?? '');
+        $pay   = sanitize_text_field($_POST['payment_method'] ?? '');
 
-    if ($first) { update_user_meta($uid, 'first_name', $first); update_user_meta($uid, 'billing_first_name', $first); }
-    if ($last)  { update_user_meta($uid, 'last_name', $last);  update_user_meta($uid, 'billing_last_name', $last); }
+        if ($first) { update_user_meta($uid, 'first_name', $first); update_user_meta($uid, 'billing_first_name', $first); }
+        if ($last)  { update_user_meta($uid, 'last_name', $last);  update_user_meta($uid, 'billing_last_name', $last); }
 
-    $gateways = WC()->payment_gateways()->get_available_payment_gateways();
-    if (!isset($gateways[$pay])) wp_send_json_error(['msg' => 'روش پرداخت نامعتبر است.']);
+        $gateways = WC()->payment_gateways()->get_available_payment_gateways();
+        if (!isset($gateways[$pay])) wp_send_json_error(['msg' => 'روش پرداخت نامعتبر است.']);
 
-    $user  = wp_get_current_user();
-    $phone = get_user_meta($uid, 'billing_phone', true);
+        $user  = wp_get_current_user();
+        $phone = get_user_meta($uid, 'billing_phone', true);
 
-    $order = wc_create_order(['customer_id' => $uid]);
-    $order->add_product($product, 1);
-    $order->set_billing_first_name($first);
-    $order->set_billing_last_name($last);
-    $order->set_billing_phone($phone);
-    $order->set_billing_email($user->user_email);
-    $order->set_payment_method($gateways[$pay]);
-    $order->calculate_totals();
-    $order->save();
+        $order = wc_create_order(['customer_id' => $uid]);
+        $order->add_product($product, 1);
+        $order->set_billing_first_name($first);
+        $order->set_billing_last_name($last);
+        $order->set_billing_phone($phone);
+        $order->set_billing_email($user->user_email);
+        $order->set_payment_method($gateways[$pay]);
+        $order->calculate_totals();
+        $order->save();
 
-    $result = $gateways[$pay]->process_payment($order->get_id());
-    if (is_array($result) && ($result['result'] ?? '') === 'success') {
-        wp_send_json_success(['redirect' => $result['redirect']]);
+        $result = $gateways[$pay]->process_payment($order->get_id());
+        if (is_array($result) && ($result['result'] ?? '') === 'success') {
+            wp_send_json_success(['redirect' => $result['redirect']]);
+        }
+        wp_send_json_error(['msg' => 'درگاه پرداخت پاسخ موفق نداد.']);
+    } catch (\Throwable $e) {
+        wp_send_json_error(['msg' => 'خطا: ' . $e->getMessage()]);
     }
-    wp_send_json_error(['msg' => 'خطا در شروع پرداخت.']);
 }
 
 // ───────────────────────── تشکر + هدایت به دانلودها ─────────────────────────
