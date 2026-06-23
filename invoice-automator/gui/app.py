@@ -23,6 +23,7 @@ if str(BASE_DIR) not in sys.path:
 
 from gui import settings_store as store
 from gui import core
+from gui import license as lic
 from gui.fonts import load_persian_font, app_icon_path
 from gui.theme import COLORS, CHANNELS, FONT_FALLBACK
 
@@ -330,6 +331,86 @@ class InvoiceApp(_AppBase):
         self._show_send()
         self._poll_log()
         self._setup_dnd()
+        self.after(300, self._check_license_on_start)
+
+    # ──────────────────────────────────────────────── لایسنس
+    def _check_license_on_start(self):
+        self._refresh_license_badge()
+        if not lic.is_usable():
+            self._open_activation()
+
+    def _refresh_license_badge(self):
+        st = lic.status()
+        if not hasattr(self, "license_badge"):
+            return
+        if st["state"] == "active":
+            d = st.get("days_left")
+            txt = "✅ نسخه فعال" + (f" ({d} روز)" if d else " (دائمی)")
+            col = COLORS["success"]
+        elif st["state"] == "trial":
+            txt = f"⏳ تست رایگان: {st['days_left']} روز"
+            col = COLORS["warning"]
+        else:
+            txt = "🔒 غیرفعال — فعال‌سازی"
+            col = COLORS["danger"]
+        self.license_badge.configure(text=txt, text_color=col)
+
+    def _open_activation(self):
+        win = ctk.CTkToplevel(self)
+        win.title("فعال‌سازی کارا")
+        win.geometry("460x420")
+        win.configure(fg_color=COLORS["bg"])
+        win.transient(self)
+        try:
+            win.grab_set()
+        except Exception:
+            pass
+
+        ctk.CTkLabel(win, text="🔑 فعال‌سازی کارا", font=_font(20, "bold"),
+                     text_color=COLORS["text"]).pack(pady=(24, 4))
+        ctk.CTkLabel(win, text="کلید لایسنسی که هنگام خرید دریافت کردید را وارد کنید.",
+                     font=_font(12), text_color=COLORS["text_dim"], wraplength=400).pack(pady=(0, 16))
+
+        key_var = ctk.StringVar()
+        ctk.CTkEntry(win, textvariable=key_var, placeholder_text="XXXX-XXXX-XXXX-XXXX",
+                     font=_font(14), justify="center", width=380, height=42,
+                     fg_color=COLORS["input"], border_color=COLORS["border"]).pack(pady=(0, 6))
+
+        status_lbl = ctk.CTkLabel(win, text="", font=_font(12), wraplength=400)
+        status_lbl.pack(pady=(2, 8))
+
+        def do_activate():
+            status_lbl.configure(text="در حال فعال‌سازی…", text_color=COLORS["text_dim"])
+            def worker():
+                ok, msg = lic.activate(key_var.get())
+                def done():
+                    status_lbl.configure(text=("✅ " if ok else "❌ ") + msg,
+                                         text_color=COLORS["success"] if ok else COLORS["danger"])
+                    if ok:
+                        self._refresh_license_badge()
+                        win.after(1200, win.destroy)
+                self.after(0, done)
+            threading.Thread(target=worker, daemon=True).start()
+
+        def do_trial():
+            ok, msg = lic.start_trial()
+            status_lbl.configure(text=("✅ " if ok else "❌ ") + msg,
+                                 text_color=COLORS["success"] if ok else COLORS["danger"])
+            if ok:
+                self._refresh_license_badge()
+                win.after(1000, win.destroy)
+
+        ctk.CTkButton(win, text="فعال‌سازی", height=44, font=_font(15, "bold"),
+                      fg_color=COLORS["accent"], hover_color=COLORS["accent_hover"],
+                      command=do_activate).pack(fill="x", padx=40, pady=(6, 6))
+        ctk.CTkButton(win, text=f"شروع تست رایگان {lic.TRIAL_DAYS} روزه", height=40, font=_font(13),
+                      fg_color=COLORS["card"], hover_color=COLORS["card_hover"],
+                      command=do_trial).pack(fill="x", padx=40, pady=2)
+        ctk.CTkButton(win, text="خرید لایسنس 🛒", height=36, font=_font(13),
+                      fg_color="transparent", border_width=1, border_color=COLORS["accent"],
+                      text_color=COLORS["accent"], hover_color=COLORS["card_hover"],
+                      command=lambda: __import__("webbrowser").open(lic.store_url())).pack(
+            fill="x", padx=40, pady=(8, 4))
 
     def _setup_dnd(self):
         """فعال‌سازی کشیدن‌ورهاکردن فایل روی پنجره."""
@@ -392,6 +473,12 @@ class InvoiceApp(_AppBase):
         self.theme_menu.pack(fill="x")
         ctk.CTkLabel(theme_frame, text="حالت نمایش", font=_font(11),
                      text_color=COLORS["text_dim"]).pack(pady=(4, 0))
+
+        # نشان وضعیت لایسنس (کلیک = فعال‌سازی)
+        self.license_badge = ctk.CTkLabel(theme_frame, text="", font=_font(12, "bold"),
+                                          text_color=COLORS["text_dim"], cursor="hand2")
+        self.license_badge.pack(pady=(12, 0))
+        self.license_badge.bind("<Button-1>", lambda e: self._open_activation())
 
         # ناحیه‌ی محتوای اصلی
         self.content = ctk.CTkFrame(self, fg_color=COLORS["bg"], corner_radius=0)
@@ -648,6 +735,11 @@ class InvoiceApp(_AppBase):
         self.after(120, self._poll_log)
 
     def _start_send(self):
+        if not lic.is_usable():
+            messagebox.showwarning("فعال‌سازی لازم است",
+                                   "برای ارسال، ابتدا برنامه را فعال کنید یا تست رایگان را شروع کنید.")
+            self._open_activation()
+            return
         if not self.selected_file:
             messagebox.showwarning("توجه", "ابتدا یک فایل PDF انتخاب کنید.")
             return

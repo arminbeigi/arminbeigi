@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>کارا | دستیار هوشمند کسب‌وکار — ارسال خودکار پیش‌فاکتور</title>
+<meta name="description" content="کارا پیش‌فاکتورها و پیام‌های کسب‌وکارت را خودکار و چندکاناله (پیامک، واتساپ، بله، روبیکا) برای مشتری می‌فرستد. بدون کار دستی، بدون فراموشی.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --indigo:#5B6CFF; --violet:#7C4DFF; --teal:#22D3B4;
+  --dark:#0F1117; --card:#161922; --line:#252a3a;
+  --text:#E6E8EF; --dim:#9AA0B4; --grad:linear-gradient(135deg,#5B6CFF,#7C4DFF);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Vazirmatn',Tahoma,sans-serif;background:var(--dark);color:var(--text);line-height:1.9;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1160px;margin:0 auto;padding:0 22px}
+.btn{display:inline-flex;align-items:center;gap:8px;border:none;cursor:pointer;font-family:inherit;font-weight:700;
+  border-radius:14px;padding:14px 30px;font-size:1rem;transition:.25s;background:var(--grad);color:#fff}
+.btn:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(91,108,255,.4)}
+.btn.ghost{background:transparent;border:1.5px solid var(--line);color:var(--text)}
+.btn.ghost:hover{border-color:var(--indigo);box-shadow:none}
+.tag{display:inline-block;background:rgba(91,108,255,.14);color:#aeb8ff;border:1px solid rgba(91,108,255,.3);
+  padding:6px 16px;border-radius:30px;font-size:.85rem;font-weight:500}
+
+/* Header */
+header{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);background:rgba(15,17,23,.7);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:70px}
+.logo{display:flex;align-items:center;gap:12px;font-weight:900;font-size:1.45rem}
+.logo .mark{width:42px;height:42px}
+nav.links{display:flex;gap:28px}
+nav.links a{color:var(--dim);font-size:.95rem;transition:.2s}
+nav.links a:hover{color:var(--text)}
+@media(max-width:820px){nav.links{display:none}}
+
+/* Hero */
+.hero{position:relative;padding:90px 0 70px;text-align:center;overflow:hidden}
+.hero::before{content:"";position:absolute;top:-200px;right:-150px;width:600px;height:600px;
+  background:radial-gradient(circle,rgba(124,77,255,.25),transparent 60%);filter:blur(20px)}
+.hero::after{content:"";position:absolute;bottom:-250px;left:-150px;width:600px;height:600px;
+  background:radial-gradient(circle,rgba(34,211,180,.16),transparent 60%);filter:blur(20px)}
+.hero h1{font-size:3.1rem;font-weight:900;line-height:1.4;margin:20px auto;max-width:820px;position:relative}
+.hero h1 .hl{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.sub{font-size:1.25rem;color:var(--dim);max-width:640px;margin:0 auto 32px;position:relative}
+.hero .cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;position:relative}
+.hero .note{margin-top:16px;color:var(--dim);font-size:.9rem;position:relative}
+@media(max-width:640px){.hero h1{font-size:2.1rem}}
+
+/* App mockup */
+.mock{margin:54px auto 0;max-width:760px;position:relative;border-radius:20px;overflow:hidden;
+  border:1px solid var(--line);box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.mock .bar{height:42px;background:#11141d;display:flex;align-items:center;gap:8px;padding:0 16px}
+.mock .bar i{width:12px;height:12px;border-radius:50%;display:inline-block}
+.mock .body{background:linear-gradient(180deg,#1c2030,#11141d);padding:34px;display:grid;gap:14px}
+.mock .row{height:14px;border-radius:8px;background:#2a3147}
+.mock .row.s{width:50%}.mock .row.m{width:75%}
+.mock .send{height:48px;border-radius:12px;background:linear-gradient(90deg,#22c55e,#16a34a);
+  display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;margin-top:8px}
+
+/* Trust */
+.trust{padding:34px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:#11141d}
+.chips{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.chip{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);
+  padding:10px 18px;border-radius:14px;color:var(--dim);font-size:.95rem}
+
+/* Sections */
+section.block{padding:80px 0}
+.center{text-align:center;max-width:680px;margin:0 auto 50px}
+.center h2{font-size:2.2rem;font-weight:900;margin-bottom:12px}
+.center p{color:var(--dim);font-size:1.1rem}
+@media(max-width:640px){.center h2{font-size:1.6rem}}
+
+/* Features */
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+@media(max-width:880px){.grid{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.grid{grid-template-columns:1fr}}
+.feat{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:28px;transition:.25s}
+.feat:hover{transform:translateY(-5px);border-color:var(--indigo);box-shadow:0 18px 40px rgba(0,0,0,.35)}
+.feat .ico{width:54px;height:54px;border-radius:14px;background:rgba(91,108,255,.14);
+  display:flex;align-items:center;justify-content:center;font-size:1.6rem;margin-bottom:16px}
+.feat h3{font-size:1.2rem;margin-bottom:8px}
+.feat p{color:var(--dim);font-size:.97rem}
+
+/* Steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;counter-reset:s}
+@media(max-width:760px){.steps{grid-template-columns:1fr}}
+.step{position:relative;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:30px 26px}
+.step .n{counter-increment:s;width:44px;height:44px;border-radius:50%;background:var(--grad);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.2rem;margin-bottom:14px}
+.step .n::before{content:counter(s)}
+
+/* Pricing */
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;align-items:stretch}
+@media(max-width:880px){.plans{grid-template-columns:1fr;max-width:420px;margin:0 auto}}
+.plan{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:34px 28px;display:flex;flex-direction:column}
+.plan.pop{border:2px solid var(--indigo);position:relative;box-shadow:0 20px 50px rgba(91,108,255,.25)}
+.plan.pop .badge{position:absolute;top:-14px;right:24px;background:var(--grad);color:#fff;
+  padding:5px 16px;border-radius:20px;font-size:.8rem;font-weight:700}
+.plan h3{font-size:1.3rem}
+.plan .price{font-size:2.1rem;font-weight:900;margin:14px 0 2px}
+.plan .price span{font-size:1rem;color:var(--dim);font-weight:400}
+.plan ul{list-style:none;margin:20px 0;display:grid;gap:12px;flex:1}
+.plan li{display:flex;gap:10px;color:var(--dim)}
+.plan li::before{content:"✓";color:var(--teal);font-weight:900}
+.plan .btn{justify-content:center;margin-top:auto}
+
+/* FAQ */
+.faq{max-width:760px;margin:0 auto}
+.q{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:12px;overflow:hidden}
+.q summary{cursor:pointer;padding:20px 24px;font-weight:700;list-style:none;display:flex;justify-content:space-between}
+.q summary::-webkit-details-marker{display:none}
+.q summary::after{content:"+";color:var(--indigo);font-size:1.4rem}
+.q[open] summary::after{content:"−"}
+.q .a{padding:0 24px 20px;color:var(--dim)}
+
+/* CTA */
+.final{margin:30px auto 0;background:var(--grad);border-radius:26px;padding:60px 30px;text-align:center}
+.final h2{font-size:2.2rem;font-weight:900;margin-bottom:12px}
+.final p{opacity:.92;margin-bottom:26px;font-size:1.1rem}
+.final .btn{background:#fff;color:var(--violet)}
+.final .btn:hover{box-shadow:0 14px 30px rgba(0,0,0,.3)}
+
+footer{padding:40px 0;border-top:1px solid var(--line);color:var(--dim);text-align:center;font-size:.9rem;margin-top:70px}
+
+/* reveal animation */
+.reveal{opacity:0;transform:translateY(28px);transition:.7s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+</style>
+</head>
+<body>
+
+<!-- لوگوی SVG (نشانه) به‌صورت inline -->
+<svg width="0" height="0" style="position:absolute"><defs>
+  <linearGradient id="kg" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#5B6CFF"/><stop offset="1" stop-color="#7C4DFF"/>
+  </linearGradient></defs></svg>
+
+<header>
+  <div class="wrap nav">
+    <div class="logo">
+      <svg class="mark" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="url(#kg)"/>
+        <rect x="22" y="24" width="56" height="42" rx="12" fill="#fff"/>
+        <polygon points="34,64 50,64 36,82" fill="#fff"/>
+        <polygon points="50,32 56,44 68,45 58,54 60,66 50,59 40,66 42,54 32,45 44,44" fill="#5B6CFF"/>
+      </svg>
+      <span>کارا</span>
+    </div>
+    <nav class="links">
+      <a href="#features">امکانات</a>
+      <a href="#how">چطور کار می‌کند</a>
+      <a href="#pricing">قیمت‌ها</a>
+      <a href="#faq">سؤالات</a>
+    </nav>
+    <a href="#pricing" class="btn" style="padding:10px 22px">شروع رایگان</a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <span class="tag">دستیار هوشمند کسب‌وکار شما</span>
+    <h1>پیش‌فاکتورهایت را در <span class="hl">یک کلیک</span>،<br>همه‌جا بفرست.</h1>
+    <p class="sub">کارا فاکتور و پیام مشتری را خودکار و چندکاناله — پیامک، واتساپ، بله و روبیکا — می‌فرستد. بدون کار دستی، بدون فراموشی.</p>
+    <div class="cta">
+      <a href="#pricing" class="btn">شروع تست رایگان ۷ روزه</a>
+      <a href="#how" class="btn ghost">▶ تماشای دمو</a>
+    </div>
+    <div class="note">بدون نیاز به کارت بانکی برای تست · نصب در کمتر از ۲ دقیقه</div>
+
+    <div class="mock reveal">
+      <div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></div>
+      <div class="body">
+        <div class="row m"></div><div class="row s"></div>
+        <div class="row"></div><div class="row m"></div>
+        <div class="send">🚀 شروع ارسال</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST -->
+<div class="trust"><div class="wrap chips">
+  <div class="chip">📱 پیامک</div><div class="chip">🟢 واتساپ</div>
+  <div class="chip">🔵 بله</div><div class="chip">🟣 روبیکا</div>
+  <div class="chip">🌐 وردپرس</div><div class="chip">🔒 امن و آفلاین</div>
+</div></div>
+
+<!-- PROBLEM -->
+<section class="block">
+  <div class="wrap center reveal">
+    <h2>هنوز دستی فاکتور می‌فرستی؟</h2>
+    <p>هر روز وقتت صرف کپی‌کردن شماره، باز کردن چند پیام‌رسان و فرستادن تک‌تک فایل‌ها می‌شود — با خطا و فراموشی. کارا همه‌ی این‌ها را یک‌جا و خودکار انجام می‌دهد.</p>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="block" id="features" style="padding-top:0">
+  <div class="wrap">
+    <div class="center reveal"><h2>چرا کارا؟</h2><p>همه‌ی ابزارهایی که برای ارسال سریع و حرفه‌ای لازم داری.</p></div>
+    <div class="grid">
+      <div class="feat reveal"><div class="ico">📤</div><h3>ارسال چندکاناله</h3><p>یک فایل، هم‌زمان به پیامک، واتساپ، بله و روبیکا. خودت انتخاب کن از کدام برود.</p></div>
+      <div class="feat reveal"><div class="ico">🧠</div><h3>متن هوشمند با متغیر</h3><p>نام مشتری، شماره فاکتور و لینک به‌صورت خودکار در متن قرار می‌گیرند.</p></div>
+      <div class="feat reveal"><div class="ico">💬</div><h3>چت دوطرفه‌ی واقعی</h3><p>در بله و روبیکا پیام از شماره‌ی خودت می‌رود؛ مشتری می‌تواند جواب بدهد.</p></div>
+      <div class="feat reveal"><div class="ico">🔗</div><h3>لینک کوتاه وردپرس</h3><p>PDF را در سایت آپلود و یک لینک کوتاه برای مشتری می‌سازد.</p></div>
+      <div class="feat reveal"><div class="ico">🖱️</div><h3>کشیدن و رها کردن</h3><p>فایل را بکش و رها کن؛ شماره از نام فایل خودکار تشخیص داده می‌شود.</p></div>
+      <div class="feat reveal"><div class="ico">🔒</div><h3>امن و روی سیستم خودت</h3><p>اطلاعات ورود رمزنگاری‌شده و فقط روی کامپیوتر تو ذخیره می‌شود.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW -->
+<section class="block" id="how" style="padding-top:0">
+  <div class="wrap">
+    <div class="center reveal"><h2>در ۳ مرحله</h2><p>به این سادگی.</p></div>
+    <div class="steps">
+      <div class="step reveal"><div class="n"></div><h3>فایل را انتخاب کن</h3><p>PDF یا عکس پیش‌فاکتور را بکش و رها کن یا انتخاب کن.</p></div>
+      <div class="step reveal"><div class="n"></div><h3>کانال‌ها را بزن</h3><p>تیک بزن از کدام پیام‌رسان‌ها ارسال شود.</p></div>
+      <div class="step reveal"><div class="n"></div><h3>شروع ارسال</h3><p>کارا هم‌زمان همه را می‌فرستد و گزارش زنده می‌دهد.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="block" id="pricing" style="padding-top:0">
+  <div class="wrap">
+    <div class="center reveal"><h2>قیمت‌گذاری شفاف</h2><p>یک‌بار انتخاب کن، همیشه در وقت و انرژی صرفه‌جویی کن.</p></div>
+    <div class="plans">
+      <div class="plan reveal">
+        <h3>پایه</h3>
+        <div class="price">۹۹۰<span> هزار / سال</span></div>
+        <ul><li>یک کانال دلخواه</li><li>ارسال نامحدود</li><li>متن با متغیر</li><li>پشتیبانی ایمیلی</li></ul>
+        <a href="#" class="btn ghost">انتخاب پایه</a>
+      </div>
+      <div class="plan pop reveal">
+        <span class="badge">پیشنهادی</span>
+        <h3>حرفه‌ای</h3>
+        <div class="price">۱٬۹۹۰<span> هزار / سال</span></div>
+        <ul><li>همه‌ی کانال‌ها (۴ پیام‌رسان)</li><li>چت دوطرفه بله و روبیکا</li><li>لینک کوتاه وردپرس</li><li>تشخیص خودکار شماره</li><li>پشتیبانی اولویت‌دار</li></ul>
+        <a href="#" class="btn">شروع حرفه‌ای</a>
+      </div>
+      <div class="plan reveal">
+        <h3>کسب‌وکار</h3>
+        <div class="price">۳٬۹۹۰<span> هزار / سال</span></div>
+        <ul><li>تمام امکانات حرفه‌ای</li><li>چند کاربر</li><li>ماژول‌های آینده (دستیار هوشمند)</li><li>پشتیبانی اختصاصی</li></ul>
+        <a href="#" class="btn ghost">انتخاب کسب‌وکار</a>
+      </div>
+    </div>
+    <p style="text-align:center;color:var(--dim);margin-top:24px">✅ گارانتی بازگشت وجه ۱۴ روزه · ۷ روز تست رایگان</p>
+  </div>
+</section>
+
+<!-- TESTIMONIAL -->
+<section class="block" style="padding-top:0">
+  <div class="wrap">
+    <div class="feat reveal" style="max-width:760px;margin:0 auto;text-align:center;padding:40px">
+      <p style="font-size:1.3rem;color:var(--text);line-height:2">«قبلاً هر روز نیم ساعت صرف فرستادن فاکتورها می‌شد. الان با کارا چند ثانیه‌ست و دیگه هیچ مشتری‌ای جا نمی‌مونه.»</p>
+      <p style="color:var(--dim);margin-top:14px">— مدیر فروشگاه لوازم خانگی</p>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="block" id="faq" style="padding-top:0">
+  <div class="wrap">
+    <div class="center reveal"><h2>سؤالات متداول</h2></div>
+    <div class="faq">
+      <details class="q reveal"><summary>برای استفاده به دانش فنی نیاز دارم؟</summary><div class="a">نه. کارا را نصب می‌کنی، یک‌بار پیام‌رسان‌ها را وصل می‌کنی و تمام. محیط کاملاً فارسی و ساده است.</div></details>
+      <details class="q reveal"><summary>اطلاعاتم امن است؟</summary><div class="a">بله. تمام اطلاعات ورود به‌صورت رمزنگاری‌شده و فقط روی کامپیوتر خودت ذخیره می‌شود؛ روی هیچ سروری نمی‌رود.</div></details>
+      <details class="q reveal"><summary>بله و روبیکا چطور کار می‌کنند؟</summary><div class="a">با اکانت شخصی خودت (با شماره و کد تأیید) وارد می‌شوی و پیام از شماره‌ی خودت برای مشتری می‌رود — مثل یک چت واقعی.</div></details>
+      <details class="q reveal"><summary>روی چند سیستم می‌توانم نصب کنم؟</summary><div class="a">هر لایسنس برای تعداد مشخصی دستگاه فعال می‌شود. برای دستگاه بیشتر، پلن بالاتر یا لایسنس اضافه تهیه کن.</div></details>
+      <details class="q reveal"><summary>اگر راضی نبودم؟</summary><div class="a">۱۴ روز گارانتی بازگشت وجه داری. بدون دردسر مبلغ را برمی‌گردانیم.</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="block" style="padding-top:0">
+  <div class="wrap">
+    <div class="final reveal">
+      <h2>همین امروز ارسال فاکتورهایت را خودکار کن</h2>
+      <p>۷ روز رایگان امتحان کن. اگر دوست داشتی، بمان.</p>
+      <a href="#pricing" class="btn">شروع رایگان کارا</a>
+    </div>
+  </div>
+</section>
+
+<footer><div class="wrap">© کارا — دستیار هوشمند کسب‌وکار · ساخته‌شده با ❤️</div></footer>
+
+<script>
+// انیمیشن ظاهرشدن هنگام اسکرول
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
