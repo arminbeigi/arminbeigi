@@ -310,7 +310,7 @@ class InvoiceApp(_AppBase):
         ctk.set_appearance_mode(self.settings.get("appearance", "system"))
         ctk.set_default_color_theme("blue")
 
-        self.title("سامانه ارسال پیش‌فاکتور")
+        self.title("یارا — دستیار هوشمند کسب‌وکار")
         self.geometry("1040x720")
         self.minsize(900, 640)
         self.configure(fg_color=COLORS["bg"])
@@ -357,7 +357,7 @@ class InvoiceApp(_AppBase):
 
     def _open_activation(self):
         win = ctk.CTkToplevel(self)
-        win.title("فعال‌سازی کارا")
+        win.title("فعال‌سازی یارا")
         win.geometry("460x420")
         win.configure(fg_color=COLORS["bg"])
         win.transient(self)
@@ -366,7 +366,7 @@ class InvoiceApp(_AppBase):
         except Exception:
             pass
 
-        ctk.CTkLabel(win, text="🔑 فعال‌سازی کارا", font=_font(20, "bold"),
+        ctk.CTkLabel(win, text="🔑 فعال‌سازی یارا", font=_font(20, "bold"),
                      text_color=COLORS["text"]).pack(pady=(24, 4))
         ctk.CTkLabel(win, text="کلید لایسنسی که هنگام خرید دریافت کردید را وارد کنید.",
                      font=_font(12), text_color=COLORS["text_dim"], wraplength=400).pack(pady=(0, 16))
@@ -446,9 +446,9 @@ class InvoiceApp(_AppBase):
         sidebar.grid_propagate(False)
 
         ctk.CTkLabel(sidebar, text="🧾", font=_font(40)).pack(pady=(28, 4))
-        ctk.CTkLabel(sidebar, text="ارسال پیش‌فاکتور", font=_font(18, "bold"),
+        ctk.CTkLabel(sidebar, text="یارا", font=_font(20, "bold"),
                      text_color=COLORS["text"]).pack()
-        ctk.CTkLabel(sidebar, text="Invoice Automator", font=_font(11),
+        ctk.CTkLabel(sidebar, text="YaraPro", font=_font(11),
                      text_color=COLORS["text_dim"]).pack(pady=(0, 24))
 
         self.nav_buttons = {}

@@ -1,8 +1,8 @@
 """
-سیستم فعال‌سازی لایسنس «کارا».
+سیستم فعال‌سازی لایسنس «یارا».
 
 - فعال‌سازی آنلاین با کلیدی که فروشگاه ووکامرس (License Manager for WooCommerce)
-  می‌سازد؛ از طریق یک endpoint سفارشی روی سایت فروشگاه: /wp-json/kara/v1/activate
+  می‌سازد؛ از طریق یک endpoint سفارشی روی سایت فروشگاه: /wp-json/yara/v1/activate
 - ذخیره‌ی رمزنگاری‌شده‌ی وضعیت فعال‌سازی، گره‌خورده به همین دستگاه.
 - تست رایگان یک‌باره و مهلت کار آفلاین.
 
@@ -19,7 +19,7 @@ import getpass
 from gui import settings_store as store
 
 # آدرس فروشگاه ووکامرس (بدون اسلش انتهایی) — این را تغییر دهید
-STORE_URL = "https://getkara.ir"
+STORE_URL = "https://yarapro.ir"
 
 TRIAL_DAYS = 7            # طول تست رایگان
 OFFLINE_GRACE_DAYS = 14   # مهلت کار آفلاین پس از آخرین اعتبارسنجی موفق
@@ -112,7 +112,7 @@ def activate(key: str) -> tuple[bool, str]:
         return False, "کلید لایسنس را وارد کنید."
     try:
         r = requests.post(
-            f"{STORE_URL}/wp-json/kara/v1/activate",
+            f"{STORE_URL}/wp-json/yara/v1/activate",
             json={"license_key": key, "device": device_id()},
             timeout=25,
         )

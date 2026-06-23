@@ -35,21 +35,21 @@ rm -rf "$SP"/tkinterdnd2/tkdnd/linux-* "$SP"/tkinterdnd2/tkdnd/win-* 2>/dev/null
 find "$B/payload" -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
 
 echo "▶ ساخت .app"
-APP="$B/InvoiceAutomator.app"; RES="$APP/Contents/Resources"
+APP="$B/YaraPro.app"; RES="$APP/Contents/Resources"
 mkdir -p "$RES" "$APP/Contents/MacOS"
 cp -R "$B/payload/python" "$RES/python"
 cp -R "$REPO/gui" "$REPO/modules" "$REPO/assets" "$RES/"
 cp "$REPO/run_gui.py" "$REPO/config.example.yaml" "$RES/"
 command -v png2icns >/dev/null && png2icns "$RES/icon.icns" "$REPO/assets/icon.png" >/dev/null 2>&1 || true
-printf '#!/bin/bash\nDIR="$(cd "$(dirname "$0")/../Resources" && pwd)"\nexport TK_SILENCE_DEPRECATION=1\nexec "$DIR/python/bin/python3.12" "$DIR/run_gui.py"\n' > "$APP/Contents/MacOS/InvoiceAutomator"
-chmod +x "$APP/Contents/MacOS/InvoiceAutomator"
+printf '#!/bin/bash\nDIR="$(cd "$(dirname "$0")/../Resources" && pwd)"\nexport TK_SILENCE_DEPRECATION=1\nexec "$DIR/python/bin/python3.12" "$DIR/run_gui.py"\n' > "$APP/Contents/MacOS/YaraPro"
+chmod +x "$APP/Contents/MacOS/YaraPro"
 cat > "$APP/Contents/Info.plist" <<'PLIST'
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0"><dict>
-  <key>CFBundleName</key><string>InvoiceAutomator</string>
-  <key>CFBundleExecutable</key><string>InvoiceAutomator</string>
-  <key>CFBundleIdentifier</key><string>com.shofazh.invoiceautomator</string>
+  <key>CFBundleName</key><string>YaraPro</string>
+  <key>CFBundleExecutable</key><string>YaraPro</string>
+  <key>CFBundleIdentifier</key><string>com.shofazh.yarapro</string>
   <key>CFBundleVersion</key><string>1.0.0</string>
   <key>CFBundleShortVersionString</key><string>1.0.0</string>
   <key>CFBundlePackageType</key><string>APPL</string>
@@ -61,6 +61,6 @@ PLIST
 
 echo "▶ ساخت dmg"
 D="$B/dmg"; rm -rf "$D"; mkdir -p "$D"; cp -R "$APP" "$D/"; ln -s /Applications "$D/Applications"
-mkdir -p "$REPO/dist"; rm -f "$REPO/dist/InvoiceAutomator.dmg"
-genisoimage -V "InvoiceAutomator" -D -R -apple -no-pad -quiet -o "$REPO/dist/InvoiceAutomator.dmg" "$D"
-echo "✅ $REPO/dist/InvoiceAutomator.dmg"
+mkdir -p "$REPO/dist"; rm -f "$REPO/dist/YaraPro.dmg"
+genisoimage -V "YaraPro" -D -R -apple -no-pad -quiet -o "$REPO/dist/YaraPro.dmg" "$D"
+echo "✅ $REPO/dist/YaraPro.dmg"

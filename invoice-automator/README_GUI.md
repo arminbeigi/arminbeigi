@@ -1,4 +1,4 @@
-# 🧾 برنامه‌ی گرافیکی ارسال پیش‌فاکتور (نسخه‌ی ویندوز)
+# 🧾 یارا — دستیار هوشمند کسب‌وکار (نسخه‌ی ویندوز)
 
 برنامه‌ای با محیط گرافیکی مدرن برای ارسال پیش‌فاکتور از طریق
 **پیامک (کاوه‌نگار)، واتساپ، بله و روبیکا** به‌همراه آپلود روی **وردپرس**.
@@ -32,14 +32,14 @@ python run_gui.py
 
 ---
 
-## 📦 نصب روی ویندوز (`InvoiceAutomator-Setup.exe`)
+## 📦 نصب روی ویندوز (`YaraPro-Setup.exe`)
 
 نصب از طریق یک **فایل `Setup.exe` گرافیکی** انجام می‌شود که **پایتون و همه‌ی
 کتابخانه‌ها داخلش باندل شده‌اند** — کاربر نهایی به هیچ پیش‌نیاز، دانلود یا
 نصب اضافه‌ای نیاز ندارد (نصب کاملاً آفلاین).
 
-**برای کاربر نهایی:** فقط `InvoiceAutomator-Setup.exe` را اجرا کنید. نصاب:
-- برنامه را در `%LOCALAPPDATA%\Programs\InvoiceAutomator` نصب می‌کند
+**برای کاربر نهایی:** فقط `YaraPro-Setup.exe` را اجرا کنید. نصاب:
+- برنامه را در `%LOCALAPPDATA%\Programs\YaraPro` نصب می‌کند
 - **آیکن دسکتاپ** و میانبر منوی استارت می‌سازد
 - در **«افزودن یا حذف برنامه‌ها»ی ویندوز (Uninstall)** ثبت می‌شود
 - در پایان، گزینه‌ی اجرای برنامه را می‌دهد
@@ -54,7 +54,7 @@ python run_gui.py
 ```bash
 sudo apt-get install -y nsis p7zip-full
 bash windows-installer/build_on_linux.sh
-# خروجی: windows-installer/build/InvoiceAutomator-Setup.exe
+# خروجی: windows-installer/build/YaraPro-Setup.exe
 ```
 
 این اسکریپت پایتون قابل‌حمل ویندوزی (به‌همراه tkinter) را دانلود، کتابخانه‌ها
@@ -71,7 +71,7 @@ bash windows-installer/build_on_linux.sh
 اطلاعات ورود رمزنگاری‌شده در این مسیر ذخیره می‌شود:
 
 ```
-%APPDATA%\InvoiceAutomator\settings.enc
+%APPDATA%\YaraPro\settings.enc
 ```
 
 کلید رمزنگاری به همین دستگاه گره خورده است، بنابراین فایل روی کامپیوتر

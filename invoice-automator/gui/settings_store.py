@@ -4,9 +4,9 @@
 هیچ اطلاعاتی داخل کد یا گیت ذخیره نمی‌شود. همه‌ی اطلاعات ورود
 به‌صورت رمزنگاری‌شده در پوشه‌ی کاربر (روی همان کامپیوتر) نگه‌داری می‌شود:
 
-  Windows : %APPDATA%/InvoiceAutomator/
-  Linux   : ~/.config/InvoiceAutomator/
-  macOS   : ~/Library/Application Support/InvoiceAutomator/
+  Windows : %APPDATA%/YaraPro/
+  Linux   : ~/.config/YaraPro/
+  macOS   : ~/Library/Application Support/YaraPro/
 
 کلید رمزنگاری از شناسه‌ی مخصوص همان دستگاه + یک نمک تصادفی ساخته می‌شود،
 بنابراین فایل تنظیمات روی دستگاه دیگری قابل‌خواندن نیست.
@@ -26,7 +26,7 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 
-APP_NAME = "InvoiceAutomator"
+APP_NAME = "YaraPro"
 
 
 # ── ساختار پیش‌فرض تنظیمات ─────────────────────────────────────────

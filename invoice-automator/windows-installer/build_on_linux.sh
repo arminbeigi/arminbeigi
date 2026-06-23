@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ============================================================
-#   ساخت نصاب گرافیکی ویندوزی (InvoiceAutomator-Setup.exe) روی لینوکس
+#   ساخت نصاب گرافیکی ویندوزی (YaraPro-Setup.exe) روی لینوکس
 #
 #   این اسکریپت:
 #     ۱. پایتون قابل‌حمل ویندوزی (با tkinter) را دانلود می‌کند
@@ -10,7 +10,7 @@
 #
 #   پیش‌نیاز:  apt-get install -y nsis p7zip-full  +  pip (پایتون لینوکس)
 #   اجرا   :  bash windows-installer/build_on_linux.sh
-#   خروجی  :  windows-installer/build/InvoiceAutomator-Setup.exe
+#   خروجی  :  windows-installer/build/YaraPro-Setup.exe
 # ============================================================
 set -euo pipefail
 
@@ -81,5 +81,5 @@ echo "▶ کامپایل نصاب با NSIS"
 ( cd "$BUILD" && makensis -V2 installer.nsi )
 
 echo ""
-echo "✅ انجام شد: $BUILD/InvoiceAutomator-Setup.exe"
-ls -lh "$BUILD/InvoiceAutomator-Setup.exe"
+echo "✅ انجام شد: $BUILD/YaraPro-Setup.exe"
+ls -lh "$BUILD/YaraPro-Setup.exe"

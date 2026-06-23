@@ -5,7 +5,7 @@
 #
 #   اجرا: این فایل را در Terminal بکشید و Enter بزنید، یا:
 #         bash build_on_mac.command
-#   خروجی: dist/InvoiceAutomator.dmg
+#   خروجی: dist/YaraPro.dmg
 # ============================================================
 set -euo pipefail
 cd "$(dirname "$0")/.."   # ریشه‌ی پروژه
@@ -16,7 +16,7 @@ PBS_TAG="20260610"
 if [ "$(uname -m)" = "arm64" ]; then ARCH="aarch64-apple-darwin"; else ARCH="x86_64-apple-darwin"; fi
 
 BUILD="macos-installer/build"
-APP="$BUILD/InvoiceAutomator.app"
+APP="$BUILD/YaraPro.app"
 RES="$APP/Contents/Resources"
 rm -rf "$BUILD"; mkdir -p "$RES" "$APP/Contents/MacOS" "$BUILD/dmg"
 
@@ -49,22 +49,22 @@ if command -v sips >/dev/null && command -v iconutil >/dev/null; then
   iconutil -c icns "$ICONSET" -o "$RES/icon.icns" 2>/dev/null || true
 fi
 
-cat > "$APP/Contents/MacOS/InvoiceAutomator" <<'LAUNCH'
+cat > "$APP/Contents/MacOS/YaraPro" <<'LAUNCH'
 #!/bin/bash
 DIR="$(cd "$(dirname "$0")/../Resources" && pwd)"
 export TK_SILENCE_DEPRECATION=1
 exec "$DIR/python/bin/python3.12" "$DIR/run_gui.py"
 LAUNCH
-chmod +x "$APP/Contents/MacOS/InvoiceAutomator"
+chmod +x "$APP/Contents/MacOS/YaraPro"
 
 cat > "$APP/Contents/Info.plist" <<'PLIST'
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0"><dict>
-  <key>CFBundleName</key><string>InvoiceAutomator</string>
-  <key>CFBundleDisplayName</key><string>سامانه ارسال پیش‌فاکتور</string>
-  <key>CFBundleExecutable</key><string>InvoiceAutomator</string>
-  <key>CFBundleIdentifier</key><string>com.shofazh.invoiceautomator</string>
+  <key>CFBundleName</key><string>YaraPro</string>
+  <key>CFBundleDisplayName</key><string>یارا — دستیار هوشمند کسب‌وکار</string>
+  <key>CFBundleExecutable</key><string>YaraPro</string>
+  <key>CFBundleIdentifier</key><string>com.shofazh.yarapro</string>
   <key>CFBundleVersion</key><string>1.0.0</string>
   <key>CFBundleShortVersionString</key><string>1.0.0</string>
   <key>CFBundlePackageType</key><string>APPL</string>
@@ -81,9 +81,9 @@ echo "▶ ساخت dmg"
 cp -R "$APP" "$BUILD/dmg/"
 ln -s /Applications "$BUILD/dmg/Applications"
 mkdir -p dist
-rm -f dist/InvoiceAutomator.dmg
-hdiutil create -volname "InvoiceAutomator" -srcfolder "$BUILD/dmg" \
-    -ov -format UDZO dist/InvoiceAutomator.dmg
+rm -f dist/YaraPro.dmg
+hdiutil create -volname "YaraPro" -srcfolder "$BUILD/dmg" \
+    -ov -format UDZO dist/YaraPro.dmg
 
 echo ""
-echo "✅ انجام شد: dist/InvoiceAutomator.dmg"
+echo "✅ انجام شد: dist/YaraPro.dmg"

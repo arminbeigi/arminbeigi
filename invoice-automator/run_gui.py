@@ -4,7 +4,7 @@
 
 اجرا روی ویندوز:
     python run_gui.py
-یا پس از ساخت با build_windows.bat، فایل اجرایی dist/InvoiceAutomator.exe
+یا پس از ساخت نصاب، فایل اجرایی YaraPro (در پوشه‌ی نصب).
 """
 
 import sys

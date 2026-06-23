@@ -1,17 +1,17 @@
-; نصاب گرافیکی «سامانه ارسال پیش‌فاکتور» — ساخته‌شده با NSIS
+; نصاب گرافیکی «یارا — دستیار هوشمند کسب‌وکار» — ساخته‌شده با NSIS
 ; این فایل توسط build_on_linux.sh کامپایل می‌شود (مسیرها نسبی به پوشه‌ی build).
 Unicode true
 !include "MUI2.nsh"
 
-!define APPNAME    "سامانه ارسال پیش‌فاکتور"
-!define APPNAME_EN "InvoiceAutomator"
+!define APPNAME    "یارا — دستیار هوشمند کسب‌وکار"
+!define APPNAME_EN "YaraPro"
 !define COMPANY    "Shofazh"
 !define VERSION    "1.0.0"
 !define UNINSTKEY  "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME_EN}"
 
 Name "${APPNAME}"
-OutFile "InvoiceAutomator-Setup.exe"
-InstallDir "$LOCALAPPDATA\Programs\InvoiceAutomator"
+OutFile "YaraPro-Setup.exe"
+InstallDir "$LOCALAPPDATA\Programs\YaraPro"
 InstallDirRegKey HKCU "${UNINSTKEY}" "InstallLocation"
 RequestExecutionLevel user
 SetCompressor /SOLID lzma
