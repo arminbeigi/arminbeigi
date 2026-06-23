@@ -24,6 +24,7 @@ if str(BASE_DIR) not in sys.path:
 from gui import settings_store as store
 from gui import core
 from gui import license as lic
+from gui import __version__, __brand__, __tagline__
 from gui.fonts import load_persian_font, app_icon_path
 from gui.theme import COLORS, CHANNELS, FONT_FALLBACK
 
@@ -310,8 +311,12 @@ class InvoiceApp(_AppBase):
         ctk.set_appearance_mode(self.settings.get("appearance", "system"))
         ctk.set_default_color_theme("blue")
 
-        self.title("یارا — دستیار هوشمند کسب‌وکار")
-        self.geometry("1040x720")
+        self.title(f"{__brand__} — {__tagline__}")
+        w, h = 1040, 720
+        # وسط‌چینی پنجره روی صفحه‌نمایش هنگام اجرای اول
+        sw, sh = self.winfo_screenwidth(), self.winfo_screenheight()
+        x, y = max(0, (sw - w) // 2), max(0, (sh - h) // 2 - 20)
+        self.geometry(f"{w}x{h}+{x}+{y}")
         self.minsize(900, 640)
         self.configure(fg_color=COLORS["bg"])
 
@@ -446,9 +451,9 @@ class InvoiceApp(_AppBase):
         sidebar.grid_propagate(False)
 
         ctk.CTkLabel(sidebar, text="🧾", font=_font(40)).pack(pady=(28, 4))
-        ctk.CTkLabel(sidebar, text="یارا", font=_font(20, "bold"),
+        ctk.CTkLabel(sidebar, text=__brand__, font=_font(20, "bold"),
                      text_color=COLORS["text"]).pack()
-        ctk.CTkLabel(sidebar, text="YaraPro", font=_font(11),
+        ctk.CTkLabel(sidebar, text=f"YaraPro · v{__version__}", font=_font(11),
                      text_color=COLORS["text_dim"]).pack(pady=(0, 24))
 
         self.nav_buttons = {}

@@ -9,7 +9,7 @@
 import os
 import sys
 from pathlib import Path
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError as FutureTimeout
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 if str(BASE_DIR) not in sys.path:
@@ -178,15 +178,17 @@ def process_pdf(pdf_path: str, settings: dict, channels: list[str], log=print,
             return "rubika", rubika.send_invoice(phone, pdf_path, info, short_link, welcome)
         tasks["rubika"] = send_rubika
 
-    # ── ارسال موازی ──
+    # ── ارسال موازی با تایم‌اوت برای جلوگیری از هنگ کل ارسال ──
     if tasks:
+        # هر کانال حداکثر ۹۰ ثانیه؛ اگر یکی نشست، بقیه کارشان را ادامه می‌دهند
+        SEND_TIMEOUT = 90
         with ThreadPoolExecutor(max_workers=max(1, len(tasks))) as executor:
             futures = {executor.submit(fn): key for key, fn in tasks.items()}
-            for future in as_completed(futures):
+            for future in as_completed(futures, timeout=None):
                 key = futures[future]
                 label = CHANNEL_LABELS.get(key, key)
                 try:
-                    _, r = future.result()
+                    _, r = future.result(timeout=SEND_TIMEOUT)
                     if r.get("success"):
                         log(f"✅ {label} → {phone}")
                         report["ok"].append(key)
@@ -195,6 +197,9 @@ def process_pdf(pdf_path: str, settings: dict, channels: list[str], log=print,
                     else:
                         log(f"⚠️ {label}: {r.get('error', 'خطای نامشخص')}")
                         report["fail"].append(f"{key}: {r.get('error', '')}")
+                except FutureTimeout:
+                    log(f"⏱️ {label}: تایم‌اوت ({SEND_TIMEOUT} ثانیه) — رد شد")
+                    report["fail"].append(f"{key}: timeout")
                 except Exception as e:
                     log(f"❌ {label}: {e}")
                     report["fail"].append(f"{key}: {e}")
