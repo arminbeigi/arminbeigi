@@ -333,7 +333,7 @@ class InvoiceApp(_AppBase):
         self.log_queue: queue.Queue = queue.Queue()
 
         self._build_layout()
-        self._show_send()
+        self._show_dashboard()
         self._poll_log()
         self._setup_dnd()
         self.after(300, self._check_license_on_start)
@@ -457,9 +457,11 @@ class InvoiceApp(_AppBase):
                      text_color=COLORS["text_dim"]).pack(pady=(0, 24))
 
         self.nav_buttons = {}
-        for key, label, icon in [("send", "ارسال فاکتور", "📤"),
-                                  ("history", "تاریخچه ارسال‌ها", "📜"),
-                                  ("settings", "تنظیمات پیام‌رسان‌ها", "⚙")]:
+        for key, label, icon in [("dashboard", "داشبورد", "🏠"),
+                                  ("send", "ارسال پیش‌فاکتور", "📤"),
+                                  ("cheque", "چاپ چک", "🏦"),
+                                  ("history", "تاریخچه", "📜"),
+                                  ("settings", "تنظیمات", "⚙")]:
             btn = ctk.CTkButton(
                 sidebar, text=f"  {icon}  {label}", anchor="e", height=46,
                 font=_font(14), corner_radius=10, fg_color="transparent",
@@ -495,8 +497,12 @@ class InvoiceApp(_AppBase):
     def _navigate(self, key):
         for k, btn in self.nav_buttons.items():
             btn.configure(fg_color=COLORS["accent"] if k == key else "transparent")
-        if key == "send":
+        if key == "dashboard":
+            self._show_dashboard()
+        elif key == "send":
             self._show_send()
+        elif key == "cheque":
+            self._show_cheque()
         elif key == "history":
             self._show_history()
         else:
@@ -505,6 +511,337 @@ class InvoiceApp(_AppBase):
     def _clear_content(self):
         for w in self.content.winfo_children():
             w.destroy()
+
+    # ──────────────────────────────────────────────── داشبورد
+    def _show_dashboard(self):
+        self._navigate_buttons("dashboard")
+        self._clear_content()
+
+        page = ctk.CTkScrollableFrame(self.content, fg_color="transparent")
+        page.grid(row=0, column=0, sticky="nsew", padx=30, pady=24)
+        page.grid_columnconfigure((0, 1, 2), weight=1)
+
+        # سرتیتر خوش‌آمد
+        head = ctk.CTkFrame(page, fg_color="transparent")
+        head.grid(row=0, column=0, columnspan=3, sticky="ew", pady=(0, 18))
+        ctk.CTkLabel(head, text=f"به یارا خوش آمدید 👋", font=_font(26, "bold"),
+                     text_color=COLORS["text"], anchor="e").pack(anchor="e")
+        ctk.CTkLabel(head, text="یک پنل، همه‌ی کارهای روزمره‌ی کسب‌وکارت.",
+                     font=_font(13), text_color=COLORS["text_dim"], anchor="e").pack(anchor="e")
+
+        # کارت‌های آمار سریع
+        try:
+            from gui import history as _h
+            sends = len(_h.get_records())
+        except Exception:
+            sends = 0
+        st = lic.status()
+        lic_txt = {"active": "نسخه فعال", "trial": f"تست {st.get('days_left','')} روزه",
+                   "expired": "منقضی", "none": "غیرفعال"}.get(st["state"], "—")
+        stats = ctk.CTkFrame(page, fg_color="transparent")
+        stats.grid(row=1, column=0, columnspan=3, sticky="ew", pady=(0, 18))
+        stats.grid_columnconfigure((0, 1), weight=1)
+        for i, (val, lbl, col) in enumerate([
+                (str(sends), "ارسال انجام‌شده", COLORS["accent"]),
+                (lic_txt, "وضعیت لایسنس", COLORS["success"])]):
+            c = ctk.CTkFrame(stats, fg_color=COLORS["card"], corner_radius=14,
+                             border_width=1, border_color=COLORS["border"])
+            c.grid(row=0, column=i, sticky="ew", padx=6)
+            ctk.CTkLabel(c, text=val, font=_font(22, "bold"), text_color=col).pack(
+                anchor="e", padx=18, pady=(14, 0))
+            ctk.CTkLabel(c, text=lbl, font=_font(12), text_color=COLORS["text_dim"]).pack(
+                anchor="e", padx=18, pady=(0, 14))
+
+        # کارت‌های امکانات
+        ctk.CTkLabel(page, text="امکانات", font=_font(16, "bold"),
+                     text_color=COLORS["text"], anchor="e").grid(
+            row=2, column=0, columnspan=3, sticky="ew", pady=(4, 10))
+
+        cards = [
+            ("📤", "ارسال پیش‌فاکتور", "ارسال خودکار فاکتور به پیامک، بله، روبیکا و واتساپ",
+             COLORS["accent"], lambda: self._navigate("send"), True),
+            ("🏦", "چاپ چک", "چاپ چک صیادی روی برگه‌ی چک با کالیبراسیون دقیق",
+             "#7C4DFF", lambda: self._navigate("cheque"), True),
+            ("📜", "تاریخچه", "سوابق ارسال‌ها با جستجو و امکان ارسال دوباره",
+             "#22D3B4", lambda: self._navigate("history"), True),
+            ("⚙", "تنظیمات", "ورود به پیام‌رسان‌ها و تنظیمات برنامه",
+             COLORS["text_dim"], lambda: self._navigate("settings"), True),
+            ("👥", "مدیریت مشتریان", "دفترچه‌ی مشتریان و یادآور — به‌زودی",
+             COLORS["text_dim"], None, False),
+            ("📊", "گزارش هوشمند", "تحلیل فروش و عملکرد — به‌زودی",
+             COLORS["text_dim"], None, False),
+        ]
+        grid = ctk.CTkFrame(page, fg_color="transparent")
+        grid.grid(row=3, column=0, columnspan=3, sticky="nsew")
+        grid.grid_columnconfigure((0, 1, 2), weight=1, uniform="cards")
+        for idx, (icon, title, desc, col, cmd, active) in enumerate(cards):
+            r, cc = divmod(idx, 3)
+            card = ctk.CTkFrame(grid, fg_color=COLORS["card"], corner_radius=16,
+                                border_width=1, border_color=COLORS["border"])
+            card.grid(row=r, column=cc, sticky="nsew", padx=8, pady=8)
+            ctk.CTkLabel(card, text=icon, font=_font(34)).pack(anchor="e", padx=18, pady=(16, 2))
+            ctk.CTkLabel(card, text=title, font=_font(16, "bold"),
+                         text_color=COLORS["text"] if active else COLORS["text_dim"],
+                         anchor="e").pack(anchor="e", padx=18)
+            ctk.CTkLabel(card, text=desc, font=_font(11), text_color=COLORS["text_dim"],
+                         anchor="e", justify="right", wraplength=200).pack(
+                anchor="e", padx=18, pady=(2, 12))
+            if active and cmd:
+                ctk.CTkButton(card, text="باز کردن", height=34, font=_font(12, "bold"),
+                              corner_radius=9, fg_color=col, hover_color=COLORS["accent_hover"],
+                              command=cmd).pack(fill="x", padx=16, pady=(0, 16))
+            else:
+                ctk.CTkLabel(card, text="به‌زودی", font=_font(11, "bold"),
+                             text_color=COLORS["warning"]).pack(pady=(0, 18))
+
+    # ──────────────────────────────────────────────── چاپ چک
+    def _show_cheque(self):
+        self._navigate_buttons("cheque")
+        self._clear_content()
+        import tkinter as tk
+        from gui import cheque as chq
+
+        self._chq_cfg = chq.get_config(self.settings)
+
+        page = ctk.CTkFrame(self.content, fg_color="transparent")
+        page.grid(row=0, column=0, sticky="nsew", padx=24, pady=20)
+        page.grid_columnconfigure(0, weight=1)   # پیش‌نمایش
+        page.grid_columnconfigure(1, weight=0)   # فرم
+        page.grid_rowconfigure(1, weight=1)
+
+        ctk.CTkLabel(page, text="چاپ چک صیادی", font=_font(22, "bold"),
+                     text_color=COLORS["text"], anchor="e").grid(
+            row=0, column=0, columnspan=2, sticky="ew", pady=(0, 14))
+
+        # ── فرم (سمت راست) ──
+        form = ctk.CTkScrollableFrame(page, fg_color=COLORS["card"], corner_radius=14,
+                                      width=340, border_width=1, border_color=COLORS["border"])
+        form.grid(row=1, column=1, sticky="ns", padx=(14, 0))
+
+        self._chq_vars = {}
+        def add_field(key, label, default=""):
+            ctk.CTkLabel(form, text=label, font=_font(12, "bold"),
+                         text_color=COLORS["text_dim"], anchor="e").pack(
+                anchor="e", padx=16, pady=(10, 2), fill="x")
+            v = ctk.StringVar(value=default)
+            e = ctk.CTkEntry(form, textvariable=v, font=_font(13), justify="right",
+                             fg_color=COLORS["input"], border_color=COLORS["border"], height=38)
+            e.pack(fill="x", padx=16)
+            v.trace_add("write", lambda *_: self._chq_refresh())
+            self._chq_vars[key] = v
+            return v
+
+        add_field("date", "تاریخ", chq.today_jalali())
+        add_field("payee", "در وجه")
+        add_field("amount", "مبلغ")
+        # واحد
+        ctk.CTkLabel(form, text="واحد", font=_font(12, "bold"),
+                     text_color=COLORS["text_dim"], anchor="e").pack(anchor="e", padx=16, pady=(10, 2), fill="x")
+        self._chq_unit = ctk.CTkOptionMenu(form, values=["ریال", "تومان"], font=_font(12),
+                                           fg_color=COLORS["input"], button_color=COLORS["accent"],
+                                           command=lambda _: self._chq_refresh())
+        self._chq_unit.set("ریال")
+        self._chq_unit.pack(fill="x", padx=16)
+        add_field("sayad_id", "شناسه صیاد (۱۶ رقم)")
+        add_field("description", "بابت")
+
+        # مبلغ به حروف (زنده)
+        ctk.CTkLabel(form, text="مبلغ به حروف:", font=_font(11, "bold"),
+                     text_color=COLORS["text_dim"], anchor="e").pack(anchor="e", padx=16, pady=(12, 2), fill="x")
+        self._chq_words = ctk.CTkLabel(form, text="—", font=_font(12), text_color=COLORS["accent"],
+                                       anchor="e", justify="right", wraplength=300)
+        self._chq_words.pack(anchor="e", padx=16, fill="x")
+
+        # دکمه‌ها
+        ctk.CTkButton(form, text="🖨  چاپ روی چک", height=44, font=_font(14, "bold"),
+                      corner_radius=10, fg_color=COLORS["success"], hover_color="#1ea34f",
+                      command=self._chq_print).pack(fill="x", padx=16, pady=(16, 6))
+        ctk.CTkButton(form, text="💾  ذخیره PDF", height=38, font=_font(12),
+                      corner_radius=10, fg_color=COLORS["accent"], hover_color=COLORS["accent_hover"],
+                      command=self._chq_save_pdf).pack(fill="x", padx=16, pady=4)
+        ctk.CTkButton(form, text="⚙  کالیبراسیون موقعیت‌ها", height=38, font=_font(12),
+                      corner_radius=10, fg_color="transparent", border_width=1,
+                      border_color=COLORS["border"], text_color=COLORS["text"],
+                      command=self._chq_calibrate).pack(fill="x", padx=16, pady=(4, 16))
+
+        # ── پیش‌نمایش (سمت چپ) ──
+        prev_wrap = ctk.CTkFrame(page, fg_color=COLORS["card"], corner_radius=14,
+                                 border_width=1, border_color=COLORS["border"])
+        prev_wrap.grid(row=1, column=0, sticky="nsew")
+        ctk.CTkLabel(prev_wrap, text="پیش‌نمایش (موقعیت متن روی چک)", font=_font(12),
+                     text_color=COLORS["text_dim"]).pack(pady=(10, 4))
+        self._chq_canvas = tk.Canvas(prev_wrap, bg="#f5f6fa", highlightthickness=0, height=320)
+        self._chq_canvas.pack(fill="both", expand=True, padx=12, pady=(0, 12))
+        self._chq_canvas.bind("<Configure>", lambda e: self._chq_refresh())
+
+        self._chq_refresh()
+
+    def _chq_data(self):
+        from gui import cheque as chq
+        amount = self._chq_vars["amount"].get().replace(",", "").replace("،", "").strip()
+        try:
+            amount = int("".join(ch for ch in amount if ch.isdigit()))
+        except ValueError:
+            amount = 0
+        return {
+            "date": self._chq_vars["date"].get().strip(),
+            "payee": self._chq_vars["payee"].get().strip(),
+            "amount": amount,
+            "unit": self._chq_unit.get(),
+            "sayad_id": self._chq_vars["sayad_id"].get().strip(),
+            "description": self._chq_vars["description"].get().strip(),
+        }
+
+    def _chq_refresh(self):
+        from gui import cheque as chq
+        if not hasattr(self, "_chq_canvas"):
+            return
+        data = self._chq_data()
+        # مبلغ به حروف
+        self._chq_words.configure(text=chq.amount_words(data["amount"], data["unit"]) or "—")
+
+        cv = self._chq_canvas
+        cv.delete("all")
+        cw = cv.winfo_width() or 560
+        cfg = self._chq_cfg
+        pw, ph = cfg["page"]["w"], cfg["page"]["h"]
+        scale = (cw - 20) / pw
+        ch = ph * scale
+        x0, y0 = 10, 10
+        # قاب چک
+        cv.create_rectangle(x0, y0, x0 + pw * scale, y0 + ch, outline="#c9cede",
+                            fill="#ffffff", width=2)
+        cv.create_text(x0 + pw * scale - 8, y0 + 8, text="نمونه چک", anchor="ne",
+                      fill="#c9cede", font=(_FONT_FAMILY, 9))
+        values = chq.build_values(data)
+        ox, oy = cfg["offset"]["x"], cfg["offset"]["y"]
+        for key, f in cfg["fields"].items():
+            if not f.get("enabled", True):
+                continue
+            txt = values.get(key, "")
+            if not txt:
+                txt = "…" + chq.FIELD_LABELS.get(key, key)
+                color = "#cfd4e2"
+            else:
+                color = "#1a1c23"
+            rx = x0 + (pw - (f["x"] + ox)) * scale
+            ry = y0 + (f["y"] + oy) * scale
+            px = max(8, int(f["size"] * 0.3528 * scale))
+            cv.create_text(rx, ry, text=txt, anchor="e", fill=color,
+                          font=(_FONT_FAMILY, -px))
+
+    def _chq_build_pdf(self):
+        from gui import cheque as chq
+        try:
+            return chq.generate_pdf(self._chq_data(), self._chq_cfg)
+        except ImportError:
+            messagebox.showerror("کتابخانه لازم",
+                                 "برای تولید PDF نیاز به reportlab است (در نسخه‌ی ویندوزی باندل شده).")
+            return None
+        except Exception as e:
+            messagebox.showerror("خطا", f"تولید چک ناموفق بود:\n{e}")
+            return None
+
+    def _chq_print(self):
+        from gui import cheque as chq
+        pdf = self._chq_build_pdf()
+        if not pdf:
+            return
+        if chq.print_pdf(pdf):
+            messagebox.showinfo("چاپ", "چک به چاپگر ارسال شد.\n"
+                                "نکته: در تنظیمات چاپ، «اندازه واقعی / Actual size» را انتخاب کنید.")
+        else:
+            messagebox.showwarning("چاپ", "ارسال به چاپگر ناموفق بود؛ فایل PDF را دستی باز و چاپ کنید.")
+
+    def _chq_save_pdf(self):
+        pdf = self._chq_build_pdf()
+        if not pdf:
+            return
+        dest = filedialog.asksaveasfilename(defaultextension=".pdf",
+                                            filetypes=[("PDF", "*.pdf")], initialfile="cheque.pdf")
+        if dest:
+            try:
+                import shutil
+                shutil.copy(pdf, dest)
+                messagebox.showinfo("ذخیره", f"ذخیره شد:\n{dest}")
+            except Exception as e:
+                messagebox.showerror("خطا", str(e))
+
+    def _chq_calibrate(self):
+        from gui import cheque as chq
+        win = ctk.CTkToplevel(self)
+        win.title("کالیبراسیون چک")
+        win.geometry("440x560")
+        win.configure(fg_color=COLORS["bg"])
+        win.transient(self)
+        try:
+            win.grab_set()
+        except Exception:
+            pass
+
+        ctk.CTkLabel(win, text="⚙ کالیبراسیون موقعیت‌ها", font=_font(18, "bold"),
+                     text_color=COLORS["text"]).pack(pady=(18, 4))
+        ctk.CTkLabel(win, text="همه مقادیر بر حسب میلی‌متر. x = فاصله از لبه‌ی راست، y = از بالا.",
+                     font=_font(11), text_color=COLORS["text_dim"], wraplength=380).pack(pady=(0, 8))
+
+        body = ctk.CTkScrollableFrame(win, fg_color="transparent")
+        body.pack(fill="both", expand=True, padx=14)
+
+        cfg = self._chq_cfg
+        entries = {}
+
+        def row(parent, label, value):
+            fr = ctk.CTkFrame(parent, fg_color="transparent")
+            fr.pack(fill="x", pady=3)
+            ctk.CTkLabel(fr, text=label, font=_font(11), text_color=COLORS["text_dim"],
+                         width=150, anchor="e").pack(side="right", padx=(6, 0))
+            v = ctk.StringVar(value=str(value))
+            ctk.CTkEntry(fr, textvariable=v, width=80, justify="center",
+                         fg_color=COLORS["input"]).pack(side="right")
+            return v
+
+        # ابعاد و آفست
+        sec = lambda t: ctk.CTkLabel(body, text=t, font=_font(13, "bold"),
+                                     text_color=COLORS["accent"], anchor="e").pack(anchor="e", pady=(10, 2), fill="x")
+        sec("ابعاد برگه و آفست کلی")
+        entries["page_w"] = row(body, "عرض برگه", cfg["page"]["w"])
+        entries["page_h"] = row(body, "ارتفاع برگه", cfg["page"]["h"])
+        entries["off_x"] = row(body, "آفست افقی (راست/چپ)", cfg["offset"]["x"])
+        entries["off_y"] = row(body, "آفست عمودی (بالا/پایین)", cfg["offset"]["y"])
+
+        sec("موقعیت فیلدها (x راست، y بالا، اندازه)")
+        for key, f in cfg["fields"].items():
+            lbl = chq.FIELD_LABELS.get(key, key)
+            entries[f"{key}_x"] = row(body, f"{lbl} — x", f["x"])
+            entries[f"{key}_y"] = row(body, f"{lbl} — y", f["y"])
+            entries[f"{key}_s"] = row(body, f"{lbl} — اندازه", f["size"])
+
+        def fnum(v, d=0.0):
+            try:
+                return float(v.get())
+            except ValueError:
+                return d
+
+        def save():
+            cfg["page"]["w"] = fnum(entries["page_w"], 195)
+            cfg["page"]["h"] = fnum(entries["page_h"], 90)
+            cfg["offset"]["x"] = fnum(entries["off_x"])
+            cfg["offset"]["y"] = fnum(entries["off_y"])
+            for key in cfg["fields"]:
+                cfg["fields"][key]["x"] = fnum(entries[f"{key}_x"])
+                cfg["fields"][key]["y"] = fnum(entries[f"{key}_y"])
+                cfg["fields"][key]["size"] = int(fnum(entries[f"{key}_s"], 11))
+            self.settings["cheque"] = cfg
+            try:
+                store.save_settings(self.settings)
+            except Exception:
+                pass
+            self._chq_refresh()
+            win.destroy()
+
+        ctk.CTkButton(win, text="ذخیره و اعمال", height=42, font=_font(14, "bold"),
+                      fg_color=COLORS["success"], hover_color="#1ea34f",
+                      command=save).pack(fill="x", padx=14, pady=14)
 
     # ──────────────────────────────────────────────── صفحه‌ی ارسال
     def _show_send(self):
