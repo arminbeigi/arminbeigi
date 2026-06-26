@@ -42,6 +42,20 @@ DEFAULT_SETTINGS = {
         "username": "",
         "app_password": "",
     },
+    # پنل پیامکِ خودِ کاربر — پشتیبانی از سرویس‌دهنده‌های رایج ایران.
+    # فایل پیش‌فاکتور پشت‌صحنه روی هاست مرجع آپلود می‌شود و لینک کوتاهِ
+    # غیرقابل‌حدس با همین پنل (و اعتبار خودِ کاربر) برای مشتری ارسال می‌گردد.
+    "sms_panel": {
+        "enabled": False,
+        "provider": "kavenegar",   # kavenegar | smsir | melipayamak | ghasedak | ippanel | custom
+        "api_key": "",
+        "line": "",
+        "username": "",
+        "password": "",
+        "url": "",
+        "body_template": "",
+    },
+    # نگه‌داری برای سازگاری با نسخه‌های قدیمی (کاوه‌نگار مستقل)
     "kavenegar": {
         "enabled": False,
         "api_key": "",
@@ -148,6 +162,22 @@ def _merge_defaults(data: dict) -> dict:
     return merged
 
 
+def _migrate(data: dict) -> dict:
+    """مهاجرت نرم از نسخه‌های قدیمی به ساختار جدید."""
+    # کاوه‌نگارِ مستقل قبلی ⇒ پنل پیامک (اگر هنوز تنظیم نشده)
+    kv = data.get("kavenegar", {})
+    sp = data.get("sms_panel", {})
+    if kv.get("api_key") and not sp.get("api_key"):
+        sp.update(
+            provider="kavenegar",
+            api_key=kv.get("api_key", ""),
+            line=kv.get("sender", ""),
+            enabled=sp.get("enabled") or kv.get("enabled", False),
+        )
+        data["sms_panel"] = sp
+    return data
+
+
 def load_settings() -> dict:
     """خواندن تنظیمات. اگر فایلی نباشد یا خراب باشد، پیش‌فرض برمی‌گردد."""
     path = _settings_file()
@@ -156,7 +186,7 @@ def load_settings() -> dict:
     try:
         decrypted = _fernet().decrypt(path.read_bytes())
         data = json.loads(decrypted.decode("utf-8"))
-        return _merge_defaults(data)
+        return _migrate(_merge_defaults(data))
     except (InvalidToken, ValueError, json.JSONDecodeError):
         # فایل با کلید دستگاه دیگری ساخته شده یا خراب است
         return _merge_defaults({})

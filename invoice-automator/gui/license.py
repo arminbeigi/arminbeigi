@@ -142,5 +142,10 @@ def deactivate():
         pass
 
 
+def current_key() -> str:
+    """کلید لایسنس فعالِ ذخیره‌شده (برای احراز هویت آپلود فایل). خالی اگر نباشد."""
+    return (_load().get("key") or "").strip()
+
+
 def store_url() -> str:
     return STORE_URL

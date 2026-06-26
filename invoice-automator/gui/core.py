@@ -17,7 +17,8 @@ if str(BASE_DIR) not in sys.path:
 
 from modules.pdf_parser import extract_invoice_data
 from modules.wp_uploader import WordPressUploader
-from modules.sms_kavenegar import KavenegarSMS
+from modules import sms_panel
+from modules import file_relay
 from modules.whatsapp_sender import WhatsAppSender
 from modules.bale_sender import BaleSender
 from modules.rubika_sender import RubikaSender
@@ -25,7 +26,7 @@ from modules.rubika_sender import RubikaSender
 
 CHANNEL_LABELS = {
     "wordpress": "وردپرس",
-    "kavenegar": "پیامک",
+    "sms_panel": "پیامک",
     "whatsapp": "واتساپ",
     "bale": "بله",
     "rubika": "روبیکا",
@@ -37,8 +38,9 @@ def available_channels(settings: dict) -> list[str]:
     result = []
     if settings.get("wordpress", {}).get("enabled") and settings["wordpress"].get("url"):
         result.append("wordpress")
-    if settings.get("kavenegar", {}).get("enabled") and settings["kavenegar"].get("api_key"):
-        result.append("kavenegar")
+    sp = settings.get("sms_panel", {})
+    if sp.get("enabled") and _sms_panel_ready(sp):
+        result.append("sms_panel")
     wa = settings.get("whatsapp", {})
     if wa.get("enabled"):
         result.append("whatsapp")  # حتی بدون API می‌تواند لینک wa.me بسازد
@@ -47,6 +49,18 @@ def available_channels(settings: dict) -> list[str]:
     if settings.get("rubika", {}).get("enabled") and settings["rubika"].get("logged_in"):
         result.append("rubika")
     return result
+
+
+def _sms_panel_ready(sp: dict) -> bool:
+    """آیا پنل پیامک حداقلِ اطلاعات لازم را دارد؟"""
+    prov = sp.get("provider", "kavenegar")
+    if prov in ("kavenegar", "smsir", "ghasedak", "ippanel"):
+        return bool(sp.get("api_key"))
+    if prov == "melipayamak":
+        return bool(sp.get("username") and sp.get("password"))
+    if prov == "custom":
+        return bool(sp.get("url"))
+    return False
 
 
 def analyze_file(pdf_path: str) -> dict:
@@ -122,9 +136,11 @@ def process_pdf(pdf_path: str, settings: dict, channels: list[str], log=print,
     name = info.get("name") or "مشتری گرامی"
     log(f"☎ {phone}  |  📄 فاکتور: {serial or '—'}  |  👤 {name}")
 
-    # ── وردپرس (آپلود + لینک کوتاه) ──
+    # ── ساخت لینک کوتاه پیش‌فاکتور ──
     short_link = ""
+    customer_name_for_link = (info.get("name") or "").strip()
     if "wordpress" in channels:
+        # کاربرانی که سایت وردپرس خودشان را وصل کرده‌اند
         try:
             wp = WordPressUploader(settings["wordpress"])
             short_link = wp.upload_and_get_short_link(
@@ -136,6 +152,17 @@ def process_pdf(pdf_path: str, settings: dict, channels: list[str], log=print,
         except Exception as e:
             log(f"❌ وردپرس: {e}")
             report["fail"].append(f"wordpress: {e}")
+
+    # اگر هنوز لینکی نداریم و کانالی نیاز به لینک دارد (پیامک)، فایل را
+    # پشت‌صحنه روی هاست مرجع آپلود کن و لینک کوتاهِ غیرقابل‌حدس بساز.
+    needs_link = any(ch in channels for ch in ("sms_panel", "whatsapp", "bale", "rubika"))
+    if not short_link and needs_link:
+        try:
+            short_link = file_relay.upload_invoice(pdf_path, serial, customer_name_for_link)
+            report["short_link"] = short_link
+            log(f"🔗 لینک پیش‌فاکتور آماده شد: {short_link}")
+        except Exception as e:
+            log(f"⚠️ ساخت لینک پیش‌فاکتور ناموفق بود: {e}")
 
     # متن خوش‌آمدگویی با جایگزینی متغیرها ({name}, {invoice}, {link})
     customer_name = (info.get("name") or "").strip() or "مشتری"
@@ -149,11 +176,14 @@ def process_pdf(pdf_path: str, settings: dict, channels: list[str], log=print,
     # ── ساخت توابع ارسال برای کانال‌های انتخاب‌شده ──
     tasks = {}
 
-    if "kavenegar" in channels:
+    if "sms_panel" in channels:
         def send_sms():
-            sms = KavenegarSMS(settings["kavenegar"])
-            return "kavenegar", sms.send_invoice_sms(phone, info, short_link, welcome)
-        tasks["kavenegar"] = send_sms
+            # متن از «متن پیام» مشترک؛ اگر لینک در متن نباشد، ته متن اضافه می‌شود.
+            text = (welcome or "").strip()
+            if short_link and short_link not in text:
+                text = (text + "\n" + short_link).strip() if text else short_link
+            return "sms_panel", sms_panel.send_sms(settings["sms_panel"], phone, text)
+        tasks["sms_panel"] = send_sms
 
     if "whatsapp" in channels:
         def send_whatsapp():
@@ -221,14 +251,8 @@ def test_channel(channel: str, settings: dict) -> tuple[bool, str]:
                 return True, f"اتصال موفق — کاربر: {resp.json().get('name', '')}"
             return False, f"خطای احراز هویت (کد {resp.status_code})"
 
-        if channel == "kavenegar":
-            import requests
-            url = f"https://api.kavenegar.com/v1/{cfg['api_key']}/account/info.json"
-            resp = requests.get(url, timeout=15)
-            data = resp.json()
-            if data.get("return", {}).get("status") == 200:
-                return True, "کلید API معتبر است."
-            return False, f"کلید نامعتبر: {data.get('return', {}).get('message', '')}"
+        if channel == "sms_panel":
+            return sms_panel.test_panel(cfg)
 
         if channel == "bale":
             if cfg.get("logged_in"):
@@ -256,3 +280,20 @@ def test_channel(channel: str, settings: dict) -> tuple[bool, str]:
         return False, f"خطا: {e}"
 
     return False, "کانال ناشناخته"
+
+
+def send_test_sms(settings: dict, phone: str) -> tuple[bool, str]:
+    """ارسال یک پیامک آزمایشی واقعی با پنل پیامکِ تنظیم‌شده."""
+    if not is_valid_phone(phone):
+        return False, "شماره موبایل را درست وارد کنید (09xxxxxxxxx)."
+    brand = "یارا"
+    try:
+        from gui import edition
+        brand = edition.brand()
+    except Exception:
+        pass
+    msg = f"پیام آزمایشی {brand}\nپنل پیامک شما درست تنظیم شده است. ✅"
+    r = sms_panel.send_sms(settings.get("sms_panel", {}), phone, msg)
+    if r.get("success"):
+        return True, "پیامک آزمایشی ارسال شد. صندوق پیام گوشی را بررسی کنید."
+    return False, r.get("error", "ارسال ناموفق بود.")

@@ -27,6 +27,7 @@ from gui import license as lic
 from gui import __version__, __brand__, __tagline__
 from gui.fonts import load_persian_font, app_icon_path
 from gui.theme import COLORS, CHANNELS, FONT_FALLBACK
+from modules import sms_panel as smspanel
 
 # کشیدن‌ورهاکردن فایل (اختیاری؛ اگر نبود، بی‌خطا نادیده گرفته می‌شود)
 try:
@@ -83,7 +84,13 @@ class ChannelCard(ctk.CTkFrame):
             progress_color=COLORS["accent"], command=self._on_toggle)
         self.switch.grid(row=0, column=2, rowspan=2, padx=(12, 0))
 
-        # ── بدنه: یا فیلدهای ورودی، یا UI لاگین تلفنی ──
+        # ── بدنه: یا فیلدهای ورودی، یا UI لاگین تلفنی، یا پنل پیامک ──
+        if channel.get("sms_panel"):
+            self._build_sms_panel_ui()
+            self._build_help_footer()
+            self._on_toggle()
+            return
+
         if channel.get("login"):
             self._build_login_ui()
             self._build_help_footer()
@@ -140,6 +147,105 @@ class ChannelCard(ctk.CTkFrame):
         ctk.CTkButton(footer, text="بررسی وضعیت", width=110, font=_font(13),
                       fg_color=COLORS["accent_dim"], hover_color=COLORS["accent"],
                       command=self._test).grid(row=0, column=1)
+
+    # ──────────────────────────── UI پنل پیامک (چند سرویس‌دهنده)
+    def _build_sms_panel_ui(self):
+        # مقادیر اولیه از تنظیمات ذخیره‌شده
+        self.sms_values = dict(self.settings.get(self.key, {}))
+        labels = smspanel.provider_labels()          # key -> label
+        self._sms_label_to_key = {v: k for k, v in labels.items()}
+        cur_key = self.sms_values.get("provider", "kavenegar")
+        cur_label = labels.get(cur_key, labels["kavenegar"])
+
+        body = ctk.CTkFrame(self, fg_color="transparent")
+        body.grid(row=1, column=0, sticky="ew", padx=18, pady=(4, 8))
+        body.grid_columnconfigure(0, weight=1)
+
+        # انتخاب سرویس‌دهنده
+        ctk.CTkLabel(body, text="سرویس‌دهنده‌ی پیامک", font=_font(12, "bold"),
+                     text_color=COLORS["text_dim"], anchor="e").grid(
+            row=0, column=0, sticky="ew", pady=(4, 2))
+        self.provider_menu = ctk.CTkOptionMenu(
+            body, values=list(labels.values()), font=_font(13),
+            fg_color=COLORS["input"], button_color=COLORS["accent"],
+            button_hover_color=COLORS["accent_hover"], dropdown_font=_font(13),
+            command=self._on_provider_change)
+        self.provider_menu.set(cur_label)
+        self.provider_menu.grid(row=1, column=0, sticky="ew")
+
+        # محل فیلدهای پویا
+        self.sms_fields_frame = ctk.CTkFrame(body, fg_color="transparent")
+        self.sms_fields_frame.grid(row=2, column=0, sticky="ew", pady=(4, 0))
+        self.sms_fields_frame.grid_columnconfigure(0, weight=1)
+        self._render_sms_fields(cur_key)
+
+        # ── ارسال آزمایشی (تست واقعی) ──
+        test_card = ctk.CTkFrame(body, fg_color=COLORS["card_hover"], corner_radius=10)
+        test_card.grid(row=3, column=0, sticky="ew", pady=(12, 4))
+        test_card.grid_columnconfigure(0, weight=1)
+        ctk.CTkLabel(test_card, text="ارسال پیامک آزمایشی به شماره‌ی خودتان:",
+                     font=_font(11, "bold"), text_color=COLORS["text_dim"], anchor="e").grid(
+            row=0, column=0, columnspan=2, sticky="ew", padx=12, pady=(10, 4))
+        self.sms_test_phone = ctk.StringVar(value="")
+        ctk.CTkEntry(test_card, textvariable=self.sms_test_phone, placeholder_text="09xxxxxxxxx",
+                     font=_font(13), fg_color=COLORS["input"], justify="right",
+                     border_color=COLORS["border"], corner_radius=8, height=36).grid(
+            row=1, column=0, sticky="ew", padx=(12, 6), pady=(0, 10))
+        ctk.CTkButton(test_card, text="ارسال آزمایشی", width=120, height=36, font=_font(12),
+                      fg_color=COLORS["accent"], hover_color=COLORS["accent_hover"],
+                      command=self._send_test_sms).grid(row=1, column=1, padx=(0, 12), pady=(0, 10))
+        self.sms_test_status = ctk.CTkLabel(test_card, text="", font=_font(11), anchor="e",
+                                            wraplength=520, justify="right")
+        self.sms_test_status.grid(row=2, column=0, columnspan=2, sticky="ew", padx=12, pady=(0, 10))
+
+    def _render_sms_fields(self, provider_key):
+        for w in self.sms_fields_frame.winfo_children():
+            w.destroy()
+        self.field_vars = {}
+        spec = smspanel.PROVIDERS.get(provider_key, {})
+        for i, (fkey, label, placeholder, secret) in enumerate(spec.get("fields", [])):
+            ctk.CTkLabel(self.sms_fields_frame, text=label, font=_font(12, "bold"),
+                         text_color=COLORS["text_dim"], anchor="e").grid(
+                row=i * 2, column=0, sticky="ew", pady=(8, 2))
+            var = ctk.StringVar(value=self.sms_values.get(fkey, ""))
+            self.field_vars[fkey] = var
+            ctk.CTkEntry(self.sms_fields_frame, textvariable=var, placeholder_text=placeholder,
+                         font=_font(13), fg_color=COLORS["input"], justify="right",
+                         border_color=COLORS["border"], corner_radius=8, height=38,
+                         show="•" if secret else "").grid(
+                row=i * 2 + 1, column=0, sticky="ew")
+        if spec.get("help"):
+            ctk.CTkLabel(self.sms_fields_frame, text="ℹ " + spec["help"], font=_font(10),
+                         text_color=COLORS["text_dim"], anchor="e",
+                         wraplength=540, justify="right").grid(
+                row=99, column=0, sticky="ew", pady=(8, 2))
+
+    def _save_current_sms_values(self):
+        for fkey, var in self.field_vars.items():
+            self.sms_values[fkey] = var.get().strip()
+
+    def _on_provider_change(self, label):
+        self._save_current_sms_values()
+        key = self._sms_label_to_key.get(label, "kavenegar")
+        self.sms_values["provider"] = key
+        self._render_sms_fields(key)
+
+    def _send_test_sms(self):
+        self._save_current_sms_values()
+        cfg = dict(self.sms_values)
+        cfg["provider"] = self._sms_label_to_key.get(self.provider_menu.get(), "kavenegar")
+        phone = self.sms_test_phone.get().strip()
+        self.sms_test_status.configure(text="در حال ارسال…", text_color=COLORS["text_dim"])
+        tmp = dict(self.settings)
+        tmp["sms_panel"] = cfg
+
+        def worker():
+            ok, msg = core.send_test_sms(tmp, phone)
+            color = COLORS["success"] if ok else COLORS["danger"]
+            icon = "✅" if ok else "❌"
+            self.after(0, lambda: self.sms_test_status.configure(
+                text=f"{icon} {msg}", text_color=color))
+        threading.Thread(target=worker, daemon=True).start()
 
     # ──────────────────────────── UI لاگین تلفنی (بله/روبیکا)
     def _build_login_ui(self):
@@ -279,6 +385,14 @@ class ChannelCard(ctk.CTkFrame):
 
     def collect(self) -> dict:
         """جمع‌آوری مقادیر فعلی فیلدها."""
+        if self.channel.get("sms_panel"):
+            self._save_current_sms_values()
+            data = dict(self.sms_values)
+            data["provider"] = self._sms_label_to_key.get(
+                self.provider_menu.get(), "kavenegar")
+            data["enabled"] = self.enabled_var.get()
+            return data
+
         if self.channel.get("login"):
             # برای کانال‌های لاگین، وضعیت لاگین حفظ می‌شود
             data = dict(self.settings.get(self.key, {}))
