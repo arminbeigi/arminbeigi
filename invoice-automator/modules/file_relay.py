@@ -42,12 +42,16 @@ def _auth_payload() -> dict:
 
 
 def upload_invoice(pdf_path: str, invoice_serial: str = "",
-                   customer_name: str = "") -> str:
+                   customer_name: str = "", business: str = "") -> str:
     """
-    آپلود فایل و دریافت لینک کوتاه. در صورت خطا، استثنا پرتاب می‌کند.
+    آپلود فایل و دریافت لینک کوتاهِ معنادار. در صورت خطا، استثنا پرتاب می‌کند.
+
+    Args:
+        business: نام کوتاه فروشنده برای ساختن لینکِ قابل‌اعتماد
+                  (مثلاً shofazh ⇒ yarapro.ir/factor/shofazh-1024-k7m9)
 
     Returns:
-        str: لینک کوتاه مثل https://yarapro.ir/f/Xk7mP2qR
+        str: لینک کوتاه مثل yarapro.ir/factor/shofazh-1024-k7m9
     """
     if not os.path.exists(pdf_path):
         raise FileNotFoundError("فایل پیش‌فاکتور پیدا نشد.")
@@ -55,6 +59,7 @@ def upload_invoice(pdf_path: str, invoice_serial: str = "",
     data = _auth_payload()
     data["serial"] = invoice_serial or ""
     data["name"] = customer_name or ""
+    data["business"] = business or ""
 
     filename = os.path.basename(pdf_path)
     with open(pdf_path, "rb") as f:

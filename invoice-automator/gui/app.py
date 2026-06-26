@@ -1370,10 +1370,39 @@ class InvoiceApp(_AppBase):
         scroll.grid(row=1, column=0, sticky="nsew")
         scroll.grid_columnconfigure(0, weight=1)
 
+        # ── کارت نام کسب‌وکار (برای متن پیام و لینکِ قابل‌اعتماد) ──
+        biz = self.settings.get("business", {})
+        bcard = ctk.CTkFrame(scroll, fg_color=COLORS["card"], corner_radius=14,
+                             border_width=1, border_color=COLORS["border"])
+        bcard.grid(row=0, column=0, sticky="ew", pady=(0, 16))
+        bcard.grid_columnconfigure(0, weight=1)
+        ctk.CTkLabel(bcard, text="🏢  نام کسب‌وکار شما", font=_font(15, "bold"),
+                     text_color=COLORS["text"], anchor="e").grid(
+            row=0, column=0, sticky="ew", padx=18, pady=(16, 2))
+        ctk.CTkLabel(bcard, text="نام شما در متن پیامک و در لینک پیش‌فاکتور دیده می‌شود تا مشتری فروشنده را بشناسد و به لینک اعتماد کند.",
+                     font=_font(11), text_color=COLORS["text_dim"], anchor="e",
+                     wraplength=600, justify="right").grid(row=1, column=0, sticky="ew", padx=18)
+        ctk.CTkLabel(bcard, text="نام نمایشی (مثلاً: فروشگاه شوفاژ)", font=_font(11, "bold"),
+                     text_color=COLORS["text_dim"], anchor="e").grid(
+            row=2, column=0, sticky="ew", padx=18, pady=(10, 2))
+        self.business_name_var = ctk.StringVar(value=biz.get("name", ""))
+        ctk.CTkEntry(bcard, textvariable=self.business_name_var, placeholder_text="نام برند یا فروشگاه شما",
+                     font=_font(13), fg_color=COLORS["input"], justify="right",
+                     border_color=COLORS["border"], corner_radius=8, height=38).grid(
+            row=3, column=0, sticky="ew", padx=18)
+        ctk.CTkLabel(bcard, text="نام کوتاه در لینک (لاتین) — مثلاً shofazh  ⇐  yarapro.ir/factor/shofazh-1024-k7m9",
+                     font=_font(11, "bold"), text_color=COLORS["text_dim"], anchor="e").grid(
+            row=4, column=0, sticky="ew", padx=18, pady=(10, 2))
+        self.business_slug_var = ctk.StringVar(value=biz.get("url_slug", ""))
+        ctk.CTkEntry(bcard, textvariable=self.business_slug_var, placeholder_text="مثلاً shofazh (خالی = خودکار)",
+                     font=_font(13), fg_color=COLORS["input"], justify="left",
+                     border_color=COLORS["border"], corner_radius=8, height=38).grid(
+            row=5, column=0, sticky="ew", padx=18, pady=(0, 16))
+
         # ── کارت متن خوش‌آمدگویی پیش‌فرض ──
         wcard = ctk.CTkFrame(scroll, fg_color=COLORS["card"], corner_radius=14,
                              border_width=1, border_color=COLORS["border"])
-        wcard.grid(row=0, column=0, sticky="ew", pady=(0, 16))
+        wcard.grid(row=1, column=0, sticky="ew", pady=(0, 16))
         wcard.grid_columnconfigure(0, weight=1)
         ctk.CTkLabel(wcard, text="💬  متن پیام (برای همه‌ی پیام‌رسان‌ها)", font=_font(15, "bold"),
                      text_color=COLORS["text"], anchor="e").grid(
@@ -1417,7 +1446,7 @@ class InvoiceApp(_AppBase):
         self.cards: dict[str, ChannelCard] = {}
         for i, ch in enumerate(CHANNELS):
             card = ChannelCard(scroll, ch, self.settings, on_test=self._test_channel)
-            card.grid(row=i + 1, column=0, sticky="ew", pady=(0, 16))
+            card.grid(row=i + 2, column=0, sticky="ew", pady=(0, 16))
             self.cards[ch["key"]] = card
 
         # دکمه‌ی ذخیره (ثابت پایین)
@@ -1436,6 +1465,10 @@ class InvoiceApp(_AppBase):
             self.settings[key].update(card.collect())
         self.settings["appearance"] = self.theme_menu.get()
         self.settings["welcome_message"] = self.welcome_box.get("1.0", "end").strip()
+        self.settings["business"] = {
+            "name": self.business_name_var.get().strip(),
+            "url_slug": self.business_slug_var.get().strip(),
+        }
         try:
             store.save_settings(self.settings)
             self.save_status.configure(text="✅ تنظیمات ذخیره شد.",

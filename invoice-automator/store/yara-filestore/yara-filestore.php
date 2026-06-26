@@ -2,7 +2,7 @@
 /**
  * Plugin Name: یارا — میزبان پیش‌فاکتور (File Store)
  * Description: دریافت فایل پیش‌فاکتور از نرم‌افزار یارا و ساخت لینک کوتاهِ غیرقابل‌حدس (yourdomain.com/f/XXXX). فایل با پنل پیامکِ خودِ مشتری برای گیرنده ارسال می‌شود.
- * Version: 1.0.0
+ * Version: 1.1.0
  * Author: Yara
  *
  * این افزونه «پشت‌صحنه» است: نرم‌افزار دسکتاپ فایل را اینجا آپلود می‌کند،
@@ -12,9 +12,9 @@
 
 if (!defined('ABSPATH')) exit;
 
-define('YARA_FS_VER', '1.0.0');
+define('YARA_FS_VER', '1.1.0');
 define('YARA_FS_DIR', 'yara-files');           // پوشه داخل uploads
-define('YARA_FS_TOKEN_LEN', 10);               // طول توکن (base62)
+define('YARA_FS_RAND_LEN', 4);                 // طول بخش تصادفیِ لینک (غیرقابل‌حدس)
 
 // ───────────────────────────── فعال‌سازی: جدول + پوشه + rewrite ─────────────────────────────
 register_activation_hook(__FILE__, 'yara_fs_activate');
@@ -54,10 +54,11 @@ function yara_fs_path() {
     return trailingslashit($up['basedir']) . YARA_FS_DIR;
 }
 
-// ───────────────────────────── Rewrite:  /f/{token} ─────────────────────────────
+// ───────────────────────────── Rewrite:  /factor/{slug}  (و /f/ برای سازگاری) ─────────────────────────────
 add_action('init', 'yara_fs_add_rewrite');
 function yara_fs_add_rewrite() {
-    add_rewrite_rule('^f/([A-Za-z0-9]+)/?$', 'index.php?yara_file=$matches[1]', 'top');
+    add_rewrite_rule('^factor/([A-Za-z0-9\-]+)/?$', 'index.php?yara_file=$matches[1]', 'top');
+    add_rewrite_rule('^f/([A-Za-z0-9\-]+)/?$', 'index.php?yara_file=$matches[1]', 'top');
 }
 add_filter('query_vars', function ($v) { $v[] = 'yara_file'; return $v; });
 
@@ -105,10 +106,11 @@ function yara_fs_json($success, $data = []) {
 }
 
 function yara_fs_upload(WP_REST_Request $req) {
-    $license = sanitize_text_field($req->get_param('license_key'));
-    $device  = sanitize_text_field($req->get_param('device'));
-    $serial  = sanitize_text_field($req->get_param('serial'));
-    $name    = sanitize_text_field($req->get_param('name'));
+    $license  = sanitize_text_field($req->get_param('license_key'));
+    $device   = sanitize_text_field($req->get_param('device'));
+    $serial   = sanitize_text_field($req->get_param('serial'));
+    $name     = sanitize_text_field($req->get_param('name'));
+    $business = sanitize_text_field($req->get_param('business'));
 
     // احراز هویت: کلید لایسنس معتبر یا (در نبود سیستم لایسنس) شناسه‌ی دستگاه.
     if (!yara_fs_auth_ok($license)) {
@@ -141,11 +143,14 @@ function yara_fs_upload(WP_REST_Request $req) {
     $dir = yara_fs_path();
     if (!file_exists($dir)) wp_mkdir_p($dir);
 
-    // توکن یکتا و غیرقابل‌حدس
+    // لینکِ معنادار و قابل‌اعتماد + بخش تصادفیِ غیرقابل‌حدس:
+    //   factor/{business}-{serial}-{rand}
     global $wpdb;
     $table = $wpdb->prefix . 'yara_files';
+    $base = yara_fs_slug_base($business, $serial);
     do {
-        $token = yara_fs_token(YARA_FS_TOKEN_LEN);
+        $rand = yara_fs_rand(YARA_FS_RAND_LEN);
+        $token = ($base !== '' ? $base . '-' : '') . $rand;
         $exists = $wpdb->get_var($wpdb->prepare("SELECT id FROM $table WHERE token = %s", $token));
     } while ($exists);
 
@@ -160,13 +165,36 @@ function yara_fs_upload(WP_REST_Request $req) {
         'license' => $license, 'device' => $device,
     ]);
 
-    $url = home_url('/f/' . $token);
+    $url = home_url('/factor/' . $token);
     return yara_fs_json(true, ['url' => $url, 'token' => $token]);
 }
 
-// توکن base62 تصادفی و امن
-function yara_fs_token($len) {
-    $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+/**
+ * بخش معنادار لینک: نام فروشنده + شماره فاکتور (لاتین، کوتاه، تمیز).
+ * مثال: ("فروشگاه شوفاژ" یا "shofazh", "1024") ⇒ "shofazh-1024"
+ * اگر نام فروشنده لاتین نباشد و چیزی باقی نماند، فقط شماره فاکتور می‌ماند.
+ */
+function yara_fs_slug_base($business, $serial) {
+    $parts = [];
+    $b = yara_fs_clean($business, 16);
+    if ($b !== '') $parts[] = $b;
+    $s = yara_fs_clean($serial, 14);
+    if ($s !== '') $parts[] = $s;
+    return implode('-', $parts);
+}
+
+// فقط حروف/ارقام لاتین و خط تیره؛ کوچک؛ کوتاه‌شده.
+function yara_fs_clean($str, $max) {
+    $str = strtolower((string) $str);
+    $str = preg_replace('/[^a-z0-9]+/', '-', $str);   // غیرلاتین/فاصله ⇒ خط تیره
+    $str = trim($str, '-');
+    if (strlen($str) > $max) $str = substr($str, 0, $max);
+    return trim($str, '-');
+}
+
+// بخش تصادفی غیرقابل‌حدس (base62 امن)
+function yara_fs_rand($len) {
+    $alphabet = 'abcdefghijkmnpqrstuvwxyz23456789';  // بدون حروف/ارقام گمراه‌کننده (0,o,1,l)
     $max = strlen($alphabet) - 1;
     $out = '';
     for ($i = 0; $i < $len; $i++) {
@@ -232,7 +260,7 @@ function yara_fs_admin_page() {
     echo '<table class="wp-list-table widefat fixed striped"><thead><tr>'
         . '<th>تاریخ</th><th>شماره فاکتور</th><th>مشتری</th><th>لینک</th><th>بازدید</th></tr></thead><tbody>';
     if ($rows) foreach ($rows as $r) {
-        $url = home_url('/f/' . $r->token);
+        $url = home_url('/factor/' . $r->token);
         printf('<tr><td>%s</td><td>%s</td><td>%s</td><td><a href="%s" target="_blank">%s</a></td><td>%d</td></tr>',
             esc_html($r->created), esc_html($r->serial), esc_html($r->name),
             esc_url($url), esc_html($url), (int) $r->hits);

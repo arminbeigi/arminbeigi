@@ -76,21 +76,26 @@ def is_valid_phone(phone: str) -> bool:
 
 # متغیرهای قابل‌استفاده در متن پیام (برای نمایش راهنما در رابط)
 MESSAGE_VARIABLES = [
+    ("{business}", "نام کسب‌وکار شما (از تنظیمات)"),
     ("{name}", "نام مشتری (اگر خالی باشد: مشتری)"),
     ("{invoice}", "شماره فاکتور"),
     ("{link}", "لینک کوتاه پیش‌فاکتور"),
 ]
 
 
-def render_message(template: str, name: str = "", invoice: str = "", link: str = "") -> str:
+def render_message(template: str, name: str = "", invoice: str = "", link: str = "",
+                   business: str = "") -> str:
     """جایگزینی متغیرها در متن پیام."""
     if not template:
         return ""
     out = template
+    out = out.replace("{business}", business or "")
     out = out.replace("{name}", name or "مشتری")
     out = out.replace("{invoice}", invoice or "")
     out = out.replace("{invoice_number}", invoice or "")
     out = out.replace("{link}", link or "")
+    # اگر نام کسب‌وکار خالی بود، فاصله‌ی اضافی «از » را تمیز کن
+    out = out.replace(" از \n", "\n").replace("از  ", "")
     return out.strip()
 
 
@@ -155,10 +160,13 @@ def process_pdf(pdf_path: str, settings: dict, channels: list[str], log=print,
 
     # اگر هنوز لینکی نداریم و کانالی نیاز به لینک دارد (پیامک)، فایل را
     # پشت‌صحنه روی هاست مرجع آپلود کن و لینک کوتاهِ غیرقابل‌حدس بساز.
+    biz = settings.get("business", {})
+    biz_slug = (biz.get("url_slug") or biz.get("name") or "").strip()
     needs_link = any(ch in channels for ch in ("sms_panel", "whatsapp", "bale", "rubika"))
     if not short_link and needs_link:
         try:
-            short_link = file_relay.upload_invoice(pdf_path, serial, customer_name_for_link)
+            short_link = file_relay.upload_invoice(
+                pdf_path, serial, customer_name_for_link, business=biz_slug)
             report["short_link"] = short_link
             log(f"🔗 لینک پیش‌فاکتور آماده شد: {short_link}")
         except Exception as e:
@@ -166,8 +174,10 @@ def process_pdf(pdf_path: str, settings: dict, channels: list[str], log=print,
 
     # متن خوش‌آمدگویی با جایگزینی متغیرها ({name}, {invoice}, {link})
     customer_name = (info.get("name") or "").strip() or "مشتری"
+    business_name = (settings.get("business", {}).get("name") or "").strip()
     welcome = render_message(settings.get("welcome_message", ""),
-                             name=customer_name, invoice=serial, link=short_link)
+                             name=customer_name, invoice=serial, link=short_link,
+                             business=business_name)
 
     # مسیر نشست‌های لاگین‌شده
     from gui import settings_store as _store
