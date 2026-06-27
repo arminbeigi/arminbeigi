@@ -201,9 +201,16 @@ The file MUST contain these fields (Persian labels):
 
 ### Step 4: Schema JSON-LD
 Embed inside `<script type="application/ld+json">` blocks:
-- `Product` (with offers, aggregateRating, brand)
 - `FAQPage` (mirror all FAQs from accordion)
 - `BreadcrumbList` (Home > Category > Subcategory > Product)
+
+**Do NOT add a `Product` schema block.** The shofazh.com WooCommerce product page,
+together with its SEO plugin (Rank Math / Yoast), already generates the `Product`
+schema with the **live WooCommerce price** automatically. Injecting a manual
+`Product` block here would create duplicate / conflicting structured data and a
+wrong (hardcoded) price. Instead, leave a short HTML comment in place of the
+Product block explaining that WooCommerce supplies the live-priced Product schema.
+Never hardcode a price or `aggregateRating` in this file.
 
 ### Step 5: Build HTML
 - Copy `.ran25-wrap` CSS framework exactly as-is from RAN25 template
@@ -242,7 +249,7 @@ After push, reply with:
 2. Three-line summary of what was generated (word count, schema types, image count)
 3. Confirmation that the SEO metadata file was already sent to the user in Step 3c
 4. Note about hotspot positions needing visual verification in browser
-5. **Schema JSON-LD preview**: Display the full generated Schema JSON-LD code blocks (Product, FAQPage, BreadcrumbList) in the chat so the user can review and verify them before publishing
+5. **Schema JSON-LD preview**: Display the full generated Schema JSON-LD code blocks (FAQPage, BreadcrumbList) in the chat so the user can review and verify them before publishing. Note that the `Product` schema (with live price) is intentionally left to WooCommerce + the SEO plugin.
 
 Do NOT paste the full HTML in chat — the file in the repo IS the deliverable. But DO show the Schema JSON-LD separately.
 
