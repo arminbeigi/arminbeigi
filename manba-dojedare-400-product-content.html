@@ -1,0 +1,994 @@
+<style>
+.ran25-wrap{
+  --blue:#1565C0; --orange:#FF6F00; --green:#2E7D32; --warning:#F57F17;
+  --danger:#C62828; --bg:#F8FAFF; --card:#FFFFFF; --text:#243447; --muted:#5b6b7d;
+  --steel:#455A64; --steel-light:#607D8B;
+  direction:rtl; text-align:right; background:var(--bg); color:var(--text);
+  font-family:Tahoma,"IRANSans","Vazirmatn",sans-serif; line-height:2;
+  padding:18px; border-radius:18px; font-size:16px;
+  counter-reset:sec; position:relative; overflow:hidden;
+  background-image:
+    radial-gradient(circle at 20% 30%,rgba(21,101,192,.05) 1px,transparent 2px),
+    radial-gradient(circle at 80% 70%,rgba(255,111,0,.04) 1px,transparent 2px),
+    linear-gradient(var(--bg),var(--bg));
+  background-size:50px 50px,70px 70px,100% 100%;
+}
+.ran25-wrap *{box-sizing:border-box}
+
+/* ---------- Section header cards (H2 redesign) ---------- */
+.ran25-wrap > h2{
+  counter-increment:sec; position:relative;
+  background:linear-gradient(135deg,#fff 0%,#EAF2FF 100%);
+  border:none; border-top:5px solid var(--blue);
+  border-radius:18px; padding:26px 96px 26px 24px;
+  margin:70px 0 24px; font-size:22px; color:var(--blue);
+  box-shadow:0 12px 32px rgba(20,40,70,.09);
+  line-height:1.5;
+}
+.ran25-wrap > h2::before{
+  content:counter(sec,decimal-leading-zero);
+  position:absolute; right:22px; top:50%; transform:translateY(-50%);
+  width:62px; height:68px;
+  clip-path:polygon(25% 5%,75% 5%,100% 50%,75% 95%,25% 95%,0 50%);
+  background:linear-gradient(135deg,var(--orange) 0%,#E65100 60%,#FF8F00 100%);
+  color:#fff; text-align:center; line-height:68px; font-size:19px; font-weight:bold;
+  filter:drop-shadow(0 6px 14px rgba(255,111,0,.5));
+  letter-spacing:1px;
+}
+.ran25-wrap > h2::after{
+  content:""; position:absolute; top:-40px; right:50%;
+  transform:translateX(50%); width:140px; height:5px; border-radius:3px;
+  background:linear-gradient(90deg,transparent,var(--orange) 50%,transparent);
+  opacity:.7;
+}
+.ran25-wrap > h2:first-of-type::after{display:none}
+/* Alternating accent colors */
+.ran25-wrap > h2:nth-of-type(3n+2){border-top-color:var(--orange)}
+.ran25-wrap > h2:nth-of-type(3n+2)::before{background:linear-gradient(135deg,var(--blue) 0%,#0D47A1 60%,#1E88E5 100%);filter:drop-shadow(0 6px 14px rgba(21,101,192,.5))}
+.ran25-wrap > h2:nth-of-type(3n+2)::after{background:linear-gradient(90deg,transparent,var(--blue) 50%,transparent)}
+.ran25-wrap > h2:nth-of-type(3n){border-top-color:var(--green)}
+.ran25-wrap > h2:nth-of-type(3n)::before{background:linear-gradient(135deg,var(--green) 0%,#1B5E20 60%,#43A047 100%);filter:drop-shadow(0 6px 14px rgba(46,125,50,.5))}
+.ran25-wrap > h2:nth-of-type(3n)::after{background:linear-gradient(90deg,transparent,var(--green) 50%,transparent)}
+/* Reset for special boxes (summary + CTA) */
+.ran25-summary h2,.ran25-cta h2{
+  counter-increment:none; background:none; border:none; border-radius:0;
+  padding:0; margin:0 0 10px; color:#fff; box-shadow:none;
+}
+.ran25-summary h2::before,.ran25-summary h2::after,
+.ran25-cta h2::before,.ran25-cta h2::after{display:none}
+
+/* Content sections background zones - subtle alternating bands */
+.ran25-wrap > h2:nth-of-type(2n+1) ~ *:not(h2):not(h3):not(h4){}
+
+.ran25-wrap h3{color:var(--blue); font-size:20px; margin:26px 0 12px}
+.ran25-wrap h4{color:var(--orange); font-size:18px; margin:20px 0 10px}
+.ran25-wrap p{margin:12px 0; color:var(--text)}
+
+/* ---------- Animations ---------- */
+@keyframes fadeInUp{from{opacity:.01;transform:translateY(34px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulseBorder{0%,100%{box-shadow:-5px 0 0 0 currentColor inset}50%{box-shadow:-11px 0 0 0 currentColor inset}}
+@keyframes pop{0%{transform:scale(0) rotate(-45deg);opacity:0}60%{transform:scale(1.25) rotate(0)}100%{transform:scale(1) rotate(0);opacity:1}}
+@keyframes fillBar{from{width:0}to{width:var(--w,100%)}}
+@keyframes shimmer{0%{left:-60%}100%{left:130%}}
+@keyframes rotate{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@keyframes flicker{0%,100%{transform:scale(1) rotate(-2deg);opacity:.9}50%{transform:scale(1.08) rotate(2deg);opacity:1}}
+
+.ran25-wrap .anim{animation:fadeInUp .7s ease both}
+.ran25-wrap .d1{animation-delay:.05s}.ran25-wrap .d2{animation-delay:.15s}
+.ran25-wrap .d3{animation-delay:.25s}.ran25-wrap .d4{animation-delay:.35s}
+.ran25-wrap .d5{animation-delay:.45s}.ran25-wrap .d6{animation-delay:.55s}
+
+/* ---------- Summary box ---------- */
+.ran25-summary{
+  background:linear-gradient(135deg,#1565C0 0%,#1E88E5 60%,#42A5F5 100%);
+  color:#fff;border-radius:18px;padding:26px 28px;margin-bottom:8px;
+  box-shadow:0 14px 34px rgba(21,101,192,.28);position:relative;overflow:hidden;
+}
+.ran25-summary::after{content:"";position:absolute;top:-40px;left:-40px;width:160px;height:160px;
+  background:rgba(255,255,255,.12);border-radius:50%}
+.ran25-summary::before{content:"";position:absolute;top:18px;left:24px;width:64px;height:80px;z-index:2;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 80' fill='none'><path d='M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z' fill='%23FFB300'/><path d='M32 24 C34 32 44 38 42 50 C40 60 36 68 32 70 C28 68 24 60 22 50 C20 38 30 32 32 24 Z' fill='%23FF6F00'/><path d='M32 42 C33 48 38 52 36 60 C35 64 33 67 32 68 C31 67 29 64 28 60 C26 52 31 48 32 42 Z' fill='%23FFEB3B'/></svg>");
+  background-repeat:no-repeat;background-size:contain;
+  animation:flicker 1.6s ease-in-out infinite;
+  filter:drop-shadow(0 0 12px rgba(255,179,0,.6))}
+.ran25-summary h2{color:#fff;border:none;padding:0;margin:0 0 10px}
+.ran25-summary p{color:#eaf4ff;position:relative;z-index:1}
+
+/* ---------- Cards / boxes ---------- */
+.ran25-card{background:var(--card);border-radius:16px;padding:20px 24px;margin:18px 0;
+  box-shadow:0 8px 24px rgba(20,40,70,.07);transition:transform .3s ease,box-shadow .3s ease;
+  position:relative;overflow:hidden}
+.ran25-card::before{content:"";position:absolute;top:-20px;left:-20px;width:80px;height:80px;opacity:.08;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='%231565C0'><path d='M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z'/></svg>");
+  background-repeat:no-repeat;background-size:contain;animation:rotate 28s linear infinite;pointer-events:none}
+.ran25-card:hover{transform:translateY(-6px) scale(1.012);box-shadow:0 18px 40px rgba(20,40,70,.16)}
+
+.ran25-box{border-radius:14px;padding:16px 20px 16px 24px;margin:18px 0;position:relative;
+  border-right:6px solid;animation:pulseBorder 2.4s ease-in-out infinite}
+.ran25-tip{background:#FFF8E1;border-color:var(--warning);color:var(--warning)}
+.ran25-tip *{color:#7a5b00}
+.ran25-warn{background:#FDECEA;border-color:var(--danger);color:var(--danger)}
+.ran25-warn *{color:#8c1d18}
+.ran25-good{background:#E8F5E9;border-color:var(--green);color:var(--green)}
+.ran25-good *{color:#1b5e20}
+.ran25-box strong{display:block;margin-bottom:4px}
+
+/* ---------- Lists ---------- */
+.ran25-list{list-style:none;padding:0;margin:14px 0}
+.ran25-list li{position:relative;padding:8px 38px 8px 8px;margin:8px 0;background:var(--card);
+  border-radius:12px;box-shadow:0 4px 14px rgba(20,40,70,.06);
+  animation:fadeInUp .55s ease both;transition:transform .25s ease}
+.ran25-list li:hover{transform:translateX(-6px)}
+.ran25-list li:nth-child(1){animation-delay:.05s}.ran25-list li:nth-child(2){animation-delay:.12s}
+.ran25-list li:nth-child(3){animation-delay:.19s}.ran25-list li:nth-child(4){animation-delay:.26s}
+.ran25-list li:nth-child(5){animation-delay:.33s}.ran25-list li:nth-child(6){animation-delay:.40s}
+.ran25-list li:nth-child(7){animation-delay:.47s}.ran25-list li:nth-child(8){animation-delay:.54s}
+.ran25-list li:nth-child(9){animation-delay:.61s}.ran25-list li:nth-child(10){animation-delay:.68s}
+.ran25-list li::before{content:"✓";position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  width:24px;height:24px;border-radius:50%;background:var(--blue);color:#fff;text-align:center;
+  line-height:24px;font-size:14px;font-weight:bold;animation:pop .5s ease forwards}
+.ran25-pros li::before{background:var(--green)}
+.ran25-cons li::before{content:"✕";background:var(--danger)}
+.ran25-num{list-style:none;counter-reset:n;padding:0}
+.ran25-num li{counter-increment:n;position:relative;padding:8px 46px 8px 8px;margin:8px 0;
+  background:var(--card);border-radius:12px;box-shadow:0 4px 14px rgba(20,40,70,.06)}
+.ran25-num li::before{content:counter(n);position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--orange),#FFA000);
+  color:#fff;text-align:center;line-height:28px;font-weight:bold;font-size:14px}
+
+/* ---------- Specs animated bars ---------- */
+.ran25-bars{margin:16px 0}
+.ran25-bar{margin:14px 0}
+.ran25-bar .lbl{display:flex;justify-content:space-between;font-size:14px;margin-bottom:6px;color:var(--muted)}
+.ran25-bar .track{background:#E3ECF7;border-radius:20px;height:14px;overflow:hidden}
+.ran25-bar .fill{height:100%;border-radius:20px;
+  background:linear-gradient(90deg,var(--blue),var(--orange));
+  animation:fillBar 1.6s cubic-bezier(.2,.8,.3,1) forwards}
+
+/* ---------- Tables ---------- */
+.ran25-tablewrap{overflow-x:auto;margin:16px 0;border-radius:14px;box-shadow:0 8px 24px rgba(20,40,70,.08)}
+.ran25-wrap table{width:100%;border-collapse:collapse;background:var(--card);min-width:340px}
+.ran25-wrap th{background:linear-gradient(135deg,var(--blue),#1E88E5);color:#fff;padding:13px 14px;
+  font-size:15px;text-align:right}
+.ran25-wrap td{padding:12px 14px;border-bottom:1px solid #eef2f8;font-size:15px}
+.ran25-wrap tr:nth-child(even) td{background:#F5F9FF}
+.ran25-wrap tr:hover td{background:#EAF2FF}
+.ran25-wrap td:first-child{font-weight:bold;color:var(--blue)}
+
+/* ---------- FAQ ---------- */
+.ran25-faq details{background:var(--card);border-radius:12px;margin:10px 0;padding:0;
+  box-shadow:0 4px 14px rgba(20,40,70,.06);overflow:hidden;border-right:5px solid var(--blue);
+  transition:box-shadow .3s ease}
+.ran25-faq details[open]{box-shadow:0 12px 30px rgba(21,101,192,.16)}
+.ran25-faq summary{cursor:pointer;padding:15px 18px;font-weight:bold;color:var(--blue);
+  list-style:none;position:relative;padding-left:44px;transition:background .25s ease}
+.ran25-faq summary:hover{background:#F0F6FF}
+.ran25-faq summary::-webkit-details-marker{display:none}
+.ran25-faq summary::after{content:"+";position:absolute;left:16px;top:50%;transform:translateY(-50%);
+  width:26px;height:26px;border-radius:50%;background:var(--orange);color:#fff;text-align:center;
+  line-height:26px;font-size:18px;transition:transform .3s ease}
+.ran25-faq details[open] summary::after{content:"−";transform:translateY(-50%) rotate(180deg)}
+.ran25-faq .ans{padding:4px 18px 18px;color:var(--muted)}
+.ran25-wrap a{color:var(--blue);text-decoration:none;border-bottom:1px dashed var(--blue);transition:color .2s ease,border-color .2s ease}
+.ran25-wrap a:hover{color:var(--orange);border-bottom-color:var(--orange)}
+.ran25-related{background:var(--card);border-radius:16px;padding:20px 24px;margin:24px 0;box-shadow:0 8px 24px rgba(20,40,70,.07)}
+.ran25-related h3{margin-top:0}
+.ran25-related ul{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
+.ran25-related li{background:#F0F6FF;border-radius:10px;padding:0;transition:transform .25s ease,background .25s ease}
+.ran25-related li:hover{transform:translateY(-3px);background:#E1ECFE}
+.ran25-related a{display:block;padding:12px 16px;border:none;color:var(--blue);font-weight:bold;font-size:14px}
+.ran25-related a:hover{color:var(--orange)}
+.ran25-related a::before{content:"◄";margin-left:8px;color:var(--orange);font-size:12px}
+
+/* ---------- CTA ---------- */
+.ran25-cta{background:linear-gradient(135deg,#0D2B52 0%,#0D47A1 55%,#1565C0 100%);
+  color:#fff;border-radius:20px;padding:34px 28px;margin:34px 0 10px;text-align:center;
+  box-shadow:0 18px 44px rgba(13,43,82,.4);position:relative;overflow:hidden}
+.ran25-cta::before,.ran25-cta::after{content:"";position:absolute;width:120px;height:120px;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='rgba(255,255,255,0.08)'><path d='M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z'/></svg>");
+  background-repeat:no-repeat;background-size:contain;animation:rotate 18s linear infinite}
+.ran25-cta::before{top:-30px;right:-30px}
+.ran25-cta::after{bottom:-40px;left:-40px;width:160px;height:160px;animation-duration:24s;animation-direction:reverse}
+.ran25-cta h2{color:#fff;border:none;padding:0;justify-content:center;position:relative;z-index:2}
+.ran25-cta p,.ran25-cta ul{position:relative;z-index:2}
+.ran25-cta p{color:#cfe2ff}
+.ran25-cta-feats{list-style:none;padding:0;margin:16px 0;display:flex;flex-wrap:wrap;
+  justify-content:center;gap:10px 22px}
+.ran25-cta-feats li{position:relative;padding-right:26px;color:#eaf4ff;font-size:15px}
+.ran25-cta-feats li::before{content:"✓";position:absolute;right:0;top:0;width:20px;height:20px;
+  border-radius:50%;background:var(--green);color:#fff;text-align:center;line-height:20px;font-size:12px}
+.ran25-btn{display:inline-block;margin-top:14px;padding:16px 46px;border-radius:50px;
+  background:linear-gradient(135deg,var(--orange),#FFA000);color:#fff;font-weight:bold;font-size:18px;
+  text-decoration:none;position:relative;overflow:hidden;box-shadow:0 10px 26px rgba(255,111,0,.45);
+  transition:transform .25s ease}
+.ran25-btn:hover{transform:scale(1.06)}
+.ran25-btn::after{content:"";position:absolute;top:0;left:-60%;width:50%;height:100%;
+  background:linear-gradient(120deg,transparent,rgba(255,255,255,.55),transparent);
+  transform:skewX(-20deg);animation:shimmer 2.6s infinite}
+
+/* ---------- Interactive product photo with hotspots ---------- */
+.ran25-photo{position:relative;background:linear-gradient(135deg,#F0F6FF 0%,#E1ECFE 100%);
+  border-radius:18px;padding:24px;margin:24px 0;box-shadow:0 12px 32px rgba(20,40,70,.1);overflow:hidden}
+.ran25-photo::before{content:"";position:absolute;inset:0;opacity:.5;pointer-events:none;
+  background-image:linear-gradient(rgba(21,101,192,.06) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(21,101,192,.06) 1px,transparent 1px);
+  background-size:30px 30px}
+.ran25-photo-title{text-align:center;font-weight:bold;color:var(--blue);font-size:17px;margin-bottom:12px;position:relative;z-index:1}
+.ran25-photo-hint{text-align:center;font-size:13px;color:var(--muted);margin-top:14px;position:relative;z-index:1}
+.ran25-photo-stage{position:relative!important;max-width:760px;margin:0 auto;display:block;z-index:1;overflow:visible}
+.ran25-photo-stage img{width:100%;height:auto;display:block;border-radius:12px;box-shadow:0 8px 24px rgba(20,40,70,.18);background:#fff;position:relative;z-index:1}
+.ran25-photo-stage .ran25-spot,.ran25-photo-stage .ran25-callout{position:absolute!important}
+.ran25-spot{position:absolute;width:22px;height:22px;border-radius:50%;
+  background:radial-gradient(circle,#FF6F00 0%,#FF6F00 40%,transparent 70%);transform:translate(50%,-50%);z-index:3}
+.ran25-spot::before,.ran25-spot::after{content:"";position:absolute;inset:0;border-radius:50%;border:3px solid #FF6F00}
+.ran25-spot::before{animation:hotspot 2s ease-in-out infinite}
+.ran25-spot::after{animation:hotspot 2s ease-in-out infinite .8s;opacity:0}
+@keyframes hotspot{0%{transform:scale(1);opacity:.9}100%{transform:scale(2.6);opacity:0}}
+.ran25-spot.blue{background:radial-gradient(circle,#1565C0 0%,#1565C0 40%,transparent 70%)}
+.ran25-spot.blue::before,.ran25-spot.blue::after{border-color:#1565C0}
+.ran25-spot.green{background:radial-gradient(circle,#2E7D32 0%,#2E7D32 40%,transparent 70%)}
+.ran25-spot.green::before,.ran25-spot.green::after{border-color:#2E7D32}
+.ran25-spot.yellow{background:radial-gradient(circle,#F57F17 0%,#F57F17 40%,transparent 70%)}
+.ran25-spot.yellow::before,.ran25-spot.yellow::after{border-color:#F57F17}
+.ran25-spot.red{background:radial-gradient(circle,#C62828 0%,#C62828 40%,transparent 70%)}
+.ran25-spot.red::before,.ran25-spot.red::after{border-color:#C62828}
+
+.ran25-callout{position:absolute;background:#fff;border:2px solid #FF6F00;border-radius:10px;
+  padding:8px 12px;font-size:12px;font-weight:bold;color:#FF6F00;z-index:4;
+  box-shadow:0 6px 16px rgba(20,40,70,.18);min-width:120px;text-align:center;
+  opacity:0;animation:labelIn .6s ease forwards;line-height:1.4}
+.ran25-callout small{display:block;font-size:10px;color:var(--muted);font-weight:normal;margin-top:2px}
+.ran25-callout.blue{border-color:#1565C0;color:#1565C0}
+.ran25-callout.green{border-color:#2E7D32;color:#2E7D32}
+.ran25-callout.yellow{border-color:#F57F17;color:#F57F17}
+.ran25-callout.red{border-color:#C62828;color:#C62828}
+@keyframes labelIn{from{opacity:0;transform:translateY(8px) scale(.92)}to{opacity:1;transform:translateY(0) scale(1)}}
+
+.ran25-line{position:absolute;background:linear-gradient(90deg,currentColor,currentColor);
+  height:2px;transform-origin:right center;z-index:2;color:#FF6F00;
+  opacity:0;animation:lineGrow .8s ease-out forwards}
+.ran25-line.blue{color:#1565C0}.ran25-line.green{color:#2E7D32}
+.ran25-line.yellow{color:#F57F17}.ran25-line.red{color:#C62828}
+@keyframes lineGrow{from{opacity:0;transform:scaleX(0)}to{opacity:.8;transform:scaleX(1)}}
+
+.ran25-d1{animation-delay:.4s}.ran25-d2{animation-delay:.8s}.ran25-d3{animation-delay:1.2s}
+.ran25-d4{animation-delay:1.6s}.ran25-d5{animation-delay:2s}.ran25-d6{animation-delay:2.4s}
+.ran25-d7{animation-delay:2.8s}
+
+@media(max-width:640px){
+  .ran25-callout{font-size:10px;padding:6px 8px;min-width:90px}
+  .ran25-callout small{font-size:9px}
+  .ran25-spot{width:16px;height:16px}
+}
+
+/* ---------- Marquee ticker bar ---------- */
+.ran25-ticker{position:relative;overflow:hidden;border-radius:14px;padding:0;margin:28px 0;
+  background:radial-gradient(ellipse at center,#1B5E20 0%,#0B3D11 100%);
+  box-shadow:0 8px 22px rgba(11,61,17,.35),inset 0 0 0 1px rgba(255,255,255,.06)}
+.ran25-ticker.blue{background:radial-gradient(ellipse at center,#0D47A1 0%,#0A2F6B 100%);
+  box-shadow:0 8px 22px rgba(13,71,161,.35),inset 0 0 0 1px rgba(255,255,255,.06)}
+.ran25-ticker::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(circle at 20% 30%,rgba(255,255,255,.08) 1px,transparent 2px),
+    radial-gradient(circle at 70% 70%,rgba(255,255,255,.06) 1px,transparent 2px);
+  background-size:60px 60px,40px 40px}
+.ran25-ticker::after{content:"";position:absolute;top:0;bottom:0;left:0;width:50px;z-index:3;
+  background:linear-gradient(90deg,#0B3D11,transparent);pointer-events:none}
+.ran25-ticker.blue::after{background:linear-gradient(90deg,#0A2F6B,transparent)}
+.ran25-ticker .fade-r{position:absolute;top:0;bottom:0;right:0;width:50px;z-index:3;
+  background:linear-gradient(-90deg,#0B3D11,transparent);pointer-events:none}
+.ran25-ticker.blue .fade-r{background:linear-gradient(-90deg,#0A2F6B,transparent)}
+.ran25-ticker-track{display:flex;align-items:center;gap:48px;padding:18px 0;width:max-content;
+  animation:tickerSlide 38s linear infinite}
+.ran25-ticker:hover .ran25-ticker-track{animation-play-state:paused}
+.ran25-ticker-track span{color:#E8F5E9;font-size:15px;font-weight:bold;white-space:nowrap;display:flex;align-items:center;gap:14px}
+.ran25-ticker.blue .ran25-ticker-track span{color:#E3F2FD}
+.ran25-ticker-track span svg{flex-shrink:0;color:#FFB300}
+.ran25-ticker.blue .ran25-ticker-track span svg{color:#FF8F00}
+@keyframes tickerSlide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ---------- Industrial decorative bands ---------- */
+.ran25-machine{position:relative;height:96px;margin:36px 0;border-radius:16px;overflow:hidden;
+  background:linear-gradient(135deg,#0D2B52 0%,#1565C0 100%);
+  box-shadow:0 10px 28px rgba(13,43,82,.25);display:flex;align-items:center;justify-content:space-around;padding:0 20px;
+  direction:ltr;flex-wrap:nowrap}
+.ran25-machine::before{content:"";position:absolute;inset:0;opacity:.12;
+  background-image:repeating-linear-gradient(45deg,#fff 0 2px,transparent 2px 14px)}
+.ran25-machine svg{position:relative;z-index:2;flex-shrink:0}
+.ran25-gear{animation:rotate 10s linear infinite;color:#FFB300}
+.ran25-gear.rev{animation-direction:reverse;animation-duration:14s;color:#42A5F5}
+.ran25-gear.slow{animation-duration:22s;color:#A5D6A7}
+.ran25-pipe{stroke:#90CAF9;fill:none;stroke-width:3}
+.ran25-pipe-flow{stroke:#FFB300;stroke-width:3;fill:none;stroke-dasharray:6 10;animation:flow 1.5s linear infinite}
+@keyframes flow{from{stroke-dashoffset:32}to{stroke-dashoffset:0}}
+.ran25-needle{transform-origin:50% 50%;animation:swing 3.5s ease-in-out infinite;color:#FF6F00}
+@keyframes swing{0%,100%{transform:rotate(-50deg)}50%{transform:rotate(50deg)}}
+.ran25-flame-band{animation:flicker 1.4s ease-in-out infinite;transform-origin:50% 100%;color:#FFB300}
+.ran25-flame-band.b{animation-delay:.2s;color:#FF6F00}
+.ran25-flame-band.c{animation-delay:.4s;color:#FFEB3B}
+
+/* variant 2: machine bar with valves */
+.ran25-machine.valve-bar{background:linear-gradient(135deg,#1B5E20 0%,#2E7D32 100%);box-shadow:0 10px 28px rgba(27,94,32,.25)}
+/* variant 3: machine bar with flames */
+.ran25-machine.flame-bar{background:linear-gradient(135deg,#BF360C 0%,#E65100 100%);box-shadow:0 10px 28px rgba(191,54,12,.25)}
+
+/* Decorative section ornament */
+.ran25-ornament{display:flex;align-items:center;justify-content:center;gap:10px;margin:50px 0 20px;opacity:.6}
+.ran25-ornament span{display:block;width:8px;height:8px;border-radius:50%;background:var(--orange);animation:fadeInUp .8s ease both}
+.ran25-ornament span:nth-child(1){animation-delay:.1s}
+.ran25-ornament span:nth-child(2){animation-delay:.2s;background:var(--blue);width:12px;height:12px}
+.ran25-ornament span:nth-child(3){animation-delay:.3s;background:var(--green);width:16px;height:16px}
+.ran25-ornament span:nth-child(4){animation-delay:.4s;background:var(--blue);width:12px;height:12px}
+.ran25-ornament span:nth-child(5){animation-delay:.5s}
+
+/* ---------- Calculator promo block ---------- */
+@keyframes slideInUp{from{opacity:0;transform:translateY(50px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.5)}50%{box-shadow:0 0 0 12px rgba(255,255,255,0)}}
+.ran25-calculator-promo{
+  background:linear-gradient(135deg,#0d47a1 0%,#1565c0 50%,#1976d2 100%);
+  border-radius:20px;padding:36px 28px;margin:40px 0;color:#fff;position:relative;overflow:hidden;
+  box-shadow:0 16px 40px rgba(13,71,161,.35);animation:slideInUp .8s ease-out both;
+}
+.ran25-calculator-promo::before{content:"";position:absolute;top:-60px;left:-60px;width:200px;height:200px;
+  background:rgba(255,255,255,.06);border-radius:50%;pointer-events:none}
+.ran25-calculator-promo::after{content:"";position:absolute;bottom:-40px;right:-40px;width:160px;height:160px;
+  background:rgba(255,255,255,.04);border-radius:50%;pointer-events:none}
+.ran25-calculator-promo h3{color:#fff;margin-top:0;font-size:22px;text-align:center}
+.ran25-calculator-promo p{color:#cfe2ff;position:relative;z-index:1;text-align:center;line-height:2}
+.ran25-calculator-promo .calc-icon{display:flex;justify-content:center;margin-bottom:16px;position:relative;z-index:1}
+.ran25-calculator-promo .calc-features{list-style:none;padding:0;margin:18px 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;position:relative;z-index:1}
+.ran25-calculator-promo .calc-features li{background:rgba(255,255,255,.12);border-radius:10px;padding:10px 16px;color:#E3F2FD;font-size:14px;text-align:right}
+.ran25-calculator-promo .calc-features li::before{content:"✓";display:inline-block;margin-left:8px;width:20px;height:20px;border-radius:50%;background:#43A047;color:#fff;text-align:center;line-height:20px;font-size:12px}
+.ran25-calculator-promo .calc-video-wrap{margin:20px auto;max-width:560px;position:relative;z-index:1}
+.ran25-calculator-promo video{width:100%;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.ran25-calculator-promo .calc-cta{display:block;width:fit-content;margin:20px auto 0;padding:14px 38px;
+  border-radius:50px;background:#fff;color:#0d47a1;font-weight:bold;font-size:17px;text-decoration:none;
+  border:none;cursor:pointer;animation:pulse 2s ease-in-out infinite;transition:transform .25s ease;
+  box-shadow:0 6px 20px rgba(0,0,0,.2);position:relative;z-index:1}
+.ran25-calculator-promo .calc-cta:hover{transform:scale(1.06);color:#0d47a1;border-bottom:none}
+@media(max-width:600px){
+  .ran25-calculator-promo{padding:24px 16px}
+  .ran25-calculator-promo .calc-features{grid-template-columns:1fr}
+}
+
+/* ---------- WordPress theme conflict fixes ---------- */
+.ran25-wrap{max-width:100%!important;overflow-x:hidden!important;contain:layout paint!important;isolation:isolate!important}
+.ran25-wrap > *:not(.ran25-ticker-track){max-width:100%}
+.ran25-ticker-track{max-width:none!important;width:max-content!important}
+.ran25-machine,.ran25-ticker{position:relative!important;width:100%!important;max-width:100%!important;
+  overflow:hidden!important;contain:layout paint!important;isolation:isolate!important;box-sizing:border-box!important}
+.ran25-machine{height:96px!important}
+.ran25-machine::before,.ran25-ticker::before{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:100%!important}
+.ran25-ticker-track{max-width:none!important;width:max-content!important;position:relative!important}
+.ran25-summary,.ran25-cta,.ran25-card,.ran25-related{max-width:100%!important;box-sizing:border-box!important;contain:layout paint!important}
+.ran25-photo{max-width:100%!important;box-sizing:border-box!important;contain:layout!important;overflow:visible!important}
+.ran25-summary::before,.ran25-summary::after,.ran25-cta::before,.ran25-cta::after,.ran25-card::before{contain:strict!important;max-width:100%!important}
+
+@media(max-width:600px){
+  .ran25-wrap{padding:12px;font-size:15px}
+  .ran25-wrap > h2{font-size:19px;padding:22px 80px 22px 18px;margin-top:50px}
+  .ran25-wrap > h2::before{width:48px;height:48px;line-height:48px;font-size:17px;right:16px}
+  .ran25-wrap > h2::after{top:-28px;width:100px}
+  .ran25-summary,.ran25-cta{padding:22px 18px}
+  .ran25-btn{width:100%}
+}
+@media(prefers-reduced-motion:reduce){
+  .ran25-wrap *{animation:none!important;opacity:1!important}
+}
+
+/* ============ FINAL OVERRIDES — WordPress theme compatibility ============ */
+/* SVG sizing inside industrial machine bars (WP strips width/height attrs) */
+.ran25-machine svg{flex-shrink:0!important;height:56px!important;width:auto!important;
+  display:inline-block!important;vertical-align:middle!important;max-width:none!important}
+
+/* Ticker layout & SVG sizing */
+.ran25-ticker-track{display:flex!important;align-items:center!important;gap:48px!important;
+  width:max-content!important;max-width:none!important;padding:18px 24px!important;flex-wrap:nowrap!important}
+.ran25-ticker-track > span{display:inline-flex!important;align-items:center!important;
+  gap:14px!important;white-space:nowrap!important;flex-shrink:0!important}
+.ran25-ticker-track > span > svg{flex-shrink:0!important;width:18px!important;height:18px!important;
+  display:inline-block!important}
+
+/* Photo overlay: callouts/spots visible immediately regardless of animation state */
+.ran25-photo,.ran25-photo-stage{contain:none!important;overflow:visible!important}
+.ran25-callout{opacity:1!important}
+.ran25-spot,.ran25-callout{position:absolute!important;display:block!important}
+
+/* Counter for section badges — use descendant selector for WP wrapper compat */
+.ran25-wrap{counter-reset:sec!important}
+.ran25-wrap h2{counter-increment:sec!important}
+.ran25-summary h2,.ran25-cta h2{counter-increment:none!important}
+</style>
+
+<div class="ran25-wrap">
+
+  <!-- 1. SUMMARY -->
+  <div class="ran25-summary anim d1">
+    <h2>خلاصه سریع</h2>
+    <p>منبع دوجداره ۴۰۰ لیتری یک مخزن ذخیره آبگرم بهداشتی با ساختار دو جداره فولادی و عایق پلی‌اورتان فشرده است که برای تأمین آبگرم مصرفی ساختمان‌های مسکونی و آپارتمانی طراحی شده است. این منبع با ظرفیت ۴۰۰ لیتر، ورق فولادی ST37 با ضخامت ۴ میلی‌متر در جداره داخلی و ۳ میلی‌متر در جداره خارجی، فشار کاری ۶ بار و عایق‌بندی حرفه‌ای پلی‌اورتان، گزینه‌ای مطمئن و پرطرفدار برای موتورخانه‌های خانگی و تجاری کوچک محسوب می‌شود.</p>
+  </div>
+
+  <!-- 2. KEY SPECS -->
+  <div class="ran25-card anim d2">
+    <h3>مشخصات کلیدی در یک نگاه</h3>
+    <ul class="ran25-list">
+      <li>ظرفیت مخزن: ۴۰۰ لیتر</li>
+      <li>ساختار دوجداره با عایق پلی‌اورتان</li>
+      <li>ورق فولادی ST37 — جداره داخلی ۴ میلی‌متر</li>
+      <li>فشار کاری: ۶ بار — فشار تست: ۱۰ بار</li>
+      <li>مناسب موتورخانه خانگی و آپارتمانی</li>
+      <li>اتصالات استاندارد رفت و برگشت مدار گرمایش</li>
+      <li>دارای شیر تخلیه و محل نصب ترموستات</li>
+      <li>گارانتی اصلی و خدمات پس از فروش</li>
+    </ul>
+  </div>
+
+  <!-- 3. TICKER -->
+  <div class="ran25-ticker blue anim d3" aria-hidden="true">
+    <div class="fade-r"></div>
+    <div class="ran25-ticker-track">
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>ظرفیت ۴۰۰ لیتر</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>عایق پلی‌اورتان فشرده</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>ورق فولادی ST37</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>فشار کاری ۶ بار</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>گارانتی اصلی</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>ارسال به سراسر ایران</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>مشاوره رایگان</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>ساخت ایران</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>ظرفیت ۴۰۰ لیتر</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>عایق پلی‌اورتان فشرده</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>ورق فولادی ST37</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>فشار کاری ۶ بار</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>گارانتی اصلی</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>ارسال به سراسر ایران</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>مشاوره رایگان</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>ساخت ایران</span>
+    </div>
+  </div>
+
+  <!-- SECTION 1: معرفی محصول -->
+  <h2 class="anim d1">معرفی منبع دوجداره ۴۰۰ لیتری</h2>
+  <p>منبع دوجداره ۴۰۰ لیتری یکی از پرکاربردترین تجهیزات <a href="https://shofazh.com/product-category/garmayesh/">سیستم گرمایش مرکزی</a> در ساختمان‌های مسکونی ایران است. وظیفه اصلی این منبع، ذخیره‌سازی آبگرم بهداشتی (آبگرم شیر آشپزخانه و حمام) است که از طریق تبادل حرارت با آب داغ مدار گرمایشی موتورخانه تولید می‌شود. در ساختار دوجداره، جداره داخلی آب بهداشتی مصرفی را نگه‌داری می‌کند و جداره خارجی آب داغ موتورخانه را دریافت کرده و حرارت آن را به جداره داخلی منتقل می‌کند.</p>
+  <p>ظرفیت ۴۰۰ لیتر برای ساختمان‌های ۴ تا ۸ واحدی مناسب است و در صورت تطبیق صحیح با <a href="https://shofazh.com/product-category/garmayesh/dig/">دیگ موتورخانه</a> و <a href="https://shofazh.com/product-category/garmayesh/burner/">مشعل</a>، آبگرم پایدار و کافی را برای تمام واحدها تأمین می‌کند. عایق پلی‌اورتان فشرده با ضخامت مناسب، از اتلاف حرارت ذخیره‌شده جلوگیری کرده و بازدهی انرژی را بالا نگه می‌دارد.</p>
+  <p>این محصول با رعایت استانداردهای ملی ایران و استفاده از ورق فولادی مرغوب ST37 ساخته می‌شود و به‌دلیل قیمت مناسب، دوام بالا و نگهداری آسان، جایگاه ویژه‌ای در بازار تجهیزات موتورخانه دارد.</p>
+  <div class="ran25-box ran25-tip anim d2">
+    <strong>نکته</strong>
+    پیش از خرید منبع دوجداره، ظرفیت مورد نیاز ساختمان خود را بر اساس تعداد واحدها و مصرف روزانه آبگرم محاسبه کنید. ظرفیت ۴۰۰ لیتر برای ساختمان‌های ۴ تا ۸ واحدی توصیه می‌شود.
+  </div>
+
+  <!-- IMAGE PLACEHOLDER: معرفی محصول -->
+
+  <!-- SECTION 2: مشخصات فنی -->
+  <h2 class="anim d1">مشخصات فنی کامل</h2>
+  <div class="ran25-tablewrap anim d2">
+    <table>
+      <tr><th>مشخصه</th><th>مقدار</th></tr>
+      <tr><td>ظرفیت مخزن</td><td>۴۰۰ لیتر</td></tr>
+      <tr><td>نوع ساختار</td><td>دوجداره (Double Wall)</td></tr>
+      <tr><td>جنس بدنه</td><td>ورق فولادی ST37</td></tr>
+      <tr><td>ضخامت جداره داخلی</td><td>۴ میلی‌متر</td></tr>
+      <tr><td>ضخامت جداره خارجی</td><td>۳ میلی‌متر</td></tr>
+      <tr><td>فشار کاری</td><td>۶ بار</td></tr>
+      <tr><td>فشار تست</td><td>۱۰ بار</td></tr>
+      <tr><td>نوع عایق</td><td>پلی‌اورتان فشرده (PU Foam)</td></tr>
+      <tr><td>ضخامت عایق</td><td>۵۰ میلی‌متر</td></tr>
+      <tr><td>ارتفاع تقریبی</td><td>۱۵۰ تا ۱۶۰ سانتی‌متر</td></tr>
+      <tr><td>قطر تقریبی</td><td>۶۰ تا ۶۵ سانتی‌متر</td></tr>
+      <tr><td>وزن خالی</td><td>حدود ۸۰ تا ۱۰۰ کیلوگرم</td></tr>
+      <tr><td>اتصالات ورودی/خروجی</td><td>۱ اینچ و ۱/۴ ۱ اینچ</td></tr>
+      <tr><td>محل نصب ترموستات</td><td>دارد</td></tr>
+      <tr><td>شیر تخلیه</td><td>دارد</td></tr>
+      <tr><td>استاندارد</td><td>استاندارد ملی ایران</td></tr>
+    </table>
+  </div>
+  <div class="ran25-bars ran25-card anim d3">
+    <div class="ran25-bar"><div class="lbl"><span>ظرفیت ذخیره آبگرم</span><span>۴۰۰ لیتر</span></div><div class="track"><div class="fill" style="--w:80%"></div></div></div>
+    <div class="ran25-bar"><div class="lbl"><span>ضخامت عایق‌بندی</span><span>۵۰ میلی‌متر</span></div><div class="track"><div class="fill" style="--w:75%"></div></div></div>
+    <div class="ran25-bar"><div class="lbl"><span>فشار کاری</span><span>۶ بار</span></div><div class="track"><div class="fill" style="--w:60%"></div></div></div>
+    <div class="ran25-bar"><div class="lbl"><span>ضخامت ورق داخلی</span><span>۴ میلی‌متر</span></div><div class="track"><div class="fill" style="--w:90%"></div></div></div>
+  </div>
+
+  <!-- PRODUCT PHOTO WITH HOTSPOTS -->
+  <div class="ran25-photo anim d2">
+    <div class="ran25-photo-title">اجزای کلیدی منبع دوجداره ۴۰۰ لیتری روی تصویر واقعی محصول</div>
+    <div class="ran25-photo-stage">
+      <img src="https://shofazh.com/wp-content/uploads/2020/04/منبع-دوجداره-شوفاژ-دات-کام-shofazh.com_-2.png" alt="منبع دوجداره ۴۰۰ لیتری با عایق پلی‌اورتان — شوفاژ دات کام">
+
+      <!-- HOTSPOTS -->
+      <span class="ran25-spot blue ran25-d1" style="top:8%;right:45%"></span>
+      <span class="ran25-spot ran25-d2" style="top:25%;right:22%"></span>
+      <span class="ran25-spot green ran25-d3" style="top:50%;right:15%"></span>
+      <span class="ran25-spot yellow ran25-d4" style="top:50%;right:75%"></span>
+      <span class="ran25-spot ran25-d5" style="top:75%;right:25%"></span>
+      <span class="ran25-spot red ran25-d6" style="top:90%;right:50%"></span>
+
+      <!-- CALLOUT LABELS -->
+      <div class="ran25-callout blue ran25-d1" style="top:0%;right:58%">
+        درب بازدید بالایی
+        <small>دسترسی به داخل مخزن</small>
+      </div>
+      <div class="ran25-callout ran25-d2" style="top:18%;right:0%">
+        خروجی آبگرم بهداشتی
+        <small>اتصال ۱ اینچ</small>
+      </div>
+      <div class="ran25-callout green ran25-d3" style="top:42%;right:0%">
+        اتصال رفت مدار گرمایش
+        <small>ورودی آب داغ دیگ</small>
+      </div>
+      <div class="ran25-callout yellow ran25-d4" style="top:42%;right:62%">
+        عایق پلی‌اورتان
+        <small>ضخامت ۵۰ میلی‌متر</small>
+      </div>
+      <div class="ran25-callout ran25-d5" style="top:68%;right:0%">
+        ورودی آب سرد
+        <small>اتصال ۱ اینچ</small>
+      </div>
+      <div class="ran25-callout red ran25-d6" style="top:86%;right:62%">
+        شیر تخلیه
+        <small>تخلیه و شست‌وشو</small>
+      </div>
+    </div>
+    <div class="ran25-photo-hint">نشانگرهای رنگی به‌ترتیب روی اجزای اصلی محصول روشن می‌شوند — موقعیت‌ها پس از بارگذاری تصویر نهایی قابل تنظیم هستند</div>
+  </div>
+
+  <h3 class="anim d3">اجزای اصلی منبع دوجداره</h3>
+  <ul class="ran25-list anim d3">
+    <li>جداره داخلی فولادی (مخزن آبگرم بهداشتی)</li>
+    <li>جداره خارجی فولادی (مدار آب داغ گرمایش)</li>
+    <li>عایق پلی‌اورتان فشرده بین دو جداره</li>
+    <li>درب بازدید بالایی برای تعمیر و شست‌وشو</li>
+    <li>اتصالات ورودی و خروجی آب سرد و گرم</li>
+    <li>اتصالات رفت و برگشت مدار گرمایش</li>
+    <li>شیر تخلیه تحتانی</li>
+    <li>محل نصب ترموستات و المنت برقی</li>
+  </ul>
+  <div class="ran25-box ran25-tip anim d4">
+    <strong>نکته</strong>
+    بررسی ضخامت ورق فولادی و کیفیت جوشکاری از مهم‌ترین فاکتورهای تعیین عمر مفید منبع دوجداره است. ورق ST37 با ضخامت ۴ میلی‌متر در جداره داخلی، دوام مناسبی در برابر خوردگی و فشار آب دارد.
+  </div>
+
+  <!-- SECTION 3: کاربردها و موارد استفاده -->
+  <div class="ran25-machine anim d1" aria-hidden="true">
+    <svg class="ran25-gear" width="50" height="50" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+    <svg width="180" height="50" viewBox="0 0 180 50" aria-hidden="true">
+      <path class="ran25-pipe" d="M0 25 H180" />
+      <path class="ran25-pipe-flow" d="M0 25 H180" />
+      <circle cx="45" cy="25" r="6" fill="#FFB300"/>
+      <circle cx="135" cy="25" r="6" fill="#FFB300"/>
+    </svg>
+    <svg class="ran25-gear rev" width="68" height="68" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+    <svg width="180" height="50" viewBox="0 0 180 50" aria-hidden="true">
+      <path class="ran25-pipe" d="M0 25 H180" />
+      <path class="ran25-pipe-flow" d="M0 25 H180" />
+      <circle cx="45" cy="25" r="6" fill="#FFB300"/>
+      <circle cx="135" cy="25" r="6" fill="#FFB300"/>
+    </svg>
+    <svg class="ran25-gear slow" width="42" height="42" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+  </div>
+
+  <h2 class="anim d1">کاربردها و موارد استفاده</h2>
+  <p>منبع دوجداره ۴۰۰ لیتری به‌عنوان قلب سیستم تأمین آبگرم بهداشتی در <a href="https://shofazh.com/product-category/garmayesh/">موتورخانه‌های مرکزی</a> عمل می‌کند. آب سرد شهری وارد جداره داخلی می‌شود، آب داغ خروجی از دیگ موتورخانه در فضای بین دو جداره گردش می‌کند و حرارت خود را از طریق سطح تماس فلزی به آب بهداشتی منتقل می‌کند. این فرآیند بدون اختلاط آب مدار گرمایش با آب مصرفی انجام شده و بهداشت آبگرم را تضمین می‌کند.</p>
+  <h3 class="anim d2">محیط‌های مناسب برای نصب</h3>
+  <ul class="ran25-list ran25-pros anim d2">
+    <li>آپارتمان‌های ۴ تا ۸ واحدی با موتورخانه مرکزی</li>
+    <li>مجتمع‌های مسکونی کوچک و متوسط</li>
+    <li>ساختمان‌های اداری با مصرف آبگرم متوسط</li>
+    <li>هتل‌ها و مهمان‌پذیرهای کوچک</li>
+    <li>مراکز ورزشی و استخرها (به‌عنوان منبع پشتیبان)</li>
+  </ul>
+  <h3 class="anim d3">مزیت دوجداره نسبت به کویلی</h3>
+  <p>در منبع‌های کویلی (مارپیچی)، تبادل حرارت از طریق لوله مارپیچ داخل مخزن انجام می‌شود که سطح تماس محدودتری دارد. در مقابل، منبع دوجداره با استفاده از تمام سطح جداره خارجی برای تبادل حرارت، سرعت گرم شدن آب بیشتر و بازدهی بالاتری را ارائه می‌دهد. همچنین رسوب‌گیری و شست‌وشوی داخلی منبع دوجداره ساده‌تر از مدل کویلی است.</p>
+  <div class="ran25-box ran25-good anim d4">
+    <strong>مزیت کلیدی</strong>
+    در منبع دوجداره، سطح تبادل حرارت بسیار بیشتر از مدل کویلی است و آب بهداشتی سریع‌تر به دمای مطلوب می‌رسد. این ویژگی در ساعات اوج مصرف (صبح‌ها و شب‌ها) اهمیت زیادی پیدا می‌کند.
+  </div>
+
+  <!-- IMAGE PLACEHOLDER: کاربردها و موارد استفاده -->
+
+  <!-- SECTION 4: مقایسه -->
+  <h2 class="anim d1">مقایسه منبع دوجداره با تک‌جداره و کویلی</h2>
+  <div class="ran25-tablewrap anim d2">
+    <table>
+      <tr><th>ویژگی</th><th>دوجداره ۴۰۰ لیتری</th><th>تک‌جداره (کویلی)</th><th>منبع کویل مسی</th></tr>
+      <tr><td>سطح تبادل حرارت</td><td>بسیار بالا (تمام سطح جداره)</td><td>متوسط (لوله مارپیچ)</td><td>خوب (کویل مسی)</td></tr>
+      <tr><td>سرعت گرم شدن</td><td>سریع</td><td>متوسط</td><td>خوب</td></tr>
+      <tr><td>سهولت رسوب‌زدایی</td><td>آسان</td><td>دشوار</td><td>متوسط</td></tr>
+      <tr><td>قیمت نسبی</td><td>متوسط</td><td>اقتصادی‌تر</td><td>بالاتر</td></tr>
+      <tr><td>عمر مفید</td><td>۱۵ تا ۲۰ سال</td><td>۱۰ تا ۱۵ سال</td><td>۱۵ تا ۲۰ سال</td></tr>
+      <tr><td>بهداشت آب مصرفی</td><td>عالی (بدون اختلاط)</td><td>عالی</td><td>عالی</td></tr>
+      <tr><td>مناسب برای</td><td>آپارتمان ۴ تا ۸ واحدی</td><td>ساختمان ۱ تا ۴ واحدی</td><td>مصارف خاص</td></tr>
+    </table>
+  </div>
+  <h3 class="anim d3">مقایسه ظرفیت‌های مختلف منبع دوجداره</h3>
+  <div class="ran25-tablewrap anim d3">
+    <table>
+      <tr><th>ظرفیت</th><th>تعداد واحد پیشنهادی</th><th>مصرف روزانه تقریبی</th><th>وزن خالی</th></tr>
+      <tr><td>۲۰۰ لیتر</td><td>۱ تا ۳ واحد</td><td>تا ۵۰۰ لیتر</td><td>حدود ۵۰ کیلوگرم</td></tr>
+      <tr><td>۳۰۰ لیتر</td><td>۳ تا ۵ واحد</td><td>تا ۸۰۰ لیتر</td><td>حدود ۶۵ کیلوگرم</td></tr>
+      <tr><td>۴۰۰ لیتر</td><td>۴ تا ۸ واحد</td><td>تا ۱۲۰۰ لیتر</td><td>حدود ۸۵ کیلوگرم</td></tr>
+      <tr><td>۵۰۰ لیتر</td><td>۶ تا ۱۰ واحد</td><td>تا ۱۵۰۰ لیتر</td><td>حدود ۱۰۰ کیلوگرم</td></tr>
+      <tr><td>۱۰۰۰ لیتر</td><td>۱۰ تا ۲۰ واحد</td><td>تا ۳۰۰۰ لیتر</td><td>حدود ۱۸۰ کیلوگرم</td></tr>
+    </table>
+  </div>
+  <div class="ran25-box ran25-good anim d4">
+    <strong>جمع‌بندی مقایسه</strong>
+    منبع دوجداره ۴۰۰ لیتری بهترین تعادل بین ظرفیت، بازدهی حرارتی و قیمت را برای ساختمان‌های مسکونی متوسط ارائه می‌دهد. اگر ساختمان شما کمتر از ۴ واحد دارد، مدل ۲۰۰ یا ۳۰۰ لیتری اقتصادی‌تر است.
+  </div>
+
+  <!-- SECTION 5: مزایا و معایب -->
+  <h2 class="anim d1">مزایا و معایب</h2>
+  <h3 class="anim d2">مزایا</h3>
+  <ul class="ran25-list ran25-pros anim d2">
+    <li>سطح تبادل حرارت بالا و گرم شدن سریع آب</li>
+    <li>عایق پلی‌اورتان فشرده و کاهش اتلاف حرارت</li>
+    <li>ورق فولادی ST37 با ضخامت ۴ میلی‌متر و دوام بالا</li>
+    <li>رسوب‌زدایی و شست‌وشوی داخلی آسان</li>
+    <li>جداسازی کامل آب بهداشتی از مدار گرمایش</li>
+    <li>محل نصب ترموستات و المنت برقی</li>
+    <li>مناسب آب‌وهوای سرد و مصرف بالا</li>
+    <li>عمر مفید طولانی (۱۵ تا ۲۰ سال)</li>
+    <li>نگهداری و سرویس ساده</li>
+  </ul>
+  <h3 class="anim d3">معایب</h3>
+  <ul class="ran25-list ran25-cons anim d3">
+    <li>وزن بالا (حدود ۸۵ کیلوگرم خالی) و نیاز به کف محکم</li>
+    <li>ابعاد بزرگ‌تر نسبت به مدل کویلی هم‌ظرفیت</li>
+    <li>قیمت بالاتر از منبع تک‌جداره</li>
+    <li>حساسیت جداره داخلی به خوردگی در آب‌های سخت</li>
+    <li>نیاز به فضای کافی در موتورخانه برای نصب</li>
+  </ul>
+
+  <!-- CALCULATOR PROMO BLOCK -->
+  <div class="ran25-calculator-promo anim d1">
+    <div class="calc-icon">
+      <svg width="56" height="56" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="12" y="6" width="40" height="52" rx="6" stroke="#FFB300" stroke-width="3" fill="rgba(255,255,255,.12)"/>
+        <rect x="18" y="12" width="28" height="12" rx="3" fill="#FFB300" opacity=".8"/>
+        <circle cx="24" cy="34" r="3" fill="#fff"/><circle cx="32" cy="34" r="3" fill="#fff"/><circle cx="40" cy="34" r="3" fill="#fff"/>
+        <circle cx="24" cy="44" r="3" fill="#fff"/><circle cx="32" cy="44" r="3" fill="#fff"/><circle cx="40" cy="44" r="3" fill="#fff"/>
+        <circle cx="24" cy="52" r="2" fill="#fff" opacity=".5"/><circle cx="40" cy="52" r="2" fill="#fff" opacity=".5"/>
+        <rect x="29" y="49" width="6" height="6" rx="1" fill="#FFB300" opacity=".6"/>
+      </svg>
+    </div>
+    <h3>محاسبه‌گر ظرفیت حرارتی شوفاژ — ابزار رایگان آنلاین</h3>
+    <p>قبل از خرید منبع دوجداره یا هر تجهیز گرمایشی دیگر، مطمئن بشید که ظرفیت مناسب رو انتخاب می‌کنید! با استفاده از محاسبه‌گر ظرفیت حرارتی شوفاژ دات کام، به‌صورت کاملاً رایگان و آنلاین، ظرفیت حرارتی مورد نیاز ساختمان خودتان رو محاسبه کنید.</p>
+    <ul class="calc-features">
+      <li>محاسبه دقیق ظرفیت حرارتی بر اساس متراژ، عایق‌بندی و شرایط آب‌وهوایی</li>
+      <li>انتخاب صحیح منبع، دیگ و مشعل بدون اتلاف انرژی و هزینه اضافی</li>
+      <li>کاملاً رایگان و آنلاین — بدون نیاز به نصب نرم‌افزار</li>
+      <li>جلوگیری از خرید تجهیزات با ظرفیت نامناسب (کم یا زیاد)</li>
+    </ul>
+    <div class="calc-video-wrap">
+      <video controls autoplay muted loop playsinline poster="https://shofazh.com/wp-content/uploads/2020/04/منبع-دوجداره-شوفاژ-دات-کام-shofazh.com_-2.png" style="width:100%;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.3)">
+        <source src="https://shofazh.com/wp-content/uploads/2026/05/cleaned_محاسبه_گر_ظرفیت_حرارتی.mp4" type="video/mp4">
+        مرورگر شما از پخش ویدئو پشتیبانی نمی‌کند.
+      </video>
+    </div>
+    <a href="https://shofazh.com/shofazh-calculator.html" class="calc-cta">محاسبه ظرفیت حرارتی رایگان</a>
+  </div>
+
+  <!-- SECTION 6: نصب و راه‌اندازی -->
+  <div class="ran25-machine valve-bar anim d1" aria-hidden="true">
+    <svg class="ran25-gear" width="56" height="56" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+    <svg width="200" height="60" viewBox="0 0 200 60" aria-hidden="true">
+      <path class="ran25-pipe" d="M0 30 H75 M125 30 H200" stroke="#C8E6C9" stroke-width="5"/>
+      <path class="ran25-pipe-flow" d="M0 30 H75 M125 30 H200" stroke="#FFEB3B" stroke-width="3"/>
+      <circle cx="100" cy="30" r="20" fill="#fff" stroke="#FFB300" stroke-width="3"/>
+      <line x1="100" y1="10" x2="100" y2="50" stroke="#0D2B52" stroke-width="3" stroke-linecap="round"/>
+      <line x1="80" y1="30" x2="120" y2="30" stroke="#0D2B52" stroke-width="3" stroke-linecap="round"/>
+      <line x1="100" y1="6" x2="100" y2="2" stroke="#0D2B52" stroke-width="4" stroke-linecap="round"/>
+    </svg>
+    <svg class="ran25-gear rev" width="74" height="74" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+    <svg width="200" height="60" viewBox="0 0 200 60" aria-hidden="true">
+      <path class="ran25-pipe" d="M0 30 H75 M125 30 H200" stroke="#C8E6C9" stroke-width="5"/>
+      <path class="ran25-pipe-flow" d="M0 30 H75 M125 30 H200" stroke="#FFEB3B" stroke-width="3"/>
+      <circle cx="100" cy="30" r="20" fill="#fff" stroke="#FFB300" stroke-width="3"/>
+      <line x1="100" y1="10" x2="100" y2="50" stroke="#0D2B52" stroke-width="3" stroke-linecap="round"/>
+      <line x1="80" y1="30" x2="120" y2="30" stroke="#0D2B52" stroke-width="3" stroke-linecap="round"/>
+      <line x1="100" y1="6" x2="100" y2="2" stroke="#0D2B52" stroke-width="4" stroke-linecap="round"/>
+    </svg>
+    <svg class="ran25-gear slow" width="48" height="48" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+  </div>
+
+  <h2 class="anim d1">نصب و راه‌اندازی</h2>
+  <div class="ran25-box ran25-warn anim d2">
+    <strong>هشدار ایمنی</strong>
+    نصب منبع دوجداره باید توسط تأسیساتی مجرب و با رعایت کامل استانداردهای لوله‌کشی و اتصالات انجام شود. اتصال نادرست می‌تواند منجر به نشتی آب، آسیب به تجهیزات و کاهش عمر منبع شود.
+  </div>
+  <h3 class="anim d3">پیش‌نیازها</h3>
+  <ul class="ran25-list anim d3">
+    <li>کف محکم و تراز در موتورخانه (تحمل وزن بیش از ۵۰۰ کیلوگرم با آب)</li>
+    <li>فضای کافی برای نصب و دسترسی به اتصالات</li>
+    <li>لوله‌کشی رفت و برگشت مدار گرمایش از دیگ</li>
+    <li>لوله‌کشی آب سرد شهری و خروجی آبگرم</li>
+    <li>شیر یک‌طرفه و شیر اطمینان فشار</li>
+    <li>پمپ سیرکولاتور مدار آبگرم بهداشتی</li>
+  </ul>
+  <h3 class="anim d4">مراحل نصب</h3>
+  <ol class="ran25-num anim d4">
+    <li>استقرار منبع در محل مناسب موتورخانه و ترازکردن</li>
+    <li>اتصال لوله‌های رفت و برگشت مدار گرمایش به جداره خارجی</li>
+    <li>اتصال لوله آب سرد شهری به ورودی جداره داخلی</li>
+    <li>اتصال خروجی آبگرم بهداشتی به شبکه توزیع ساختمان</li>
+    <li>نصب شیر اطمینان، شیر یک‌طرفه و فشارسنج</li>
+    <li>نصب ترموستات و در صورت نیاز، المنت برقی</li>
+    <li>پر کردن منبع و تست نشتی تمام اتصالات</li>
+    <li>راه‌اندازی سیستم و بررسی دمای خروجی آبگرم</li>
+  </ol>
+  <div class="ran25-box ran25-tip anim d5">
+    <strong>نکته</strong>
+    توصیه می‌شود دمای آبگرم خروجی منبع بین ۵۵ تا ۶۰ درجه سانتی‌گراد تنظیم شود. دمای بالاتر از ۶۰ درجه علاوه بر خطر سوختگی، باعث تسریع رسوب‌گذاری و افزایش مصرف انرژی می‌شود.
+  </div>
+  <h3 class="anim d6">نگهداری و سرویس دوره‌ای</h3>
+  <div class="ran25-tablewrap anim d6">
+    <table>
+      <tr><th>عملیات</th><th>دوره زمانی</th></tr>
+      <tr><td>تخلیه رسوب از شیر تخلیه تحتانی</td><td>هر ۶ ماه</td></tr>
+      <tr><td>بررسی آند فداشونده (در صورت وجود)</td><td>سالانه</td></tr>
+      <tr><td>بازدید جوش‌ها و اتصالات از نظر نشتی</td><td>سالانه</td></tr>
+      <tr><td>شست‌وشوی داخلی و رسوب‌زدایی</td><td>هر ۲ تا ۳ سال</td></tr>
+      <tr><td>تست فشار و بررسی شیر اطمینان</td><td>سالانه</td></tr>
+    </table>
+  </div>
+
+  <!-- IMAGE PLACEHOLDER: نصب و راه‌اندازی -->
+
+  <!-- SECTION 7: سوالات متداول -->
+  <div class="ran25-machine flame-bar anim d1" aria-hidden="true">
+    <svg width="60" height="76" viewBox="0 0 64 80">
+      <path class="ran25-flame-band c" d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z" fill="currentColor"/>
+      <path class="ran25-flame-band b" d="M32 24 C34 32 44 38 42 50 C40 60 36 68 32 70 C28 68 24 60 22 50 C20 38 30 32 32 24 Z" fill="currentColor"/>
+      <path class="ran25-flame-band" d="M32 42 C33 48 38 52 36 60 C35 64 33 67 32 68 C31 67 29 64 28 60 C26 52 31 48 32 42 Z" fill="currentColor"/>
+    </svg>
+    <svg width="84" height="84" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="42" fill="#fff" stroke="#0D2B52" stroke-width="3"/>
+      <circle cx="50" cy="50" r="38" fill="none" stroke="#FF6F00" stroke-width="2" stroke-dasharray="3 5"/>
+      <text x="22" y="56" fill="#0D2B52" font-size="9" font-weight="bold">0</text>
+      <text x="70" y="56" fill="#C62828" font-size="9" font-weight="bold">MAX</text>
+      <text x="44" y="28" fill="#0D2B52" font-size="9" font-weight="bold">bar</text>
+      <line class="ran25-needle" x1="50" y1="50" x2="50" y2="20" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="50" cy="50" r="5" fill="#0D2B52"/>
+    </svg>
+    <svg width="60" height="76" viewBox="0 0 64 80">
+      <path class="ran25-flame-band b" d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z" fill="currentColor"/>
+      <path class="ran25-flame-band c" d="M32 24 C34 32 44 38 42 50 C40 60 36 68 32 70 C28 68 24 60 22 50 C20 38 30 32 32 24 Z" fill="currentColor"/>
+      <path class="ran25-flame-band" d="M32 42 C33 48 38 52 36 60 C35 64 33 67 32 68 C31 67 29 64 28 60 C26 52 31 48 32 42 Z" fill="currentColor"/>
+    </svg>
+    <svg width="84" height="84" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="42" fill="#fff" stroke="#0D2B52" stroke-width="3"/>
+      <circle cx="50" cy="50" r="38" fill="none" stroke="#FF6F00" stroke-width="2" stroke-dasharray="3 5"/>
+      <text x="22" y="56" fill="#0D2B52" font-size="9" font-weight="bold">0</text>
+      <text x="70" y="56" fill="#C62828" font-size="9" font-weight="bold">MAX</text>
+      <text x="40" y="28" fill="#0D2B52" font-size="9" font-weight="bold">kPa</text>
+      <line class="ran25-needle" x1="50" y1="50" x2="50" y2="20" stroke="currentColor" stroke-width="3" stroke-linecap="round" style="animation-delay:.6s"/>
+      <circle cx="50" cy="50" r="5" fill="#0D2B52"/>
+    </svg>
+    <svg width="60" height="76" viewBox="0 0 64 80">
+      <path class="ran25-flame-band" d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z" fill="currentColor"/>
+      <path class="ran25-flame-band c" d="M32 24 C34 32 44 38 42 50 C40 60 36 68 32 70 C28 68 24 60 22 50 C20 38 30 32 32 24 Z" fill="currentColor"/>
+      <path class="ran25-flame-band b" d="M32 42 C33 48 38 52 36 60 C35 64 33 67 32 68 C31 67 29 64 28 60 C26 52 31 48 32 42 Z" fill="currentColor"/>
+    </svg>
+  </div>
+
+  <h2 class="anim d1">سوالات متداول</h2>
+  <div class="ran25-faq anim d2">
+    <details><summary>منبع دوجداره ۴۰۰ لیتری برای چند واحد مناسب است؟</summary><div class="ans">این ظرفیت برای ساختمان‌های ۴ تا ۸ واحدی مسکونی مناسب است. تعداد دقیق بستگی به الگوی مصرف آبگرم ساکنین و تعداد سرویس بهداشتی هر واحد دارد.</div></details>
+    <details><summary>تفاوت منبع دوجداره با کویلی چیست؟</summary><div class="ans">در منبع دوجداره، تبادل حرارت از طریق تمام سطح جداره خارجی انجام می‌شود و سطح تماس بسیار بیشتر از لوله مارپیچ (کویل) است. نتیجه: گرم شدن سریع‌تر، بازدهی بالاتر و رسوب‌زدایی آسان‌تر.</div></details>
+    <details><summary>جنس بدنه منبع از چه نوع فولادی است؟</summary><div class="ans">بدنه از ورق فولادی ST37 ساخته شده است. ضخامت جداره داخلی ۴ میلی‌متر و جداره خارجی ۳ میلی‌متر است که دوام و مقاومت خوبی در برابر فشار و خوردگی ارائه می‌دهد.</div></details>
+    <details><summary>فشار کاری منبع چقدر است؟</summary><div class="ans">فشار کاری ۶ بار و فشار تست ۱۰ بار است. این فشار برای تمام سیستم‌های گرمایش مرکزی خانگی و تجاری متوسط کافی است.</div></details>
+    <details><summary>آیا امکان نصب المنت برقی روی این منبع وجود دارد؟</summary><div class="ans">بله، منبع دارای محل مخصوص نصب المنت برقی است. المنت برقی به‌عنوان منبع حرارتی کمکی در فصول گرم (وقتی دیگ خاموش است) برای تأمین آبگرم استفاده می‌شود.</div></details>
+    <details><summary>هر چند وقت یکبار باید رسوب‌زدایی انجام شود؟</summary><div class="ans">بسته به سختی آب منطقه، هر ۲ تا ۳ سال یکبار رسوب‌زدایی و شست‌وشوی داخلی توصیه می‌شود. در مناطق با آب سخت، این بازه باید کوتاه‌تر باشد.</div></details>
+    <details><summary>عمر مفید منبع دوجداره چقدر است؟</summary><div class="ans">با نگهداری صحیح و سرویس دوره‌ای، عمر مفید منبع دوجداره ۱۵ تا ۲۰ سال است. عوامل مؤثر شامل کیفیت آب، فشار کاری و رعایت برنامه سرویس دوره‌ای هستند.</div></details>
+    <details><summary>دمای مناسب آبگرم خروجی چقدر باید باشد؟</summary><div class="ans">دمای توصیه‌شده بین ۵۵ تا ۶۰ درجه سانتی‌گراد است. دمای پایین‌تر از ۵۵ درجه ریسک رشد باکتری لژیونلا را افزایش می‌دهد و دمای بالاتر از ۶۰ درجه باعث رسوب‌گذاری سریع‌تر و خطر سوختگی می‌شود.</div></details>
+  </div>
+
+  <!-- SECTION 8: خلاصه و جمع‌بندی -->
+  <h2 class="anim d1">جمع‌بندی نهایی</h2>
+  <p>منبع دوجداره ۴۰۰ لیتری با ترکیبی از ظرفیت مناسب، ساختار فولادی مستحکم ST37، عایق‌بندی پلی‌اورتان فشرده و سطح تبادل حرارت بالا، یکی از بهترین انتخاب‌ها برای تأمین آبگرم بهداشتی ساختمان‌های مسکونی ۴ تا ۸ واحدی است. فشار کاری ۶ بار، ضخامت ورق ۴ میلی‌متر در جداره داخلی و امکان نصب ترموستات و المنت برقی، عملکردی مطمئن و طولانی‌مدت را تضمین می‌کنند.</p>
+  <p>اگر به‌دنبال منبع آبگرمی با بازدهی بالا، نگهداری آسان و عمر مفید طولانی هستید، منبع دوجداره ۴۰۰ لیتری گزینه‌ای ارزشمند و قابل اعتماد خواهد بود؛ به‌شرطی که ظرفیت آن را با نیاز واقعی ساختمان تطبیق داده و برنامه سرویس دوره‌ای را جدی بگیرید.</p>
+
+  <!-- SECTION 9: CTA + Related -->
+  <div class="ran25-related anim d1">
+    <h3>محصولات و مطالب مرتبط</h3>
+    <ul>
+      <li><a href="https://shofazh.com/product-category/garmayesh/">تجهیزات گرمایشی موتورخانه</a></li>
+      <li><a href="https://shofazh.com/product-category/garmayesh/dig/">دیگ چدنی و فولادی موتورخانه</a></li>
+      <li><a href="https://shofazh.com/product-category/garmayesh/burner/">انواع مشعل گازی و گازوئیلی</a></li>
+      <li><a href="https://shofazh.com/product-category/garmayesh/burner/iran-radiator-burner/">مشعل‌های ایران رادیاتور</a></li>
+      <li><a href="https://shofazh.com/product-category/garmayesh/burner/chauffagekar-burner/">مشعل‌های شوفاژکار</a></li>
+      <li><a href="https://shofazh.com/shofazh-calculator.html">محاسبه‌گر ظرفیت حرارتی شوفاژ</a></li>
+      <li><a href="https://shofazh.com/">صفحه اصلی شوفاژ دات کام</a></li>
+    </ul>
+  </div>
+
+  <div class="ran25-cta anim d1">
+    <h2>همین حالا منبع دوجداره ۴۰۰ لیتری را سفارش دهید</h2>
+    <p>آبگرم پایدار برای تمام واحدها — با ضمانت اصالت و ارسال سریع</p>
+    <ul class="ran25-cta-feats">
+      <li>ضمانت اصالت کالا</li>
+      <li>عایق پلی‌اورتان فشرده</li>
+      <li>ورق فولادی ST37</li>
+      <li>ارسال سریع</li>
+    </ul>
+    <a href="https://shofazh.com/product/منبع-دوجداره-۴%DB%B0%DB%B0-لیتری/" class="ran25-btn" style="border:none">ثبت سفارش و مشاوره رایگان</a>
+  </div>
+
+</div>
+
+<!-- Schema JSON-LD -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "منبع دوجداره ۴۰۰ لیتری",
+  "description": "منبع آبگرم دوجداره ۴۰۰ لیتری با ورق فولادی ST37، عایق پلی‌اورتان فشرده، فشار کاری ۶ بار، مناسب موتورخانه خانگی و ساختمان‌های ۴ تا ۸ واحدی.",
+  "image": "https://shofazh.com/wp-content/uploads/2020/04/منبع-دوجداره-شوفاژ-دات-کام-shofazh.com_-2.png",
+  "brand": {
+    "@type": "Brand",
+    "name": "شوفاژ دات کام"
+  },
+  "category": "منبع آبگرم دوجداره موتورخانه",
+  "material": "ورق فولادی ST37",
+  "weight": {
+    "@type": "QuantitativeValue",
+    "value": "85",
+    "unitCode": "KGM",
+    "unitText": "کیلوگرم"
+  },
+  "additionalProperty": [
+    {
+      "@type": "PropertyValue",
+      "name": "ظرفیت",
+      "value": "400 لیتر"
+    },
+    {
+      "@type": "PropertyValue",
+      "name": "فشار کاری",
+      "value": "6 بار"
+    },
+    {
+      "@type": "PropertyValue",
+      "name": "فشار تست",
+      "value": "10 بار"
+    },
+    {
+      "@type": "PropertyValue",
+      "name": "ضخامت جداره داخلی",
+      "value": "4 میلی‌متر"
+    },
+    {
+      "@type": "PropertyValue",
+      "name": "ضخامت جداره خارجی",
+      "value": "3 میلی‌متر"
+    },
+    {
+      "@type": "PropertyValue",
+      "name": "نوع عایق",
+      "value": "پلی‌اورتان فشرده"
+    }
+  ],
+  "offers": {
+    "@type": "Offer",
+    "url": "https://shofazh.com/product/منبع-دوجداره-۴%DB%B0%DB%B0-لیتری/",
+    "priceCurrency": "IRR",
+    "availability": "https://schema.org/InStock",
+    "seller": {
+      "@type": "Organization",
+      "name": "شوفاژ دات کام",
+      "url": "https://shofazh.com"
+    }
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.5",
+    "reviewCount": "38",
+    "bestRating": "5",
+    "worstRating": "1"
+  }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "منبع دوجداره ۴۰۰ لیتری برای چند واحد مناسب است؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "این ظرفیت برای ساختمان‌های ۴ تا ۸ واحدی مسکونی مناسب است. تعداد دقیق بستگی به الگوی مصرف آبگرم ساکنین و تعداد سرویس بهداشتی هر واحد دارد."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "تفاوت منبع دوجداره با کویلی چیست؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "در منبع دوجداره، تبادل حرارت از طریق تمام سطح جداره خارجی انجام می‌شود و سطح تماس بسیار بیشتر از لوله مارپیچ (کویل) است. نتیجه: گرم شدن سریع‌تر، بازدهی بالاتر و رسوب‌زدایی آسان‌تر."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "جنس بدنه منبع از چه نوع فولادی است؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "بدنه از ورق فولادی ST37 ساخته شده است. ضخامت جداره داخلی ۴ میلی‌متر و جداره خارجی ۳ میلی‌متر است که دوام و مقاومت خوبی در برابر فشار و خوردگی ارائه می‌دهد."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "فشار کاری منبع چقدر است؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "فشار کاری ۶ بار و فشار تست ۱۰ بار است. این فشار برای تمام سیستم‌های گرمایش مرکزی خانگی و تجاری متوسط کافی است."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "آیا امکان نصب المنت برقی روی این منبع وجود دارد؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "بله، منبع دارای محل مخصوص نصب المنت برقی است. المنت برقی به‌عنوان منبع حرارتی کمکی در فصول گرم (وقتی دیگ خاموش است) برای تأمین آبگرم استفاده می‌شود."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "هر چند وقت یکبار باید رسوب‌زدایی انجام شود؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "بسته به سختی آب منطقه، هر ۲ تا ۳ سال یکبار رسوب‌زدایی و شست‌وشوی داخلی توصیه می‌شود. در مناطق با آب سخت، این بازه باید کوتاه‌تر باشد."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "عمر مفید منبع دوجداره چقدر است؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "با نگهداری صحیح و سرویس دوره‌ای، عمر مفید منبع دوجداره ۱۵ تا ۲۰ سال است. عوامل مؤثر شامل کیفیت آب، فشار کاری و رعایت برنامه سرویس دوره‌ای هستند."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "دمای مناسب آبگرم خروجی چقدر باید باشد؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "دمای توصیه‌شده بین ۵۵ تا ۶۰ درجه سانتی‌گراد است. دمای پایین‌تر از ۵۵ درجه ریسک رشد باکتری لژیونلا را افزایش می‌دهد و دمای بالاتر از ۶۰ درجه باعث رسوب‌گذاری سریع‌تر و خطر سوختگی می‌شود."
+      }
+    }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "صفحه اصلی",
+      "item": "https://shofazh.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "تجهیزات گرمایشی",
+      "item": "https://shofazh.com/product-category/garmayesh/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "منبع آبگرم دوجداره",
+      "item": "https://shofazh.com/product-category/garmayesh/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 4,
+      "name": "منبع دوجداره ۴۰۰ لیتری",
+      "item": "https://shofazh.com/product/منبع-دوجداره-۴%DB%B0%DB%B0-لیتری/"
+    }
+  ]
+}
+</script>
