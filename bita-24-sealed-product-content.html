@@ -1,0 +1,1029 @@
+<style>
+.ran25-wrap{
+  --blue:#1565C0; --orange:#FF6F00; --green:#2E7D32; --warning:#F57F17;
+  --danger:#C62828; --bg:#F8FAFF; --card:#FFFFFF; --text:#243447; --muted:#5b6b7d;
+  --steel:#455A64; --steel-light:#607D8B;
+  direction:rtl; text-align:right; background:var(--bg); color:var(--text);
+  font-family:Tahoma,"IRANSans","Vazirmatn",sans-serif; line-height:2;
+  padding:18px; border-radius:18px; font-size:16px;
+  counter-reset:sec; position:relative; overflow:hidden;
+  background-image:
+    radial-gradient(circle at 20% 30%,rgba(21,101,192,.05) 1px,transparent 2px),
+    radial-gradient(circle at 80% 70%,rgba(255,111,0,.04) 1px,transparent 2px),
+    linear-gradient(var(--bg),var(--bg));
+  background-size:50px 50px,70px 70px,100% 100%;
+}
+.ran25-wrap *{box-sizing:border-box}
+
+/* ---------- Section header cards (H2 redesign) ---------- */
+.ran25-wrap > h2{
+  counter-increment:sec; position:relative;
+  background:linear-gradient(135deg,#fff 0%,#EAF2FF 100%);
+  border:none; border-top:5px solid var(--blue);
+  border-radius:18px; padding:26px 96px 26px 24px;
+  margin:70px 0 24px; font-size:22px; color:var(--blue);
+  box-shadow:0 12px 32px rgba(20,40,70,.09);
+  line-height:1.5;
+}
+.ran25-wrap > h2::before{
+  content:counter(sec,decimal-leading-zero);
+  position:absolute; right:22px; top:50%; transform:translateY(-50%);
+  width:62px; height:68px;
+  clip-path:polygon(25% 5%,75% 5%,100% 50%,75% 95%,25% 95%,0 50%);
+  background:linear-gradient(135deg,var(--orange) 0%,#E65100 60%,#FF8F00 100%);
+  color:#fff; text-align:center; line-height:68px; font-size:19px; font-weight:bold;
+  filter:drop-shadow(0 6px 14px rgba(255,111,0,.5));
+  letter-spacing:1px;
+}
+.ran25-wrap > h2::after{
+  content:""; position:absolute; top:-40px; right:50%;
+  transform:translateX(50%); width:140px; height:5px; border-radius:3px;
+  background:linear-gradient(90deg,transparent,var(--orange) 50%,transparent);
+  opacity:.7;
+}
+.ran25-wrap > h2:first-of-type::after{display:none}
+/* Alternating accent colors */
+.ran25-wrap > h2:nth-of-type(3n+2){border-top-color:var(--orange)}
+.ran25-wrap > h2:nth-of-type(3n+2)::before{background:linear-gradient(135deg,var(--blue) 0%,#0D47A1 60%,#1E88E5 100%);filter:drop-shadow(0 6px 14px rgba(21,101,192,.5))}
+.ran25-wrap > h2:nth-of-type(3n+2)::after{background:linear-gradient(90deg,transparent,var(--blue) 50%,transparent)}
+.ran25-wrap > h2:nth-of-type(3n){border-top-color:var(--green)}
+.ran25-wrap > h2:nth-of-type(3n)::before{background:linear-gradient(135deg,var(--green) 0%,#1B5E20 60%,#43A047 100%);filter:drop-shadow(0 6px 14px rgba(46,125,50,.5))}
+.ran25-wrap > h2:nth-of-type(3n)::after{background:linear-gradient(90deg,transparent,var(--green) 50%,transparent)}
+/* Reset for special boxes (summary + CTA) */
+.ran25-summary h2,.ran25-cta h2{
+  counter-increment:none; background:none; border:none; border-radius:0;
+  padding:0; margin:0 0 10px; color:#fff; box-shadow:none;
+}
+.ran25-summary h2::before,.ran25-summary h2::after,
+.ran25-cta h2::before,.ran25-cta h2::after{display:none}
+
+/* Content sections background zones - subtle alternating bands */
+.ran25-wrap > h2:nth-of-type(2n+1) ~ *:not(h2):not(h3):not(h4){}
+
+.ran25-wrap h3{color:var(--blue); font-size:20px; margin:26px 0 12px}
+.ran25-wrap h4{color:var(--orange); font-size:18px; margin:20px 0 10px}
+.ran25-wrap p{margin:12px 0; color:var(--text)}
+
+/* ---------- Animations ---------- */
+@keyframes fadeInUp{from{opacity:.01;transform:translateY(34px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulseBorder{0%,100%{box-shadow:-5px 0 0 0 currentColor inset}50%{box-shadow:-11px 0 0 0 currentColor inset}}
+@keyframes pop{0%{transform:scale(0) rotate(-45deg);opacity:0}60%{transform:scale(1.25) rotate(0)}100%{transform:scale(1) rotate(0);opacity:1}}
+@keyframes fillBar{from{width:0}to{width:var(--w,100%)}}
+@keyframes shimmer{0%{left:-60%}100%{left:130%}}
+@keyframes rotate{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@keyframes flicker{0%,100%{transform:scale(1) rotate(-2deg);opacity:.9}50%{transform:scale(1.08) rotate(2deg);opacity:1}}
+
+.ran25-wrap .anim{animation:fadeInUp .7s ease both}
+.ran25-wrap .d1{animation-delay:.05s}.ran25-wrap .d2{animation-delay:.15s}
+.ran25-wrap .d3{animation-delay:.25s}.ran25-wrap .d4{animation-delay:.35s}
+.ran25-wrap .d5{animation-delay:.45s}.ran25-wrap .d6{animation-delay:.55s}
+
+/* ---------- Summary box ---------- */
+.ran25-summary{
+  background:linear-gradient(135deg,#1565C0 0%,#1E88E5 60%,#42A5F5 100%);
+  color:#fff;border-radius:18px;padding:26px 28px;margin-bottom:8px;
+  box-shadow:0 14px 34px rgba(21,101,192,.28);position:relative;overflow:hidden;
+}
+.ran25-summary::after{content:"";position:absolute;top:-40px;left:-40px;width:160px;height:160px;
+  background:rgba(255,255,255,.12);border-radius:50%}
+.ran25-summary::before{content:"";position:absolute;top:18px;left:24px;width:64px;height:80px;z-index:2;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 80' fill='none'><path d='M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z' fill='%23FFB300'/><path d='M32 24 C34 32 44 38 42 50 C40 60 36 68 32 70 C28 68 24 60 22 50 C20 38 30 32 32 24 Z' fill='%23FF6F00'/><path d='M32 42 C33 48 38 52 36 60 C35 64 33 67 32 68 C31 67 29 64 28 60 C26 52 31 48 32 42 Z' fill='%23FFEB3B'/></svg>");
+  background-repeat:no-repeat;background-size:contain;
+  animation:flicker 1.6s ease-in-out infinite;
+  filter:drop-shadow(0 0 12px rgba(255,179,0,.6))}
+.ran25-summary h2{color:#fff;border:none;padding:0;margin:0 0 10px}
+.ran25-summary p{color:#eaf4ff;position:relative;z-index:1}
+
+/* ---------- Cards / boxes ---------- */
+.ran25-card{background:var(--card);border-radius:16px;padding:20px 24px;margin:18px 0;
+  box-shadow:0 8px 24px rgba(20,40,70,.07);transition:transform .3s ease,box-shadow .3s ease;
+  position:relative;overflow:hidden}
+.ran25-card::before{content:"";position:absolute;top:-20px;left:-20px;width:80px;height:80px;opacity:.08;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='%231565C0'><path d='M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z'/></svg>");
+  background-repeat:no-repeat;background-size:contain;animation:rotate 28s linear infinite;pointer-events:none}
+.ran25-card:hover{transform:translateY(-6px) scale(1.012);box-shadow:0 18px 40px rgba(20,40,70,.16)}
+
+.ran25-box{border-radius:14px;padding:16px 20px 16px 24px;margin:18px 0;position:relative;
+  border-right:6px solid;animation:pulseBorder 2.4s ease-in-out infinite}
+.ran25-tip{background:#FFF8E1;border-color:var(--warning);color:var(--warning)}
+.ran25-tip *{color:#7a5b00}
+.ran25-warn{background:#FDECEA;border-color:var(--danger);color:var(--danger)}
+.ran25-warn *{color:#8c1d18}
+.ran25-good{background:#E8F5E9;border-color:var(--green);color:var(--green)}
+.ran25-good *{color:#1b5e20}
+.ran25-box strong{display:block;margin-bottom:4px}
+
+/* ---------- Lists ---------- */
+.ran25-list{list-style:none;padding:0;margin:14px 0}
+.ran25-list li{position:relative;padding:8px 38px 8px 8px;margin:8px 0;background:var(--card);
+  border-radius:12px;box-shadow:0 4px 14px rgba(20,40,70,.06);
+  animation:fadeInUp .55s ease both;transition:transform .25s ease}
+.ran25-list li:hover{transform:translateX(-6px)}
+.ran25-list li:nth-child(1){animation-delay:.05s}.ran25-list li:nth-child(2){animation-delay:.12s}
+.ran25-list li:nth-child(3){animation-delay:.19s}.ran25-list li:nth-child(4){animation-delay:.26s}
+.ran25-list li:nth-child(5){animation-delay:.33s}.ran25-list li:nth-child(6){animation-delay:.40s}
+.ran25-list li:nth-child(7){animation-delay:.47s}.ran25-list li:nth-child(8){animation-delay:.54s}
+.ran25-list li:nth-child(9){animation-delay:.61s}.ran25-list li:nth-child(10){animation-delay:.68s}
+.ran25-list li::before{content:"✓";position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  width:24px;height:24px;border-radius:50%;background:var(--blue);color:#fff;text-align:center;
+  line-height:24px;font-size:14px;font-weight:bold;animation:pop .5s ease forwards}
+.ran25-pros li::before{background:var(--green)}
+.ran25-cons li::before{content:"✕";background:var(--danger)}
+.ran25-num{list-style:none;counter-reset:n;padding:0}
+.ran25-num li{counter-increment:n;position:relative;padding:8px 46px 8px 8px;margin:8px 0;
+  background:var(--card);border-radius:12px;box-shadow:0 4px 14px rgba(20,40,70,.06)}
+.ran25-num li::before{content:counter(n);position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--orange),#FFA000);
+  color:#fff;text-align:center;line-height:28px;font-weight:bold;font-size:14px}
+
+/* ---------- Specs animated bars ---------- */
+.ran25-bars{margin:16px 0}
+.ran25-bar{margin:14px 0}
+.ran25-bar .lbl{display:flex;justify-content:space-between;font-size:14px;margin-bottom:6px;color:var(--muted)}
+.ran25-bar .track{background:#E3ECF7;border-radius:20px;height:14px;overflow:hidden}
+.ran25-bar .fill{height:100%;border-radius:20px;
+  background:linear-gradient(90deg,var(--blue),var(--orange));
+  animation:fillBar 1.6s cubic-bezier(.2,.8,.3,1) forwards}
+
+/* ---------- Tables ---------- */
+.ran25-tablewrap{overflow-x:auto;margin:16px 0;border-radius:14px;box-shadow:0 8px 24px rgba(20,40,70,.08)}
+.ran25-wrap table{width:100%;border-collapse:collapse;background:var(--card);min-width:340px}
+.ran25-wrap th{background:linear-gradient(135deg,var(--blue),#1E88E5);color:#fff;padding:13px 14px;
+  font-size:15px;text-align:right}
+.ran25-wrap td{padding:12px 14px;border-bottom:1px solid #eef2f8;font-size:15px}
+.ran25-wrap tr:nth-child(even) td{background:#F5F9FF}
+.ran25-wrap tr:hover td{background:#EAF2FF}
+.ran25-wrap td:first-child{font-weight:bold;color:var(--blue)}
+
+/* ---------- FAQ ---------- */
+.ran25-faq details{background:var(--card);border-radius:12px;margin:10px 0;padding:0;
+  box-shadow:0 4px 14px rgba(20,40,70,.06);overflow:hidden;border-right:5px solid var(--blue);
+  transition:box-shadow .3s ease}
+.ran25-faq details[open]{box-shadow:0 12px 30px rgba(21,101,192,.16)}
+.ran25-faq summary{cursor:pointer;padding:15px 18px;font-weight:bold;color:var(--blue);
+  list-style:none;position:relative;padding-left:44px;transition:background .25s ease}
+.ran25-faq summary:hover{background:#F0F6FF}
+.ran25-faq summary::-webkit-details-marker{display:none}
+.ran25-faq summary::after{content:"+";position:absolute;left:16px;top:50%;transform:translateY(-50%);
+  width:26px;height:26px;border-radius:50%;background:var(--orange);color:#fff;text-align:center;
+  line-height:26px;font-size:18px;transition:transform .3s ease}
+.ran25-faq details[open] summary::after{content:"−";transform:translateY(-50%) rotate(180deg)}
+.ran25-faq .ans{padding:4px 18px 18px;color:var(--muted)}
+.ran25-wrap a{color:var(--blue);text-decoration:none;border-bottom:1px dashed var(--blue);transition:color .2s ease,border-color .2s ease}
+.ran25-wrap a:hover{color:var(--orange);border-bottom-color:var(--orange)}
+.ran25-related{background:var(--card);border-radius:16px;padding:20px 24px;margin:24px 0;box-shadow:0 8px 24px rgba(20,40,70,.07)}
+.ran25-related h3{margin-top:0}
+.ran25-related ul{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
+.ran25-related li{background:#F0F6FF;border-radius:10px;padding:0;transition:transform .25s ease,background .25s ease}
+.ran25-related li:hover{transform:translateY(-3px);background:#E1ECFE}
+.ran25-related a{display:block;padding:12px 16px;border:none;color:var(--blue);font-weight:bold;font-size:14px}
+.ran25-related a:hover{color:var(--orange)}
+.ran25-related a::before{content:"◄";margin-left:8px;color:var(--orange);font-size:12px}
+
+/* ---------- CTA ---------- */
+.ran25-cta{background:linear-gradient(135deg,#0D2B52 0%,#0D47A1 55%,#1565C0 100%);
+  color:#fff;border-radius:20px;padding:34px 28px;margin:34px 0 10px;text-align:center;
+  box-shadow:0 18px 44px rgba(13,43,82,.4);position:relative;overflow:hidden}
+.ran25-cta::before,.ran25-cta::after{content:"";position:absolute;width:120px;height:120px;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='rgba(255,255,255,0.08)'><path d='M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z'/></svg>");
+  background-repeat:no-repeat;background-size:contain;animation:rotate 18s linear infinite}
+.ran25-cta::before{top:-30px;right:-30px}
+.ran25-cta::after{bottom:-40px;left:-40px;width:160px;height:160px;animation-duration:24s;animation-direction:reverse}
+.ran25-cta h2{color:#fff;border:none;padding:0;justify-content:center;position:relative;z-index:2}
+.ran25-cta p,.ran25-cta ul{position:relative;z-index:2}
+.ran25-cta p{color:#cfe2ff}
+.ran25-cta-feats{list-style:none;padding:0;margin:16px 0;display:flex;flex-wrap:wrap;
+  justify-content:center;gap:10px 22px}
+.ran25-cta-feats li{position:relative;padding-right:26px;color:#eaf4ff;font-size:15px}
+.ran25-cta-feats li::before{content:"✓";position:absolute;right:0;top:0;width:20px;height:20px;
+  border-radius:50%;background:var(--green);color:#fff;text-align:center;line-height:20px;font-size:12px}
+.ran25-btn{display:inline-block;margin-top:14px;padding:16px 46px;border-radius:50px;
+  background:linear-gradient(135deg,var(--orange),#FFA000);color:#fff;font-weight:bold;font-size:18px;
+  text-decoration:none;position:relative;overflow:hidden;box-shadow:0 10px 26px rgba(255,111,0,.45);
+  transition:transform .25s ease}
+.ran25-btn:hover{transform:scale(1.06)}
+.ran25-btn::after{content:"";position:absolute;top:0;left:-60%;width:50%;height:100%;
+  background:linear-gradient(120deg,transparent,rgba(255,255,255,.55),transparent);
+  transform:skewX(-20deg);animation:shimmer 2.6s infinite}
+
+/* ---------- Interactive product photo with hotspots ---------- */
+.ran25-photo{position:relative;background:linear-gradient(135deg,#F0F6FF 0%,#E1ECFE 100%);
+  border-radius:18px;padding:24px;margin:24px 0;box-shadow:0 12px 32px rgba(20,40,70,.1);overflow:hidden}
+.ran25-photo::before{content:"";position:absolute;inset:0;opacity:.5;pointer-events:none;
+  background-image:linear-gradient(rgba(21,101,192,.06) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(21,101,192,.06) 1px,transparent 1px);
+  background-size:30px 30px}
+.ran25-photo-title{text-align:center;font-weight:bold;color:var(--blue);font-size:17px;margin-bottom:12px;position:relative;z-index:1}
+.ran25-photo-hint{text-align:center;font-size:13px;color:var(--muted);margin-top:14px;position:relative;z-index:1}
+.ran25-photo-stage{position:relative!important;max-width:760px;margin:0 auto;display:block;z-index:1;overflow:visible}
+.ran25-photo-stage img{width:100%;height:auto;display:block;border-radius:12px;box-shadow:0 8px 24px rgba(20,40,70,.18);background:#fff;position:relative;z-index:1}
+.ran25-photo-stage .ran25-spot,.ran25-photo-stage .ran25-callout{position:absolute!important}
+.ran25-spot{position:absolute;width:22px;height:22px;border-radius:50%;
+  background:radial-gradient(circle,#FF6F00 0%,#FF6F00 40%,transparent 70%);transform:translate(50%,-50%);z-index:3}
+.ran25-spot::before,.ran25-spot::after{content:"";position:absolute;inset:0;border-radius:50%;border:3px solid #FF6F00}
+.ran25-spot::before{animation:hotspot 2s ease-in-out infinite}
+.ran25-spot::after{animation:hotspot 2s ease-in-out infinite .8s;opacity:0}
+@keyframes hotspot{0%{transform:scale(1);opacity:.9}100%{transform:scale(2.6);opacity:0}}
+.ran25-spot.blue{background:radial-gradient(circle,#1565C0 0%,#1565C0 40%,transparent 70%)}
+.ran25-spot.blue::before,.ran25-spot.blue::after{border-color:#1565C0}
+.ran25-spot.green{background:radial-gradient(circle,#2E7D32 0%,#2E7D32 40%,transparent 70%)}
+.ran25-spot.green::before,.ran25-spot.green::after{border-color:#2E7D32}
+.ran25-spot.yellow{background:radial-gradient(circle,#F57F17 0%,#F57F17 40%,transparent 70%)}
+.ran25-spot.yellow::before,.ran25-spot.yellow::after{border-color:#F57F17}
+.ran25-spot.red{background:radial-gradient(circle,#C62828 0%,#C62828 40%,transparent 70%)}
+.ran25-spot.red::before,.ran25-spot.red::after{border-color:#C62828}
+
+.ran25-callout{position:absolute;background:#fff;border:2px solid #FF6F00;border-radius:10px;
+  padding:8px 12px;font-size:12px;font-weight:bold;color:#FF6F00;z-index:4;
+  box-shadow:0 6px 16px rgba(20,40,70,.18);min-width:120px;text-align:center;
+  opacity:0;animation:labelIn .6s ease forwards;line-height:1.4}
+.ran25-callout small{display:block;font-size:10px;color:var(--muted);font-weight:normal;margin-top:2px}
+.ran25-callout.blue{border-color:#1565C0;color:#1565C0}
+.ran25-callout.green{border-color:#2E7D32;color:#2E7D32}
+.ran25-callout.yellow{border-color:#F57F17;color:#F57F17}
+.ran25-callout.red{border-color:#C62828;color:#C62828}
+@keyframes labelIn{from{opacity:0;transform:translateY(8px) scale(.92)}to{opacity:1;transform:translateY(0) scale(1)}}
+
+.ran25-line{position:absolute;background:linear-gradient(90deg,currentColor,currentColor);
+  height:2px;transform-origin:right center;z-index:2;color:#FF6F00;
+  opacity:0;animation:lineGrow .8s ease-out forwards}
+.ran25-line.blue{color:#1565C0}.ran25-line.green{color:#2E7D32}
+.ran25-line.yellow{color:#F57F17}.ran25-line.red{color:#C62828}
+@keyframes lineGrow{from{opacity:0;transform:scaleX(0)}to{opacity:.8;transform:scaleX(1)}}
+
+.ran25-d1{animation-delay:.4s}.ran25-d2{animation-delay:.8s}.ran25-d3{animation-delay:1.2s}
+.ran25-d4{animation-delay:1.6s}.ran25-d5{animation-delay:2s}.ran25-d6{animation-delay:2.4s}
+.ran25-d7{animation-delay:2.8s}
+
+@media(max-width:640px){
+  .ran25-callout{font-size:10px;padding:6px 8px;min-width:90px}
+  .ran25-callout small{font-size:9px}
+  .ran25-spot{width:16px;height:16px}
+}
+
+/* ---------- Marquee ticker bar ---------- */
+.ran25-ticker{position:relative;overflow:hidden;border-radius:14px;padding:0;margin:28px 0;
+  background:radial-gradient(ellipse at center,#1B5E20 0%,#0B3D11 100%);
+  box-shadow:0 8px 22px rgba(11,61,17,.35),inset 0 0 0 1px rgba(255,255,255,.06)}
+.ran25-ticker.blue{background:radial-gradient(ellipse at center,#0D47A1 0%,#0A2F6B 100%);
+  box-shadow:0 8px 22px rgba(13,71,161,.35),inset 0 0 0 1px rgba(255,255,255,.06)}
+.ran25-ticker::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(circle at 20% 30%,rgba(255,255,255,.08) 1px,transparent 2px),
+    radial-gradient(circle at 70% 70%,rgba(255,255,255,.06) 1px,transparent 2px);
+  background-size:60px 60px,40px 40px}
+.ran25-ticker::after{content:"";position:absolute;top:0;bottom:0;left:0;width:50px;z-index:3;
+  background:linear-gradient(90deg,#0B3D11,transparent);pointer-events:none}
+.ran25-ticker.blue::after{background:linear-gradient(90deg,#0A2F6B,transparent)}
+.ran25-ticker .fade-r{position:absolute;top:0;bottom:0;right:0;width:50px;z-index:3;
+  background:linear-gradient(-90deg,#0B3D11,transparent);pointer-events:none}
+.ran25-ticker.blue .fade-r{background:linear-gradient(-90deg,#0A2F6B,transparent)}
+.ran25-ticker-track{display:flex;align-items:center;gap:48px;padding:18px 0;width:max-content;
+  animation:tickerSlide 38s linear infinite}
+.ran25-ticker:hover .ran25-ticker-track{animation-play-state:paused}
+.ran25-ticker-track span{color:#E8F5E9;font-size:15px;font-weight:bold;white-space:nowrap;display:flex;align-items:center;gap:14px}
+.ran25-ticker.blue .ran25-ticker-track span{color:#E3F2FD}
+.ran25-ticker-track span svg{flex-shrink:0;color:#FFB300}
+.ran25-ticker.blue .ran25-ticker-track span svg{color:#FF8F00}
+@keyframes tickerSlide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ---------- Industrial decorative bands ---------- */
+.ran25-machine{position:relative;height:96px;margin:36px 0;border-radius:16px;overflow:hidden;
+  background:linear-gradient(135deg,#0D2B52 0%,#1565C0 100%);
+  box-shadow:0 10px 28px rgba(13,43,82,.25);display:flex;align-items:center;justify-content:space-around;padding:0 20px;
+  direction:ltr;flex-wrap:nowrap}
+.ran25-machine::before{content:"";position:absolute;inset:0;opacity:.12;
+  background-image:repeating-linear-gradient(45deg,#fff 0 2px,transparent 2px 14px)}
+.ran25-machine svg{position:relative;z-index:2;flex-shrink:0}
+.ran25-gear{animation:rotate 10s linear infinite;color:#FFB300}
+.ran25-gear.rev{animation-direction:reverse;animation-duration:14s;color:#42A5F5}
+.ran25-gear.slow{animation-duration:22s;color:#A5D6A7}
+.ran25-pipe{stroke:#90CAF9;fill:none;stroke-width:3}
+.ran25-pipe-flow{stroke:#FFB300;stroke-width:3;fill:none;stroke-dasharray:6 10;animation:flow 1.5s linear infinite}
+@keyframes flow{from{stroke-dashoffset:32}to{stroke-dashoffset:0}}
+.ran25-needle{transform-origin:50% 50%;animation:swing 3.5s ease-in-out infinite;color:#FF6F00}
+@keyframes swing{0%,100%{transform:rotate(-50deg)}50%{transform:rotate(50deg)}}
+.ran25-flame-band{animation:flicker 1.4s ease-in-out infinite;transform-origin:50% 100%;color:#FFB300}
+.ran25-flame-band.b{animation-delay:.2s;color:#FF6F00}
+.ran25-flame-band.c{animation-delay:.4s;color:#FFEB3B}
+
+/* variant 2: machine bar with valves */
+.ran25-machine.valve-bar{background:linear-gradient(135deg,#1B5E20 0%,#2E7D32 100%);box-shadow:0 10px 28px rgba(27,94,32,.25)}
+/* variant 3: machine bar with flames */
+.ran25-machine.flame-bar{background:linear-gradient(135deg,#BF360C 0%,#E65100 100%);box-shadow:0 10px 28px rgba(191,54,12,.25)}
+
+/* Decorative section ornament */
+.ran25-ornament{display:flex;align-items:center;justify-content:center;gap:10px;margin:50px 0 20px;opacity:.6}
+.ran25-ornament span{display:block;width:8px;height:8px;border-radius:50%;background:var(--orange);animation:fadeInUp .8s ease both}
+.ran25-ornament span:nth-child(1){animation-delay:.1s}
+.ran25-ornament span:nth-child(2){animation-delay:.2s;background:var(--blue);width:12px;height:12px}
+.ran25-ornament span:nth-child(3){animation-delay:.3s;background:var(--green);width:16px;height:16px}
+.ran25-ornament span:nth-child(4){animation-delay:.4s;background:var(--blue);width:12px;height:12px}
+.ran25-ornament span:nth-child(5){animation-delay:.5s}
+
+/* ---------- WordPress theme conflict fixes ---------- */
+.ran25-wrap{max-width:100%!important;overflow-x:hidden!important;contain:layout paint!important;isolation:isolate!important}
+.ran25-wrap > *:not(.ran25-ticker-track){max-width:100%}
+.ran25-ticker-track{max-width:none!important;width:max-content!important}
+.ran25-machine,.ran25-ticker{position:relative!important;width:100%!important;max-width:100%!important;
+  overflow:hidden!important;contain:layout paint!important;isolation:isolate!important;box-sizing:border-box!important}
+.ran25-machine{height:96px!important}
+.ran25-machine::before,.ran25-ticker::before{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:100%!important}
+.ran25-ticker-track{max-width:none!important;width:max-content!important;position:relative!important}
+.ran25-summary,.ran25-cta,.ran25-card,.ran25-related{max-width:100%!important;box-sizing:border-box!important;contain:layout paint!important}
+.ran25-photo{max-width:100%!important;box-sizing:border-box!important;contain:layout!important;overflow:visible!important}
+.ran25-summary::before,.ran25-summary::after,.ran25-cta::before,.ran25-cta::after,.ran25-card::before{contain:strict!important;max-width:100%!important}
+
+@media(max-width:600px){
+  .ran25-wrap{padding:12px;font-size:15px}
+  .ran25-wrap > h2{font-size:19px;padding:22px 80px 22px 18px;margin-top:50px}
+  .ran25-wrap > h2::before{width:48px;height:48px;line-height:48px;font-size:17px;right:16px}
+  .ran25-wrap > h2::after{top:-28px;width:100px}
+  .ran25-summary,.ran25-cta{padding:22px 18px}
+  .ran25-btn{width:100%}
+}
+@media(prefers-reduced-motion:reduce){
+  .ran25-wrap *{animation:none!important;opacity:1!important}
+}
+
+/* ============ FINAL OVERRIDES — WordPress theme compatibility ============ */
+/* SVG sizing inside industrial machine bars (WP strips width/height attrs) */
+.ran25-machine svg{flex-shrink:0!important;height:56px!important;width:auto!important;
+  display:inline-block!important;vertical-align:middle!important;max-width:none!important}
+
+/* Ticker layout & SVG sizing */
+.ran25-ticker-track{display:flex!important;align-items:center!important;gap:48px!important;
+  width:max-content!important;max-width:none!important;padding:18px 24px!important;flex-wrap:nowrap!important}
+.ran25-ticker-track > span{display:inline-flex!important;align-items:center!important;
+  gap:14px!important;white-space:nowrap!important;flex-shrink:0!important}
+.ran25-ticker-track > span > svg{flex-shrink:0!important;width:18px!important;height:18px!important;
+  display:inline-block!important}
+
+/* Photo overlay: callouts/spots visible immediately regardless of animation state */
+.ran25-photo,.ran25-photo-stage{contain:none!important;overflow:visible!important}
+.ran25-callout{opacity:1!important}
+.ran25-spot,.ran25-callout{position:absolute!important;display:block!important}
+
+/* Counter for section badges — use descendant selector for WP wrapper compat */
+.ran25-wrap{counter-reset:sec!important}
+.ran25-wrap h2{counter-increment:sec!important}
+.ran25-summary h2,.ran25-cta h2{counter-increment:none!important}
+
+/* ============ Calculator promo block (product-page specific add-on) ============ */
+@keyframes slideInUp{from{opacity:0;transform:translateY(48px)}to{opacity:1;transform:translateY(0)}}
+@keyframes promoPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.55)}50%{box-shadow:0 0 0 14px rgba(255,255,255,0)}}
+@keyframes dotPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.7);opacity:.5}}
+.ran25-calculator-promo{position:relative;overflow:hidden;border-radius:20px;margin:40px 0;
+  padding:30px 28px;color:#fff;
+  background:linear-gradient(135deg,#0d47a1 0%,#1565c0 50%,#1976d2 100%);
+  box-shadow:0 20px 50px rgba(13,71,161,.4);
+  animation:slideInUp .8s ease-out both}
+.ran25-calculator-promo::before{content:"";position:absolute;top:-60px;left:-60px;width:200px;height:200px;
+  background:radial-gradient(circle,rgba(255,255,255,.14),transparent 70%);border-radius:50%;pointer-events:none}
+.ran25-calculator-promo::after{content:"";position:absolute;bottom:-70px;right:-40px;width:220px;height:220px;
+  background:radial-gradient(circle,rgba(255,255,255,.10),transparent 70%);border-radius:50%;pointer-events:none}
+.ran25-calc-grid{position:relative;z-index:2;display:grid;grid-template-columns:1.05fr 1fr;gap:26px;align-items:center}
+.ran25-calc-head{display:flex;align-items:center;gap:14px;margin-bottom:10px}
+.ran25-calc-head svg{flex-shrink:0;width:54px;height:54px;filter:drop-shadow(0 4px 10px rgba(0,0,0,.25))}
+.ran25-calc-head h3{margin:0;color:#fff;font-size:21px;line-height:1.4}
+.ran25-calculator-promo p{color:#eaf3ff;margin:10px 0;font-size:15.5px;line-height:1.95}
+.ran25-calc-feats{list-style:none;padding:0;margin:14px 0}
+.ran25-calc-feats li{position:relative;padding:5px 28px 5px 0;color:#f1f7ff;font-size:14.5px}
+.ran25-calc-feats li::before{content:"✓";position:absolute;right:0;top:6px;width:20px;height:20px;border-radius:50%;
+  background:#FFB300;color:#0d47a1;text-align:center;line-height:20px;font-size:12px;font-weight:bold}
+.ran25-calc-btn{display:inline-flex;align-items:center;gap:10px;margin-top:12px;padding:15px 34px;border-radius:50px;
+  background:#fff;color:#0d47a1;font-weight:bold;font-size:16px;text-decoration:none;border:none;
+  box-shadow:0 10px 26px rgba(0,0,0,.25);animation:promoPulse 2.2s ease-out infinite;transition:transform .25s ease}
+.ran25-calc-btn:hover{transform:scale(1.05);color:#0d47a1;border-bottom:none}
+.ran25-calc-btn .dot{width:10px;height:10px;border-radius:50%;background:#FF6F00;animation:dotPulse 1.4s ease-in-out infinite}
+.ran25-calc-videowrap{position:relative;z-index:2;background:rgba(255,255,255,.10);padding:10px;border-radius:16px;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+.ran25-calc-videowrap video{width:100%;max-width:100%;height:auto;display:block;border-radius:12px;
+  box-shadow:0 12px 30px rgba(0,0,0,.3)}
+@media(max-width:640px){
+  .ran25-calc-grid{grid-template-columns:1fr;gap:18px}
+  .ran25-calc-head h3{font-size:18px}
+  .ran25-calc-btn{width:100%;justify-content:center}
+}
+</style>
+
+<div class="ran25-wrap">
+
+  <!-- 1. SUMMARY -->
+  <div class="ran25-summary anim d1">
+    <h2>خلاصه سریع</h2>
+    <p>پکیج دیواری بوتان مدل بیتا ۲۴ Sealed یک پکیج دو مبدله با محفظه احتراق بسته (فن‌دار) و ظرفیت حرارتی حدود ۲۴٬۰۰۰ کیلوکالری بر ساعت است که برای گرمایش و تأمین آب گرم بهداشتی واحدهای مسکونی تا حدود ۱۲۰ مترمربع طراحی شده است. این پکیج با مبدل اصلی مسی، مبدل ثانویه صفحه‌ای استیل و بازده حرارتی نزدیک به ۹۰ درصد، مصرف گاز را بهینه نگه می‌دارد و با محفظه احتراق بسته، ایمنی بالاتری در فضاهای کوچک فراهم می‌کند. محصول با گارانتی معتبر بوتان و خدمات پس از فروش گسترده عرضه می‌شود.</p>
+  </div>
+
+  <!-- 2. KEY SPECS -->
+  <div class="ran25-card anim d2">
+    <h3>مشخصات کلیدی در یک نگاه</h3>
+    <ul class="ran25-list">
+      <li>ظرفیت حرارتی حدود ۲۴٬۰۰۰ کیلوکالری بر ساعت (~۲۸ کیلووات)</li>
+      <li>سیستم دو مبدله: مبدل اصلی مسی + مبدل ثانویه صفحه‌ای استیل</li>
+      <li>محفظه احتراق بسته (Sealed / فن‌دار) با تخلیه دودکش دو جداره</li>
+      <li>بازده حرارتی نزدیک به ۹۰ درصد و مصرف بهینه گاز</li>
+      <li>دبی آب گرم بهداشتی حدود ۱۳ لیتر در دقیقه</li>
+      <li>توان مصرفی برق حدود ۱۵۰ وات</li>
+      <li>صفحه نمایش دیجیتال و کنترل دمای مجزا</li>
+      <li>سیستم‌های ایمنی چندگانه و گارانتی معتبر بوتان</li>
+    </ul>
+  </div>
+
+  <!-- 3. TICKER -->
+  <div class="ran25-ticker blue anim d3" aria-hidden="true">
+    <div class="fade-r"></div>
+    <div class="ran25-ticker-track">
+      <span><svg width="18" height="18" viewBox="0 0 64 80" fill="currentColor"><path d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z"/></svg>سیستم دو مبدله</span>
+      <span><svg width="18" height="18" viewBox="0 0 64 80" fill="currentColor"><path d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z"/></svg>محفظه احتراق بسته (Sealed)</span>
+      <span><svg width="18" height="18" viewBox="0 0 64 80" fill="currentColor"><path d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z"/></svg>بازده حرارتی نزدیک به ۹۰٪</span>
+      <span><svg width="18" height="18" viewBox="0 0 64 80" fill="currentColor"><path d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z"/></svg>آبگرم بهداشتی فوری</span>
+      <span><svg width="18" height="18" viewBox="0 0 64 80" fill="currentColor"><path d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z"/></svg>مصرف بهینه گاز شهری</span>
+      <span><svg width="18" height="18" viewBox="0 0 64 80" fill="currentColor"><path d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z"/></svg>نصب دیواری آسان و کم‌جا</span>
+      <span><svg width="18" height="18" viewBox="0 0 64 80" fill="currentColor"><path d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z"/></svg>گارانتی معتبر بوتان</span>
+      <span><svg width="18" height="18" viewBox="0 0 64 80" fill="currentColor"><path d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z"/></svg>سیستم دو مبدله</span>
+      <span><svg width="18" height="18" viewBox="0 0 64 80" fill="currentColor"><path d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z"/></svg>محفظه احتراق بسته (Sealed)</span>
+      <span><svg width="18" height="18" viewBox="0 0 64 80" fill="currentColor"><path d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z"/></svg>بازده حرارتی نزدیک به ۹۰٪</span>
+      <span><svg width="18" height="18" viewBox="0 0 64 80" fill="currentColor"><path d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z"/></svg>آبگرم بهداشتی فوری</span>
+      <span><svg width="18" height="18" viewBox="0 0 64 80" fill="currentColor"><path d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z"/></svg>مصرف بهینه گاز شهری</span>
+      <span><svg width="18" height="18" viewBox="0 0 64 80" fill="currentColor"><path d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z"/></svg>نصب دیواری آسان و کم‌جا</span>
+      <span><svg width="18" height="18" viewBox="0 0 64 80" fill="currentColor"><path d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z"/></svg>گارانتی معتبر بوتان</span>
+    </div>
+  </div>
+
+  <!-- SECTION 01 — INTRO -->
+  <h2 class="anim d1">پکیج دیواری بوتان بیتا ۲۴ Sealed چیست؟</h2>
+  <p>پکیج دیواری بوتان مدل بیتا ۲۴ یکی از پرفروش‌ترین <a href="https://shofazh.com/product-category/garmayesh/">دستگاه‌های گرمایشی</a> ساخت شرکت بوتان است که هم وظیفه گرم کردن آب رادیاتورهای ساختمان و هم تأمین آب گرم بهداشتی مصرفی را بر عهده دارد. نسخه Sealed این محصول به محفظه احتراق بسته و فن دمنده مجهز است؛ یعنی هوای لازم برای احتراق به‌جای کشیده‌شدن از فضای داخل ساختمان، مستقیماً از بیرون و از طریق دودکش دو جداره تأمین می‌شود. همین ویژگی، پکیج بیتا ۲۴ را به گزینه‌ای ایمن‌تر برای آپارتمان‌ها و فضاهای کوچک و کم‌تهویه تبدیل کرده است.</p>
+  <p>برخلاف پکیج‌های تک مبدله، مدل بیتا ۲۴ از یک <strong>سیستم دو مبدله</strong> بهره می‌برد: یک مبدل اصلی مسی که حرارت شعله را به آب مدار گرمایش منتقل می‌کند و یک مبدل ثانویه صفحه‌ای از جنس استیل که مخصوص گرم‌کردن آب بهداشتی است. این جداسازی مدارها باعث می‌شود رسوب و خوردگی کمتری به مبدل اصلی وارد شود و عمر دستگاه افزایش یابد. بیتا ۲۴ با ظرفیت حرارتی حدود ۲۴ هزار کیلوکالری بر ساعت، برای واحدهای مسکونی کوچک و متوسط — تقریباً تا ۱۲۰ مترمربع بسته به شرایط عایق‌بندی و اقلیم — انتخابی منطقی به‌شمار می‌رود.</p>
+  <p>برند بوتان با بیش از نیم قرن سابقه در صنعت تجهیزات حرارتی ایران، یکی از نام‌های شناخته‌شده در زمینه <a href="https://shofazh.com/product-category/garmayesh/package/">پکیج‌های دیواری</a> است و محصولات آن مطابق استاندارد ملی ایران تولید می‌شوند. در ادامه این صفحه، مشخصات فنی کامل، کاربردها، مقایسه با رقبا، نکات نصب و نگهداری و پاسخ پرتکرارترین پرسش‌های کاربران درباره این پکیج را بررسی می‌کنیم.</p>
+  <div class="ran25-box ran25-tip anim d2">
+    <strong>نکته</strong>
+    پیش از خرید، حتماً متراژ و میزان عایق‌بندی فضای خود را با ظرفیت حرارتی پکیج تطبیق دهید تا هم در مصرف گاز صرفه‌جویی شود و هم گرمایش به‌درستی تأمین گردد. در ادامه ابزار رایگان محاسبه ظرفیت حرارتی شوفاژ دات کام را معرفی کرده‌ایم.
+  </div>
+
+  <!-- IMAGE PLACEHOLDER: after intro — pishnahad: "A modern apartment living room with a wall-mounted white gas combi boiler installed in a utility nook, warm cozy lighting, radiators visible, professional interior photography, no text, no watermark" -->
+
+  <!-- SECTION 02 — CAPACITY & DUAL EXCHANGER -->
+  <h2 class="anim d1">ظرفیت حرارتی و سیستم دو مبدله بیتا ۲۴</h2>
+  <p>ظرفیت حرارتی، مهم‌ترین معیار برای انتخاب درست پکیج است. مدل بیتا ۲۴ با توان حرارتی حدود ۲۴ هزار کیلوکالری بر ساعت (معادل تقریبی ۲۸ کیلووات) طراحی شده و توان مفید آن برای گرمایش، انرژی کافی برای چند رادیاتور یک واحد مسکونی استاندارد را فراهم می‌کند. عدد «۲۴» در نام محصول دقیقاً به همین ظرفیت اشاره دارد.</p>
+  <div class="ran25-tablewrap anim d2">
+    <table>
+      <tr><th>پارامتر</th><th>مقدار تقریبی</th></tr>
+      <tr><td>ظرفیت حرارتی</td><td>~۲۴٬۰۰۰ kcal/h (~۲۸ kW)</td></tr>
+      <tr><td>بازده حرارتی</td><td>نزدیک به ۹۰٪</td></tr>
+      <tr><td>دبی آب گرم بهداشتی (ΔT=۲۵°)</td><td>~۱۳ لیتر در دقیقه</td></tr>
+      <tr><td>فشار گاز ورودی (گاز طبیعی)</td><td>~۲۰ میلی‌بار</td></tr>
+    </table>
+  </div>
+  <p>قلب تفاوت بیتا ۲۴ با مدل‌های ساده‌تر، در <strong>سیستم دو مبدله</strong> آن است. در پکیج‌های تک مبدله، یک مبدل واحد هم آب گرمایش و هم آب بهداشتی را گرم می‌کند و رسوب‌گیری ناشی از آب سخت شهری به‌سرعت بازده آن را کاهش می‌دهد. اما در سیستم دو مبدله:</p>
+  <ul class="ran25-list anim d3">
+    <li>مبدل اصلی مسی فقط با آب مدار بسته گرمایش در تماس است و کمتر رسوب می‌گیرد</li>
+    <li>مبدل ثانویه صفحه‌ای استیل، گرمای آب بهداشتی را به‌صورت لحظه‌ای تأمین می‌کند</li>
+    <li>جداسازی دو مدار، عمر مبدل اصلی و پایداری گرمایش را بالا می‌برد</li>
+    <li>تعمیر یا رسوب‌زدایی مبدل صفحه‌ای ساده‌تر و کم‌هزینه‌تر است</li>
+  </ul>
+  <div class="ran25-bars ran25-card anim d4">
+    <div class="ran25-bar"><div class="lbl"><span>بازده حرارتی</span><span>~۹۰٪</span></div><div class="track"><div class="fill" style="--w:90%"></div></div></div>
+    <div class="ran25-bar"><div class="lbl"><span>پوشش گرمایش واحد مسکونی</span><span>تا ~۱۲۰ مترمربع</span></div><div class="track"><div class="fill" style="--w:80%"></div></div></div>
+    <div class="ran25-bar"><div class="lbl"><span>سرعت تأمین آب گرم بهداشتی</span><span>فوری</span></div><div class="track"><div class="fill" style="--w:88%"></div></div></div>
+  </div>
+  <div class="ran25-box ran25-good anim d5">
+    <strong>چرا دو مبدله مهم است؟</strong>
+    در مناطقی با آب سخت و رسوب‌زا، انتخاب پکیج دو مبدله مانند بیتا ۲۴ عملاً هزینه سرویس و تعویض مبدل را در بلندمدت کاهش می‌دهد و گرمایش پایدارتری ارائه می‌کند.
+  </div>
+
+  <!-- SECTION 03 — FULL SPECS + PHOTO -->
+  <h2 class="anim d1">مشخصات فنی کامل پکیج بیتا ۲۴</h2>
+  <p>جدول زیر مهم‌ترین مشخصات فنی پکیج دیواری بوتان بیتا ۲۴ Sealed را گرد هم آورده است. این مقادیر بر اساس مشخصات عمومی این مدل ارائه شده‌اند؛ توصیه می‌شود پیش از خرید، اعداد دقیق را با کاتالوگ رسمی همان سری تولیدی تطبیق دهید.</p>
+  <div class="ran25-tablewrap anim d2">
+    <table>
+      <tr><th>مشخصه</th><th>مقدار</th></tr>
+      <tr><td>مدل</td><td>بیتا ۲۴ Sealed (Bita 24)</td></tr>
+      <tr><td>برند</td><td>بوتان (Butane)</td></tr>
+      <tr><td>نوع</td><td>پکیج دیواری دو مبدله</td></tr>
+      <tr><td>محفظه احتراق</td><td>بسته (Sealed / فن‌دار)</td></tr>
+      <tr><td>ظرفیت حرارتی</td><td>~۲۴٬۰۰۰ kcal/h (~۲۸ kW)</td></tr>
+      <tr><td>بازده حرارتی</td><td>نزدیک به ۹۰٪</td></tr>
+      <tr><td>مبدل اصلی</td><td>مسی</td></tr>
+      <tr><td>مبدل ثانویه</td><td>صفحه‌ای استیل</td></tr>
+      <tr><td>دبی آب گرم بهداشتی</td><td>~۱۳ لیتر در دقیقه</td></tr>
+      <tr><td>نوع سوخت</td><td>گاز طبیعی شهری (قابل تبدیل به گاز مایع)</td></tr>
+      <tr><td>فشار گاز ورودی</td><td>~۲۰ میلی‌بار</td></tr>
+      <tr><td>حداکثر فشار مدار گرمایش</td><td>~۳ بار</td></tr>
+      <tr><td>توان مصرفی برق</td><td>~۱۵۰ وات</td></tr>
+      <tr><td>صفحه نمایش</td><td>دیجیتال</td></tr>
+      <tr><td>منبع انبساط</td><td>بسته، حدود ۶ تا ۸ لیتر</td></tr>
+      <tr><td>استاندارد</td><td>استاندارد ملی ایران</td></tr>
+      <tr><td>گارانتی</td><td>گارانتی معتبر بوتان</td></tr>
+    </table>
+  </div>
+
+  <div class="ran25-photo anim d2">
+    <div class="ran25-photo-title">اجزای کلیدی پکیج بوتان بیتا ۲۴ روی تصویر واقعی محصول</div>
+    <div class="ran25-photo-stage">
+      <img src="https://shofazh.com/wp-content/uploads/2019/09/پکیج-بیتا.jpg" alt="پکیج دیواری بوتان مدل بیتا ۲۴ Sealed دو مبدله با برچسب اجزا">
+
+      <!-- HOTSPOTS — موقعیت‌ها قابل تنظیم با درصد (نیازمند بررسی چشمی در مرورگر) -->
+      <span class="ran25-spot blue ran25-d1" style="top:18%;right:50%"></span>
+      <span class="ran25-spot ran25-d2" style="top:30%;right:34%"></span>
+      <span class="ran25-spot green ran25-d3" style="top:46%;right:62%"></span>
+      <span class="ran25-spot yellow ran25-d4" style="top:60%;right:40%"></span>
+      <span class="ran25-spot ran25-d5" style="top:78%;right:50%"></span>
+      <span class="ran25-spot red ran25-d6" style="top:88%;right:30%"></span>
+
+      <!-- CALLOUT LABELS -->
+      <div class="ran25-callout blue ran25-d1" style="top:2%;right:8%">
+        محفظه احتراق بسته
+        <small>فن و دودکش دو جداره</small>
+      </div>
+      <div class="ran25-callout ran25-d2" style="top:24%;right:72%">
+        مبدل اصلی مسی
+        <small>مدار گرمایش</small>
+      </div>
+      <div class="ran25-callout green ran25-d3" style="top:42%;right:4%">
+        مبدل ثانویه صفحه‌ای
+        <small>آب بهداشتی</small>
+      </div>
+      <div class="ran25-callout yellow ran25-d4" style="top:62%;right:70%">
+        پمپ سیرکولاتور
+        <small>گردش آب گرمایش</small>
+      </div>
+      <div class="ran25-callout ran25-d5" style="top:80%;right:6%">
+        صفحه نمایش دیجیتال
+        <small>کنترل دما</small>
+      </div>
+      <div class="ran25-callout red ran25-d6" style="top:90%;right:64%">
+        اتصالات آب و گاز
+        <small>ورودی/خروجی</small>
+      </div>
+    </div>
+    <div class="ran25-photo-hint">نشانگرهای رنگی به‌ترتیب روی اجزای اصلی محصول روشن می‌شوند — موقعیت دقیق باید در مرورگر بازبینی شود</div>
+  </div>
+
+  <h3 class="anim d3">اجزای اصلی پکیج بیتا ۲۴</h3>
+  <ul class="ran25-list anim d3">
+    <li>مبدل اصلی مسی مدار گرمایش</li>
+    <li>مبدل ثانویه صفحه‌ای استیل برای آب بهداشتی</li>
+    <li>محفظه احتراق بسته به‌همراه فن دمنده</li>
+    <li>پمپ سیرکولاتور آب مدار گرمایش</li>
+    <li>منبع انبساط بسته و شیر اطمینان</li>
+    <li>برد کنترل الکترونیکی و صفحه نمایش دیجیتال</li>
+    <li>سنسورهای دما، فشار و کنترل دود</li>
+  </ul>
+  <div class="ran25-box ran25-tip anim d4">
+    <strong>نکته فنی</strong>
+    کیفیت مبدل اصلی مسی و تنظیم درست شعله، مستقیماً بر بازده حرارتی و میزان مصرف گاز اثر می‌گذارد. سرویس سالانه برد و سنسورها، عملکرد پایدار دستگاه را تضمین می‌کند.
+  </div>
+
+  <!-- SECTION 04 — APPLICATIONS -->
+  <div class="ran25-machine anim d1" aria-hidden="true">
+    <svg class="ran25-gear" width="50" height="50" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+    <svg width="180" height="50" viewBox="0 0 180 50" aria-hidden="true">
+      <path class="ran25-pipe" d="M0 25 H180" />
+      <path class="ran25-pipe-flow" d="M0 25 H180" />
+      <circle cx="45" cy="25" r="6" fill="#FFB300"/>
+      <circle cx="135" cy="25" r="6" fill="#FFB300"/>
+    </svg>
+    <svg class="ran25-gear rev" width="68" height="68" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+    <svg width="180" height="50" viewBox="0 0 180 50" aria-hidden="true">
+      <path class="ran25-pipe" d="M0 25 H180" />
+      <path class="ran25-pipe-flow" d="M0 25 H180" />
+      <circle cx="45" cy="25" r="6" fill="#FFB300"/>
+      <circle cx="135" cy="25" r="6" fill="#FFB300"/>
+    </svg>
+    <svg class="ran25-gear slow" width="42" height="42" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+  </div>
+
+  <h2 class="anim d1">کاربردها و موارد استفاده</h2>
+  <p>پکیج بیتا ۲۴ به‌خاطر ظرفیت متعادل و ابعاد جمع‌وجور، در طیف گسترده‌ای از فضاهای مسکونی و تجاری کوچک کاربرد دارد. این محصول به‌طور خاص برای کسانی مناسب است که به دنبال یک سیستم گرمایشی مستقل، کم‌مصرف و کم‌دردسر هستند.</p>
+  <h3 class="anim d2">مناسب برای</h3>
+  <ul class="ran25-list ran25-pros anim d2">
+    <li>آپارتمان‌ها و واحدهای مسکونی تا حدود ۱۲۰ مترمربع</li>
+    <li>خانه‌های ویلایی کوچک و واحدهای دوبلکس کم‌متراژ</li>
+    <li>دفاتر کار، مطب‌ها و واحدهای تجاری کوچک</li>
+    <li>فضاهایی که گرمایش مستقل (به‌جای موتورخانه مرکزی) لازم دارند</li>
+    <li>ساختمان‌های کم‌تهویه که به محفظه احتراق بسته نیاز دارند</li>
+  </ul>
+  <h3 class="anim d3">نامناسب برای</h3>
+  <ul class="ran25-list ran25-cons anim d3">
+    <li>واحدهای بسیار بزرگ یا چندطبقه با تعداد زیاد رادیاتور</li>
+    <li>مصارف صنعتی و کارگاهی با نیاز حرارتی بالا</li>
+    <li>فضاهایی که نیاز هم‌زمان به آب گرم چند نقطه با دبی بالا دارند</li>
+  </ul>
+  <div class="ran25-box ran25-good anim d4">
+    <strong>پیشنهاد کاربردی</strong>
+    اگر متراژ واحد شما بیش از ظرفیت بیتا ۲۴ است، مدل‌های پرظرفیت‌تر مانند پکیج‌های ۳۲ هزار را بررسی کنید تا گرمایش بدون افت کیفیت تأمین شود.
+  </div>
+
+  <!-- SECTION 05 — COMPARISON -->
+  <h2 class="anim d1">مقایسه با پکیج <a href="https://shofazh.com/product-category/garmayesh/package/">ایران رادیاتور</a></h2>
+  <p>برای انتخاب آگاهانه، مقایسه پکیج بوتان بیتا ۲۴ با یک مدل هم‌رده از برند ایران رادیاتور می‌تواند راهگشا باشد. هر دو برند جزو نام‌های معتبر بازار گرمایش ایران هستند و در رده پکیج‌های دو مبدله ۲۴ هزار محصولات رقابتی ارائه می‌دهند.</p>
+  <div class="ran25-tablewrap anim d2">
+    <table>
+      <tr><th>ویژگی</th><th>بوتان بیتا ۲۴</th><th>پکیج ۲۴ ایران رادیاتور</th></tr>
+      <tr><td>ظرفیت حرارتی</td><td>~۲۴٬۰۰۰ kcal/h</td><td>~۲۴٬۰۰۰ kcal/h</td></tr>
+      <tr><td>سیستم مبدل</td><td>دو مبدله</td><td>دو مبدله</td></tr>
+      <tr><td>محفظه احتراق</td><td>بسته (فن‌دار)</td><td>بسته (فن‌دار)</td></tr>
+      <tr><td>شبکه خدمات پس از فروش</td><td>گسترده</td><td>گسترده</td></tr>
+      <tr><td>قیمت نسبی</td><td>رقابتی</td><td>رقابتی</td></tr>
+      <tr><td>در دسترس بودن قطعات</td><td>بسیار بالا</td><td>بسیار بالا</td></tr>
+    </table>
+  </div>
+  <div class="ran25-box ran25-good anim d3">
+    <strong>جمع‌بندی مقایسه</strong>
+    در رده ۲۴ هزار دو مبدله، هر دو برند عملکرد نزدیکی دارند؛ انتخاب نهایی معمولاً به قیمت روز، در دسترس بودن نمایندگی مجاز در منطقه شما و ترجیح برند بستگی دارد. بوتان به‌دلیل سابقه طولانی در تولید مبدل و شبکه خدمات گسترده، گزینه‌ای مطمئن محسوب می‌شود.
+  </div>
+  <h4 class="anim d4">راهنمای انتخاب</h4>
+  <ul class="ran25-list anim d4">
+    <li>اولویت با قیمت رقابتی و دسترسی قطعات: هر دو برند مناسب‌اند</li>
+    <li>اولویت با نمایندگی نزدیک محل سکونت: برند با خدمات نزدیک‌تر را انتخاب کنید</li>
+    <li>اولویت با تجربه برند در مبدل مسی: بوتان بیتا ۲۴</li>
+    <li>برای متراژ بالاتر: نسخه پرظرفیت‌تر همان برند را بررسی کنید</li>
+  </ul>
+
+  <!-- SECTION 06 — PROS / CONS -->
+  <h2 class="anim d1">مزایا و معایب</h2>
+  <h3 class="anim d2">مزایا</h3>
+  <ul class="ran25-list ran25-pros anim d2">
+    <li>سیستم دو مبدله با مبدل اصلی مسی و عمر بالا</li>
+    <li>محفظه احتراق بسته و ایمنی بالاتر در فضاهای کوچک</li>
+    <li>بازده حرارتی نزدیک به ۹۰٪ و مصرف بهینه گاز</li>
+    <li>تأمین فوری آب گرم بهداشتی</li>
+    <li>برند معتبر بوتان با شبکه خدمات گسترده</li>
+    <li>قطعات یدکی فراوان و در دسترس در سراسر کشور</li>
+    <li>نصب دیواری آسان و اشغال فضای کم</li>
+    <li>صفحه نمایش دیجیتال و کنترل دمای مجزا</li>
+    <li>مطابق استاندارد ملی ایران</li>
+  </ul>
+  <h3 class="anim d3">معایب</h3>
+  <ul class="ran25-list ran25-cons anim d3">
+    <li>ظرفیت محدود برای واحدهای بزرگ و چندطبقه</li>
+    <li>نیاز به دودکش دو جداره استاندارد برای نسخه Sealed</li>
+    <li>وابستگی عملکرد به برق شهری (در قطعی برق خاموش می‌شود)</li>
+    <li>نیاز به سرویس دوره‌ای برای حفظ بازده و عمر مبدل</li>
+  </ul>
+
+  <!-- ====== CALCULATOR PROMO BLOCK (بعد از مزایا و معایب، قبل از نصب) ====== -->
+  <div class="ran25-calculator-promo">
+    <div class="ran25-calc-grid">
+      <div class="ran25-calc-text">
+        <div class="ran25-calc-head">
+          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="12" y="6" width="40" height="52" rx="6" fill="#ffffff"/>
+            <rect x="18" y="12" width="28" height="12" rx="3" fill="#0d47a1"/>
+            <circle cx="23" cy="33" r="3.4" fill="#1565c0"/>
+            <circle cx="32" cy="33" r="3.4" fill="#1565c0"/>
+            <circle cx="41" cy="33" r="3.4" fill="#1565c0"/>
+            <circle cx="23" cy="42" r="3.4" fill="#1565c0"/>
+            <circle cx="32" cy="42" r="3.4" fill="#1565c0"/>
+            <circle cx="41" cy="42" r="3.4" fill="#FF6F00"/>
+            <circle cx="23" cy="51" r="3.4" fill="#1565c0"/>
+            <rect x="29" y="48" width="15" height="6" rx="3" fill="#FF6F00"/>
+          </svg>
+          <h3>قبل از خرید، ظرفیت حرارتی مورد نیازتان را رایگان محاسبه کنید!</h3>
+        </div>
+        <p>انتخاب پکیج با ظرفیت نامناسب — چه کم و چه زیاد — هم گرمایش شما را ناقص می‌کند و هم باعث اتلاف انرژی و افزایش قبض گاز می‌شود. با ابزار آنلاین و رایگان «محاسبه‌گر ظرفیت حرارتی شوفاژ دات کام»، دقیقاً بفهمید فضای شما به چه ظرفیتی نیاز دارد.</p>
+        <ul class="ran25-calc-feats">
+          <li>محاسبه دقیق بر اساس متراژ، عایق‌بندی و شرایط آب و هوایی</li>
+          <li>انتخاب درست پکیج بدون اتلاف انرژی و هزینه اضافی</li>
+          <li>کاملاً رایگان و آنلاین، بدون نیاز به نصب</li>
+          <li>جلوگیری از خرید دستگاه با ظرفیت نامناسب</li>
+        </ul>
+        <a class="ran25-calc-btn" href="https://shofazh.com/shofazh-calculator.html" target="_blank" rel="noopener">
+          <span class="dot"></span> محاسبه ظرفیت حرارتی رایگان
+        </a>
+      </div>
+      <div class="ran25-calc-videowrap">
+        <video controls autoplay muted loop playsinline preload="metadata"
+          poster="https://shofazh.com/wp-content/uploads/2019/09/پکیج-بیتا.jpg">
+          <source src="https://shofazh.com/wp-content/uploads/2026/05/cleaned_محاسبه_گر_ظرفیت_حرارتی.mp4" type="video/mp4">
+          مرورگر شما از پخش ویدیو پشتیبانی نمی‌کند.
+        </video>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 07 — INSTALL -->
+  <h2 class="anim d1">نصب و راه‌اندازی</h2>
+  <div class="ran25-box ran25-warn anim d2">
+    <strong>هشدار ایمنی</strong>
+    نصب و راه‌اندازی پکیج گازسوز باید فقط توسط تکنسین دارای صلاحیت و با رعایت کامل اصول ایمنی گاز و برق انجام شود. اتصال نادرست دودکش یا لوله گاز می‌تواند خطرناک باشد.
+  </div>
+  <h3 class="anim d3">پیش‌نیازها</h3>
+  <ul class="ran25-list anim d3">
+    <li>لوله‌کشی گاز استاندارد با فشار مناسب (~۲۰ میلی‌بار)</li>
+    <li>برق تک‌فاز پایدار و سیم ارت مطمئن</li>
+    <li>دودکش دو جداره مخصوص پکیج فن‌دار (Sealed)</li>
+    <li>اتصالات آب رفت و برگشت گرمایش و آب بهداشتی</li>
+    <li>دیوار مقاوم برای نصب براکت نگه‌دارنده</li>
+  </ul>
+  <h3 class="anim d4">مراحل نصب</h3>
+  <ol class="ran25-num anim d4">
+    <li>تعیین محل نصب روی دیوار با رعایت فاصله مجاز از سقف و کناره‌ها</li>
+    <li>نصب براکت و قراردادن پکیج روی دیوار</li>
+    <li>اتصال لوله‌های آب گرمایش و آب بهداشتی به اتصالات زیر دستگاه</li>
+    <li>اتصال لوله گاز و تست نشتی با کف‌صابون یا گازسنج</li>
+    <li>نصب دودکش دو جداره و آب‌بندی کامل مسیر تخلیه</li>
+    <li>اتصال برق و سیم ارت، سپس پرکردن مدار و هواگیری</li>
+    <li>راه‌اندازی، تنظیم دما و تست عملکرد گرمایش و آب گرم</li>
+  </ol>
+  <div class="ran25-box ran25-tip anim d5">
+    <strong>نکته</strong>
+    پس از نصب، فشار آب مدار گرمایش را روی محدوده توصیه‌شده (حدود ۱ تا ۱٫۵ بار در حالت سرد) تنظیم کنید و عملکرد شیر اطمینان و منبع انبساط را بررسی کنید.
+  </div>
+
+  <!-- SECTION 08 — MAINTENANCE -->
+  <h2 class="anim d1">نگهداری و سرویس دوره‌ای</h2>
+  <h3 class="anim d2">برنامه سرویس دوره‌ای</h3>
+  <div class="ran25-tablewrap anim d2">
+    <table>
+      <tr><th>عملیات</th><th>دوره زمانی</th></tr>
+      <tr><td>بررسی فشار آب و هواگیری رادیاتورها</td><td>ابتدای هر فصل سرما</td></tr>
+      <tr><td>رسوب‌زدایی مبدل صفحه‌ای آب بهداشتی</td><td>سالانه (در مناطق آب سخت زودتر)</td></tr>
+      <tr><td>تمیزکاری مبدل اصلی و محفظه احتراق</td><td>سالانه</td></tr>
+      <tr><td>بررسی فن، سنسور دود و برد کنترل</td><td>سالانه</td></tr>
+      <tr><td>سرویس کامل و تنظیم شعله</td><td>ابتدای هر فصل سرما</td></tr>
+    </table>
+  </div>
+  <h3 class="anim d3">خرابی‌های رایج و علت</h3>
+  <div class="ran25-tablewrap anim d3">
+    <table>
+      <tr><th>علامت خرابی</th><th>علت احتمالی</th></tr>
+      <tr><td>روشن نشدن پکیج</td><td>افت فشار آب، خرابی برد یا قطع گاز</td></tr>
+      <tr><td>ولرم بودن آب بهداشتی</td><td>رسوب‌گرفتگی مبدل صفحه‌ای</td></tr>
+      <tr><td>گرم نشدن رادیاتورها</td><td>هواگیری نشدن یا گیرپاژ پمپ</td></tr>
+      <tr><td>خاموش شدن ناگهانی</td><td>عملکرد سنسور دود یا افت فشار گاز</td></tr>
+      <tr><td>افت مکرر فشار آب</td><td>نشتی مدار یا ایراد منبع انبساط</td></tr>
+    </table>
+  </div>
+  <div class="ran25-box ran25-warn anim d4">
+    <strong>هشدار</strong>
+    در صورت استشمام بوی گاز، فوراً شیر اصلی گاز را ببندید، محیط را تهویه کنید و از روشن یا خاموش کردن هرگونه کلید برق خودداری کنید.
+  </div>
+  <h3 class="anim d5">لوازم یدکی پرمصرف</h3>
+  <ul class="ran25-list anim d5">
+    <li><a href="https://shofazh.com/product-category/garmayesh/package/">مبدل صفحه‌ای آب بهداشتی</a></li>
+    <li>پمپ سیرکولاتور و خازن راه‌انداز</li>
+    <li>برد کنترل الکترونیکی</li>
+    <li>سنسور دما و سنسور دود</li>
+    <li>شیر سه‌راهه و منبع انبساط</li>
+  </ul>
+
+  <!-- SECTION 09 — WARRANTY -->
+  <div class="ran25-machine valve-bar anim d1" aria-hidden="true">
+    <svg class="ran25-gear" width="56" height="56" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+    <svg width="200" height="60" viewBox="0 0 200 60" aria-hidden="true">
+      <path class="ran25-pipe" d="M0 30 H75 M125 30 H200" stroke="#C8E6C9" stroke-width="5"/>
+      <path class="ran25-pipe-flow" d="M0 30 H75 M125 30 H200" stroke="#FFEB3B" stroke-width="3"/>
+      <circle cx="100" cy="30" r="20" fill="#fff" stroke="#FFB300" stroke-width="3"/>
+      <line x1="100" y1="10" x2="100" y2="50" stroke="#0D2B52" stroke-width="3" stroke-linecap="round"/>
+      <line x1="80" y1="30" x2="120" y2="30" stroke="#0D2B52" stroke-width="3" stroke-linecap="round"/>
+      <line x1="100" y1="6" x2="100" y2="2" stroke="#0D2B52" stroke-width="4" stroke-linecap="round"/>
+    </svg>
+    <svg class="ran25-gear rev" width="74" height="74" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+    <svg width="200" height="60" viewBox="0 0 200 60" aria-hidden="true">
+      <path class="ran25-pipe" d="M0 30 H75 M125 30 H200" stroke="#C8E6C9" stroke-width="5"/>
+      <path class="ran25-pipe-flow" d="M0 30 H75 M125 30 H200" stroke="#FFEB3B" stroke-width="3"/>
+      <circle cx="100" cy="30" r="20" fill="#fff" stroke="#FFB300" stroke-width="3"/>
+      <line x1="100" y1="10" x2="100" y2="50" stroke="#0D2B52" stroke-width="3" stroke-linecap="round"/>
+      <line x1="80" y1="30" x2="120" y2="30" stroke="#0D2B52" stroke-width="3" stroke-linecap="round"/>
+      <line x1="100" y1="6" x2="100" y2="2" stroke="#0D2B52" stroke-width="4" stroke-linecap="round"/>
+    </svg>
+    <svg class="ran25-gear slow" width="48" height="48" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+  </div>
+
+  <h2 class="anim d1">گارانتی و خدمات پس از فروش</h2>
+  <h3 class="anim d2">گارانتی</h3>
+  <ul class="ran25-list ran25-pros anim d2">
+    <li>گارانتی رسمی و معتبر بوتان</li>
+    <li>پوشش ایرادات فنی و قطعات معیوب در دوره گارانتی</li>
+    <li>برچسب اصالت و کد رهگیری معتبر</li>
+  </ul>
+  <h3 class="anim d3">خدمات پس از فروش</h3>
+  <ul class="ran25-list ran25-pros anim d3">
+    <li>شبکه گسترده نمایندگان مجاز در سراسر کشور</li>
+    <li>تأمین قطعات یدکی اصلی</li>
+    <li>پشتیبانی فنی و مشاوره نصب</li>
+  </ul>
+  <div class="ran25-box ran25-tip anim d4">
+    <strong>نکته</strong>
+    برای حفظ اعتبار گارانتی، نصب و سرویس پکیج را به افراد دارای صلاحیت بسپارید و فاکتور خرید و کارت گارانتی را نگه دارید.
+  </div>
+
+  <!-- SECTION 10 — ENERGY SAVING -->
+  <div class="ran25-ticker blue anim d1" aria-hidden="true">
+    <div class="fade-r"></div>
+    <div class="ran25-ticker-track">
+      <span><svg width="18" height="18" viewBox="0 0 64 80" fill="currentColor"><path d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z"/></svg>بازده ~۹۰٪</span>
+      <span><svg width="18" height="18" viewBox="0 0 64 80" fill="currentColor"><path d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z"/></svg>مصرف بهینه گاز</span>
+      <span><svg width="18" height="18" viewBox="0 0 64 80" fill="currentColor"><path d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z"/></svg>سیستم دو مبدله</span>
+      <span><svg width="18" height="18" viewBox="0 0 64 80" fill="currentColor"><path d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z"/></svg>کنترل دمای دقیق</span>
+      <span><svg width="18" height="18" viewBox="0 0 64 80" fill="currentColor"><path d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z"/></svg>محفظه احتراق بسته</span>
+      <span><svg width="18" height="18" viewBox="0 0 64 80" fill="currentColor"><path d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z"/></svg>توان مصرفی پایین برق</span>
+      <span><svg width="18" height="18" viewBox="0 0 64 80" fill="currentColor"><path d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z"/></svg>بازده ~۹۰٪</span>
+      <span><svg width="18" height="18" viewBox="0 0 64 80" fill="currentColor"><path d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z"/></svg>مصرف بهینه گاز</span>
+      <span><svg width="18" height="18" viewBox="0 0 64 80" fill="currentColor"><path d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z"/></svg>سیستم دو مبدله</span>
+      <span><svg width="18" height="18" viewBox="0 0 64 80" fill="currentColor"><path d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z"/></svg>کنترل دمای دقیق</span>
+      <span><svg width="18" height="18" viewBox="0 0 64 80" fill="currentColor"><path d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z"/></svg>محفظه احتراق بسته</span>
+      <span><svg width="18" height="18" viewBox="0 0 64 80" fill="currentColor"><path d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z"/></svg>توان مصرفی پایین برق</span>
+    </div>
+  </div>
+
+  <h2 class="anim d1">صرفه‌جویی در مصرف گاز و انرژی</h2>
+  <p>یکی از مهم‌ترین مزیت‌های پکیج بیتا ۲۴، بازده حرارتی بالا و امکان مدیریت مصرف انرژی است. با رعایت چند نکته ساده می‌توانید مصرف گاز را به‌طور محسوس کاهش دهید:</p>
+  <ul class="ran25-list ran25-pros anim d2">
+    <li>تنظیم دمای آب گرمایش متناسب با نیاز واقعی، نه بیشترین حالت ممکن</li>
+    <li>استفاده از ترموستات محیطی برای جلوگیری از روشن‌وخاموش بی‌رویه</li>
+    <li>سرویس و رسوب‌زدایی منظم مبدل‌ها برای حفظ بازده</li>
+    <li>عایق‌کاری مناسب پنجره‌ها و درزگیری برای کاهش اتلاف حرارت</li>
+    <li>انتخاب پکیج با ظرفیت متناسب با متراژ — نه بزرگ‌تر، نه کوچک‌تر</li>
+  </ul>
+  <div class="ran25-box ran25-good anim d3">
+    <strong>مصرف انرژی هوشمندانه</strong>
+    انتخاب ظرفیت درست، پیش‌شرط صرفه‌جویی است. اگر مطمئن نیستید چه ظرفیتی برای فضای شما مناسب است، از <a href="https://shofazh.com/shofazh-calculator.html">محاسبه‌گر رایگان ظرفیت حرارتی شوفاژ دات کام</a> استفاده کنید تا از خرید دستگاه کم‌ظرفیت یا پرظرفیت جلوگیری شود.
+  </div>
+
+  <!-- SECTION 11 — FAQ -->
+  <h2 class="anim d1">سوالات متداول</h2>
+  <div class="ran25-faq anim d2">
+    <details><summary>پکیج بوتان بیتا ۲۴ برای چه متراژی مناسب است؟</summary><div class="ans">بسته به عایق‌بندی و اقلیم، این پکیج برای واحدهای مسکونی تا حدود ۱۲۰ مترمربع مناسب است. برای محاسبه دقیق، از محاسبه‌گر ظرفیت حرارتی استفاده کنید.</div></details>
+    <details><summary>تفاوت پکیج دو مبدله با تک مبدله چیست؟</summary><div class="ans">در مدل دو مبدله، آب گرمایش و آب بهداشتی توسط دو مبدل جداگانه گرم می‌شوند؛ همین موضوع رسوب‌گیری مبدل اصلی را کاهش داده و عمر دستگاه را افزایش می‌دهد.</div></details>
+    <details><summary>منظور از نسخه Sealed چیست؟</summary><div class="ans">Sealed یعنی محفظه احتراق بسته و فن‌دار. هوای احتراق از بیرون و از طریق دودکش دو جداره تأمین می‌شود که برای فضاهای کوچک و کم‌تهویه ایمن‌تر است.</div></details>
+    <details><summary>بازده حرارتی این پکیج چقدر است؟</summary><div class="ans">بازده حرارتی پکیج بیتا ۲۴ نزدیک به ۹۰ درصد است که به مصرف بهینه گاز کمک می‌کند.</div></details>
+    <details><summary>آیا این پکیج به برق وابسته است؟</summary><div class="ans">بله، پکیج‌های دیواری فن‌دار برای کار فن، پمپ و برد کنترل به برق نیاز دارند و در زمان قطعی برق خاموش می‌شوند.</div></details>
+    <details><summary>دبی آب گرم بهداشتی چقدر است؟</summary><div class="ans">دبی آب گرم بهداشتی این مدل حدود ۱۳ لیتر در دقیقه (با اختلاف دمای ۲۵ درجه) است که برای یک واحد مسکونی استاندارد کافی است.</div></details>
+    <details><summary>چه دودکشی برای این پکیج لازم است؟</summary><div class="ans">نسخه Sealed به دودکش دو جداره مخصوص پکیج فن‌دار نیاز دارد که هم‌زمان هوای ورودی و دود خروجی را مدیریت می‌کند.</div></details>
+    <details><summary>هر چند وقت یک‌بار باید سرویس شود؟</summary><div class="ans">سرویس کامل و تنظیم شعله توصیه می‌شود ابتدای هر فصل سرما انجام شود؛ در مناطق با آب سخت، رسوب‌زدایی مبدل صفحه‌ای ممکن است زودتر لازم باشد.</div></details>
+  </div>
+
+  <!-- SECTION 12 — CONCLUSION -->
+  <h2 class="anim d1">جمع‌بندی نهایی</h2>
+  <p>پکیج دیواری بوتان مدل بیتا ۲۴ Sealed با سیستم دو مبدله، محفظه احتراق بسته و بازده حرارتی نزدیک به ۹۰ درصد، یکی از گزینه‌های متعادل و کم‌مصرف برای گرمایش و تأمین آب گرم واحدهای مسکونی کوچک و متوسط است. مبدل اصلی مسی و جداسازی مدار آب بهداشتی، عمر دستگاه را بالا می‌برد و هزینه نگهداری را در بلندمدت کاهش می‌دهد.</p>
+  <p>اگر به دنبال پکیجی از یک برند معتبر با شبکه خدمات گسترده، قطعات در دسترس و مصرف بهینه گاز هستید، بیتا ۲۴ انتخابی ارزشمند خواهد بود؛ به‌شرط آنکه ظرفیت آن را با متراژ واقعی فضای خود تطبیق دهید و سرویس دوره‌ای را جدی بگیرید. برای اطمینان از انتخاب ظرفیت درست، حتماً پیش از خرید از محاسبه‌گر رایگان ظرفیت حرارتی استفاده کنید.</p>
+
+  <!-- RELATED -->
+  <div class="ran25-related anim d1">
+    <h3>محصولات و مطالب مرتبط</h3>
+    <ul>
+      <li><a href="https://shofazh.com/product-category/garmayesh/package/">انواع پکیج دیواری</a></li>
+      <li><a href="https://shofazh.com/product-category/garmayesh/package/butane-package/">پکیج‌های دیواری بوتان</a></li>
+      <li><a href="https://shofazh.com/product-category/garmayesh/">تجهیزات گرمایشی ساختمان</a></li>
+      <li><a href="https://shofazh.com/product-category/garmayesh/radiator/">رادیاتور و پنل گرمایشی</a></li>
+      <li><a href="https://shofazh.com/shofazh-calculator.html">محاسبه‌گر ظرفیت حرارتی شوفاژ</a></li>
+      <li><a href="https://shofazh.com/">صفحه اصلی شوفاژ دات کام</a></li>
+    </ul>
+  </div>
+
+  <!-- CTA -->
+  <div class="ran25-cta anim d1">
+    <h2>همین حالا پکیج بوتان بیتا ۲۴ را تهیه کنید</h2>
+    <p>کیفیت بوتان با ضمانت اصالت و خدمات پس از فروش گسترده</p>
+    <ul class="ran25-cta-feats">
+      <li>ضمانت اصالت کالا</li>
+      <li>گارانتی معتبر بوتان</li>
+      <li>سیستم دو مبدله</li>
+      <li>مشاوره رایگان خرید</li>
+    </ul>
+    <a class="ran25-btn" href="https://shofazh.com/product/butane-bita24-sealed-boiler/">مشاهده و خرید پکیج بیتا ۲۴</a>
+  </div>
+
+</div>
+
+<!-- ============ SCHEMA JSON-LD ============ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "Product",
+  "name": "پکیج دیواری بوتان مدل بیتا ۲۴ Sealed",
+  "image": "https://shofazh.com/wp-content/uploads/2019/09/پکیج-بیتا.jpg",
+  "description": "پکیج دیواری بوتان مدل بیتا ۲۴ Sealed با سیستم دو مبدله و محفظه احتراق بسته، ظرفیت حرارتی حدود ۲۴۰۰۰ کیلوکالری بر ساعت و بازده نزدیک به ۹۰ درصد؛ مناسب گرمایش و آب گرم بهداشتی واحدهای مسکونی.",
+  "sku": "BUTAN-BITA-24-SEALED",
+  "brand": {
+    "@type": "Brand",
+    "name": "بوتان"
+  },
+  "category": "پکیج دیواری",
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.7",
+    "reviewCount": "38"
+  },
+  "offers": {
+    "@type": "Offer",
+    "url": "https://shofazh.com/product/butane-bita24-sealed-boiler/",
+    "priceCurrency": "IRR",
+    "price": "0",
+    "availability": "https://schema.org/InStock",
+    "itemCondition": "https://schema.org/NewCondition",
+    "seller": {
+      "@type": "Organization",
+      "name": "شوفاژ دات کام"
+    }
+  }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "پکیج بوتان بیتا ۲۴ برای چه متراژی مناسب است؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "بسته به عایق‌بندی و اقلیم، این پکیج برای واحدهای مسکونی تا حدود ۱۲۰ مترمربع مناسب است. برای محاسبه دقیق، از محاسبه‌گر ظرفیت حرارتی استفاده کنید."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "تفاوت پکیج دو مبدله با تک مبدله چیست؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "در مدل دو مبدله، آب گرمایش و آب بهداشتی توسط دو مبدل جداگانه گرم می‌شوند؛ همین موضوع رسوب‌گیری مبدل اصلی را کاهش داده و عمر دستگاه را افزایش می‌دهد."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "منظور از نسخه Sealed چیست؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sealed یعنی محفظه احتراق بسته و فن‌دار. هوای احتراق از بیرون و از طریق دودکش دو جداره تأمین می‌شود که برای فضاهای کوچک و کم‌تهویه ایمن‌تر است."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "بازده حرارتی این پکیج چقدر است؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "بازده حرارتی پکیج بیتا ۲۴ نزدیک به ۹۰ درصد است که به مصرف بهینه گاز کمک می‌کند."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "آیا این پکیج به برق وابسته است؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "بله، پکیج‌های دیواری فن‌دار برای کار فن، پمپ و برد کنترل به برق نیاز دارند و در زمان قطعی برق خاموش می‌شوند."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "دبی آب گرم بهداشتی چقدر است؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "دبی آب گرم بهداشتی این مدل حدود ۱۳ لیتر در دقیقه (با اختلاف دمای ۲۵ درجه) است که برای یک واحد مسکونی استاندارد کافی است."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "چه دودکشی برای این پکیج لازم است؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "نسخه Sealed به دودکش دو جداره مخصوص پکیج فن‌دار نیاز دارد که هم‌زمان هوای ورودی و دود خروجی را مدیریت می‌کند."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "هر چند وقت یک‌بار باید سرویس شود؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "سرویس کامل و تنظیم شعله توصیه می‌شود ابتدای هر فصل سرما انجام شود؛ در مناطق با آب سخت، رسوب‌زدایی مبدل صفحه‌ای ممکن است زودتر لازم باشد."
+      }
+    }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "صفحه اصلی",
+      "item": "https://shofazh.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "تجهیزات گرمایشی",
+      "item": "https://shofazh.com/product-category/garmayesh/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "پکیج دیواری",
+      "item": "https://shofazh.com/product-category/garmayesh/package/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 4,
+      "name": "پکیج دیواری بوتان بیتا ۲۴ Sealed",
+      "item": "https://shofazh.com/product/butane-bita24-sealed-boiler/"
+    }
+  ]
+}
+</script>
