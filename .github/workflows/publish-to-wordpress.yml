@@ -1,0 +1,60 @@
+name: Publish Product to WordPress
+
+on:
+  push:
+    branches:
+      - 'claude/**'
+      - 'main'
+    paths:
+      - '*-product-content.html'
+      - 'wp-product-map.json'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Publish changed product pages
+        env:
+          WP_USER: ${{ secrets.WP_USER }}
+          WP_APP_PASS: ${{ secrets.WP_APP_PASS }}
+        run: |
+          changed=$(git diff-tree --no-commit-id -r --name-only HEAD | grep '\-product-content\.html' || true)
+          if [ -z "$changed" ]; then
+            echo "No product HTML files changed."
+            exit 0
+          fi
+
+          # اگر wp-product-map.json روی این branch نبود، از main یا branch اصلی می‌گیریم
+          if [ ! -f "wp-product-map.json" ]; then
+            echo "wp-product-map.json not on this branch — fetching from origin/main or fallback branch"
+            git show origin/main:wp-product-map.json > wp-product-map.json 2>/dev/null || \
+            git show origin/claude/unclear-request-xe89t7:wp-product-map.json > wp-product-map.json 2>/dev/null || \
+            echo "{}" > wp-product-map.json
+          fi
+
+          for file in $changed; do
+            slug=$(basename "$file" "-product-content.html")
+            echo "Processing: $file (slug=$slug)"
+            post_id=$(SLUG="$slug" python3 -c "import json,os; d=json.load(open('wp-product-map.json')); v=d.get(os.environ['SLUG']); print(v if v is not None else '')" 2>/dev/null || echo "")
+            if [ -z "$post_id" ]; then
+              echo "SKIP: slug '$slug' not in wp-product-map.json (post-id unknown)"
+              continue
+            fi
+            seo_flag=""
+            if [ -f "${slug}-seo.md" ]; then seo_flag="--seo ${slug}-seo.md"; fi
+            echo "Publishing post-id=$post_id for slug=$slug"
+            python3 wp_publish_product.py --html "$file" $seo_flag --post-id "$post_id"
+          done
