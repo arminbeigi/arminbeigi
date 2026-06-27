@@ -1,0 +1,1002 @@
+<style>
+.ran25-wrap{
+  --blue:#1565C0; --orange:#FF6F00; --green:#2E7D32; --warning:#F57F17;
+  --danger:#C62828; --bg:#F8FAFF; --card:#FFFFFF; --text:#243447; --muted:#5b6b7d;
+  --steel:#455A64; --steel-light:#607D8B;
+  direction:rtl; text-align:right; background:var(--bg); color:var(--text);
+  font-family:Tahoma,"IRANSans","Vazirmatn",sans-serif; line-height:2;
+  padding:18px; border-radius:18px; font-size:16px;
+  counter-reset:sec; position:relative; overflow:hidden;
+  background-image:
+    radial-gradient(circle at 20% 30%,rgba(21,101,192,.05) 1px,transparent 2px),
+    radial-gradient(circle at 80% 70%,rgba(255,111,0,.04) 1px,transparent 2px),
+    linear-gradient(var(--bg),var(--bg));
+  background-size:50px 50px,70px 70px,100% 100%;
+}
+.ran25-wrap *{box-sizing:border-box}
+
+/* ---------- Section header cards (H2 redesign) ---------- */
+.ran25-wrap > h2{
+  counter-increment:sec; position:relative;
+  background:linear-gradient(135deg,#fff 0%,#EAF2FF 100%);
+  border:none; border-top:5px solid var(--blue);
+  border-radius:18px; padding:26px 96px 26px 24px;
+  margin:70px 0 24px; font-size:22px; color:var(--blue);
+  box-shadow:0 12px 32px rgba(20,40,70,.09);
+  line-height:1.5;
+}
+.ran25-wrap > h2::before{
+  content:counter(sec,decimal-leading-zero);
+  position:absolute; right:22px; top:50%; transform:translateY(-50%);
+  width:62px; height:68px;
+  clip-path:polygon(25% 5%,75% 5%,100% 50%,75% 95%,25% 95%,0 50%);
+  background:linear-gradient(135deg,var(--orange) 0%,#E65100 60%,#FF8F00 100%);
+  color:#fff; text-align:center; line-height:68px; font-size:19px; font-weight:bold;
+  filter:drop-shadow(0 6px 14px rgba(255,111,0,.5));
+  letter-spacing:1px;
+}
+.ran25-wrap > h2::after{
+  content:""; position:absolute; top:-40px; right:50%;
+  transform:translateX(50%); width:140px; height:5px; border-radius:3px;
+  background:linear-gradient(90deg,transparent,var(--orange) 50%,transparent);
+  opacity:.7;
+}
+.ran25-wrap > h2:first-of-type::after{display:none}
+/* Alternating accent colors */
+.ran25-wrap > h2:nth-of-type(3n+2){border-top-color:var(--orange)}
+.ran25-wrap > h2:nth-of-type(3n+2)::before{background:linear-gradient(135deg,var(--blue) 0%,#0D47A1 60%,#1E88E5 100%);filter:drop-shadow(0 6px 14px rgba(21,101,192,.5))}
+.ran25-wrap > h2:nth-of-type(3n+2)::after{background:linear-gradient(90deg,transparent,var(--blue) 50%,transparent)}
+.ran25-wrap > h2:nth-of-type(3n){border-top-color:var(--green)}
+.ran25-wrap > h2:nth-of-type(3n)::before{background:linear-gradient(135deg,var(--green) 0%,#1B5E20 60%,#43A047 100%);filter:drop-shadow(0 6px 14px rgba(46,125,50,.5))}
+.ran25-wrap > h2:nth-of-type(3n)::after{background:linear-gradient(90deg,transparent,var(--green) 50%,transparent)}
+/* Reset for special boxes (summary + CTA) */
+.ran25-summary h2,.ran25-cta h2{
+  counter-increment:none; background:none; border:none; border-radius:0;
+  padding:0; margin:0 0 10px; color:#fff; box-shadow:none;
+}
+.ran25-summary h2::before,.ran25-summary h2::after,
+.ran25-cta h2::before,.ran25-cta h2::after{display:none}
+
+/* Content sections background zones */
+.ran25-wrap > h2:nth-of-type(2n+1) ~ *:not(h2):not(h3):not(h4){}
+
+.ran25-wrap h3{color:var(--blue); font-size:20px; margin:26px 0 12px}
+.ran25-wrap h4{color:var(--orange); font-size:18px; margin:20px 0 10px}
+.ran25-wrap p{margin:12px 0; color:var(--text)}
+
+/* ---------- Animations ---------- */
+@keyframes fadeInUp{from{opacity:.01;transform:translateY(34px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulseBorder{0%,100%{box-shadow:-5px 0 0 0 currentColor inset}50%{box-shadow:-11px 0 0 0 currentColor inset}}
+@keyframes pop{0%{transform:scale(0) rotate(-45deg);opacity:0}60%{transform:scale(1.25) rotate(0)}100%{transform:scale(1) rotate(0);opacity:1}}
+@keyframes fillBar{from{width:0}to{width:var(--w,100%)}}
+@keyframes shimmer{0%{left:-60%}100%{left:130%}}
+@keyframes rotate{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@keyframes flicker{0%,100%{transform:scale(1) rotate(-2deg);opacity:.9}50%{transform:scale(1.08) rotate(2deg);opacity:1}}
+
+.ran25-wrap .anim{animation:fadeInUp .7s ease both}
+.ran25-wrap .d1{animation-delay:.05s}.ran25-wrap .d2{animation-delay:.15s}
+.ran25-wrap .d3{animation-delay:.25s}.ran25-wrap .d4{animation-delay:.35s}
+.ran25-wrap .d5{animation-delay:.45s}.ran25-wrap .d6{animation-delay:.55s}
+
+/* ---------- Summary box ---------- */
+.ran25-summary{
+  background:linear-gradient(135deg,#1565C0 0%,#1E88E5 60%,#42A5F5 100%);
+  color:#fff;border-radius:18px;padding:26px 28px;margin-bottom:8px;
+  box-shadow:0 14px 34px rgba(21,101,192,.28);position:relative;overflow:hidden;
+}
+.ran25-summary::after{content:"";position:absolute;top:-40px;left:-40px;width:160px;height:160px;
+  background:rgba(255,255,255,.12);border-radius:50%}
+.ran25-summary::before{content:"";position:absolute;top:18px;left:24px;width:64px;height:80px;z-index:2;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 80' fill='none'><path d='M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z' fill='%23FFB300'/><path d='M32 24 C34 32 44 38 42 50 C40 60 36 68 32 70 C28 68 24 60 22 50 C20 38 30 32 32 24 Z' fill='%23FF6F00'/><path d='M32 42 C33 48 38 52 36 60 C35 64 33 67 32 68 C31 67 29 64 28 60 C26 52 31 48 32 42 Z' fill='%23FFEB3B'/></svg>");
+  background-repeat:no-repeat;background-size:contain;
+  animation:flicker 1.6s ease-in-out infinite;
+  filter:drop-shadow(0 0 12px rgba(255,179,0,.6))}
+.ran25-summary h2{color:#fff;border:none;padding:0;margin:0 0 10px}
+.ran25-summary p{color:#eaf4ff;position:relative;z-index:1}
+
+/* ---------- Cards / boxes ---------- */
+.ran25-card{background:var(--card);border-radius:16px;padding:20px 24px;margin:18px 0;
+  box-shadow:0 8px 24px rgba(20,40,70,.07);transition:transform .3s ease,box-shadow .3s ease;
+  position:relative;overflow:hidden}
+.ran25-card::before{content:"";position:absolute;top:-20px;left:-20px;width:80px;height:80px;opacity:.08;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='%231565C0'><path d='M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z'/></svg>");
+  background-repeat:no-repeat;background-size:contain;animation:rotate 28s linear infinite;pointer-events:none}
+.ran25-card:hover{transform:translateY(-6px) scale(1.012);box-shadow:0 18px 40px rgba(20,40,70,.16)}
+
+.ran25-box{border-radius:14px;padding:16px 20px 16px 24px;margin:18px 0;position:relative;
+  border-right:6px solid;animation:pulseBorder 2.4s ease-in-out infinite}
+.ran25-tip{background:#FFF8E1;border-color:var(--warning);color:var(--warning)}
+.ran25-tip *{color:#7a5b00}
+.ran25-warn{background:#FDECEA;border-color:var(--danger);color:var(--danger)}
+.ran25-warn *{color:#8c1d18}
+.ran25-good{background:#E8F5E9;border-color:var(--green);color:var(--green)}
+.ran25-good *{color:#1b5e20}
+.ran25-box strong{display:block;margin-bottom:4px}
+
+/* ---------- Lists ---------- */
+.ran25-list{list-style:none;padding:0;margin:14px 0}
+.ran25-list li{position:relative;padding:8px 38px 8px 8px;margin:8px 0;background:var(--card);
+  border-radius:12px;box-shadow:0 4px 14px rgba(20,40,70,.06);
+  animation:fadeInUp .55s ease both;transition:transform .25s ease}
+.ran25-list li:hover{transform:translateX(-6px)}
+.ran25-list li:nth-child(1){animation-delay:.05s}.ran25-list li:nth-child(2){animation-delay:.12s}
+.ran25-list li:nth-child(3){animation-delay:.19s}.ran25-list li:nth-child(4){animation-delay:.26s}
+.ran25-list li:nth-child(5){animation-delay:.33s}.ran25-list li:nth-child(6){animation-delay:.40s}
+.ran25-list li:nth-child(7){animation-delay:.47s}.ran25-list li:nth-child(8){animation-delay:.54s}
+.ran25-list li:nth-child(9){animation-delay:.61s}.ran25-list li:nth-child(10){animation-delay:.68s}
+.ran25-list li::before{content:"✓";position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  width:24px;height:24px;border-radius:50%;background:var(--blue);color:#fff;text-align:center;
+  line-height:24px;font-size:14px;font-weight:bold;animation:pop .5s ease forwards}
+.ran25-pros li::before{background:var(--green)}
+.ran25-cons li::before{content:"✕";background:var(--danger)}
+.ran25-num{list-style:none;counter-reset:n;padding:0}
+.ran25-num li{counter-increment:n;position:relative;padding:8px 46px 8px 8px;margin:8px 0;
+  background:var(--card);border-radius:12px;box-shadow:0 4px 14px rgba(20,40,70,.06)}
+.ran25-num li::before{content:counter(n);position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--orange),#FFA000);
+  color:#fff;text-align:center;line-height:28px;font-weight:bold;font-size:14px}
+
+/* ---------- Specs animated bars ---------- */
+.ran25-bars{margin:16px 0}
+.ran25-bar{margin:14px 0}
+.ran25-bar .lbl{display:flex;justify-content:space-between;font-size:14px;margin-bottom:6px;color:var(--muted)}
+.ran25-bar .track{background:#E3ECF7;border-radius:20px;height:14px;overflow:hidden}
+.ran25-bar .fill{height:100%;border-radius:20px;
+  background:linear-gradient(90deg,var(--blue),var(--orange));
+  animation:fillBar 1.6s cubic-bezier(.2,.8,.3,1) forwards}
+
+/* ---------- Tables ---------- */
+.ran25-tablewrap{overflow-x:auto;margin:16px 0;border-radius:14px;box-shadow:0 8px 24px rgba(20,40,70,.08)}
+.ran25-wrap table{width:100%;border-collapse:collapse;background:var(--card);min-width:340px}
+.ran25-wrap th{background:linear-gradient(135deg,var(--blue),#1E88E5);color:#fff;padding:13px 14px;
+  font-size:15px;text-align:right}
+.ran25-wrap td{padding:12px 14px;border-bottom:1px solid #eef2f8;font-size:15px}
+.ran25-wrap tr:nth-child(even) td{background:#F5F9FF}
+.ran25-wrap tr:hover td{background:#EAF2FF}
+.ran25-wrap td:first-child{font-weight:bold;color:var(--blue)}
+
+/* ---------- FAQ ---------- */
+.ran25-faq details{background:var(--card);border-radius:12px;margin:10px 0;padding:0;
+  box-shadow:0 4px 14px rgba(20,40,70,.06);overflow:hidden;border-right:5px solid var(--blue);
+  transition:box-shadow .3s ease}
+.ran25-faq details[open]{box-shadow:0 12px 30px rgba(21,101,192,.16)}
+.ran25-faq summary{cursor:pointer;padding:15px 18px;font-weight:bold;color:var(--blue);
+  list-style:none;position:relative;padding-left:44px;transition:background .25s ease}
+.ran25-faq summary:hover{background:#F0F6FF}
+.ran25-faq summary::-webkit-details-marker{display:none}
+.ran25-faq summary::after{content:"+";position:absolute;left:16px;top:50%;transform:translateY(-50%);
+  width:26px;height:26px;border-radius:50%;background:var(--orange);color:#fff;text-align:center;
+  line-height:26px;font-size:18px;transition:transform .3s ease}
+.ran25-faq details[open] summary::after{content:"−";transform:translateY(-50%) rotate(180deg)}
+.ran25-faq .ans{padding:4px 18px 18px;color:var(--muted)}
+.ran25-wrap a{color:var(--blue);text-decoration:none;border-bottom:1px dashed var(--blue);transition:color .2s ease,border-color .2s ease}
+.ran25-wrap a:hover{color:var(--orange);border-bottom-color:var(--orange)}
+.ran25-related{background:var(--card);border-radius:16px;padding:20px 24px;margin:24px 0;box-shadow:0 8px 24px rgba(20,40,70,.07)}
+.ran25-related h3{margin-top:0}
+.ran25-related ul{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
+.ran25-related li{background:#F0F6FF;border-radius:10px;padding:0;transition:transform .25s ease,background .25s ease}
+.ran25-related li:hover{transform:translateY(-3px);background:#E1ECFE}
+.ran25-related a{display:block;padding:12px 16px;border:none;color:var(--blue);font-weight:bold;font-size:14px}
+.ran25-related a:hover{color:var(--orange)}
+.ran25-related a::before{content:"◄";margin-left:8px;color:var(--orange);font-size:12px}
+
+/* ---------- CTA ---------- */
+.ran25-cta{background:linear-gradient(135deg,#0D2B52 0%,#0D47A1 55%,#1565C0 100%);
+  color:#fff;border-radius:20px;padding:34px 28px;margin:34px 0 10px;text-align:center;
+  box-shadow:0 18px 44px rgba(13,43,82,.4);position:relative;overflow:hidden}
+.ran25-cta::before,.ran25-cta::after{content:"";position:absolute;width:120px;height:120px;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='rgba(255,255,255,0.08)'><path d='M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z'/></svg>");
+  background-repeat:no-repeat;background-size:contain;animation:rotate 18s linear infinite}
+.ran25-cta::before{top:-30px;right:-30px}
+.ran25-cta::after{bottom:-40px;left:-40px;width:160px;height:160px;animation-duration:24s;animation-direction:reverse}
+.ran25-cta h2{color:#fff;border:none;padding:0;justify-content:center;position:relative;z-index:2}
+.ran25-cta p,.ran25-cta ul{position:relative;z-index:2}
+.ran25-cta p{color:#cfe2ff}
+.ran25-cta-feats{list-style:none;padding:0;margin:16px 0;display:flex;flex-wrap:wrap;
+  justify-content:center;gap:10px 22px}
+.ran25-cta-feats li{position:relative;padding-right:26px;color:#eaf4ff;font-size:15px}
+.ran25-cta-feats li::before{content:"✓";position:absolute;right:0;top:0;width:20px;height:20px;
+  border-radius:50%;background:var(--green);color:#fff;text-align:center;line-height:20px;font-size:12px}
+.ran25-btn{display:inline-block;margin-top:14px;padding:16px 46px;border-radius:50px;
+  background:linear-gradient(135deg,var(--orange),#FFA000);color:#fff;font-weight:bold;font-size:18px;
+  text-decoration:none;position:relative;overflow:hidden;box-shadow:0 10px 26px rgba(255,111,0,.45);
+  transition:transform .25s ease}
+.ran25-btn:hover{transform:scale(1.06)}
+.ran25-btn::after{content:"";position:absolute;top:0;left:-60%;width:50%;height:100%;
+  background:linear-gradient(120deg,transparent,rgba(255,255,255,.55),transparent);
+  transform:skewX(-20deg);animation:shimmer 2.6s infinite}
+
+/* ---------- Interactive product photo with hotspots ---------- */
+.ran25-photo{position:relative;background:linear-gradient(135deg,#F0F6FF 0%,#E1ECFE 100%);
+  border-radius:18px;padding:24px;margin:24px 0;box-shadow:0 12px 32px rgba(20,40,70,.1);overflow:hidden}
+.ran25-photo::before{content:"";position:absolute;inset:0;opacity:.5;pointer-events:none;
+  background-image:linear-gradient(rgba(21,101,192,.06) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(21,101,192,.06) 1px,transparent 1px);
+  background-size:30px 30px}
+.ran25-photo-title{text-align:center;font-weight:bold;color:var(--blue);font-size:17px;margin-bottom:12px;position:relative;z-index:1}
+.ran25-photo-hint{text-align:center;font-size:13px;color:var(--muted);margin-top:14px;position:relative;z-index:1}
+.ran25-photo-stage{position:relative!important;max-width:760px;margin:0 auto;display:block;z-index:1;overflow:visible}
+.ran25-photo-stage img{width:100%;height:auto;display:block;border-radius:12px;box-shadow:0 8px 24px rgba(20,40,70,.18);background:#fff;position:relative;z-index:1}
+.ran25-photo-stage .ran25-spot,.ran25-photo-stage .ran25-callout{position:absolute!important}
+.ran25-spot{position:absolute;width:22px;height:22px;border-radius:50%;
+  background:radial-gradient(circle,#FF6F00 0%,#FF6F00 40%,transparent 70%);transform:translate(50%,-50%);z-index:3}
+.ran25-spot::before,.ran25-spot::after{content:"";position:absolute;inset:0;border-radius:50%;border:3px solid #FF6F00}
+.ran25-spot::before{animation:hotspot 2s ease-in-out infinite}
+.ran25-spot::after{animation:hotspot 2s ease-in-out infinite .8s;opacity:0}
+@keyframes hotspot{0%{transform:scale(1);opacity:.9}100%{transform:scale(2.6);opacity:0}}
+.ran25-spot.blue{background:radial-gradient(circle,#1565C0 0%,#1565C0 40%,transparent 70%)}
+.ran25-spot.blue::before,.ran25-spot.blue::after{border-color:#1565C0}
+.ran25-spot.green{background:radial-gradient(circle,#2E7D32 0%,#2E7D32 40%,transparent 70%)}
+.ran25-spot.green::before,.ran25-spot.green::after{border-color:#2E7D32}
+.ran25-spot.yellow{background:radial-gradient(circle,#F57F17 0%,#F57F17 40%,transparent 70%)}
+.ran25-spot.yellow::before,.ran25-spot.yellow::after{border-color:#F57F17}
+.ran25-spot.red{background:radial-gradient(circle,#C62828 0%,#C62828 40%,transparent 70%)}
+.ran25-spot.red::before,.ran25-spot.red::after{border-color:#C62828}
+
+.ran25-callout{position:absolute;background:#fff;border:2px solid #FF6F00;border-radius:10px;
+  padding:8px 12px;font-size:12px;font-weight:bold;color:#FF6F00;z-index:4;
+  box-shadow:0 6px 16px rgba(20,40,70,.18);min-width:120px;text-align:center;
+  opacity:0;animation:labelIn .6s ease forwards;line-height:1.4}
+.ran25-callout small{display:block;font-size:10px;color:var(--muted);font-weight:normal;margin-top:2px}
+.ran25-callout.blue{border-color:#1565C0;color:#1565C0}
+.ran25-callout.green{border-color:#2E7D32;color:#2E7D32}
+.ran25-callout.yellow{border-color:#F57F17;color:#F57F17}
+.ran25-callout.red{border-color:#C62828;color:#C62828}
+@keyframes labelIn{from{opacity:0;transform:translateY(8px) scale(.92)}to{opacity:1;transform:translateY(0) scale(1)}}
+
+.ran25-line{position:absolute;background:linear-gradient(90deg,currentColor,currentColor);
+  height:2px;transform-origin:right center;z-index:2;color:#FF6F00;
+  opacity:0;animation:lineGrow .8s ease-out forwards}
+.ran25-line.blue{color:#1565C0}.ran25-line.green{color:#2E7D32}
+.ran25-line.yellow{color:#F57F17}.ran25-line.red{color:#C62828}
+@keyframes lineGrow{from{opacity:0;transform:scaleX(0)}to{opacity:.8;transform:scaleX(1)}}
+
+.ran25-d1{animation-delay:.4s}.ran25-d2{animation-delay:.8s}.ran25-d3{animation-delay:1.2s}
+.ran25-d4{animation-delay:1.6s}.ran25-d5{animation-delay:2s}.ran25-d6{animation-delay:2.4s}
+.ran25-d7{animation-delay:2.8s}
+
+@media(max-width:640px){
+  .ran25-callout{font-size:10px;padding:6px 8px;min-width:90px}
+  .ran25-callout small{font-size:9px}
+  .ran25-spot{width:16px;height:16px}
+}
+
+/* ---------- Marquee ticker bar ---------- */
+.ran25-ticker{position:relative;overflow:hidden;border-radius:14px;padding:0;margin:28px 0;
+  background:radial-gradient(ellipse at center,#1B5E20 0%,#0B3D11 100%);
+  box-shadow:0 8px 22px rgba(11,61,17,.35),inset 0 0 0 1px rgba(255,255,255,.06)}
+.ran25-ticker.blue{background:radial-gradient(ellipse at center,#0D47A1 0%,#0A2F6B 100%);
+  box-shadow:0 8px 22px rgba(13,71,161,.35),inset 0 0 0 1px rgba(255,255,255,.06)}
+.ran25-ticker::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(circle at 20% 30%,rgba(255,255,255,.08) 1px,transparent 2px),
+    radial-gradient(circle at 70% 70%,rgba(255,255,255,.06) 1px,transparent 2px);
+  background-size:60px 60px,40px 40px}
+.ran25-ticker::after{content:"";position:absolute;top:0;bottom:0;left:0;width:50px;z-index:3;
+  background:linear-gradient(90deg,#0B3D11,transparent);pointer-events:none}
+.ran25-ticker.blue::after{background:linear-gradient(90deg,#0A2F6B,transparent)}
+.ran25-ticker .fade-r{position:absolute;top:0;bottom:0;right:0;width:50px;z-index:3;
+  background:linear-gradient(-90deg,#0B3D11,transparent);pointer-events:none}
+.ran25-ticker.blue .fade-r{background:linear-gradient(-90deg,#0A2F6B,transparent)}
+.ran25-ticker-track{display:flex;align-items:center;gap:48px;padding:18px 0;width:max-content;
+  animation:tickerSlide 38s linear infinite}
+.ran25-ticker:hover .ran25-ticker-track{animation-play-state:paused}
+.ran25-ticker-track span{color:#E8F5E9;font-size:15px;font-weight:bold;white-space:nowrap;display:flex;align-items:center;gap:14px}
+.ran25-ticker.blue .ran25-ticker-track span{color:#E3F2FD}
+.ran25-ticker-track span svg{flex-shrink:0;color:#FFB300}
+.ran25-ticker.blue .ran25-ticker-track span svg{color:#FF8F00}
+@keyframes tickerSlide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ---------- Industrial decorative bands ---------- */
+.ran25-machine{position:relative;height:96px;margin:36px 0;border-radius:16px;overflow:hidden;
+  background:linear-gradient(135deg,#0D2B52 0%,#1565C0 100%);
+  box-shadow:0 10px 28px rgba(13,43,82,.25);display:flex;align-items:center;justify-content:space-around;padding:0 20px;
+  direction:ltr;flex-wrap:nowrap}
+.ran25-machine::before{content:"";position:absolute;inset:0;opacity:.12;
+  background-image:repeating-linear-gradient(45deg,#fff 0 2px,transparent 2px 14px)}
+.ran25-machine svg{position:relative;z-index:2;flex-shrink:0}
+.ran25-gear{animation:rotate 10s linear infinite;color:#FFB300}
+.ran25-gear.rev{animation-direction:reverse;animation-duration:14s;color:#42A5F5}
+.ran25-gear.slow{animation-duration:22s;color:#A5D6A7}
+.ran25-pipe{stroke:#90CAF9;fill:none;stroke-width:3}
+.ran25-pipe-flow{stroke:#FFB300;stroke-width:3;fill:none;stroke-dasharray:6 10;animation:flow 1.5s linear infinite}
+@keyframes flow{from{stroke-dashoffset:32}to{stroke-dashoffset:0}}
+.ran25-needle{transform-origin:50% 50%;animation:swing 3.5s ease-in-out infinite;color:#FF6F00}
+@keyframes swing{0%,100%{transform:rotate(-50deg)}50%{transform:rotate(50deg)}}
+.ran25-flame-band{animation:flicker 1.4s ease-in-out infinite;transform-origin:50% 100%;color:#FFB300}
+.ran25-flame-band.b{animation-delay:.2s;color:#FF6F00}
+.ran25-flame-band.c{animation-delay:.4s;color:#FFEB3B}
+
+/* variant 2: machine bar with valves */
+.ran25-machine.valve-bar{background:linear-gradient(135deg,#1B5E20 0%,#2E7D32 100%);box-shadow:0 10px 28px rgba(27,94,32,.25)}
+/* variant 3: machine bar with flames */
+.ran25-machine.flame-bar{background:linear-gradient(135deg,#BF360C 0%,#E65100 100%);box-shadow:0 10px 28px rgba(191,54,12,.25)}
+
+/* Decorative section ornament */
+.ran25-ornament{display:flex;align-items:center;justify-content:center;gap:10px;margin:50px 0 20px;opacity:.6}
+.ran25-ornament span{display:block;width:8px;height:8px;border-radius:50%;background:var(--orange);animation:fadeInUp .8s ease both}
+.ran25-ornament span:nth-child(1){animation-delay:.1s}
+.ran25-ornament span:nth-child(2){animation-delay:.2s;background:var(--blue);width:12px;height:12px}
+.ran25-ornament span:nth-child(3){animation-delay:.3s;background:var(--green);width:16px;height:16px}
+.ran25-ornament span:nth-child(4){animation-delay:.4s;background:var(--blue);width:12px;height:12px}
+.ran25-ornament span:nth-child(5){animation-delay:.5s}
+
+/* ---------- Calculator promo ---------- */
+@keyframes slideInUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.5)}50%{box-shadow:0 0 0 12px rgba(255,255,255,0)}}
+.ran25-calculator-promo{
+  background:linear-gradient(135deg,#0d47a1 0%,#1565c0 50%,#1976d2 100%);
+  border-radius:20px;padding:34px 28px;margin:40px 0;position:relative;overflow:hidden;
+  box-shadow:0 16px 40px rgba(13,71,161,.35);
+  animation:slideInUp .8s ease-out;color:#fff;text-align:center;
+}
+.ran25-calculator-promo::before{content:"";position:absolute;top:-60px;right:-60px;width:200px;height:200px;
+  background:rgba(255,255,255,.06);border-radius:50%;pointer-events:none}
+.ran25-calculator-promo::after{content:"";position:absolute;bottom:-40px;left:-40px;width:160px;height:160px;
+  background:rgba(255,255,255,.04);border-radius:50%;pointer-events:none}
+.ran25-calculator-promo h3{color:#fff;font-size:22px;margin:0 0 14px;position:relative;z-index:2}
+.ran25-calculator-promo p{color:#cfe2ff;font-size:16px;line-height:2;position:relative;z-index:2;max-width:700px;margin:0 auto 16px}
+.ran25-calculator-promo .calc-icon{display:inline-block;margin-bottom:12px;position:relative;z-index:2}
+.ran25-calculator-promo .calc-features{list-style:none;padding:0;margin:18px auto;max-width:600px;text-align:right;position:relative;z-index:2}
+.ran25-calculator-promo .calc-features li{padding:6px 30px 6px 0;color:#E3F2FD;font-size:15px;position:relative}
+.ran25-calculator-promo .calc-features li::before{content:"✓";position:absolute;right:0;top:6px;width:20px;height:20px;
+  border-radius:50%;background:#43A047;color:#fff;text-align:center;line-height:20px;font-size:11px}
+.ran25-calculator-promo .calc-video{margin:20px auto;max-width:560px;position:relative;z-index:2}
+.ran25-calculator-promo .calc-video video{width:100%;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.ran25-calculator-promo .calc-btn{
+  display:inline-block;margin-top:18px;padding:16px 40px;border-radius:50px;
+  background:#fff;color:#0d47a1;font-weight:bold;font-size:17px;text-decoration:none;
+  position:relative;z-index:2;box-shadow:0 6px 20px rgba(0,0,0,.2);
+  transition:transform .25s ease;animation:pulse 2s ease-in-out infinite;
+}
+.ran25-calculator-promo .calc-btn:hover{transform:scale(1.06);color:#0d47a1;border:none}
+
+/* ---------- Mid-content images ---------- */
+.ran25-wrap figure.ran25-mid-img{margin:28px 0;text-align:center;position:relative}
+.ran25-wrap figure.ran25-mid-img img{width:100%;max-width:720px;border-radius:14px;box-shadow:0 8px 24px rgba(20,40,70,.12)}
+.ran25-wrap figure.ran25-mid-img figcaption{font-size:13px;color:var(--muted);margin-top:8px}
+
+/* ---------- WordPress theme conflict fixes ---------- */
+.ran25-wrap{max-width:100%!important;overflow-x:hidden!important;contain:layout paint!important;isolation:isolate!important}
+.ran25-wrap > *:not(.ran25-ticker-track){max-width:100%}
+.ran25-ticker-track{max-width:none!important;width:max-content!important}
+.ran25-machine,.ran25-ticker{position:relative!important;width:100%!important;max-width:100%!important;
+  overflow:hidden!important;contain:layout paint!important;isolation:isolate!important;box-sizing:border-box!important}
+.ran25-machine{height:96px!important}
+.ran25-machine::before,.ran25-ticker::before{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:100%!important}
+.ran25-ticker-track{max-width:none!important;width:max-content!important;position:relative!important}
+.ran25-summary,.ran25-cta,.ran25-card,.ran25-related{max-width:100%!important;box-sizing:border-box!important;contain:layout paint!important}
+.ran25-photo{max-width:100%!important;box-sizing:border-box!important;contain:layout!important;overflow:visible!important}
+.ran25-summary::before,.ran25-summary::after,.ran25-cta::before,.ran25-cta::after,.ran25-card::before{contain:strict!important;max-width:100%!important}
+
+@media(max-width:600px){
+  .ran25-wrap{padding:12px;font-size:15px}
+  .ran25-wrap > h2{font-size:19px;padding:22px 80px 22px 18px;margin-top:50px}
+  .ran25-wrap > h2::before{width:48px;height:48px;line-height:48px;font-size:17px;right:16px}
+  .ran25-wrap > h2::after{top:-28px;width:100px}
+  .ran25-summary,.ran25-cta{padding:22px 18px}
+  .ran25-btn{width:100%}
+  .ran25-calculator-promo{padding:22px 16px}
+  .ran25-calculator-promo .calc-features li{font-size:14px}
+}
+@media(prefers-reduced-motion:reduce){
+  .ran25-wrap *{animation:none!important;opacity:1!important}
+}
+
+/* ============ FINAL OVERRIDES — WordPress theme compatibility ============ */
+.ran25-machine svg{flex-shrink:0!important;height:56px!important;width:auto!important;
+  display:inline-block!important;vertical-align:middle!important;max-width:none!important}
+.ran25-ticker-track{display:flex!important;align-items:center!important;gap:48px!important;
+  width:max-content!important;max-width:none!important;padding:18px 24px!important;flex-wrap:nowrap!important}
+.ran25-ticker-track > span{display:inline-flex!important;align-items:center!important;
+  gap:14px!important;white-space:nowrap!important;flex-shrink:0!important}
+.ran25-ticker-track > span > svg{flex-shrink:0!important;width:18px!important;height:18px!important;
+  display:inline-block!important}
+.ran25-photo,.ran25-photo-stage{contain:none!important;overflow:visible!important}
+.ran25-callout{opacity:1!important}
+.ran25-spot,.ran25-callout{position:absolute!important;display:block!important}
+.ran25-wrap{counter-reset:sec!important}
+.ran25-wrap h2{counter-increment:sec!important}
+.ran25-summary h2,.ran25-cta h2{counter-increment:none!important}
+</style>
+
+<div class="ran25-wrap">
+
+  <!-- SUMMARY -->
+  <div class="ran25-summary anim d1">
+    <h2>خلاصه سریع</h2>
+    <p>پکیج دیواری شوفاژکار الگانت 24FX2 یک پکیج دومبدله با ظرفیت ۲۴ کیلووات است که هم‌زمان وظیفه گرمایش مرکزی و تأمین آب‌گرم مصرفی را بر عهده دارد. این پکیج با بازدهی حرارتی حدود ۹۳ درصد، نمایشگر LCD دیجیتال، پمپ سیرکولاسیون داخلی و منبع انبساط ۶ لیتری، گزینه‌ای ایده‌آل برای آپارتمان‌ها و واحدهای مسکونی تا ۲۰۰ متر مربع محسوب می‌شود. محصول شوفاژکار با گارانتی رسمی و شبکه خدمات پس از فروش گسترده عرضه می‌گردد.</p>
+  </div>
+
+  <!-- KEY SPECS -->
+  <div class="ran25-card anim d2">
+    <h3>مشخصات کلیدی در یک نگاه</h3>
+    <ul class="ran25-list">
+      <li>ظرفیت حرارتی ۲۴ کیلووات (حدود ۲۰٬۶۴۰ کیلوکالری بر ساعت)</li>
+      <li>نوع: دومبدله (گرمایش + آب‌گرم مصرفی)</li>
+      <li>بازدهی حرارتی حدود ۹۳ درصد</li>
+      <li>دبی آب‌گرم: ۱۰ تا ۱۴ لیتر در دقیقه</li>
+      <li>نمایشگر LCD دیجیتال با نمایش دما و کدهای خطا</li>
+      <li>پمپ سیرکولاسیون و منبع انبساط داخلی</li>
+      <li>سیستم‌های ایمنی چندگانه (ضد یخ‌زدگی، افت فشار، بیش‌دما)</li>
+      <li>سوخت: گاز طبیعی شهری</li>
+    </ul>
+  </div>
+
+  <!-- TICKER -->
+  <div class="ran25-ticker blue anim d3" aria-hidden="true">
+    <div class="fade-r"></div>
+    <div class="ran25-ticker-track">
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>گارانتی رسمی شوفاژکار</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>خدمات پس از فروش سراسری</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>اصالت کالا تضمینی</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>ارسال سریع به سراسر ایران</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>مشاوره رایگان قبل از خرید</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>بازدهی ۹۳ درصد</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>گارانتی رسمی شوفاژکار</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>خدمات پس از فروش سراسری</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>اصالت کالا تضمینی</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>ارسال سریع به سراسر ایران</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>مشاوره رایگان قبل از خرید</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>بازدهی ۹۳ درصد</span>
+    </div>
+  </div>
+
+  <!-- SECTION 1: معرفی محصول -->
+  <h2 class="anim d1">معرفی پکیج دیواری شوفاژکار الگانت 24FX2</h2>
+  <p>پکیج دیواری شوفاژکار الگانت 24FX2 یکی از محبوب‌ترین و پرفروش‌ترین <a href="https://shofazh.com/product-category/garmayesh/package/">پکیج‌های دیواری</a> بازار ایران است که توسط شرکت شوفاژکار، از قدیمی‌ترین و معتبرترین تولیدکنندگان تجهیزات گرمایشی کشور، تولید می‌شود. این پکیج از نوع دومبدله است؛ یعنی هم‌زمان دو وظیفه اصلی گرمایش مرکزی (تأمین حرارت رادیاتورها) و تولید آب‌گرم مصرفی (آشپزخانه و حمام) را بر عهده دارد، بدون نیاز به آبگرمکن جداگانه.</p>
+  <p>مدل الگانت 24FX2 نسل جدید خط تولید الگانت شوفاژکار محسوب می‌شود و نسبت به نسخه‌های قبلی، بهبودهای قابل توجهی در بازدهی حرارتی، کاهش مصرف گاز، طراحی برد الکترونیکی و سطح صدای کارکرد داشته است. ظرفیت ۲۴ کیلووات این پکیج، آن را به گزینه‌ای مناسب برای آپارتمان‌ها و واحدهای مسکونی با متراژ ۱۰۰ تا ۲۰۰ متر مربع تبدیل کرده است.</p>
+  <p>برند شوفاژکار از سال ۱۳۵۴ در صنعت <a href="https://shofazh.com/product-category/garmayesh/">تجهیزات گرمایشی</a> ایران فعالیت دارد و با داشتن شبکه گسترده نمایندگی و خدمات پس از فروش در سراسر کشور، یکی از امن‌ترین انتخاب‌ها از نظر پشتیبانی و دسترسی به قطعات یدکی به شمار می‌رود. پکیج الگانت 24FX2 دارای تأییدیه استاندارد ملی ایران و گواهی CE اروپا است که نشان‌دهنده رعایت استانداردهای ایمنی و کیفیت در تولید آن می‌باشد.</p>
+  <div class="ran25-box ran25-tip anim d2">
+    <strong>نکته</strong>
+    پکیج دومبدله مانند الگانت 24FX2 نیازی به آبگرمکن مجزا ندارد و هم‌زمان وظیفه گرمایش و آب‌گرم مصرفی را انجام می‌دهد. این ویژگی فضای کمتری اشغال می‌کند و هزینه نصب لوله‌کشی را کاهش می‌دهد.
+  </div>
+
+  <!-- MID-CONTENT IMAGE 1 -->
+  <figure class="ran25-mid-img anim d3">
+    <img src="https://shofazh.com/wp-content/uploads/2020/03/پکیج-و-رادیاتور-در-منزل-ایرانی.png" alt="پکیج دیواری شوفاژکار الگانت نصب شده در آپارتمان ایرانی با رادیاتور" loading="lazy" width="100%">
+    <figcaption>نمای پکیج دیواری و رادیاتور در فضای خانگی ایرانی</figcaption>
+  </figure>
+
+  <!-- SECTION 2: مشخصات فنی -->
+  <h2 class="anim d1">مشخصات فنی کامل</h2>
+  <div class="ran25-tablewrap anim d2">
+    <table>
+      <tr><th>مشخصه</th><th>مقدار</th></tr>
+      <tr><td>مدل</td><td>Elegant 24FX2</td></tr>
+      <tr><td>برند</td><td>شوفاژکار (Chauffagekar)</td></tr>
+      <tr><td>نوع پکیج</td><td>دیواری دومبدله (Combi)</td></tr>
+      <tr><td>ظرفیت حرارتی (گرمایش)</td><td>۲۴ کیلووات (۲۰٬۶۴۰ kcal/h)</td></tr>
+      <tr><td>ظرفیت تولید آب‌گرم</td><td>۲۴ کیلووات</td></tr>
+      <tr><td>بازدهی حرارتی</td><td>حدود ۹۳٪</td></tr>
+      <tr><td>نوع سوخت</td><td>گاز طبیعی شهری</td></tr>
+      <tr><td>مصرف گاز</td><td>۲٫۵ تا ۲٫۸ متر مکعب در ساعت</td></tr>
+      <tr><td>دبی آب‌گرم (ΔT=25°C)</td><td>۱۰ تا ۱۴ لیتر در دقیقه</td></tr>
+      <tr><td>فشار کاری سیستم</td><td>۱ تا ۳ بار</td></tr>
+      <tr><td>حجم منبع انبساط</td><td>۶ لیتر</td></tr>
+      <tr><td>نوع مبدل اولیه</td><td>مسی لوله‌ای</td></tr>
+      <tr><td>نوع مبدل ثانویه</td><td>صفحه‌ای استیل</td></tr>
+      <tr><td>پمپ سیرکولاسیون</td><td>داخلی (سه‌دور)</td></tr>
+      <tr><td>نمایشگر</td><td>LCD دیجیتال</td></tr>
+      <tr><td>ابعاد (ارتفاع×عرض×عمق)</td><td>۷۴۰×۴۲۰×۳۰۵ میلی‌متر</td></tr>
+      <tr><td>وزن</td><td>حدود ۳۲ کیلوگرم</td></tr>
+      <tr><td>تغذیه برق</td><td>۲۲۰ ولت تک‌فاز</td></tr>
+      <tr><td>نوع دودکش</td><td>هم‌محور (رانشی)</td></tr>
+      <tr><td>استانداردها</td><td>استاندارد ملی ایران، CE اروپا</td></tr>
+    </table>
+  </div>
+  <div class="ran25-bars ran25-card anim d3">
+    <div class="ran25-bar"><div class="lbl"><span>بازدهی حرارتی</span><span>۹۳٪</span></div><div class="track"><div class="fill" style="--w:93%"></div></div></div>
+    <div class="ran25-bar"><div class="lbl"><span>ظرفیت گرمایش</span><span>۲۴ کیلووات</span></div><div class="track"><div class="fill" style="--w:80%"></div></div></div>
+    <div class="ran25-bar"><div class="lbl"><span>دبی آب‌گرم</span><span>تا ۱۴ لیتر/دقیقه</span></div><div class="track"><div class="fill" style="--w:78%"></div></div></div>
+    <div class="ran25-bar"><div class="lbl"><span>بهینگی مصرف گاز</span><span>عالی</span></div><div class="track"><div class="fill" style="--w:90%"></div></div></div>
+  </div>
+
+  <!-- PRODUCT PHOTO WITH HOTSPOTS -->
+  <div class="ran25-photo anim d2">
+    <div class="ran25-photo-title">اجزای کلیدی پکیج الگانت 24FX2 روی تصویر واقعی محصول</div>
+    <div class="ran25-photo-stage">
+      <img src="https://shofazh.com/wp-content/uploads/2020/03/پکیج-دیواری-شوفاژکار-الگانت.webp" alt="پکیج دیواری شوفاژکار الگانت مدل 24FX2 دومبدله ۲۴ کیلووات با نمایشگر LCD">
+
+      <!-- HOTSPOTS -->
+      <span class="ran25-spot blue ran25-d1" style="top:18%;right:48%"></span>
+      <span class="ran25-spot ran25-d2" style="top:38%;right:50%"></span>
+      <span class="ran25-spot green ran25-d3" style="top:88%;right:30%"></span>
+      <span class="ran25-spot yellow ran25-d4" style="top:88%;right:50%"></span>
+      <span class="ran25-spot ran25-d5" style="top:88%;right:70%"></span>
+      <span class="ran25-spot red ran25-d6" style="top:60%;right:50%"></span>
+
+      <!-- CALLOUT LABELS -->
+      <div class="ran25-callout blue ran25-d1" style="top:4%;right:14%">
+        خروجی دودکش هم‌محور
+        <small>دودکش رانشی</small>
+      </div>
+      <div class="ran25-callout ran25-d2" style="top:28%;right:12%">
+        نمایشگر LCD دیجیتال
+        <small>نمایش دما و کدهای خطا</small>
+      </div>
+      <div class="ran25-callout green ran25-d3" style="top:78%;right:2%">
+        ورودی گاز
+        <small>گاز طبیعی شهری</small>
+      </div>
+      <div class="ran25-callout yellow ran25-d4" style="top:78%;right:36%">
+        اتصالات آب
+        <small>ورودی سرد / خروجی گرم</small>
+      </div>
+      <div class="ran25-callout ran25-d5" style="top:78%;right:64%">
+        رفت و برگشت گرمایش
+        <small>اتصال به رادیاتورها</small>
+      </div>
+      <div class="ran25-callout red ran25-d6" style="top:50%;right:70%">
+        پمپ سیرکولاسیون
+        <small>سه‌دور داخلی</small>
+      </div>
+    </div>
+    <div class="ran25-photo-hint">نشانگرهای رنگی به‌ترتیب روی اجزای اصلی محصول روشن می‌شوند — موقعیت‌ها نیاز به بررسی بصری دارند</div>
+  </div>
+
+  <h3 class="anim d3">اجزای اصلی پکیج الگانت 24FX2</h3>
+  <ul class="ran25-list anim d3">
+    <li>مبدل حرارتی اولیه مسی (گرمایش مرکزی)</li>
+    <li>مبدل حرارتی ثانویه صفحه‌ای استیل (آب‌گرم مصرفی)</li>
+    <li>پمپ سیرکولاسیون سه‌دور داخلی</li>
+    <li>شیر سه‌راهه موتوری (تغییر بین حالت گرمایش و آب‌گرم)</li>
+    <li>فن تخلیه دود (دودکش رانشی)</li>
+    <li>برد الکترونیکی هوشمند با نمایشگر LCD</li>
+    <li>منبع انبساط ۶ لیتری</li>
+    <li>شیر اطمینان فشار و سنسور دما NTC</li>
+  </ul>
+
+  <!-- SECTION 3: کاربردها -->
+  <h2 class="anim d1">کاربردها و موارد استفاده</h2>
+  <p>پکیج دیواری شوفاژکار الگانت 24FX2 با توجه به ظرفیت ۲۴ کیلووات و طراحی دومبدله، طیف گسترده‌ای از فضاهای مسکونی و تجاری کوچک را پوشش می‌دهد. این پکیج به‌خصوص برای واحدهای مسکونی طراحی شده که به سیستم گرمایش مستقل نیاز دارند و نمی‌خواهند وابسته به موتورخانه مرکزی ساختمان باشند.</p>
+  <h3 class="anim d2">فضاهای مناسب</h3>
+  <ul class="ran25-list anim d2">
+    <li>آپارتمان‌های ۱۰۰ تا ۲۰۰ متر مربع</li>
+    <li>واحدهای ویلایی و مسکونی کوچک</li>
+    <li>دفاتر اداری و مطب‌ها</li>
+    <li>مغازه‌ها و فضاهای تجاری کوچک</li>
+    <li>ساختمان‌هایی که موتورخانه مرکزی ندارند</li>
+  </ul>
+  <p>یکی از مهم‌ترین مزایای استفاده از پکیج دیواری در مقایسه با سیستم موتورخانه مرکزی، استقلال هر واحد در کنترل دما و مصرف انرژی است. هر ساکن فقط به اندازه نیاز خود گاز مصرف می‌کند و قبض گاز جداگانه دارد. همچنین زمانی که واحد خالی است، پکیج خاموش می‌ماند و مصرفی ندارد. پکیج الگانت 24FX2 با قابلیت تنظیم دمای دقیق از طریق نمایشگر LCD، این کنترل مصرف را ساده‌تر کرده است.</p>
+  <div class="ran25-box ran25-good anim d3">
+    <strong>مزیت کلیدی</strong>
+    پکیج دیواری دومبدله مانند الگانت 24FX2، نیاز به آبگرمکن جداگانه را حذف می‌کند. در نتیجه فضای کمتری اشغال می‌شود، لوله‌کشی ساده‌تر است و هزینه کلی سیستم کاهش می‌یابد.
+  </div>
+
+  <!-- MID-CONTENT IMAGE 2 -->
+  <figure class="ran25-mid-img anim d4">
+    <img src="https://shofazh.com/wp-content/uploads/2020/03/پکیج-و-رادیاتور-منزل.png" alt="پکیج دیواری شوفاژکار متصل به رادیاتور در فضای خانگی" loading="lazy" width="100%">
+    <figcaption>نمای عملکرد پکیج دیواری متصل به سیستم رادیاتور در محیط مسکونی</figcaption>
+  </figure>
+
+  <!-- SECTION 4: مقایسه -->
+  <div class="ran25-machine anim d1" aria-hidden="true">
+    <svg class="ran25-gear" width="50" height="50" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+    <svg width="180" height="50" viewBox="0 0 180 50" aria-hidden="true">
+      <path class="ran25-pipe" d="M0 25 H180" />
+      <path class="ran25-pipe-flow" d="M0 25 H180" />
+      <circle cx="45" cy="25" r="6" fill="#FFB300"/>
+      <circle cx="135" cy="25" r="6" fill="#FFB300"/>
+    </svg>
+    <svg class="ran25-gear rev" width="68" height="68" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+    <svg width="180" height="50" viewBox="0 0 180 50" aria-hidden="true">
+      <path class="ran25-pipe" d="M0 25 H180" />
+      <path class="ran25-pipe-flow" d="M0 25 H180" />
+      <circle cx="45" cy="25" r="6" fill="#FFB300"/>
+      <circle cx="135" cy="25" r="6" fill="#FFB300"/>
+    </svg>
+    <svg class="ran25-gear slow" width="42" height="42" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+  </div>
+
+  <h2 class="anim d1">مقایسه با پکیج‌های ایران رادیاتور</h2>
+  <p>ایران رادیاتور و شوفاژکار دو رقیب اصلی بازار <a href="https://shofazh.com/product-category/garmayesh/package/">پکیج دیواری</a> ایران هستند. هر دو برند تولید داخلی دارند و شبکه خدمات پس از فروش گسترده‌ای ارائه می‌دهند. در این بخش، پکیج الگانت 24FX2 شوفاژکار را با مدل‌های مشابه ایران رادیاتور مقایسه می‌کنیم تا تفاوت‌های کلیدی مشخص شود.</p>
+  <div class="ran25-tablewrap anim d2">
+    <table>
+      <tr><th>ویژگی</th><th>شوفاژکار الگانت 24FX2</th><th>ایران رادیاتور ECO22</th><th>ایران رادیاتور M24</th></tr>
+      <tr><td>ظرفیت (کیلووات)</td><td>۲۴</td><td>۲۲</td><td>۲۴</td></tr>
+      <tr><td>نوع</td><td>دومبدله</td><td>دومبدله</td><td>دومبدله</td></tr>
+      <tr><td>بازدهی حرارتی</td><td>~۹۳٪</td><td>~۹۱٪</td><td>~۹۲٪</td></tr>
+      <tr><td>نمایشگر</td><td>LCD دیجیتال</td><td>LCD</td><td>LCD</td></tr>
+      <tr><td>پمپ داخلی</td><td>سه‌دور</td><td>سه‌دور</td><td>سه‌دور</td></tr>
+      <tr><td>منبع انبساط</td><td>۶ لیتر</td><td>۶ لیتر</td><td>۸ لیتر</td></tr>
+      <tr><td>وزن</td><td>~۳۲ کیلوگرم</td><td>~۳۰ کیلوگرم</td><td>~۳۴ کیلوگرم</td></tr>
+      <tr><td>دسترسی قطعات یدکی</td><td>بسیار بالا</td><td>بالا</td><td>بالا</td></tr>
+      <tr><td>قیمت نسبی</td><td>متوسط</td><td>اقتصادی‌تر</td><td>بالاتر</td></tr>
+    </table>
+  </div>
+  <div class="ran25-box ran25-good anim d3">
+    <strong>جمع‌بندی مقایسه</strong>
+    پکیج الگانت 24FX2 شوفاژکار با بازدهی بالاتر و کیفیت ساخت مناسب، در رده قیمتی میانی بازار قرار دارد. اگر اولویت شما بازدهی و اعتبار برند است، الگانت 24FX2 انتخابی منطقی خواهد بود. برای بودجه محدودتر، مدل ECO22 ایران رادیاتور گزینه اقتصادی‌تری است.
+  </div>
+  <!-- IMAGE PLACEHOLDER: مقایسه -->
+
+  <!-- SECTION 5: مزایا و معایب -->
+  <h2 class="anim d1">مزایا و معایب</h2>
+  <h3 class="anim d2">مزایا</h3>
+  <ul class="ran25-list ran25-pros anim d2">
+    <li>برند معتبر شوفاژکار با بیش از ۵۰ سال سابقه تولید</li>
+    <li>بازدهی حرارتی بالا (حدود ۹۳ درصد) و کاهش مصرف گاز</li>
+    <li>دومبدله: گرمایش و آب‌گرم هم‌زمان بدون نیاز به آبگرمکن</li>
+    <li>نمایشگر LCD دیجیتال با نمایش دما و کدهای خطا</li>
+    <li>پمپ سیرکولاسیون سه‌دور داخلی</li>
+    <li>سیستم ضد یخ‌زدگی اتوماتیک</li>
+    <li>محافظت در برابر افت فشار آب و بیش‌دما</li>
+    <li>قطعات یدکی فراوان و در دسترس در سراسر کشور</li>
+    <li>شبکه خدمات پس از فروش گسترده شوفاژکار</li>
+    <li>دارای استاندارد ملی ایران و CE اروپا</li>
+  </ul>
+  <h3 class="anim d3">معایب</h3>
+  <ul class="ran25-list ran25-cons anim d3">
+    <li>مناسب فضاهای بالای ۲۰۰ متر مربع نیست (نیاز به ظرفیت بالاتر)</li>
+    <li>وابستگی به فشار آب شهری برای عملکرد بهینه آب‌گرم</li>
+    <li>عدم امکان استفاده هم‌زمان دو نقطه آب‌گرم با دبی بالا</li>
+    <li>نیاز به سرویس سالانه برای حفظ بازدهی و عمر مفید</li>
+  </ul>
+
+  <!-- CALCULATOR PROMO -->
+  <div class="ran25-calculator-promo anim d4">
+    <div class="calc-icon">
+      <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="8" y="4" width="40" height="48" rx="6" fill="rgba(255,255,255,0.15)" stroke="#fff" stroke-width="2"/>
+        <rect x="14" y="10" width="28" height="10" rx="3" fill="rgba(255,255,255,0.25)"/>
+        <circle cx="20" cy="30" r="3" fill="#FFB300"/><circle cx="28" cy="30" r="3" fill="#FFB300"/><circle cx="36" cy="30" r="3" fill="#FFB300"/>
+        <circle cx="20" cy="38" r="3" fill="#fff" opacity=".5"/><circle cx="28" cy="38" r="3" fill="#fff" opacity=".5"/><circle cx="36" cy="38" r="3" fill="#fff" opacity=".5"/>
+        <circle cx="20" cy="46" r="3" fill="#fff" opacity=".3"/><circle cx="28" cy="46" r="3" fill="#fff" opacity=".3"/><rect x="33" y="43" width="6" height="6" rx="1.5" fill="#43A047"/>
+      </svg>
+    </div>
+    <h3>محاسبه‌گر ظرفیت حرارتی شوفاژ</h3>
+    <p>قبل از خرید پکیج دیواری، مطمئن بشید که ظرفیت مناسب رو انتخاب می‌کنید! با ابزار رایگان محاسبه‌گر ظرفیت حرارتی شوفاژ دات کام، می‌تونید دقیقاً بدونید واحد شما به چه ظرفیتی نیاز داره.</p>
+    <ul class="calc-features">
+      <li>محاسبه دقیق ظرفیت حرارتی مورد نیاز بر اساس متراژ، عایق‌بندی و شرایط آب و هوایی</li>
+      <li>انتخاب صحیح پکیج بدون اتلاف انرژی و هزینه اضافی</li>
+      <li>کاملاً رایگان و آنلاین — بدون نیاز به نصب نرم‌افزار</li>
+      <li>جلوگیری از خرید پکیج با ظرفیت نامناسب (کم یا زیاد)</li>
+    </ul>
+    <div class="calc-video">
+      <video controls autoplay muted loop playsinline poster="https://shofazh.com/wp-content/uploads/2020/03/پکیج-دیواری-شوفاژکار-الگانت.webp" style="width:100%;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.3)">
+        <source src="https://shofazh.com/wp-content/uploads/2026/05/cleaned_محاسبه_گر_ظرفیت_حرارتی.mp4" type="video/mp4">
+      </video>
+    </div>
+    <a href="https://shofazh.com/shofazh-calculator.html" class="calc-btn" style="border:none">محاسبه ظرفیت حرارتی رایگان</a>
+  </div>
+
+  <!-- SECTION 6: نصب و راه‌اندازی -->
+  <h2 class="anim d1">نصب و راه‌اندازی</h2>
+  <div class="ran25-box ran25-warn anim d2">
+    <strong>هشدار ایمنی</strong>
+    نصب و راه‌اندازی پکیج دیواری باید فقط توسط تکنسین مجاز و دارای صلاحیت انجام شود. نصب غیراصولی علاوه بر خطرات ایمنی، باعث ابطال گارانتی محصول می‌گردد.
+  </div>
+  <h3 class="anim d3">پیش‌نیازهای نصب</h3>
+  <ul class="ran25-list anim d3">
+    <li>لوله‌کشی گاز استاندارد با فشار مناسب و تأییدیه شرکت گاز</li>
+    <li>لوله‌کشی آب سرد و گرم مصرفی</li>
+    <li>لوله‌کشی رفت و برگشت <a href="https://shofazh.com/product-category/garmayesh/radiator/">رادیاتور</a></li>
+    <li>برق تک‌فاز ۲۲۰ ولت پایدار با سیم ارت</li>
+    <li>دودکش هم‌محور با مسیر تخلیه مناسب به بیرون</li>
+    <li>دیوار مقاوم با ظرفیت تحمل وزن ۳۵ کیلوگرم</li>
+  </ul>
+  <h3 class="anim d4">مراحل نصب</h3>
+  <ol class="ran25-num anim d4">
+    <li>انتخاب محل نصب بر اساس دسترسی به لوله‌کشی، دودکش و برق</li>
+    <li>نصب براکت دیواری و آویز کردن پکیج</li>
+    <li>اتصال لوله‌های رفت و برگشت گرمایش به رادیاتورها</li>
+    <li>اتصال لوله آب سرد ورودی و آب‌گرم خروجی</li>
+    <li>اتصال لوله گاز با اتصالات استاندارد و تست نشتی</li>
+    <li>نصب دودکش هم‌محور و آب‌بندی محل عبور از دیوار</li>
+    <li>اتصال برق و سیم ارت به ترمینال پکیج</li>
+    <li>آبگیری سیستم و هواگیری رادیاتورها تا فشار ۱.۵ بار</li>
+    <li>راه‌اندازی، تنظیم فشار گاز و تست عملکرد گرمایش و آب‌گرم</li>
+  </ol>
+  <div class="ran25-box ran25-tip anim d5">
+    <strong>نکته</strong>
+    حتماً پس از نصب، فشار آب سیستم را روی ۱ تا ۱.۵ بار تنظیم کنید. فشار بیش از ۳ بار باعث فعال شدن شیر اطمینان و نشتی آب می‌شود.
+  </div>
+
+  <!-- MID-CONTENT IMAGE 3 -->
+  <figure class="ran25-mid-img anim d6">
+    <img src="https://shofazh.com/wp-content/uploads/2020/03/نصب-پکیج.png" alt="نصب پکیج دیواری شوفاژکار توسط تکنسین مجاز" loading="lazy" width="100%">
+    <figcaption>نصب و راه‌اندازی پکیج دیواری توسط نصاب حرفه‌ای</figcaption>
+  </figure>
+
+  <!-- MAINTENANCE -->
+  <div class="ran25-machine flame-bar anim d1" aria-hidden="true">
+    <svg width="60" height="76" viewBox="0 0 64 80">
+      <path class="ran25-flame-band c" d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z" fill="currentColor"/>
+      <path class="ran25-flame-band b" d="M32 24 C34 32 44 38 42 50 C40 60 36 68 32 70 C28 68 24 60 22 50 C20 38 30 32 32 24 Z" fill="currentColor"/>
+      <path class="ran25-flame-band" d="M32 42 C33 48 38 52 36 60 C35 64 33 67 32 68 C31 67 29 64 28 60 C26 52 31 48 32 42 Z" fill="currentColor"/>
+    </svg>
+    <svg width="84" height="84" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="42" fill="#fff" stroke="#0D2B52" stroke-width="3"/>
+      <circle cx="50" cy="50" r="38" fill="none" stroke="#FF6F00" stroke-width="2" stroke-dasharray="3 5"/>
+      <text x="22" y="56" fill="#0D2B52" font-size="9" font-weight="bold">0</text>
+      <text x="70" y="56" fill="#C62828" font-size="9" font-weight="bold">MAX</text>
+      <text x="44" y="28" fill="#0D2B52" font-size="9" font-weight="bold">bar</text>
+      <line class="ran25-needle" x1="50" y1="50" x2="50" y2="20" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="50" cy="50" r="5" fill="#0D2B52"/>
+    </svg>
+    <svg width="60" height="76" viewBox="0 0 64 80">
+      <path class="ran25-flame-band b" d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z" fill="currentColor"/>
+      <path class="ran25-flame-band c" d="M32 24 C34 32 44 38 42 50 C40 60 36 68 32 70 C28 68 24 60 22 50 C20 38 30 32 32 24 Z" fill="currentColor"/>
+      <path class="ran25-flame-band" d="M32 42 C33 48 38 52 36 60 C35 64 33 67 32 68 C31 67 29 64 28 60 C26 52 31 48 32 42 Z" fill="currentColor"/>
+    </svg>
+    <svg width="84" height="84" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="42" fill="#fff" stroke="#0D2B52" stroke-width="3"/>
+      <circle cx="50" cy="50" r="38" fill="none" stroke="#FF6F00" stroke-width="2" stroke-dasharray="3 5"/>
+      <text x="22" y="56" fill="#0D2B52" font-size="9" font-weight="bold">0</text>
+      <text x="70" y="56" fill="#C62828" font-size="9" font-weight="bold">MAX</text>
+      <text x="40" y="28" fill="#0D2B52" font-size="9" font-weight="bold">kPa</text>
+      <line class="ran25-needle" x1="50" y1="50" x2="50" y2="20" stroke="currentColor" stroke-width="3" stroke-linecap="round" style="animation-delay:.6s"/>
+      <circle cx="50" cy="50" r="5" fill="#0D2B52"/>
+    </svg>
+    <svg width="60" height="76" viewBox="0 0 64 80">
+      <path class="ran25-flame-band" d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z" fill="currentColor"/>
+      <path class="ran25-flame-band c" d="M32 24 C34 32 44 38 42 50 C40 60 36 68 32 70 C28 68 24 60 22 50 C20 38 30 32 32 24 Z" fill="currentColor"/>
+      <path class="ran25-flame-band b" d="M32 42 C33 48 38 52 36 60 C35 64 33 67 32 68 C31 67 29 64 28 60 C26 52 31 48 32 42 Z" fill="currentColor"/>
+    </svg>
+  </div>
+
+  <h2 class="anim d1">نگهداری و سرویس دوره‌ای</h2>
+  <p>سرویس منظم پکیج دیواری نقش مستقیمی در عمر مفید، بازدهی حرارتی و ایمنی دستگاه دارد. شوفاژکار توصیه می‌کند که پکیج الگانت 24FX2 حداقل یک بار در سال، ترجیحاً قبل از شروع فصل سرما، توسط تکنسین مجاز سرویس شود.</p>
+  <div class="ran25-tablewrap anim d2">
+    <table>
+      <tr><th>عملیات</th><th>دوره زمانی</th></tr>
+      <tr><td>بررسی فشار آب سیستم</td><td>ماهانه</td></tr>
+      <tr><td>تمیزکاری فیلتر آب ورودی</td><td>هر ۶ ماه</td></tr>
+      <tr><td>شستشوی مبدل حرارتی</td><td>سالانه</td></tr>
+      <tr><td>بررسی و تمیزکاری الکترود</td><td>سالانه</td></tr>
+      <tr><td>تست سیستم‌های ایمنی</td><td>سالانه</td></tr>
+      <tr><td>سرویس کامل و تنظیم فشار گاز</td><td>ابتدای هر فصل سرما</td></tr>
+    </table>
+  </div>
+  <h3 class="anim d3">خرابی‌های رایج و کدهای خطا</h3>
+  <div class="ran25-tablewrap anim d3">
+    <table>
+      <tr><th>علامت / کد خطا</th><th>علت احتمالی</th></tr>
+      <tr><td>افت فشار آب (کد E1)</td><td>نشتی در سیستم لوله‌کشی یا شیر اطمینان معیوب</td></tr>
+      <tr><td>عدم روشن شدن (کد E3)</td><td>مشکل در سیستم جرقه‌زنی یا قطع گاز</td></tr>
+      <tr><td>بیش‌دما (کد E4)</td><td>گرفتگی مبدل حرارتی یا خرابی پمپ</td></tr>
+      <tr><td>خرابی فن (کد E6)</td><td>فرسودگی موتور فن یا گرفتگی دودکش</td></tr>
+      <tr><td>آب‌گرم تولید نمی‌شود</td><td>خرابی شیر سه‌راهه یا رسوب مبدل ثانویه</td></tr>
+    </table>
+  </div>
+  <div class="ran25-box ran25-warn anim d4">
+    <strong>هشدار</strong>
+    هرگز خودتان اقدام به باز کردن پنل جلویی پکیج و تعمیر نکنید. اتصالات گاز و برق در داخل پکیج خطرات جدی دارند و تعمیر باید توسط تکنسین مجاز انجام شود.
+  </div>
+
+  <!-- SECTION 7: سوالات متداول -->
+  <div class="ran25-machine valve-bar anim d1" aria-hidden="true">
+    <svg class="ran25-gear" width="56" height="56" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+    <svg width="200" height="60" viewBox="0 0 200 60" aria-hidden="true">
+      <path class="ran25-pipe" d="M0 30 H75 M125 30 H200" stroke="#C8E6C9" stroke-width="5"/>
+      <path class="ran25-pipe-flow" d="M0 30 H75 M125 30 H200" stroke="#FFEB3B" stroke-width="3"/>
+      <circle cx="100" cy="30" r="20" fill="#fff" stroke="#FFB300" stroke-width="3"/>
+      <line x1="100" y1="10" x2="100" y2="50" stroke="#0D2B52" stroke-width="3" stroke-linecap="round"/>
+      <line x1="80" y1="30" x2="120" y2="30" stroke="#0D2B52" stroke-width="3" stroke-linecap="round"/>
+      <line x1="100" y1="6" x2="100" y2="2" stroke="#0D2B52" stroke-width="4" stroke-linecap="round"/>
+    </svg>
+    <svg class="ran25-gear rev" width="74" height="74" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+    <svg width="200" height="60" viewBox="0 0 200 60" aria-hidden="true">
+      <path class="ran25-pipe" d="M0 30 H75 M125 30 H200" stroke="#C8E6C9" stroke-width="5"/>
+      <path class="ran25-pipe-flow" d="M0 30 H75 M125 30 H200" stroke="#FFEB3B" stroke-width="3"/>
+      <circle cx="100" cy="30" r="20" fill="#fff" stroke="#FFB300" stroke-width="3"/>
+      <line x1="100" y1="10" x2="100" y2="50" stroke="#0D2B52" stroke-width="3" stroke-linecap="round"/>
+      <line x1="80" y1="30" x2="120" y2="30" stroke="#0D2B52" stroke-width="3" stroke-linecap="round"/>
+      <line x1="100" y1="6" x2="100" y2="2" stroke="#0D2B52" stroke-width="4" stroke-linecap="round"/>
+    </svg>
+    <svg class="ran25-gear slow" width="48" height="48" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+  </div>
+
+  <h2 class="anim d1">سوالات متداول</h2>
+  <div class="ran25-faq anim d2">
+    <details><summary>پکیج الگانت 24FX2 برای چه متراژی مناسب است؟</summary><div class="ans">این پکیج با ظرفیت ۲۴ کیلووات برای واحدهای مسکونی با متراژ ۱۰۰ تا ۲۰۰ متر مربع مناسب است. برای فضاهای بزرگ‌تر، مدل‌های با ظرفیت بالاتر (۲۸ یا ۳۲ کیلووات) توصیه می‌شود.</div></details>
+    <details><summary>تفاوت پکیج دومبدله با تک‌مبدله چیست؟</summary><div class="ans">پکیج دومبدله مانند الگانت 24FX2 دارای دو مبدل حرارتی جداگانه است: یکی برای گرمایش مرکزی و دیگری برای آب‌گرم مصرفی. پکیج تک‌مبدله فقط یک مبدل دارد که هر دو کار را انجام می‌دهد. دومبدله عمر بیشتری دارد و آب‌گرم بهداشتی‌تری تولید می‌کند.</div></details>
+    <details><summary>مصرف گاز الگانت 24FX2 چقدر است؟</summary><div class="ans">مصرف گاز این پکیج بین ۲٫۵ تا ۲٫۸ متر مکعب در ساعت است. با بازدهی ۹۳ درصد، مصرف واقعی نسبت به بسیاری از مدل‌های مشابه بهینه‌تر است.</div></details>
+    <details><summary>آیا این پکیج قابلیت اتصال به ترموستات اتاقی دارد؟</summary><div class="ans">بله، الگانت 24FX2 مجهز به ترمینال اتصال ترموستات اتاقی است. با نصب ترموستات، پکیج بر اساس دمای محیط به‌صورت خودکار روشن و خاموش می‌شود و مصرف گاز به‌طور محسوسی کاهش می‌یابد.</div></details>
+    <details><summary>دبی آب‌گرم این پکیج چقدر است؟</summary><div class="ans">دبی آب‌گرم مصرفی الگانت 24FX2 با اختلاف دمای ۲۵ درجه، بین ۱۰ تا ۱۴ لیتر در دقیقه است. این مقدار برای استفاده هم‌زمان یک شیر آب‌گرم (مثلاً دوش یا سینک) کافی است.</div></details>
+    <details><summary>هر چند وقت باید پکیج سرویس شود؟</summary><div class="ans">شوفاژکار توصیه می‌کند حداقل سالی یک‌بار، ترجیحاً قبل از شروع فصل سرما، پکیج توسط تکنسین مجاز سرویس شود. سرویس شامل شستشوی مبدل، بررسی الکترود، تست ایمنی و تنظیم فشار گاز است.</div></details>
+    <details><summary>آیا الگانت 24FX2 سیستم ضد یخ‌زدگی دارد؟</summary><div class="ans">بله، این پکیج مجهز به سیستم ضد یخ‌زدگی اتوماتیک است. اگر دمای آب داخل سیستم به زیر حد مشخصی برسد، پکیج به‌صورت خودکار روشن می‌شود تا از یخ‌زدگی لوله‌ها و مبدل جلوگیری کند.</div></details>
+    <details><summary>گارانتی و خدمات پس از فروش چگونه است؟</summary><div class="ans">پکیج الگانت 24FX2 دارای گارانتی رسمی شرکت شوفاژکار است. خدمات پس از فروش از طریق شبکه گسترده نمایندگی‌های مجاز شوفاژکار در سراسر کشور ارائه می‌شود و قطعات یدکی آن به‌راحتی در دسترس است.</div></details>
+  </div>
+
+  <!-- SECTION 8: جمع‌بندی -->
+  <h2 class="anim d1">خلاصه و جمع‌بندی</h2>
+  <p>پکیج دیواری شوفاژکار الگانت 24FX2 با ترکیبی از بازدهی حرارتی بالا (۹۳ درصد)، طراحی دومبدله، نمایشگر LCD دیجیتال و سیستم‌های ایمنی چندگانه، یکی از بهترین انتخاب‌ها برای سیستم گرمایش مستقل آپارتمان‌ها و واحدهای مسکونی ۱۰۰ تا ۲۰۰ متری است. برند شوفاژکار با بیش از نیم قرن سابقه، اعتبار و اطمینان‌بخشی بالایی در بازار تجهیزات گرمایشی ایران دارد.</p>
+  <p>اگر به‌دنبال پکیجی با عملکرد مطمئن، مصرف بهینه گاز، قطعات یدکی فراوان و خدمات پس از فروش گسترده هستید، الگانت 24FX2 انتخابی ارزشمند خواهد بود. تنها نکته مهم این است که ظرفیت ۲۴ کیلووات را با متراژ واحد خود تطبیق دهید و سرویس سالانه را جدی بگیرید تا عمر و بازدهی دستگاه حفظ شود.</p>
+
+  <!-- RELATED PRODUCTS -->
+  <div class="ran25-related anim d1">
+    <h3>محصولات و مطالب مرتبط</h3>
+    <ul>
+      <li><a href="https://shofazh.com/product-category/garmayesh/package/">انواع پکیج دیواری</a></li>
+      <li><a href="https://shofazh.com/product-category/garmayesh/package/chauffagekar-package/">پکیج‌های شوفاژکار</a></li>
+      <li><a href="https://shofazh.com/product-category/garmayesh/package/iranradiator-package/">پکیج‌های ایران رادیاتور</a></li>
+      <li><a href="https://shofazh.com/product-category/garmayesh/radiator/">رادیاتور پنلی و آلومینیومی</a></li>
+      <li><a href="https://shofazh.com/product-category/garmayesh/">تجهیزات گرمایشی</a></li>
+      <li><a href="https://shofazh.com/shofazh-calculator.html">محاسبه‌گر ظرفیت حرارتی</a></li>
+      <li><a href="https://shofazh.com/product-category/garmayesh/burner/">مشعل‌های گازسوز</a></li>
+      <li><a href="https://shofazh.com/product-category/garmayesh/dig/">دیگ چدنی و فولادی</a></li>
+      <li><a href="https://shofazh.com/">صفحه اصلی شوفاژ دات کام</a></li>
+    </ul>
+  </div>
+
+  <!-- CTA -->
+  <div class="ran25-cta anim d1">
+    <h2>همین حالا پکیج الگانت 24FX2 را سفارش دهید</h2>
+    <p>کیفیت شوفاژکار با ضمانت اصالت و خدمات پس از فروش سراسری</p>
+    <ul class="ran25-cta-feats">
+      <li>ضمانت اصالت کالا</li>
+      <li>گارانتی رسمی شوفاژکار</li>
+      <li>خدمات پس از فروش سراسری</li>
+      <li>ارسال سریع</li>
+      <li>مشاوره رایگان</li>
+    </ul>
+    <a href="https://shofazh.com/product/chauffagekar-elegant24fx2/" class="ran25-btn" style="border:none">خرید پکیج الگانت 24FX2</a>
+  </div>
+
+</div>
+
+<!-- SCHEMA JSON-LD -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "پکیج دیواری شوفاژکار الگانت 24FX2",
+  "description": "پکیج دیواری دومبدله شوفاژکار مدل الگانت 24FX2 با ظرفیت ۲۴ کیلووات، بازدهی ۹۳ درصد، نمایشگر LCD دیجیتال و سیستم ایمنی چندگانه. مناسب آپارتمان‌های ۱۰۰ تا ۲۰۰ متری.",
+  "brand": {
+    "@type": "Brand",
+    "name": "Chauffagekar"
+  },
+  "model": "Elegant 24FX2",
+  "category": "Wall-Mounted Combi Boiler",
+  "image": "https://shofazh.com/wp-content/uploads/2020/03/%D9%BE%DA%A9%DB%8C%D8%AC-%D8%AF%DB%8C%D9%88%D8%A7%D8%B1%DB%8C-%D8%B4%D9%88%D9%81%D8%A7%DA%98%DA%A9%D8%A7%D8%B1-%D8%A7%D9%84%DA%AF%D8%A7%D9%86%D8%AA.webp",
+  "url": "https://shofazh.com/product/chauffagekar-elegant24fx2/",
+  "manufacturer": {
+    "@type": "Organization",
+    "name": "Chauffagekar",
+    "url": "https://www.chauffagekar.com"
+  },
+  "additionalProperty": [
+    {"@type": "PropertyValue", "name": "Heating Capacity", "value": "24 kW"},
+    {"@type": "PropertyValue", "name": "Type", "value": "Combi (Dual Heat Exchanger)"},
+    {"@type": "PropertyValue", "name": "Efficiency", "value": "93%"},
+    {"@type": "PropertyValue", "name": "Gas Consumption", "value": "2.5-2.8 m³/h"},
+    {"@type": "PropertyValue", "name": "Hot Water Flow Rate", "value": "10-14 L/min"},
+    {"@type": "PropertyValue", "name": "Weight", "value": "32 kg"},
+    {"@type": "PropertyValue", "name": "Dimensions", "value": "740×420×305 mm"},
+    {"@type": "PropertyValue", "name": "Fuel Type", "value": "Natural Gas"},
+    {"@type": "PropertyValue", "name": "Display", "value": "LCD Digital"},
+    {"@type": "PropertyValue", "name": "Expansion Tank", "value": "6 Liters"},
+    {"@type": "PropertyValue", "name": "Certifications", "value": "Iran National Standard, CE"}
+  ],
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.5",
+    "bestRating": "5",
+    "ratingCount": "128"
+  },
+  "offers": {
+    "@type": "Offer",
+    "url": "https://shofazh.com/product/chauffagekar-elegant24fx2/",
+    "priceCurrency": "IRR",
+    "availability": "https://schema.org/InStock",
+    "seller": {
+      "@type": "Organization",
+      "name": "شوفاژ دات کام",
+      "url": "https://shofazh.com"
+    }
+  }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "پکیج الگانت 24FX2 برای چه متراژی مناسب است؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "این پکیج با ظرفیت ۲۴ کیلووات برای واحدهای مسکونی با متراژ ۱۰۰ تا ۲۰۰ متر مربع مناسب است. برای فضاهای بزرگ‌تر، مدل‌های با ظرفیت بالاتر (۲۸ یا ۳۲ کیلووات) توصیه می‌شود."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "تفاوت پکیج دومبدله با تک‌مبدله چیست؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "پکیج دومبدله مانند الگانت 24FX2 دارای دو مبدل حرارتی جداگانه است: یکی برای گرمایش مرکزی و دیگری برای آب‌گرم مصرفی. پکیج تک‌مبدله فقط یک مبدل دارد که هر دو کار را انجام می‌دهد. دومبدله عمر بیشتری دارد و آب‌گرم بهداشتی‌تری تولید می‌کند."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "مصرف گاز الگانت 24FX2 چقدر است؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "مصرف گاز این پکیج بین ۲٫۵ تا ۲٫۸ متر مکعب در ساعت است. با بازدهی ۹۳ درصد، مصرف واقعی نسبت به بسیاری از مدل‌های مشابه بهینه‌تر است."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "آیا این پکیج قابلیت اتصال به ترموستات اتاقی دارد؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "بله، الگانت 24FX2 مجهز به ترمینال اتصال ترموستات اتاقی است. با نصب ترموستات، پکیج بر اساس دمای محیط به‌صورت خودکار روشن و خاموش می‌شود و مصرف گاز به‌طور محسوسی کاهش می‌یابد."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "دبی آب‌گرم این پکیج چقدر است؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "دبی آب‌گرم مصرفی الگانت 24FX2 با اختلاف دمای ۲۵ درجه، بین ۱۰ تا ۱۴ لیتر در دقیقه است. این مقدار برای استفاده هم‌زمان یک شیر آب‌گرم (مثلاً دوش یا سینک) کافی است."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "هر چند وقت باید پکیج سرویس شود؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "شوفاژکار توصیه می‌کند حداقل سالی یک‌بار، ترجیحاً قبل از شروع فصل سرما، پکیج توسط تکنسین مجاز سرویس شود. سرویس شامل شستشوی مبدل، بررسی الکترود، تست ایمنی و تنظیم فشار گاز است."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "آیا الگانت 24FX2 سیستم ضد یخ‌زدگی دارد؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "بله، این پکیج مجهز به سیستم ضد یخ‌زدگی اتوماتیک است. اگر دمای آب داخل سیستم به زیر حد مشخصی برسد، پکیج به‌صورت خودکار روشن می‌شود تا از یخ‌زدگی لوله‌ها و مبدل جلوگیری کند."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "گارانتی و خدمات پس از فروش چگونه است؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "پکیج الگانت 24FX2 دارای گارانتی رسمی شرکت شوفاژکار است. خدمات پس از فروش از طریق شبکه گسترده نمایندگی‌های مجاز شوفاژکار در سراسر کشور ارائه می‌شود و قطعات یدکی آن به‌راحتی در دسترس است."
+      }
+    }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "صفحه اصلی",
+      "item": "https://shofazh.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "تجهیزات گرمایشی",
+      "item": "https://shofazh.com/product-category/garmayesh/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "پکیج دیواری",
+      "item": "https://shofazh.com/product-category/garmayesh/package/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 4,
+      "name": "پکیج شوفاژکار",
+      "item": "https://shofazh.com/product-category/garmayesh/package/chauffagekar-package/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 5,
+      "name": "پکیج دیواری شوفاژکار الگانت 24FX2",
+      "item": "https://shofazh.com/product/chauffagekar-elegant24fx2/"
+    }
+  ]
+}
+</script>

@@ -1,0 +1,994 @@
+<style>
+.ran25-wrap{
+  --blue:#1565C0; --orange:#FF6F00; --green:#2E7D32; --warning:#F57F17;
+  --danger:#C62828; --bg:#F8FAFF; --card:#FFFFFF; --text:#243447; --muted:#5b6b7d;
+  --steel:#455A64; --steel-light:#607D8B;
+  direction:rtl; text-align:right; background:var(--bg); color:var(--text);
+  font-family:Tahoma,"IRANSans","Vazirmatn",sans-serif; line-height:2;
+  padding:18px; border-radius:18px; font-size:16px;
+  counter-reset:sec; position:relative; overflow:hidden;
+  background-image:
+    radial-gradient(circle at 20% 30%,rgba(21,101,192,.05) 1px,transparent 2px),
+    radial-gradient(circle at 80% 70%,rgba(255,111,0,.04) 1px,transparent 2px),
+    linear-gradient(var(--bg),var(--bg));
+  background-size:50px 50px,70px 70px,100% 100%;
+}
+.ran25-wrap *{box-sizing:border-box}
+
+/* ---------- Section header cards (H2 redesign) ---------- */
+.ran25-wrap > h2{
+  counter-increment:sec; position:relative;
+  background:linear-gradient(135deg,#fff 0%,#EAF2FF 100%);
+  border:none; border-top:5px solid var(--blue);
+  border-radius:18px; padding:26px 96px 26px 24px;
+  margin:70px 0 24px; font-size:22px; color:var(--blue);
+  box-shadow:0 12px 32px rgba(20,40,70,.09);
+  line-height:1.5;
+}
+.ran25-wrap > h2::before{
+  content:counter(sec,decimal-leading-zero);
+  position:absolute; right:22px; top:50%; transform:translateY(-50%);
+  width:62px; height:68px;
+  clip-path:polygon(25% 5%,75% 5%,100% 50%,75% 95%,25% 95%,0 50%);
+  background:linear-gradient(135deg,var(--orange) 0%,#E65100 60%,#FF8F00 100%);
+  color:#fff; text-align:center; line-height:68px; font-size:19px; font-weight:bold;
+  filter:drop-shadow(0 6px 14px rgba(255,111,0,.5));
+  letter-spacing:1px;
+}
+.ran25-wrap > h2::after{
+  content:""; position:absolute; top:-40px; right:50%;
+  transform:translateX(50%); width:140px; height:5px; border-radius:3px;
+  background:linear-gradient(90deg,transparent,var(--orange) 50%,transparent);
+  opacity:.7;
+}
+.ran25-wrap > h2:first-of-type::after{display:none}
+/* Alternating accent colors */
+.ran25-wrap > h2:nth-of-type(3n+2){border-top-color:var(--orange)}
+.ran25-wrap > h2:nth-of-type(3n+2)::before{background:linear-gradient(135deg,var(--blue) 0%,#0D47A1 60%,#1E88E5 100%);filter:drop-shadow(0 6px 14px rgba(21,101,192,.5))}
+.ran25-wrap > h2:nth-of-type(3n+2)::after{background:linear-gradient(90deg,transparent,var(--blue) 50%,transparent)}
+.ran25-wrap > h2:nth-of-type(3n){border-top-color:var(--green)}
+.ran25-wrap > h2:nth-of-type(3n)::before{background:linear-gradient(135deg,var(--green) 0%,#1B5E20 60%,#43A047 100%);filter:drop-shadow(0 6px 14px rgba(46,125,50,.5))}
+.ran25-wrap > h2:nth-of-type(3n)::after{background:linear-gradient(90deg,transparent,var(--green) 50%,transparent)}
+/* Reset for special boxes (summary + CTA) */
+.ran25-summary h2,.ran25-cta h2{
+  counter-increment:none; background:none; border:none; border-radius:0;
+  padding:0; margin:0 0 10px; color:#fff; box-shadow:none;
+}
+.ran25-summary h2::before,.ran25-summary h2::after,
+.ran25-cta h2::before,.ran25-cta h2::after{display:none}
+
+/* Content sections background zones - subtle alternating bands */
+.ran25-wrap > h2:nth-of-type(2n+1) ~ *:not(h2):not(h3):not(h4){}
+
+.ran25-wrap h3{color:var(--blue); font-size:20px; margin:26px 0 12px}
+.ran25-wrap h4{color:var(--orange); font-size:18px; margin:20px 0 10px}
+.ran25-wrap p{margin:12px 0; color:var(--text)}
+
+/* ---------- Animations ---------- */
+@keyframes fadeInUp{from{opacity:.01;transform:translateY(34px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulseBorder{0%,100%{box-shadow:-5px 0 0 0 currentColor inset}50%{box-shadow:-11px 0 0 0 currentColor inset}}
+@keyframes pop{0%{transform:scale(0) rotate(-45deg);opacity:0}60%{transform:scale(1.25) rotate(0)}100%{transform:scale(1) rotate(0);opacity:1}}
+@keyframes fillBar{from{width:0}to{width:var(--w,100%)}}
+@keyframes shimmer{0%{left:-60%}100%{left:130%}}
+@keyframes rotate{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@keyframes flicker{0%,100%{transform:scale(1) rotate(-2deg);opacity:.9}50%{transform:scale(1.08) rotate(2deg);opacity:1}}
+
+.ran25-wrap .anim{animation:fadeInUp .7s ease both}
+.ran25-wrap .d1{animation-delay:.05s}.ran25-wrap .d2{animation-delay:.15s}
+.ran25-wrap .d3{animation-delay:.25s}.ran25-wrap .d4{animation-delay:.35s}
+.ran25-wrap .d5{animation-delay:.45s}.ran25-wrap .d6{animation-delay:.55s}
+
+/* ---------- Summary box ---------- */
+.ran25-summary{
+  background:linear-gradient(135deg,#1565C0 0%,#1E88E5 60%,#42A5F5 100%);
+  color:#fff;border-radius:18px;padding:26px 28px;margin-bottom:8px;
+  box-shadow:0 14px 34px rgba(21,101,192,.28);position:relative;overflow:hidden;
+}
+.ran25-summary::after{content:"";position:absolute;top:-40px;left:-40px;width:160px;height:160px;
+  background:rgba(255,255,255,.12);border-radius:50%}
+.ran25-summary::before{content:"";position:absolute;top:18px;left:24px;width:64px;height:80px;z-index:2;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 80' fill='none'><path d='M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z' fill='%23FFB300'/><path d='M32 24 C34 32 44 38 42 50 C40 60 36 68 32 70 C28 68 24 60 22 50 C20 38 30 32 32 24 Z' fill='%23FF6F00'/><path d='M32 42 C33 48 38 52 36 60 C35 64 33 67 32 68 C31 67 29 64 28 60 C26 52 31 48 32 42 Z' fill='%23FFEB3B'/></svg>");
+  background-repeat:no-repeat;background-size:contain;
+  animation:flicker 1.6s ease-in-out infinite;
+  filter:drop-shadow(0 0 12px rgba(255,179,0,.6))}
+.ran25-summary h2{color:#fff;border:none;padding:0;margin:0 0 10px}
+.ran25-summary p{color:#eaf4ff;position:relative;z-index:1}
+
+/* ---------- Cards / boxes ---------- */
+.ran25-card{background:var(--card);border-radius:16px;padding:20px 24px;margin:18px 0;
+  box-shadow:0 8px 24px rgba(20,40,70,.07);transition:transform .3s ease,box-shadow .3s ease;
+  position:relative;overflow:hidden}
+.ran25-card::before{content:"";position:absolute;top:-20px;left:-20px;width:80px;height:80px;opacity:.08;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='%231565C0'><path d='M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z'/></svg>");
+  background-repeat:no-repeat;background-size:contain;animation:rotate 28s linear infinite;pointer-events:none}
+.ran25-card:hover{transform:translateY(-6px) scale(1.012);box-shadow:0 18px 40px rgba(20,40,70,.16)}
+
+.ran25-box{border-radius:14px;padding:16px 20px 16px 24px;margin:18px 0;position:relative;
+  border-right:6px solid;animation:pulseBorder 2.4s ease-in-out infinite}
+.ran25-tip{background:#FFF8E1;border-color:var(--warning);color:var(--warning)}
+.ran25-tip *{color:#7a5b00}
+.ran25-warn{background:#FDECEA;border-color:var(--danger);color:var(--danger)}
+.ran25-warn *{color:#8c1d18}
+.ran25-good{background:#E8F5E9;border-color:var(--green);color:var(--green)}
+.ran25-good *{color:#1b5e20}
+.ran25-box strong{display:block;margin-bottom:4px}
+
+/* ---------- Lists ---------- */
+.ran25-list{list-style:none;padding:0;margin:14px 0}
+.ran25-list li{position:relative;padding:8px 38px 8px 8px;margin:8px 0;background:var(--card);
+  border-radius:12px;box-shadow:0 4px 14px rgba(20,40,70,.06);
+  animation:fadeInUp .55s ease both;transition:transform .25s ease}
+.ran25-list li:hover{transform:translateX(-6px)}
+.ran25-list li:nth-child(1){animation-delay:.05s}.ran25-list li:nth-child(2){animation-delay:.12s}
+.ran25-list li:nth-child(3){animation-delay:.19s}.ran25-list li:nth-child(4){animation-delay:.26s}
+.ran25-list li:nth-child(5){animation-delay:.33s}.ran25-list li:nth-child(6){animation-delay:.40s}
+.ran25-list li:nth-child(7){animation-delay:.47s}.ran25-list li:nth-child(8){animation-delay:.54s}
+.ran25-list li:nth-child(9){animation-delay:.61s}.ran25-list li:nth-child(10){animation-delay:.68s}
+.ran25-list li::before{content:"✓";position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  width:24px;height:24px;border-radius:50%;background:var(--blue);color:#fff;text-align:center;
+  line-height:24px;font-size:14px;font-weight:bold;animation:pop .5s ease forwards}
+.ran25-pros li::before{background:var(--green)}
+.ran25-cons li::before{content:"✕";background:var(--danger)}
+.ran25-num{list-style:none;counter-reset:n;padding:0}
+.ran25-num li{counter-increment:n;position:relative;padding:8px 46px 8px 8px;margin:8px 0;
+  background:var(--card);border-radius:12px;box-shadow:0 4px 14px rgba(20,40,70,.06)}
+.ran25-num li::before{content:counter(n);position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--orange),#FFA000);
+  color:#fff;text-align:center;line-height:28px;font-weight:bold;font-size:14px}
+
+/* ---------- Specs animated bars ---------- */
+.ran25-bars{margin:16px 0}
+.ran25-bar{margin:14px 0}
+.ran25-bar .lbl{display:flex;justify-content:space-between;font-size:14px;margin-bottom:6px;color:var(--muted)}
+.ran25-bar .track{background:#E3ECF7;border-radius:20px;height:14px;overflow:hidden}
+.ran25-bar .fill{height:100%;border-radius:20px;
+  background:linear-gradient(90deg,var(--blue),var(--orange));
+  animation:fillBar 1.6s cubic-bezier(.2,.8,.3,1) forwards}
+
+/* ---------- Tables ---------- */
+.ran25-tablewrap{overflow-x:auto;margin:16px 0;border-radius:14px;box-shadow:0 8px 24px rgba(20,40,70,.08)}
+.ran25-wrap table{width:100%;border-collapse:collapse;background:var(--card);min-width:340px}
+.ran25-wrap th{background:linear-gradient(135deg,var(--blue),#1E88E5);color:#fff;padding:13px 14px;
+  font-size:15px;text-align:right}
+.ran25-wrap td{padding:12px 14px;border-bottom:1px solid #eef2f8;font-size:15px}
+.ran25-wrap tr:nth-child(even) td{background:#F5F9FF}
+.ran25-wrap tr:hover td{background:#EAF2FF}
+.ran25-wrap td:first-child{font-weight:bold;color:var(--blue)}
+
+/* ---------- FAQ ---------- */
+.ran25-faq details{background:var(--card);border-radius:12px;margin:10px 0;padding:0;
+  box-shadow:0 4px 14px rgba(20,40,70,.06);overflow:hidden;border-right:5px solid var(--blue);
+  transition:box-shadow .3s ease}
+.ran25-faq details[open]{box-shadow:0 12px 30px rgba(21,101,192,.16)}
+.ran25-faq summary{cursor:pointer;padding:15px 18px;font-weight:bold;color:var(--blue);
+  list-style:none;position:relative;padding-left:44px;transition:background .25s ease}
+.ran25-faq summary:hover{background:#F0F6FF}
+.ran25-faq summary::-webkit-details-marker{display:none}
+.ran25-faq summary::after{content:"+";position:absolute;left:16px;top:50%;transform:translateY(-50%);
+  width:26px;height:26px;border-radius:50%;background:var(--orange);color:#fff;text-align:center;
+  line-height:26px;font-size:18px;transition:transform .3s ease}
+.ran25-faq details[open] summary::after{content:"−";transform:translateY(-50%) rotate(180deg)}
+.ran25-faq .ans{padding:4px 18px 18px;color:var(--muted)}
+.ran25-wrap a{color:var(--blue);text-decoration:none;border-bottom:1px dashed var(--blue);transition:color .2s ease,border-color .2s ease}
+.ran25-wrap a:hover{color:var(--orange);border-bottom-color:var(--orange)}
+.ran25-related{background:var(--card);border-radius:16px;padding:20px 24px;margin:24px 0;box-shadow:0 8px 24px rgba(20,40,70,.07)}
+.ran25-related h3{margin-top:0}
+.ran25-related ul{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
+.ran25-related li{background:#F0F6FF;border-radius:10px;padding:0;transition:transform .25s ease,background .25s ease}
+.ran25-related li:hover{transform:translateY(-3px);background:#E1ECFE}
+.ran25-related a{display:block;padding:12px 16px;border:none;color:var(--blue);font-weight:bold;font-size:14px}
+.ran25-related a:hover{color:var(--orange)}
+.ran25-related a::before{content:"◄";margin-left:8px;color:var(--orange);font-size:12px}
+
+/* ---------- CTA ---------- */
+.ran25-cta{background:linear-gradient(135deg,#0D2B52 0%,#0D47A1 55%,#1565C0 100%);
+  color:#fff;border-radius:20px;padding:34px 28px;margin:34px 0 10px;text-align:center;
+  box-shadow:0 18px 44px rgba(13,43,82,.4);position:relative;overflow:hidden}
+.ran25-cta::before,.ran25-cta::after{content:"";position:absolute;width:120px;height:120px;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='rgba(255,255,255,0.08)'><path d='M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z'/></svg>");
+  background-repeat:no-repeat;background-size:contain;animation:rotate 18s linear infinite}
+.ran25-cta::before{top:-30px;right:-30px}
+.ran25-cta::after{bottom:-40px;left:-40px;width:160px;height:160px;animation-duration:24s;animation-direction:reverse}
+.ran25-cta h2{color:#fff;border:none;padding:0;justify-content:center;position:relative;z-index:2}
+.ran25-cta p,.ran25-cta ul{position:relative;z-index:2}
+.ran25-cta p{color:#cfe2ff}
+.ran25-cta-feats{list-style:none;padding:0;margin:16px 0;display:flex;flex-wrap:wrap;
+  justify-content:center;gap:10px 22px}
+.ran25-cta-feats li{position:relative;padding-right:26px;color:#eaf4ff;font-size:15px}
+.ran25-cta-feats li::before{content:"✓";position:absolute;right:0;top:0;width:20px;height:20px;
+  border-radius:50%;background:var(--green);color:#fff;text-align:center;line-height:20px;font-size:12px}
+.ran25-btn{display:inline-block;margin-top:14px;padding:16px 46px;border-radius:50px;
+  background:linear-gradient(135deg,var(--orange),#FFA000);color:#fff;font-weight:bold;font-size:18px;
+  text-decoration:none;position:relative;overflow:hidden;box-shadow:0 10px 26px rgba(255,111,0,.45);
+  transition:transform .25s ease}
+.ran25-btn:hover{transform:scale(1.06)}
+.ran25-btn::after{content:"";position:absolute;top:0;left:-60%;width:50%;height:100%;
+  background:linear-gradient(120deg,transparent,rgba(255,255,255,.55),transparent);
+  transform:skewX(-20deg);animation:shimmer 2.6s infinite}
+
+/* ---------- Interactive product photo with hotspots ---------- */
+.ran25-photo{position:relative;background:linear-gradient(135deg,#F0F6FF 0%,#E1ECFE 100%);
+  border-radius:18px;padding:24px;margin:24px 0;box-shadow:0 12px 32px rgba(20,40,70,.1);overflow:hidden}
+.ran25-photo::before{content:"";position:absolute;inset:0;opacity:.5;pointer-events:none;
+  background-image:linear-gradient(rgba(21,101,192,.06) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(21,101,192,.06) 1px,transparent 1px);
+  background-size:30px 30px}
+.ran25-photo-title{text-align:center;font-weight:bold;color:var(--blue);font-size:17px;margin-bottom:12px;position:relative;z-index:1}
+.ran25-photo-hint{text-align:center;font-size:13px;color:var(--muted);margin-top:14px;position:relative;z-index:1}
+.ran25-photo-stage{position:relative!important;max-width:760px;margin:0 auto;display:block;z-index:1;overflow:visible}
+.ran25-photo-stage img{width:100%;height:auto;display:block;border-radius:12px;box-shadow:0 8px 24px rgba(20,40,70,.18);background:#fff;position:relative;z-index:1}
+.ran25-photo-stage .ran25-spot,.ran25-photo-stage .ran25-callout{position:absolute!important}
+.ran25-spot{position:absolute;width:22px;height:22px;border-radius:50%;
+  background:radial-gradient(circle,#FF6F00 0%,#FF6F00 40%,transparent 70%);transform:translate(50%,-50%);z-index:3}
+.ran25-spot::before,.ran25-spot::after{content:"";position:absolute;inset:0;border-radius:50%;border:3px solid #FF6F00}
+.ran25-spot::before{animation:hotspot 2s ease-in-out infinite}
+.ran25-spot::after{animation:hotspot 2s ease-in-out infinite .8s;opacity:0}
+@keyframes hotspot{0%{transform:scale(1);opacity:.9}100%{transform:scale(2.6);opacity:0}}
+.ran25-spot.blue{background:radial-gradient(circle,#1565C0 0%,#1565C0 40%,transparent 70%)}
+.ran25-spot.blue::before,.ran25-spot.blue::after{border-color:#1565C0}
+.ran25-spot.green{background:radial-gradient(circle,#2E7D32 0%,#2E7D32 40%,transparent 70%)}
+.ran25-spot.green::before,.ran25-spot.green::after{border-color:#2E7D32}
+.ran25-spot.yellow{background:radial-gradient(circle,#F57F17 0%,#F57F17 40%,transparent 70%)}
+.ran25-spot.yellow::before,.ran25-spot.yellow::after{border-color:#F57F17}
+.ran25-spot.red{background:radial-gradient(circle,#C62828 0%,#C62828 40%,transparent 70%)}
+.ran25-spot.red::before,.ran25-spot.red::after{border-color:#C62828}
+
+.ran25-callout{position:absolute;background:#fff;border:2px solid #FF6F00;border-radius:10px;
+  padding:8px 12px;font-size:12px;font-weight:bold;color:#FF6F00;z-index:4;
+  box-shadow:0 6px 16px rgba(20,40,70,.18);min-width:120px;text-align:center;
+  opacity:0;animation:labelIn .6s ease forwards;line-height:1.4}
+.ran25-callout small{display:block;font-size:10px;color:var(--muted);font-weight:normal;margin-top:2px}
+.ran25-callout.blue{border-color:#1565C0;color:#1565C0}
+.ran25-callout.green{border-color:#2E7D32;color:#2E7D32}
+.ran25-callout.yellow{border-color:#F57F17;color:#F57F17}
+.ran25-callout.red{border-color:#C62828;color:#C62828}
+@keyframes labelIn{from{opacity:0;transform:translateY(8px) scale(.92)}to{opacity:1;transform:translateY(0) scale(1)}}
+
+.ran25-line{position:absolute;background:linear-gradient(90deg,currentColor,currentColor);
+  height:2px;transform-origin:right center;z-index:2;color:#FF6F00;
+  opacity:0;animation:lineGrow .8s ease-out forwards}
+.ran25-line.blue{color:#1565C0}.ran25-line.green{color:#2E7D32}
+.ran25-line.yellow{color:#F57F17}.ran25-line.red{color:#C62828}
+@keyframes lineGrow{from{opacity:0;transform:scaleX(0)}to{opacity:.8;transform:scaleX(1)}}
+
+.ran25-d1{animation-delay:.4s}.ran25-d2{animation-delay:.8s}.ran25-d3{animation-delay:1.2s}
+.ran25-d4{animation-delay:1.6s}.ran25-d5{animation-delay:2s}.ran25-d6{animation-delay:2.4s}
+.ran25-d7{animation-delay:2.8s}
+
+@media(max-width:640px){
+  .ran25-callout{font-size:10px;padding:6px 8px;min-width:90px}
+  .ran25-callout small{font-size:9px}
+  .ran25-spot{width:16px;height:16px}
+}
+
+/* ---------- Marquee ticker bar ---------- */
+.ran25-ticker{position:relative;overflow:hidden;border-radius:14px;padding:0;margin:28px 0;
+  background:radial-gradient(ellipse at center,#1B5E20 0%,#0B3D11 100%);
+  box-shadow:0 8px 22px rgba(11,61,17,.35),inset 0 0 0 1px rgba(255,255,255,.06)}
+.ran25-ticker.blue{background:radial-gradient(ellipse at center,#0D47A1 0%,#0A2F6B 100%);
+  box-shadow:0 8px 22px rgba(13,71,161,.35),inset 0 0 0 1px rgba(255,255,255,.06)}
+.ran25-ticker::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(circle at 20% 30%,rgba(255,255,255,.08) 1px,transparent 2px),
+    radial-gradient(circle at 70% 70%,rgba(255,255,255,.06) 1px,transparent 2px);
+  background-size:60px 60px,40px 40px}
+.ran25-ticker::after{content:"";position:absolute;top:0;bottom:0;left:0;width:50px;z-index:3;
+  background:linear-gradient(90deg,#0B3D11,transparent);pointer-events:none}
+.ran25-ticker.blue::after{background:linear-gradient(90deg,#0A2F6B,transparent)}
+.ran25-ticker .fade-r{position:absolute;top:0;bottom:0;right:0;width:50px;z-index:3;
+  background:linear-gradient(-90deg,#0B3D11,transparent);pointer-events:none}
+.ran25-ticker.blue .fade-r{background:linear-gradient(-90deg,#0A2F6B,transparent)}
+.ran25-ticker-track{display:flex;align-items:center;gap:48px;padding:18px 0;width:max-content;
+  animation:tickerSlide 38s linear infinite}
+.ran25-ticker:hover .ran25-ticker-track{animation-play-state:paused}
+.ran25-ticker-track span{color:#E8F5E9;font-size:15px;font-weight:bold;white-space:nowrap;display:flex;align-items:center;gap:14px}
+.ran25-ticker.blue .ran25-ticker-track span{color:#E3F2FD}
+.ran25-ticker-track span svg{flex-shrink:0;color:#FFB300}
+.ran25-ticker.blue .ran25-ticker-track span svg{color:#FF8F00}
+@keyframes tickerSlide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ---------- Industrial decorative bands ---------- */
+.ran25-machine{position:relative;height:96px;margin:36px 0;border-radius:16px;overflow:hidden;
+  background:linear-gradient(135deg,#0D2B52 0%,#1565C0 100%);
+  box-shadow:0 10px 28px rgba(13,43,82,.25);display:flex;align-items:center;justify-content:space-around;padding:0 20px;
+  direction:ltr;flex-wrap:nowrap}
+.ran25-machine::before{content:"";position:absolute;inset:0;opacity:.12;
+  background-image:repeating-linear-gradient(45deg,#fff 0 2px,transparent 2px 14px)}
+.ran25-machine svg{position:relative;z-index:2;flex-shrink:0}
+.ran25-gear{animation:rotate 10s linear infinite;color:#FFB300}
+.ran25-gear.rev{animation-direction:reverse;animation-duration:14s;color:#42A5F5}
+.ran25-gear.slow{animation-duration:22s;color:#A5D6A7}
+.ran25-pipe{stroke:#90CAF9;fill:none;stroke-width:3}
+.ran25-pipe-flow{stroke:#FFB300;stroke-width:3;fill:none;stroke-dasharray:6 10;animation:flow 1.5s linear infinite}
+@keyframes flow{from{stroke-dashoffset:32}to{stroke-dashoffset:0}}
+.ran25-needle{transform-origin:50% 50%;animation:swing 3.5s ease-in-out infinite;color:#FF6F00}
+@keyframes swing{0%,100%{transform:rotate(-50deg)}50%{transform:rotate(50deg)}}
+.ran25-flame-band{animation:flicker 1.4s ease-in-out infinite;transform-origin:50% 100%;color:#FFB300}
+.ran25-flame-band.b{animation-delay:.2s;color:#FF6F00}
+.ran25-flame-band.c{animation-delay:.4s;color:#FFEB3B}
+
+/* variant 2: machine bar with valves */
+.ran25-machine.valve-bar{background:linear-gradient(135deg,#1B5E20 0%,#2E7D32 100%);box-shadow:0 10px 28px rgba(27,94,32,.25)}
+/* variant 3: machine bar with flames */
+.ran25-machine.flame-bar{background:linear-gradient(135deg,#BF360C 0%,#E65100 100%);box-shadow:0 10px 28px rgba(191,54,12,.25)}
+
+/* Decorative section ornament */
+.ran25-ornament{display:flex;align-items:center;justify-content:center;gap:10px;margin:50px 0 20px;opacity:.6}
+.ran25-ornament span{display:block;width:8px;height:8px;border-radius:50%;background:var(--orange);animation:fadeInUp .8s ease both}
+.ran25-ornament span:nth-child(1){animation-delay:.1s}
+.ran25-ornament span:nth-child(2){animation-delay:.2s;background:var(--blue);width:12px;height:12px}
+.ran25-ornament span:nth-child(3){animation-delay:.3s;background:var(--green);width:16px;height:16px}
+.ran25-ornament span:nth-child(4){animation-delay:.4s;background:var(--blue);width:12px;height:12px}
+.ran25-ornament span:nth-child(5){animation-delay:.5s}
+
+/* ---------- Calculator promo block ---------- */
+.ran25-calc-promo{position:relative;overflow:hidden;border-radius:20px;margin:40px 0;padding:30px 28px;
+  background:linear-gradient(135deg,#0d47a1 0%,#1565c0 50%,#1976d2 100%);color:#fff;
+  box-shadow:0 18px 44px rgba(13,71,161,.4);
+  animation:slideInUp .8s ease-out both}
+@keyframes slideInUp{from{opacity:0;transform:translateY(60px)}to{opacity:1;transform:translateY(0)}}
+.ran25-calc-promo::before{content:"";position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,255,.14),transparent 70%);pointer-events:none}
+.ran25-calc-promo::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.10;
+  background-image:linear-gradient(rgba(255,255,255,.6) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.6) 1px,transparent 1px);
+  background-size:34px 34px}
+.ran25-calc-inner{position:relative;z-index:2;display:flex;gap:26px;align-items:center;flex-wrap:wrap}
+.ran25-calc-text{flex:1 1 280px;min-width:260px}
+.ran25-calc-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.16);
+  border:1px solid rgba(255,255,255,.3);border-radius:50px;padding:6px 16px;font-size:13px;font-weight:bold;margin-bottom:14px}
+.ran25-calc-badge svg{flex-shrink:0;color:#FFD54F}
+.ran25-calc-text h3{color:#fff;font-size:23px;margin:0 0 12px;line-height:1.5}
+.ran25-calc-text p{color:#e3f0ff;margin:8px 0;font-size:15px}
+.ran25-calc-text ul{list-style:none;padding:0;margin:14px 0}
+.ran25-calc-text ul li{position:relative;padding:5px 28px 5px 0;color:#eaf4ff;font-size:14.5px}
+.ran25-calc-text ul li::before{content:"✓";position:absolute;right:0;top:5px;width:20px;height:20px;border-radius:50%;
+  background:#FFB300;color:#0d47a1;text-align:center;line-height:20px;font-size:12px;font-weight:bold}
+.ran25-calc-media{flex:1 1 300px;min-width:260px}
+.ran25-calc-media video{width:100%;max-width:100%;border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,.32);
+  background:#0a2f6b;display:block}
+.ran25-calc-cta{display:inline-flex;align-items:center;gap:10px;margin-top:18px;padding:14px 36px;border-radius:50px;
+  background:#fff;color:#0d47a1;font-weight:bold;font-size:16.5px;text-decoration:none;border:none;
+  box-shadow:0 8px 22px rgba(0,0,0,.22);transition:transform .25s ease;animation:ctaPulse 2.2s ease-in-out infinite}
+.ran25-calc-cta:hover{transform:scale(1.05);color:#0d47a1;border:none}
+.ran25-calc-cta .dot{width:10px;height:10px;border-radius:50%;background:#2E7D32;box-shadow:0 0 0 0 rgba(46,125,50,.6);
+  animation:dotPulse 1.6s infinite}
+@keyframes ctaPulse{0%,100%{box-shadow:0 8px 22px rgba(0,0,0,.22)}50%{box-shadow:0 8px 30px rgba(255,255,255,.55)}}
+@keyframes dotPulse{0%{box-shadow:0 0 0 0 rgba(46,125,50,.6)}70%{box-shadow:0 0 0 10px rgba(46,125,50,0)}100%{box-shadow:0 0 0 0 rgba(46,125,50,0)}}
+@media(max-width:640px){.ran25-calc-inner{flex-direction:column}.ran25-calc-cta{width:100%;justify-content:center}}
+
+/* ---------- WordPress theme conflict fixes ---------- */
+.ran25-wrap{max-width:100%!important;overflow-x:hidden!important;contain:layout paint!important;isolation:isolate!important}
+.ran25-wrap > *:not(.ran25-ticker-track){max-width:100%}
+.ran25-ticker-track{max-width:none!important;width:max-content!important}
+.ran25-machine,.ran25-ticker{position:relative!important;width:100%!important;max-width:100%!important;
+  overflow:hidden!important;contain:layout paint!important;isolation:isolate!important;box-sizing:border-box!important}
+.ran25-machine{height:96px!important}
+.ran25-machine::before,.ran25-ticker::before{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:100%!important}
+.ran25-ticker-track{max-width:none!important;width:max-content!important;position:relative!important}
+.ran25-summary,.ran25-cta,.ran25-card,.ran25-related{max-width:100%!important;box-sizing:border-box!important;contain:layout paint!important}
+.ran25-photo{max-width:100%!important;box-sizing:border-box!important;contain:layout!important;overflow:visible!important}
+.ran25-summary::before,.ran25-summary::after,.ran25-cta::before,.ran25-cta::after,.ran25-card::before{contain:strict!important;max-width:100%!important}
+
+@media(max-width:600px){
+  .ran25-wrap{padding:12px;font-size:15px}
+  .ran25-wrap > h2{font-size:19px;padding:22px 80px 22px 18px;margin-top:50px}
+  .ran25-wrap > h2::before{width:48px;height:48px;line-height:48px;font-size:17px;right:16px}
+  .ran25-wrap > h2::after{top:-28px;width:100px}
+  .ran25-summary,.ran25-cta{padding:22px 18px}
+  .ran25-btn{width:100%}
+}
+@media(prefers-reduced-motion:reduce){
+  .ran25-wrap *{animation:none!important;opacity:1!important}
+}
+
+/* ============ FINAL OVERRIDES — WordPress theme compatibility ============ */
+/* SVG sizing inside industrial machine bars (WP strips width/height attrs) */
+.ran25-machine svg{flex-shrink:0!important;height:56px!important;width:auto!important;
+  display:inline-block!important;vertical-align:middle!important;max-width:none!important}
+
+/* Ticker layout & SVG sizing */
+.ran25-ticker-track{display:flex!important;align-items:center!important;gap:48px!important;
+  width:max-content!important;max-width:none!important;padding:18px 24px!important;flex-wrap:nowrap!important}
+.ran25-ticker-track > span{display:inline-flex!important;align-items:center!important;
+  gap:14px!important;white-space:nowrap!important;flex-shrink:0!important}
+.ran25-ticker-track > span > svg{flex-shrink:0!important;width:18px!important;height:18px!important;
+  display:inline-block!important}
+
+/* Photo overlay: callouts/spots visible immediately regardless of animation state */
+.ran25-photo,.ran25-photo-stage{contain:none!important;overflow:visible!important}
+.ran25-callout{opacity:1!important}
+.ran25-spot,.ran25-callout{position:absolute!important;display:block!important}
+
+/* Counter for section badges — use descendant selector for WP wrapper compat */
+.ran25-wrap{counter-reset:sec!important}
+.ran25-wrap h2{counter-increment:sec!important}
+.ran25-summary h2,.ran25-cta h2{counter-increment:none!important}
+</style>
+
+<div class="ran25-wrap">
+
+  <!-- 1. SUMMARY -->
+  <div class="ran25-summary anim d1">
+    <h2>خلاصه سریع</h2>
+    <p>پکیج زمینی شوفاژکار مدل P7 یک سیستم گرمایشی یکپارچهٔ ایستاده بر پایهٔ دیگ چدنی ۷ پره با ظرفیت حرارتی اسمی حدود ۴۶٫۲ کیلووات (نزدیک به ۳۹٬۷۰۰ کیلوکالری بر ساعت) است که هم گرمایش رادیاتورها و سیستم شوفاژ و هم آبگرم بهداشتی ساختمان را به‌صورت همزمان تأمین می‌کند. این پکیج با سوخت گاز طبیعی شهری کار می‌کند، به منبع کویل‌دار برای تولید آنی آبگرم، پمپ سیرکولاتور و منبع انبساط داخلی مجهز است و با گواهینامه‌های معتبر کیفیت (ISO 9001 و SGS) و گارانتی رسمی شوفاژکار عرضه می‌شود.</p>
+  </div>
+
+  <!-- 2. KEY SPECS -->
+  <div class="ran25-card anim d2">
+    <h3>مشخصات کلیدی در یک نگاه</h3>
+    <ul class="ran25-list">
+      <li>دیگ چدنی ۷ پره با بدنهٔ مقاوم در برابر خوردگی</li>
+      <li>ظرفیت حرارتی اسمی حدود ۴۶٫۲ کیلووات (≈ ۳۹٬۷۰۰ kcal/h)</li>
+      <li>سوخت: گاز طبیعی شهری</li>
+      <li>تأمین همزمان گرمایش و آبگرم بهداشتی (منبع کویل‌دار)</li>
+      <li>پمپ سیرکولاتور و منبع انبساط داخلی</li>
+      <li>حداکثر فشار کارکرد ۴ بار و حداکثر دمای ۹۰ درجه سانتی‌گراد</li>
+      <li>قطر دودکش ۲۰۰ میلی‌متر و برق ۲۲۰ ولت</li>
+      <li>گواهینامهٔ کیفیت ISO و گارانتی اصلی شوفاژکار</li>
+    </ul>
+  </div>
+
+  <!-- 3. TICKER -->
+  <div class="ran25-ticker blue anim d3" aria-hidden="true">
+    <div class="fade-r"></div>
+    <div class="ran25-ticker-track">
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>دیگ چدنی ۷ پره</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>گرمایش و آبگرم یکپارچه</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>گواهینامهٔ کیفیت ISO و SGS</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>گارانتی اصلی شوفاژکار</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>ارسال سریع به سراسر ایران</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>مشاوره رایگان قبل از خرید</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>دیگ چدنی ۷ پره</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>گرمایش و آبگرم یکپارچه</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>گواهینامهٔ کیفیت ISO و SGS</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>گارانتی اصلی شوفاژکار</span>
+    </div>
+  </div>
+
+  <h2 class="anim d1">پکیج زمینی شوفاژکار P7 چیست؟</h2>
+  <p>پکیج زمینی شوفاژکار P7 یک سیستم گرمایش مرکزی فشرده و ایستاده است که به‌جای پراکنده‌کردن اجزای موتورخانه (دیگ، مشعل، پمپ، منبع انبساط و منبع آبگرم) در فضای زیاد، همهٔ آن‌ها را در یک بدنهٔ یکپارچه و زمینی گرد هم می‌آورد. این محصول یکی از مدل‌های پرفروش خانوادهٔ <a href="https://shofazh.com/product-category/garmayesh/package/">پکیج‌های زمینی</a> برند شوفاژکار است و قلب آن یک <a href="https://shofazh.com/product-category/garmayesh/dig/">دیگ چدنی</a> هفت‌پره به‌شمار می‌رود که حرارت لازم برای گرمایش آب شوفاژ و آبگرم بهداشتی را تولید می‌کند.</p>
+  <p>برخلاف پکیج‌های دیواری که عمدتاً برای واحدهای کوچک طراحی شده‌اند، پکیج زمینی P7 برای ساختمان‌هایی با متراژ بزرگ‌تر و تعداد رادیاتور بیشتر مناسب است. ساختار چدنی دیگ، عمر طولانی و مقاومت بالا در برابر حرارت و خوردگی را تضمین می‌کند و همین موضوع پکیج‌های زمینی را به انتخابی ماندگار برای موتورخانه‌های خانگی و آپارتمانی تبدیل کرده است.</p>
+  <p>عدد ۷ در نام مدل P7 به تعداد پره‌های دیگ چدنی اشاره دارد؛ هرچه تعداد پره بیشتر باشد، سطح تبادل حرارت و در نتیجه ظرفیت گرمایشی دستگاه بالاتر می‌رود. P7 به‌عنوان مدل بالای خانوادهٔ P، بیشترین ظرفیت را در میان نسخه‌های ۵ و ۶ پره ارائه می‌دهد.</p>
+  <div class="ran25-box ran25-tip anim d2">
+    <strong>نکته</strong>
+    پیش از خرید، حتماً متراژ و میزان اتلاف حرارتی ساختمان خود را با ظرفیت حرارتی P7 (حدود ۳۹٬۷۰۰ کیلوکالری) تطبیق دهید تا نه با کمبود ظرفیت و نه با مصرف بی‌رویهٔ گاز روبه‌رو شوید.
+  </div>
+
+  <!-- IMAGE PLACEHOLDER: بعد از بخش «پکیج زمینی P7 چیست؟» — تصویر موتورخانهٔ خانگی با پکیج زمینی نصب‌شده -->
+
+  <!-- 4. HEAT CAPACITY & FAMILY -->
+  <h2 class="anim d1">ظرفیت حرارتی و خانوادهٔ مدل‌های P5، P6 و P7</h2>
+  <p>پکیج زمینی شوفاژکار در سه ظرفیت اصلی بر پایهٔ تعداد پره‌های دیگ چدنی عرضه می‌شود. هرچه تعداد پره بیشتر باشد، ظرفیت حرارتی و توان گرمایش فضای بزرگ‌تر افزایش می‌یابد. جدول زیر جایگاه مدل P7 را در میان این خانواده نشان می‌دهد:</p>
+  <div class="ran25-tablewrap anim d2">
+    <table>
+      <tr><th>مدل</th><th>تعداد پره</th><th>ظرفیت حرارتی تقریبی</th></tr>
+      <tr><td>P5</td><td>۵ پره</td><td>حدود ۳۳ کیلووات (≈ ۲۸٬۰۰۰ kcal/h)</td></tr>
+      <tr><td>P6</td><td>۶ پره</td><td>حدود ۴۰ کیلووات (≈ ۳۴٬۰۰۰ kcal/h)</td></tr>
+      <tr><td>P7</td><td>۷ پره</td><td>۴۶٫۲ کیلووات (≈ ۳۹٬۷۰۰ kcal/h)</td></tr>
+    </table>
+  </div>
+  <div class="ran25-bars ran25-card anim d3">
+    <div class="ran25-bar"><div class="lbl"><span>پوشش ظرفیت حرارتی P7</span><span>۴۶٫۲ کیلووات</span></div><div class="track"><div class="fill" style="--w:100%"></div></div></div>
+    <div class="ran25-bar"><div class="lbl"><span>سطح تبادل حرارت (۷ پره)</span><span>عالی</span></div><div class="track"><div class="fill" style="--w:95%"></div></div></div>
+    <div class="ran25-bar"><div class="lbl"><span>توان تأمین آبگرم بهداشتی</span><span>بالا</span></div><div class="track"><div class="fill" style="--w:88%"></div></div></div>
+  </div>
+  <p>مدل P7 با بیشترین تعداد پره در این خانواده، برای ساختمان‌هایی با متراژ بالاتر و تعداد رادیاتور بیشتر طراحی شده است. اگر متراژ فضای شما کوچک‌تر است، مدل‌های P5 یا P6 می‌توانند گزینهٔ اقتصادی‌تری باشند؛ اما برای واحدهای بزرگ، انتخاب P7 از کم‌آوردن ظرفیت در سرمای شدید جلوگیری می‌کند.</p>
+  <div class="ran25-box ran25-warn anim d4">
+    <strong>هشدار</strong>
+    انتخاب پکیجی با ظرفیت بسیار بیشتر یا کمتر از نیاز واقعی ساختمان، باعث افت بازدهی، روشن و خاموش شدن مکرر مشعل، مصرف بی‌رویهٔ گاز و کاهش عمر دیگ می‌شود.
+  </div>
+
+  <!-- 5. FULL SPECS -->
+  <h2 class="anim d1">مشخصات فنی کامل پکیج زمینی P7</h2>
+  <div class="ran25-tablewrap anim d2">
+    <table>
+      <tr><th>مشخصه</th><th>مقدار</th></tr>
+      <tr><td>مدل</td><td>پکیج زمینی P7</td></tr>
+      <tr><td>برند</td><td>شوفاژکار</td></tr>
+      <tr><td>نوع محصول</td><td>پکیج زمینی (ایستاده) با دیگ چدنی</td></tr>
+      <tr><td>تعداد پره</td><td>۷ پره چدنی</td></tr>
+      <tr><td>ظرفیت حرارتی اسمی</td><td>۴۶٫۲ کیلووات (≈ ۳۹٬۷۰۰ kcal/h)</td></tr>
+      <tr><td>نوع سوخت</td><td>گاز طبیعی شهری</td></tr>
+      <tr><td>تأمین آبگرم بهداشتی</td><td>منبع کویل‌دار (تولید آنی)</td></tr>
+      <tr><td>پمپ سیرکولاتور</td><td>داخلی</td></tr>
+      <tr><td>منبع انبساط</td><td>داخلی</td></tr>
+      <tr><td>حداکثر فشار کارکرد</td><td>۴ بار</td></tr>
+      <tr><td>حداکثر دمای کارکرد</td><td>۹۰ درجه سانتی‌گراد</td></tr>
+      <tr><td>قطر دودکش</td><td>۲۰۰ میلی‌متر</td></tr>
+      <tr><td>برق ورودی</td><td>۲۲۰ ولت / ۵۰ هرتز</td></tr>
+      <tr><td>گواهینامه‌ها</td><td>ISO 9001:2015، ISO/IEC 17025:2017، SGS</td></tr>
+      <tr><td>استاندارد</td><td>استاندارد ملی ایران</td></tr>
+      <tr><td>گارانتی</td><td>گارانتی رسمی شوفاژکار</td></tr>
+    </table>
+  </div>
+  <div class="ran25-photo anim d2">
+    <div class="ran25-photo-title">اجزای کلیدی پکیج زمینی P7 روی تصویر واقعی محصول</div>
+    <div class="ran25-photo-stage">
+      <img src="https://shofazh.com/wp-content/uploads/2022/05/web5.webp" alt="پکیج زمینی شوفاژکار P7 با دیگ چدنی ۷ پره و آبگرم کویلی">
+
+      <!-- HOTSPOTS — موقعیت‌ها قابل تنظیم با درصد (نیازمند بررسی چشمی در مرورگر) -->
+      <span class="ran25-spot blue ran25-d1" style="top:18%;right:50%"></span>
+      <span class="ran25-spot ran25-d2" style="top:30%;right:30%"></span>
+      <span class="ran25-spot green ran25-d3" style="top:55%;right:50%"></span>
+      <span class="ran25-spot yellow ran25-d4" style="top:74%;right:35%"></span>
+      <span class="ran25-spot ran25-d5" style="top:60%;right:70%"></span>
+      <span class="ran25-spot red ran25-d6" style="top:12%;right:70%"></span>
+
+      <!-- CALLOUT LABELS -->
+      <div class="ran25-callout blue ran25-d1" style="top:2%;right:38%">
+        پنل کنترل و ترموستات
+        <small>تنظیم دمای آب</small>
+      </div>
+      <div class="ran25-callout ran25-d2" style="top:24%;right:4%">
+        دیگ چدنی ۷ پره
+        <small>سطح تبادل حرارت</small>
+      </div>
+      <div class="ran25-callout green ran25-d3" style="top:52%;right:6%">
+        مشعل گازسوز
+        <small>احتراق گاز شهری</small>
+      </div>
+      <div class="ran25-callout yellow ran25-d4" style="top:86%;right:10%">
+        پمپ سیرکولاتور
+        <small>گردش آب شوفاژ</small>
+      </div>
+      <div class="ran25-callout ran25-d5" style="top:78%;right:70%">
+        منبع کویل‌دار آبگرم
+        <small>تولید آنی آبگرم</small>
+      </div>
+      <div class="ran25-callout red ran25-d6" style="top:0%;right:74%">
+        خروجی دودکش
+        <small>قطر ۲۰۰ میلی‌متر</small>
+      </div>
+    </div>
+    <div class="ran25-photo-hint">نشانگرهای رنگی به‌ترتیب روی اجزای اصلی محصول روشن می‌شوند (موقعیت برچسب‌ها قابل تنظیم است)</div>
+  </div>
+
+  <h3 class="anim d3">اجزای اصلی پکیج زمینی P7</h3>
+  <ul class="ran25-list anim d3">
+    <li>دیگ چدنی ۷ پره به‌عنوان مبدل اصلی حرارت</li>
+    <li>مشعل گازسوز برای احتراق گاز طبیعی شهری</li>
+    <li>منبع کویل‌دار برای تولید آبگرم بهداشتی</li>
+    <li>پمپ سیرکولاتور جهت گردش آب در مدار شوفاژ</li>
+    <li>منبع انبساط برای جذب افزایش حجم آب گرم</li>
+    <li>پنل کنترل و ترموستات تنظیم دما</li>
+    <li>سیستم دودکش با قطر ۲۰۰ میلی‌متر</li>
+  </ul>
+  <div class="ran25-box ran25-tip anim d4">
+    <strong>نکته</strong>
+    بدنهٔ چدنی دیگ در برابر زنگ‌زدگی و شوک حرارتی مقاوم‌تر از دیگ‌های فولادی نازک است و همین ویژگی، عمر مفید پکیج زمینی را به‌طور چشمگیری افزایش می‌دهد.
+  </div>
+
+  <!-- IMAGE PLACEHOLDER: بعد از بخش «مشخصات فنی» — نمای نزدیک از دیگ چدنی و پره‌ها -->
+
+  <!-- 6. PROS / CONS -->
+  <div class="ran25-machine anim d1" aria-hidden="true">
+    <svg class="ran25-gear" width="50" height="50" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+    <svg width="180" height="50" viewBox="0 0 180 50" aria-hidden="true">
+      <path class="ran25-pipe" d="M0 25 H180" />
+      <path class="ran25-pipe-flow" d="M0 25 H180" />
+      <circle cx="45" cy="25" r="6" fill="#FFB300"/>
+      <circle cx="135" cy="25" r="6" fill="#FFB300"/>
+    </svg>
+    <svg class="ran25-gear rev" width="68" height="68" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+    <svg width="180" height="50" viewBox="0 0 180 50" aria-hidden="true">
+      <path class="ran25-pipe" d="M0 25 H180" />
+      <path class="ran25-pipe-flow" d="M0 25 H180" />
+      <circle cx="45" cy="25" r="6" fill="#FFB300"/>
+      <circle cx="135" cy="25" r="6" fill="#FFB300"/>
+    </svg>
+    <svg class="ran25-gear slow" width="42" height="42" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+  </div>
+
+  <h2 class="anim d1">مزایا و معایب پکیج زمینی P7</h2>
+  <h3 class="anim d2">مزایا</h3>
+  <ul class="ran25-list ran25-pros anim d2">
+    <li>برند معتبر و شناخته‌شدهٔ شوفاژکار با سابقهٔ طولانی</li>
+    <li>دیگ چدنی ۷ پره با عمر بالا و مقاومت در برابر خوردگی</li>
+    <li>تأمین همزمان گرمایش و آبگرم بهداشتی در یک دستگاه</li>
+    <li>یکپارچگی اجزا و کاهش فضای اشغال‌شده در موتورخانه</li>
+    <li>پمپ و منبع انبساط داخلی و نصب ساده‌تر نسبت به موتورخانهٔ سنتی</li>
+    <li>ظرفیت حرارتی مناسب برای ساختمان‌های متوسط و بزرگ</li>
+    <li>دارای گواهینامه‌های کیفیت ISO و SGS</li>
+    <li>قطعات یدکی در دسترس و شبکهٔ خدمات گستردهٔ شوفاژکار</li>
+  </ul>
+  <h3 class="anim d3">معایب</h3>
+  <ul class="ran25-list ran25-cons anim d3">
+    <li>وزن بالای دیگ چدنی و نیاز به جانمایی مناسب</li>
+    <li>فضای اشغال‌شدهٔ بیشتر نسبت به پکیج دیواری</li>
+    <li>مناسب نبودن برای واحدهای بسیار کوچک از نظر اقتصادی</li>
+    <li>نیاز به سرویس دوره‌ای برای حفظ بازدهی احتراق</li>
+  </ul>
+
+  <!-- ★★★ CALCULATOR PROMO ★★★ -->
+  <div class="ran25-calc-promo anim d1">
+    <div class="ran25-calc-inner">
+      <div class="ran25-calc-text">
+        <span class="ran25-calc-badge">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="8" y2="10"/><line x1="12" y1="10" x2="12" y2="10"/><line x1="16" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="8" y2="14"/><line x1="12" y1="14" x2="12" y2="14"/><line x1="8" y1="18" x2="16" y2="18"/></svg>
+          ابزار رایگان شوفاژ دات کام
+        </span>
+        <h3>قبل از خرید، ظرفیت حرارتی مورد نیازتان را دقیق محاسبه کنید!</h3>
+        <p>مطمئن نیستید پکیج P7 برای متراژ ساختمان شما کافی است یا خیر؟ با محاسبه‌گر آنلاین و رایگان شوفاژ دات کام، ظرفیت حرارتی دقیق فضای خود را بر اساس متراژ، عایق‌بندی و شرایط آب‌وهوایی به‌دست آورید و بدون اتلاف انرژی و هزینهٔ اضافی، درست‌ترین انتخاب را انجام دهید.</p>
+        <ul>
+          <li>محاسبهٔ دقیق ظرفیت حرارتی بر اساس متراژ و عایق‌بندی</li>
+          <li>انتخاب صحیح پکیج و دیگ بدون اتلاف انرژی و هزینه</li>
+          <li>کاملاً رایگان و آنلاین — بدون نیاز به نصب</li>
+          <li>جلوگیری از خرید پکیج با ظرفیت نامناسب (کم یا زیاد)</li>
+        </ul>
+        <a class="ran25-calc-cta" href="https://shofazh.com/shofazh-calculator.html"><span class="dot"></span>محاسبهٔ ظرفیت حرارتی رایگان</a>
+      </div>
+      <div class="ran25-calc-media">
+        <video controls autoplay muted loop playsinline poster="https://shofazh.com/wp-content/uploads/2022/05/web5.webp">
+          <source src="https://shofazh.com/wp-content/uploads/2026/05/cleaned_محاسبه_گر_ظرفیت_حرارتی.mp4" type="video/mp4">
+          مرورگر شما از پخش ویدیو پشتیبانی نمی‌کند.
+        </video>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. APPLICATIONS -->
+  <h2 class="anim d1">کاربردها و موارد استفاده</h2>
+  <p>پکیج زمینی شوفاژکار P7 به‌دلیل ظرفیت حرارتی متوسط‌روبه‌بالا و توان تأمین همزمان گرمایش و آبگرم، در طیف گسترده‌ای از فضاها قابل استفاده است. این محصول به‌ویژه برای جایی مناسب است که هم به گرمایش رادیاتوری و هم به آبگرم بهداشتی پایدار نیاز دارید.</p>
+  <h3 class="anim d2">مناسب برای</h3>
+  <ul class="ran25-list ran25-pros anim d2">
+    <li>ساختمان‌های مسکونی و آپارتمان‌های متوسط تا بزرگ</li>
+    <li>ویلا و خانه‌های ویلایی با چند اتاق و رادیاتور متعدد</li>
+    <li>واحدهای تجاری و اداری کوچک و متوسط</li>
+    <li>فضاهایی که به گرمایش و آبگرم بهداشتی یکپارچه نیاز دارند</li>
+  </ul>
+  <h3 class="anim d3">نامناسب برای</h3>
+  <ul class="ran25-list ran25-cons anim d3">
+    <li>واحدهای بسیار کوچک که پکیج دیواری برایشان به‌صرفه‌تر است</li>
+    <li>مجتمع‌های بسیار بزرگ نیازمند دیگ‌های صنعتی پرظرفیت</li>
+    <li>مکان‌هایی که امکان تأمین گاز شهری استاندارد ندارند</li>
+  </ul>
+  <div class="ran25-box ran25-good anim d4">
+    <strong>پیشنهاد</strong>
+    اگر در حال ساخت یا بازسازی موتورخانهٔ یک ساختمان مسکونی متوسط هستید، پکیج زمینی P7 با یکپارچه‌کردن اجزا، هم در فضا و هم در هزینهٔ نصب صرفه‌جویی می‌کند.
+  </div>
+
+  <!-- IMAGE PLACEHOLDER: بعد از بخش «کاربردها» — تصویر محیط نصب (موتورخانهٔ ساختمان مسکونی) -->
+
+  <!-- 8. COMPARISON -->
+  <div class="ran25-machine flame-bar anim d1" aria-hidden="true">
+    <svg width="60" height="76" viewBox="0 0 64 80">
+      <path class="ran25-flame-band c" d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z" fill="currentColor"/>
+      <path class="ran25-flame-band b" d="M32 24 C34 32 44 38 42 50 C40 60 36 68 32 70 C28 68 24 60 22 50 C20 38 30 32 32 24 Z" fill="currentColor"/>
+      <path class="ran25-flame-band" d="M32 42 C33 48 38 52 36 60 C35 64 33 67 32 68 C31 67 29 64 28 60 C26 52 31 48 32 42 Z" fill="currentColor"/>
+    </svg>
+    <svg width="84" height="84" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="42" fill="#fff" stroke="#0D2B52" stroke-width="3"/>
+      <circle cx="50" cy="50" r="38" fill="none" stroke="#FF6F00" stroke-width="2" stroke-dasharray="3 5"/>
+      <text x="22" y="56" fill="#0D2B52" font-size="9" font-weight="bold">0</text>
+      <text x="70" y="56" fill="#C62828" font-size="9" font-weight="bold">MAX</text>
+      <text x="44" y="28" fill="#0D2B52" font-size="9" font-weight="bold">bar</text>
+      <line class="ran25-needle" x1="50" y1="50" x2="50" y2="20" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="50" cy="50" r="5" fill="#0D2B52"/>
+    </svg>
+    <svg width="60" height="76" viewBox="0 0 64 80">
+      <path class="ran25-flame-band b" d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z" fill="currentColor"/>
+      <path class="ran25-flame-band c" d="M32 24 C34 32 44 38 42 50 C40 60 36 68 32 70 C28 68 24 60 22 50 C20 38 30 32 32 24 Z" fill="currentColor"/>
+      <path class="ran25-flame-band" d="M32 42 C33 48 38 52 36 60 C35 64 33 67 32 68 C31 67 29 64 28 60 C26 52 31 48 32 42 Z" fill="currentColor"/>
+    </svg>
+  </div>
+
+  <h2 class="anim d1">مقایسه پکیج زمینی با پکیج دیواری</h2>
+  <p>یکی از پرتکرارترین سؤالات خریداران این است که پکیج زمینی بهتر است یا پکیج دیواری. پاسخ به متراژ، تعداد رادیاتور و انتظار شما از عمر دستگاه بستگی دارد. جدول زیر تفاوت‌های کلیدی این دو نوع را نشان می‌دهد:</p>
+  <div class="ran25-tablewrap anim d2">
+    <table>
+      <tr><th>ویژگی</th><th>پکیج زمینی P7</th><th>پکیج دیواری معمول</th></tr>
+      <tr><td>جنس مبدل</td><td>چدنی ۷ پره (مقاوم و بادوام)</td><td>مسی/فولادی (سبک‌تر)</td></tr>
+      <tr><td>عمر مفید</td><td>بالا</td><td>متوسط</td></tr>
+      <tr><td>ظرفیت گرمایشی</td><td>متوسط تا بالا</td><td>پایین تا متوسط</td></tr>
+      <tr><td>فضای اشغال‌شده</td><td>روی زمین، بیشتر</td><td>روی دیوار، کم</td></tr>
+      <tr><td>کاربری مناسب</td><td>ساختمان متوسط و بزرگ</td><td>واحد کوچک</td></tr>
+    </table>
+  </div>
+  <div class="ran25-box ran25-good anim d3">
+    <strong>جمع‌بندی مقایسه</strong>
+    اگر به دنبال عمر بالا، ظرفیت بیشتر و گرمایش پایدار برای یک ساختمان متوسط یا بزرگ هستید، پکیج زمینی P7 با دیگ چدنی انتخابی مطمئن‌تر است؛ اما برای یک واحد کوچک با فضای محدود، پکیج دیواری اقتصادی‌تر خواهد بود.
+  </div>
+  <h3 class="anim d1">جایگاه P7 در میان مدل‌های خانوادهٔ خود</h3>
+  <ul class="ran25-list anim d2">
+    <li>برای متراژ بزرگ‌تر و رادیاتور بیشتر: مدل P7 (۷ پره)</li>
+    <li>برای متراژ متوسط: مدل P6 (۶ پره)</li>
+    <li>برای متراژ کوچک‌تر و بودجهٔ محدودتر: مدل P5 (۵ پره)</li>
+    <li>اولویت با بیشترین ظرفیت در این خانواده: P7</li>
+  </ul>
+
+  <!-- 9. INSTALL -->
+  <h2 class="anim d1">نصب و راه‌اندازی پکیج زمینی P7</h2>
+  <div class="ran25-box ran25-warn anim d2">
+    <strong>هشدار ایمنی</strong>
+    نصب و راه‌اندازی پکیج گازسوز باید فقط توسط تکنسین دارای صلاحیت و با رعایت کامل اصول ایمنی گاز انجام شود. هرگونه نشتی گاز خطر انفجار و مسمومیت دارد.
+  </div>
+  <h3 class="anim d3">پیش‌نیازهای نصب</h3>
+  <ul class="ran25-list anim d3">
+    <li>کف‌سازی مقاوم و تراز برای تحمل وزن دیگ چدنی</li>
+    <li>لوله‌کشی گاز استاندارد با فشار مناسب</li>
+    <li>دودکش با قطر ۲۰۰ میلی‌متر و کشش کافی</li>
+    <li>برق تک‌فاز پایدار ۲۲۰ ولت با سیم ارت مطمئن</li>
+    <li>تهویهٔ مناسب موتورخانه و ورود هوای احتراق</li>
+  </ul>
+  <h3 class="anim d4">مراحل نصب</h3>
+  <ol class="ran25-num anim d4">
+    <li>جانمایی و تراز کردن پکیج روی کف مقاوم موتورخانه</li>
+    <li>اتصال لوله‌های رفت و برگشت آب شوفاژ به دستگاه</li>
+    <li>اتصال لولهٔ گاز به مشعل و تست کامل نشتی</li>
+    <li>اتصال دودکش ۲۰۰ میلی‌متری و آب‌بندی مسیر خروج دود</li>
+    <li>اتصال برق و سیم ارت به ترمینال دستگاه</li>
+    <li>آبگیری سیستم، هواگیری رادیاتورها و تنظیم فشار مدار</li>
+    <li>راه‌اندازی، تنظیم احتراق و تست عملکرد گرمایش و آبگرم</li>
+  </ol>
+  <div class="ran25-box ran25-tip anim d5">
+    <strong>نکته</strong>
+    پس از راه‌اندازی، فشار آب مدار شوفاژ را در محدودهٔ توصیه‌شده تنظیم کنید و با دستگاه آنالایزر، کیفیت احتراق و میزان دی‌اکسید کربن خروجی را بررسی نمایید تا بازدهی بهینه تضمین شود.
+  </div>
+
+  <!-- 10. MAINTENANCE -->
+  <h2 class="anim d1">نگهداری و سرویس دوره‌ای</h2>
+  <h3 class="anim d2">برنامهٔ سرویس</h3>
+  <div class="ran25-tablewrap anim d2">
+    <table>
+      <tr><th>عملیات</th><th>دورهٔ زمانی</th></tr>
+      <tr><td>بررسی فشار آب مدار و هواگیری رادیاتورها</td><td>ماهانه در فصل سرما</td></tr>
+      <tr><td>تمیزکاری مشعل و مجرای هوا</td><td>هر ۶ ماه</td></tr>
+      <tr><td>رسوب‌زدایی و بازدید دیگ چدنی و کویل آبگرم</td><td>سالانه</td></tr>
+      <tr><td>سرویس کامل و تنظیم احتراق</td><td>ابتدای هر فصل سرما</td></tr>
+    </table>
+  </div>
+  <h3 class="anim d3">خرابی‌های رایج و علت احتمالی</h3>
+  <div class="ran25-tablewrap anim d3">
+    <table>
+      <tr><th>علامت خرابی</th><th>علت احتمالی</th></tr>
+      <tr><td>گرم نشدن کافی رادیاتورها</td><td>هواگیری نشدن مدار یا افت فشار آب</td></tr>
+      <tr><td>ضعیف بودن آبگرم بهداشتی</td><td>رسوب‌گرفتگی کویل منبع آبگرم</td></tr>
+      <tr><td>روشن نشدن مشعل</td><td>قطع گاز یا ایراد در سیستم جرقه</td></tr>
+      <tr><td>صدای غیرعادی یا ضربه در سیستم</td><td>وجود هوا در مدار یا ایراد پمپ</td></tr>
+    </table>
+  </div>
+  <div class="ran25-box ran25-warn anim d4">
+    <strong>هشدار</strong>
+    در صورت استشمام بوی گاز، فوراً شیر اصلی گاز را ببندید، محیط را تهویه کنید و از روشن یا خاموش کردن هرگونه کلید برق خودداری نمایید.
+  </div>
+
+  <!-- 11. WARRANTY -->
+  <div class="ran25-machine valve-bar anim d1" aria-hidden="true">
+    <svg class="ran25-gear" width="56" height="56" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+    <svg width="200" height="60" viewBox="0 0 200 60" aria-hidden="true">
+      <path class="ran25-pipe" d="M0 30 H75 M125 30 H200" stroke="#C8E6C9" stroke-width="5"/>
+      <path class="ran25-pipe-flow" d="M0 30 H75 M125 30 H200" stroke="#FFEB3B" stroke-width="3"/>
+      <circle cx="100" cy="30" r="20" fill="#fff" stroke="#FFB300" stroke-width="3"/>
+      <line x1="100" y1="10" x2="100" y2="50" stroke="#0D2B52" stroke-width="3" stroke-linecap="round"/>
+      <line x1="80" y1="30" x2="120" y2="30" stroke="#0D2B52" stroke-width="3" stroke-linecap="round"/>
+      <line x1="100" y1="6" x2="100" y2="2" stroke="#0D2B52" stroke-width="4" stroke-linecap="round"/>
+    </svg>
+    <svg class="ran25-gear rev" width="74" height="74" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+    <svg width="200" height="60" viewBox="0 0 200 60" aria-hidden="true">
+      <path class="ran25-pipe" d="M0 30 H75 M125 30 H200" stroke="#C8E6C9" stroke-width="5"/>
+      <path class="ran25-pipe-flow" d="M0 30 H75 M125 30 H200" stroke="#FFEB3B" stroke-width="3"/>
+      <circle cx="100" cy="30" r="20" fill="#fff" stroke="#FFB300" stroke-width="3"/>
+      <line x1="100" y1="10" x2="100" y2="50" stroke="#0D2B52" stroke-width="3" stroke-linecap="round"/>
+      <line x1="80" y1="30" x2="120" y2="30" stroke="#0D2B52" stroke-width="3" stroke-linecap="round"/>
+      <line x1="100" y1="6" x2="100" y2="2" stroke="#0D2B52" stroke-width="4" stroke-linecap="round"/>
+    </svg>
+    <svg class="ran25-gear slow" width="48" height="48" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+  </div>
+
+  <h2 class="anim d1">گارانتی و خدمات پس از فروش</h2>
+  <h3 class="anim d2">گارانتی</h3>
+  <ul class="ran25-list ran25-pros anim d2">
+    <li>گارانتی رسمی شوفاژکار با پوشش ایرادات فنی</li>
+    <li>برچسب اصالت و کد رهگیری معتبر</li>
+    <li>پشتوانهٔ یکی از قدیمی‌ترین برندهای گرمایشی کشور</li>
+  </ul>
+  <h3 class="anim d3">خدمات پس از فروش</h3>
+  <ul class="ran25-list ran25-pros anim d3">
+    <li>تأمین قطعات یدکی اصلی</li>
+    <li>شبکهٔ گستردهٔ نمایندگان مجاز در سراسر کشور</li>
+    <li>پشتیبانی فنی و مشاورهٔ نصب و راه‌اندازی</li>
+  </ul>
+  <div class="ran25-box ran25-tip anim d4">
+    <strong>نکته</strong>
+    برای حفظ اعتبار گارانتی، نصب و سرویس پکیج را به افراد دارای صلاحیت بسپارید و فاکتور خرید و کارت گارانتی را نزد خود نگه دارید.
+  </div>
+
+  <!-- 12. BUYING GUIDE -->
+  <h2 class="anim d1">راهنمای خرید پکیج زمینی P7</h2>
+  <p>پیش از خرید، موارد زیر را بررسی کنید تا انتخابی مطمئن و بدون پشیمانی داشته باشید:</p>
+  <ul class="ran25-list anim d2">
+    <li>تطبیق ظرفیت حرارتی پکیج با متراژ و اتلاف حرارتی ساختمان</li>
+    <li>اطمینان از اصالت کالا و وجود برچسب گارانتی شوفاژکار</li>
+    <li>بررسی سالم بودن مشعل، پمپ و منبع آبگرم</li>
+    <li>هماهنگی قطر دودکش و مسیر تخلیهٔ دود با شرایط ساختمان</li>
+    <li>اطمینان از تأمین گاز شهری استاندارد و برق پایدار</li>
+  </ul>
+  <div class="ran25-box ran25-good anim d3">
+    <strong>پیشنهاد</strong>
+    خرید از فروشگاه‌های معتبر مانند <a href="https://shofazh.com/">شوفاژ دات کام</a> تضمین‌کنندهٔ اصالت کالا، گارانتی واقعی و دسترسی به خدمات پس از فروش است. برای انتخاب ظرفیت درست، از <a href="https://shofazh.com/shofazh-calculator.html">محاسبه‌گر ظرفیت حرارتی رایگان</a> استفاده کنید.
+  </div>
+
+  <!-- 13. FAQ -->
+  <h2 class="anim d1">سوالات متداول</h2>
+  <div class="ran25-faq anim d2">
+    <details><summary>پکیج زمینی شوفاژکار P7 چند پره است؟</summary><div class="ans">این مدل دارای دیگ چدنی ۷ پره است و به همین دلیل بیشترین ظرفیت حرارتی را در میان مدل‌های P5، P6 و P7 ارائه می‌دهد.</div></details>
+    <details><summary>ظرفیت حرارتی P7 چقدر است؟</summary><div class="ans">ظرفیت حرارتی اسمی آن حدود ۴۶٫۲ کیلووات معادل تقریبی ۳۹٬۷۰۰ کیلوکالری بر ساعت است.</div></details>
+    <details><summary>این پکیج با چه سوختی کار می‌کند؟</summary><div class="ans">پکیج زمینی P7 با گاز طبیعی شهری کار می‌کند.</div></details>
+    <details><summary>آیا P7 آبگرم بهداشتی تولید می‌کند؟</summary><div class="ans">بله، این محصول به منبع کویل‌دار مجهز است و علاوه بر گرمایش، آبگرم بهداشتی را به‌صورت آنی تأمین می‌کند.</div></details>
+    <details><summary>پکیج زمینی برای چه متراژی مناسب است؟</summary><div class="ans">مدل P7 برای ساختمان‌های مسکونی و تجاری متوسط تا بزرگ مناسب است؛ برای تعیین دقیق، متراژ و عایق‌بندی ساختمان را با محاسبه‌گر ظرفیت حرارتی بررسی کنید.</div></details>
+    <details><summary>تفاوت پکیج زمینی با پکیج دیواری چیست؟</summary><div class="ans">پکیج زمینی با دیگ چدنی، عمر و ظرفیت بالاتری دارد و برای فضاهای بزرگ‌تر مناسب است؛ پکیج دیواری سبک‌تر و برای واحدهای کوچک اقتصادی‌تر است.</div></details>
+    <details><summary>قطر دودکش مورد نیاز چقدر است؟</summary><div class="ans">قطر دودکش این پکیج ۲۰۰ میلی‌متر است و باید کشش کافی و آب‌بندی مناسب داشته باشد.</div></details>
+    <details><summary>گارانتی و خدمات پس از فروش چگونه است؟</summary><div class="ans">این محصول با گارانتی رسمی شوفاژکار و شبکهٔ گستردهٔ خدمات پس از فروش و تأمین قطعات یدکی عرضه می‌شود.</div></details>
+  </div>
+
+  <!-- 14. CONCLUSION -->
+  <h2 class="anim d1">جمع‌بندی نهایی</h2>
+  <p>پکیج زمینی شوفاژکار P7 با دیگ چدنی ۷ پره، ظرفیت حرارتی حدود ۴۶٫۲ کیلووات و توان تأمین همزمان گرمایش و آبگرم بهداشتی، یکی از انتخاب‌های مطمئن برای موتورخانهٔ ساختمان‌های مسکونی و تجاری متوسط تا بزرگ است. یکپارچگی اجزا، مقاومت بالای بدنهٔ چدنی و گواهینامه‌های کیفیت، کارکردی پایدار و ماندگار را تضمین می‌کنند.</p>
+  <p>اگر به دنبال سیستمی بادوام با پشتوانهٔ برند معتبر شوفاژکار، گارانتی اصلی و خدمات پس از فروش گسترده هستید، P7 گزینه‌ای ارزشمند خواهد بود؛ به‌شرط آنکه ظرفیت آن را با متراژ ساختمان تطبیق دهید و سرویس دوره‌ای را جدی بگیرید. برای انتخاب دقیق ظرفیت، حتماً پیش از خرید از محاسبه‌گر رایگان شوفاژ دات کام استفاده کنید.</p>
+
+  <!-- 15. RELATED + CTA -->
+  <div class="ran25-related anim d1">
+    <h3>محصولات و مطالب مرتبط</h3>
+    <ul>
+      <li><a href="https://shofazh.com/product-category/garmayesh/package/">همه پکیج‌های زمینی و دیواری</a></li>
+      <li><a href="https://shofazh.com/product-category/garmayesh/dig/">دیگ چدنی و فولادی موتورخانه</a></li>
+      <li><a href="https://shofazh.com/product-category/garmayesh/burner/chauffagekar-burner/">مشعل‌های شوفاژکار</a></li>
+      <li><a href="https://shofazh.com/product-category/garmayesh/">تجهیزات گرمایشی موتورخانه</a></li>
+      <li><a href="https://shofazh.com/shofazh-calculator.html">محاسبه‌گر ظرفیت حرارتی رایگان</a></li>
+      <li><a href="https://shofazh.com/">صفحه اصلی شوفاژ دات کام</a></li>
+    </ul>
+  </div>
+
+  <div class="ran25-cta anim d1">
+    <h2>همین حالا پکیج زمینی شوفاژکار P7 را تهیه کنید</h2>
+    <p>کیفیت شوفاژکار با ضمانت اصالت و خدمات پس از فروش گسترده</p>
+    <ul class="ran25-cta-feats">
+      <li>ضمانت اصالت کالا</li>
+      <li>گارانتی رسمی شوفاژکار</li>
+      <li>خدمات پس از فروش</li>
+      <li>ارسال سریع</li>
+    </ul>
+    <a class="ran25-btn" href="https://shofazh.com/product/package-chauffagekar-p7/">مشاهده و خرید محصول</a>
+  </div>
+
+</div>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "پکیج زمینی شوفاژکار P7",
+  "image": "https://shofazh.com/wp-content/uploads/2022/05/web5.webp",
+  "description": "پکیج زمینی شوفاژکار P7 با دیگ چدنی ۷ پره و ظرفیت حرارتی اسمی حدود ۴۶.۲ کیلووات (≈ ۳۹۷۰۰ کیلوکالری بر ساعت)؛ تأمین همزمان گرمایش و آبگرم بهداشتی با منبع کویل‌دار، مناسب موتورخانهٔ ساختمان‌های مسکونی و تجاری متوسط تا بزرگ.",
+  "sku": "CHK-P7",
+  "mpn": "P7",
+  "brand": {
+    "@type": "Brand",
+    "name": "شوفاژکار"
+  },
+  "category": "پکیج زمینی",
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.7",
+    "reviewCount": "36"
+  },
+  "offers": {
+    "@type": "Offer",
+    "url": "https://shofazh.com/product/package-chauffagekar-p7/",
+    "priceCurrency": "IRR",
+    "availability": "https://schema.org/InStock",
+    "seller": {
+      "@type": "Organization",
+      "name": "شوفاژ دات کام"
+    }
+  }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "پکیج زمینی شوفاژکار P7 چند پره است؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "این مدل دارای دیگ چدنی ۷ پره است و به همین دلیل بیشترین ظرفیت حرارتی را در میان مدل‌های P5، P6 و P7 ارائه می‌دهد."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "ظرفیت حرارتی P7 چقدر است؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "ظرفیت حرارتی اسمی آن حدود ۴۶.۲ کیلووات معادل تقریبی ۳۹۷۰۰ کیلوکالری بر ساعت است."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "این پکیج با چه سوختی کار می‌کند؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "پکیج زمینی P7 با گاز طبیعی شهری کار می‌کند."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "آیا P7 آبگرم بهداشتی تولید می‌کند؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "بله، این محصول به منبع کویل‌دار مجهز است و علاوه بر گرمایش، آبگرم بهداشتی را به‌صورت آنی تأمین می‌کند."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "پکیج زمینی برای چه متراژی مناسب است؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "مدل P7 برای ساختمان‌های مسکونی و تجاری متوسط تا بزرگ مناسب است؛ برای تعیین دقیق، متراژ و عایق‌بندی ساختمان را با محاسبه‌گر ظرفیت حرارتی بررسی کنید."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "تفاوت پکیج زمینی با پکیج دیواری چیست؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "پکیج زمینی با دیگ چدنی، عمر و ظرفیت بالاتری دارد و برای فضاهای بزرگ‌تر مناسب است؛ پکیج دیواری سبک‌تر و برای واحدهای کوچک اقتصادی‌تر است."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "قطر دودکش مورد نیاز چقدر است؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "قطر دودکش این پکیج ۲۰۰ میلی‌متر است و باید کشش کافی و آب‌بندی مناسب داشته باشد."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "گارانتی و خدمات پس از فروش چگونه است؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "این محصول با گارانتی رسمی شوفاژکار و شبکهٔ گستردهٔ خدمات پس از فروش و تأمین قطعات یدکی عرضه می‌شود."
+      }
+    }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "خانه",
+      "item": "https://shofazh.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "تجهیزات گرمایشی",
+      "item": "https://shofazh.com/product-category/garmayesh/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "پکیج زمینی",
+      "item": "https://shofazh.com/product-category/garmayesh/package/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 4,
+      "name": "پکیج زمینی شوفاژکار P7",
+      "item": "https://shofazh.com/product/package-chauffagekar-p7/"
+    }
+  ]
+}
+</script>
+
+
+
