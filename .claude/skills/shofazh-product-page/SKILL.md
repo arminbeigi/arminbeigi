@@ -1,6 +1,6 @@
 ---
 name: shofazh-product-page
-description: Build a complete SEO + GEO product page (Persian) for shofazh.com products using the established RAN25 template. Use when user provides product name, URL, competitor brand, image, and category. Hands the user an image-generation prompt and pauses for them to supply the photo, then produces WordPress-ready HTML with animations, schema markup, and a separate SEO metadata file.
+description: Build a complete SEO + GEO product page (Persian) for shofazh.com products using the established RAN25 template. Requires product name, WordPress post-id, URL, competitor brand, image, and category. Hands the user an image-generation prompt and pauses for them to supply the photo, then produces WordPress-ready HTML with animations, schema markup, and a separate SEO metadata file. Auto-publishes to shofazh.com via GitHub Actions when post-id is provided.
 ---
 
 # Shofazh.com Product Page Builder
@@ -18,12 +18,21 @@ Ask in this exact order:
 - question: "نام کامل محصول چیه؟ (مثلاً: مشعل گازوئیلی ایران رادیاتور PGN0)"
 - Free text via "Other" option only — provide 2 placeholder options like "مشعل گازسوز" / "مشعل گازوئیلی" so user can pick Other to type.
 
-**Question 2 — لینک صفحه محصول**
+**Question 2 — شناسه وردپرس (post-id) ⚠️ MANDATORY — ask this before anything else**
+- header: "Post ID"
+- question: "شناسه عددی صفحه محصول در وردپرس چیه؟ بدون این، محتوا روی سایت منتشر نمی‌شه.\n\nبرای پیدا کردنش: پنل وردپرس → محصولات → روی محصول کلیک کن → در URL بالای مرورگر عدد بعد از post= رو ببین (مثلاً: post=1234)"
+- options:
+  - "بعداً اضافه می‌کنم (بدون انتشار خودکار)"
+- User types the ID number directly via "Other"
+- If user skips or says "بعداً": record post_id as null in wp-product-map.json and warn the user that auto-publish will NOT happen until they add the ID
+- ⛔ DO NOT proceed to Q3 without recording this answer (null or a number)
+
+**Question 3 — لینک صفحه محصول**
 - header: "لینک محصول"
 - question: "لینک صفحه محصول در shofazh.com چیه؟"
 - Same pattern — user types via Other.
 
-**Question 3 — دسته‌بندی محصول**
+**Question 4 — دسته‌بندی محصول**
 - header: "دسته‌بندی"
 - question: "محصول در کدوم دسته‌بندی قرار می‌گیره؟"
 - Before asking: infer the most likely category from the product name provided in Q1 (e.g. if name contains "گازسوز" → مشعل گازسوز, "گازوئیل" → مشعل گازوئیلی, "دوگانه" → مشعل دوگانه‌سوز, "پکیج" → پکیج دیواری, "دیگ" → دیگ چدنی, etc.)
@@ -31,7 +40,7 @@ Ask in this exact order:
   - "[حدس دسته‌بندی از روی نام محصول]" — e.g. "مشعل گازسوز (پیشنهاد)" (accent color per type: گازسوز→blue, گازوئیلی→red, دوگانه‌سوز→orange, others→blue)
   - "سایر" (user types via Other)
 
-**Question 4 — برند رقیب برای مقایسه**
+**Question 5 — برند رقیب برای مقایسه**
 - header: "برند رقیب"
 - question: "با کدوم برند مقایسه بشه؟"
 - options:
@@ -40,13 +49,13 @@ Ask in this exact order:
   - "ایران رادیاتور" (اگه محصول از برند دیگه‌ست)
   - "بدون مقایسه برند خاص"
 
-**Question 5 — لینک عکس محصول (مرجع برای پرامپت)**
+**Question 6 — لینک عکس محصول (مرجع برای پرامپت)**
 - header: "عکس محصول"
 - question: "لینک عکس محصول رو بده (به‌عنوان مرجع برای پرامپت تصویر)"
 - User types URL via Other.
 - NOTE: This URL is ONLY a reference for writing the image prompt in Step 2b. It is NOT the final image. Never treat it as the finished product photo, and never skip the Step 2b pause just because this URL exists — the final image always comes from the user after Step 2b.
 
-**Question 6 — تاکید ویژه (اختیاری)**
+**Question 7 — تاکید ویژه (اختیاری)**
 - header: "تاکید ویژه"
 - question: "ویژگی خاص یا مخاطب هدف ویژه‌ای داری که در محتوا تاکید بشه؟"
 - options:
@@ -54,14 +63,6 @@ Ask in this exact order:
   - "تجاری و اداری"
   - "صنعتی و کارخانه"
   - "بدون تاکید خاص"
-
-**Question 7 — شناسه وردپرس (post-id)**
-- header: "Post ID"
-- question: "شناسه عددی صفحه محصول در وردپرس چیه؟ برای پیدا کردنش: پنل وردپرس → محصولات → روی محصول کلیک کن → در URL بالای مرورگر عدد بعد از post= رو ببین (مثلاً: post=1234)"
-- options:
-  - "بعداً اضافه می‌کنم (بدون انتشار خودکار)"
-- User can also type the ID number directly via "Other"
-- If user skips or says "بعداً": record post_id as null in wp-product-map.json (Action will skip publishing until ID is added)
 
 After all 7 answers are collected, summarize them in one short Persian message, then begin the workflow. Run Steps 1–2 automatically, then **STOP at Step 2b**: present the image prompt(s) as the final message of that turn and end the turn. Do NOT generate content, build the file, or call any further tools until the user replies with the finished images. After the images arrive, run the remaining steps without further confirmation.
 
@@ -303,18 +304,32 @@ Embed inside `<script type="application/ld+json">` blocks:
 - Include the WordPress override block (`!important` rules) at the end
 
 ### Step 6: Save, Commit, Push
-- File path: `[product-slug]-product-content.html` (e.g. `pgn0-product-content.html`)
-- Also commit the SEO metadata file created in Step 3b: `[product-slug]-seo.md`
-- Slug: lowercase Latin transliteration of product model
-- **Update `wp-product-map.json`**: Read the file, add/update the entry `"[slug]": [post_id]` (use `null` if user skipped), write back and stage it
-- Commit message format:
-  ```
-  Add product page: [Product Name]
 
-  https://claude.ai/code/session_<session_id>
-  ```
-- Push to current working branch (do NOT switch branches)
-- After push, if post_id was provided, inform user: "GitHub Action شروع به انتشار روی shofazh.com کرد — چند ثانیه صبر کنید و تب Actions در گیت‌هاب رو چک کنید."
+⛔ **HARD REQUIREMENT**: `wp-product-map.json` MUST be updated before committing. Do NOT push without completing this step.
+
+1. **Update `wp-product-map.json`** (FIRST — before anything else):
+   - Read the current `wp-product-map.json` from disk
+   - Add or update the entry: `"[slug]": [post_id]` (use `null` if user chose "بعداً")
+   - Write the file back to disk
+   - Verify the entry is in the file before proceeding
+
+2. **Stage all files**:
+   - `[product-slug]-product-content.html`
+   - `[product-slug]-seo.md`
+   - `wp-product-map.json`
+
+3. **Commit** with message:
+   ```
+   Add product page: [Product Name]
+
+   https://claude.ai/code/session_<session_id>
+   ```
+
+4. **Push** to current working branch (do NOT switch branches)
+
+5. **Inform user**:
+   - If post_id was provided: "GitHub Action شروع به انتشار روی shofazh.com کرد — چند ثانیه صبر کنید و تب Actions در گیت‌هاب رو چک کنید."
+   - If post_id is null: "⚠️ post-id ثبت نشد — صفحه روی سایت منتشر نمی‌شه. برای انتشار، post-id رو بده تا wp-product-map.json رو آپدیت کنم."
 
 ## Output to User
 
