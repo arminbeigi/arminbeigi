@@ -122,19 +122,20 @@ def group_digits(n) -> str:
 
 
 # ─────────────────────────── چیدمان و کالیبراسیون ───────────────────────────
-# پیش‌فرض برای چک صیاد جدید (تقریبی) — همه بر حسب میلی‌متر از گوشه‌ی بالا-راست.
-# x = فاصله از لبه‌ی راست (چون متن راست‌چین است، x نقطه‌ی شروع از راست است)
-# هر فیلد: x, y (از بالا), اندازه‌ی فونت (pt)
+# کالیبره‌شده برای چک صیادی استاندارد بانک مرکزی ایران (200×83 میلی‌متر).
+# x = فاصله از لبه‌ی راست (چون متن راست‌چین است)
+# y = فاصله از لبه‌ی بالا
+# هر فیلد: x, y (میلی‌متر), اندازه‌ی فونت (pt)
 DEFAULT_CONFIG = {
-    "page": {"w": 195.0, "h": 90.0},   # ابعاد برگه‌ی چک (میلی‌متر)
-    "offset": {"x": 0.0, "y": 0.0},    # جابجایی کلی برای کالیبراسیون پرینتر
+    "page": {"w": 200.0, "h": 83.0},
+    "offset": {"x": 0.0, "y": 0.0},
     "fields": {
-        "date":         {"x": 35.0,  "y": 14.0, "size": 11, "enabled": True},
-        "payee":        {"x": 165.0, "y": 28.0, "size": 12, "enabled": True},
-        "amount_words": {"x": 175.0, "y": 41.0, "size": 11, "enabled": True},
-        "amount_num":   {"x": 60.0,  "y": 28.0, "size": 12, "enabled": True},
-        "sayad_id":     {"x": 150.0, "y": 66.0, "size": 12, "enabled": True},
-        "description":  {"x": 120.0, "y": 54.0, "size": 10, "enabled": True},
+        "date":         {"x": 26.0,  "y": 9.0,  "size": 11, "enabled": True},
+        "amount_num":   {"x": 14.0,  "y": 19.5, "size": 13, "enabled": True},
+        "payee":        {"x": 55.0,  "y": 25.0, "size": 11, "enabled": True},
+        "amount_words": {"x": 55.0,  "y": 35.0, "size": 10, "enabled": True},
+        "description":  {"x": 55.0,  "y": 47.0, "size": 10, "enabled": True},
+        "sayad_id":     {"x": 100.0, "y": 63.0, "size": 10, "enabled": True},
     },
 }
 
@@ -177,14 +178,35 @@ def build_values(data: dict) -> dict:
     }
 
 
-# ─────────────────────────── تولید PDF ───────────────────────────
-def _font_path():
-    here = os.path.dirname(os.path.abspath(__file__))
-    p = os.path.join(here, "assets", "fonts", "Vazirmatn-Bold.ttf")
+# ─────────────────────────── فونت‌ها ───────────────────────────
+FONTS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "fonts")
+
+AVAILABLE_FONTS = {
+    "Vazirmatn":  {"file": "Vazirmatn-Bold.ttf",  "label": "وزیرمتن (پیش‌فرض)"},
+    "Sahel":      {"file": "Sahel-Bold.ttf",       "label": "ساحل"},
+    "Shabnam":    {"file": "Shabnam-Bold.ttf",      "label": "شبنم"},
+    "Samim":      {"file": "Samim-Bold.ttf",        "label": "صمیم"},
+}
+
+
+def get_available_fonts() -> dict[str, str]:
+    """فونت‌های موجود: {key: label}. فقط فونت‌هایی که فایلشان وجود دارد."""
+    result = {}
+    for key, info in AVAILABLE_FONTS.items():
+        if os.path.exists(os.path.join(FONTS_DIR, info["file"])):
+            result[key] = info["label"]
+    return result
+
+
+def _font_path(font_key: str = "Vazirmatn"):
+    info = AVAILABLE_FONTS.get(font_key, AVAILABLE_FONTS["Vazirmatn"])
+    p = os.path.join(FONTS_DIR, info["file"])
     return p if os.path.exists(p) else None
 
 
-def generate_pdf(data: dict, config: dict, out_path: str = None) -> str:
+# ─────────────────────────── تولید PDF ───────────────────────────
+def generate_pdf(data: dict, config: dict, out_path: str = None,
+                 font_key: str = "Vazirmatn") -> str:
     """تولید PDF با متنِ چک در مختصات کالیبره‌شده (پس‌زمینه خالی)."""
     from reportlab.pdfgen import canvas
     from reportlab.lib.units import mm
@@ -196,11 +218,15 @@ def generate_pdf(data: dict, config: dict, out_path: str = None) -> str:
     def fa(t):
         return get_display(arabic_reshaper.reshape(str(t)))
 
-    fp = _font_path()
+    fp = _font_path(font_key)
     font_name = "Helvetica"
+    reg_name = f"YaraChq_{font_key}"
     if fp:
-        pdfmetrics.registerFont(TTFont("Vazir", fp))
-        font_name = "Vazir"
+        try:
+            pdfmetrics.getFont(reg_name)
+        except KeyError:
+            pdfmetrics.registerFont(TTFont(reg_name, fp))
+        font_name = reg_name
 
     if not out_path:
         out_path = os.path.join(tempfile.gettempdir(), "yara_cheque.pdf")
@@ -217,8 +243,6 @@ def generate_pdf(data: dict, config: dict, out_path: str = None) -> str:
         if not text:
             continue
         c.setFont(font_name, field["size"])
-        # field["x"] = فاصله‌ی لبه‌ی راستِ متن از لبه‌ی راستِ کاغذ (میلی‌متر).
-        # نقطه‌ی راستِ متن از چپ = pw - (x + offset). y از بالا → reportlab از پایین.
         right_anchor = pw - (field["x"] + ox)
         y_from_bottom = ph - (field["y"] + oy)
         c.drawRightString(right_anchor * mm, y_from_bottom * mm, fa(text))

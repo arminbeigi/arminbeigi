@@ -1,5 +1,6 @@
 ; نصاب گرافیکی «یارا — دستیار هوشمند کسب‌وکار» — ساخته‌شده با NSIS
-; این فایل توسط build_on_linux.sh کامپایل می‌شود (مسیرها نسبی به پوشه‌ی build).
+; پشتیبانی از آپدیت: اگر نسخه‌ی قبلی نصب باشد، روی همان مسیر بروزرسانی می‌شود.
+; تنظیمات و لاگین در %APPDATA%/YaraPro هستند و دست نمی‌خورند.
 Unicode true
 !include "MUI2.nsh"
 
@@ -46,21 +47,35 @@ VIAddVersionKey /LANG=1065 "LegalCopyright" "${COMPANY}"
 
 !insertmacro MUI_LANGUAGE "Farsi"
 
-; اجرای برنامه از صفحه‌ی پایانی (با نقل‌قول صحیح مسیرهای دارای فاصله)
+; اجرای برنامه از صفحه‌ی پایانی
 Function LaunchApp
   SetOutPath "$INSTDIR"
   Exec '"$INSTDIR\python\pythonw.exe" "$INSTDIR\run_gui.py"'
 FunctionEnd
 
 ; ============================================================
-;   بخش نصب
+;   بخش نصب (نصب تازه + آپدیت روی نسخه‌ی قبلی)
 ; ============================================================
 Section "Install"
+  ; بستن برنامه‌ی قبلی اگر در حال اجراست
+  nsExec::ExecToLog 'taskkill /F /IM pythonw.exe'
+  Sleep 1000
+
   SetOutPath "$INSTDIR"
+
+  ; حذف فایل‌های قدیمی قبل از کپی نسخه‌ی جدید
+  ; (تنظیمات در %APPDATA% هستند و دست نمی‌خورند)
+  RMDir /r "$INSTDIR\python"
+  RMDir /r "$INSTDIR\gui"
+  RMDir /r "$INSTDIR\modules"
+  RMDir /r "$INSTDIR\assets"
+  Delete "$INSTDIR\run_gui.py"
+  Delete "$INSTDIR\run_gui.pyw"
+
   ; کل محتوای برنامه (پایتون باندل‌شده + کد + آیکن)
   File /r "payload\*"
 
-  ; میانبر دسکتاپ
+  ; میانبر دسکتاپ (بازنویسی میانبر قبلی)
   CreateShortcut "$DESKTOP\${APPNAME}.lnk" "$INSTDIR\python\pythonw.exe" '"$INSTDIR\run_gui.py"' "$INSTDIR\assets\icon.ico" 0
 
   ; میانبر منوی استارت
@@ -88,8 +103,12 @@ SectionEnd
 ;   بخش حذف
 ; ============================================================
 Section "Uninstall"
+  nsExec::ExecToLog 'taskkill /F /IM pythonw.exe'
+  Sleep 500
+
   Delete "$DESKTOP\${APPNAME}.lnk"
   RMDir /r "$SMPROGRAMS\${APPNAME}"
   RMDir /r "$INSTDIR"
   DeleteRegKey HKCU "${UNINSTKEY}"
+  ; تنظیمات در %APPDATA%/YaraPro باقی می‌مانند (حذف نمی‌شوند)
 SectionEnd

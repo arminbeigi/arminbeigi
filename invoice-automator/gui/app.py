@@ -759,6 +759,27 @@ class InvoiceApp(_AppBase):
         add_field("sayad_id", "شناسه صیاد (۱۶ رقم)")
         add_field("description", "بابت")
 
+        # انتخاب فونت
+        available = chq.get_available_fonts()
+        if len(available) > 1:
+            ctk.CTkLabel(form, text="فونت چاپ", font=_font(12, "bold"),
+                         text_color=COLORS["text_dim"], anchor="e").pack(
+                anchor="e", padx=16, pady=(10, 2), fill="x")
+            font_labels = list(available.values())
+            font_keys = list(available.keys())
+            self._chq_font_keys = font_keys
+            saved_font = self.settings.get("cheque", {}).get("font", "Vazirmatn")
+            saved_idx = font_keys.index(saved_font) if saved_font in font_keys else 0
+            self._chq_font_menu = ctk.CTkOptionMenu(
+                form, values=font_labels, font=_font(12),
+                fg_color=COLORS["input"], button_color=COLORS["accent"],
+                command=lambda _: self._chq_refresh())
+            self._chq_font_menu.set(font_labels[saved_idx])
+            self._chq_font_menu.pack(fill="x", padx=16)
+        else:
+            self._chq_font_keys = list(available.keys()) or ["Vazirmatn"]
+            self._chq_font_menu = None
+
         # مبلغ به حروف (زنده)
         ctk.CTkLabel(form, text="مبلغ به حروف:", font=_font(11, "bold"),
                      text_color=COLORS["text_dim"], anchor="e").pack(anchor="e", padx=16, pady=(12, 2), fill="x")
@@ -790,6 +811,16 @@ class InvoiceApp(_AppBase):
 
         self._chq_refresh()
 
+    def _chq_selected_font(self) -> str:
+        if hasattr(self, "_chq_font_menu") and self._chq_font_menu:
+            label = self._chq_font_menu.get()
+            from gui import cheque as chq
+            fonts = chq.get_available_fonts()
+            for key, lbl in fonts.items():
+                if lbl == label:
+                    return key
+        return self._chq_font_keys[0] if hasattr(self, "_chq_font_keys") and self._chq_font_keys else "Vazirmatn"
+
     def _chq_data(self):
         from gui import cheque as chq
         amount = self._chq_vars["amount"].get().replace(",", "").replace("،", "").strip()
@@ -806,12 +837,87 @@ class InvoiceApp(_AppBase):
             "description": self._chq_vars["description"].get().strip(),
         }
 
+    def _chq_draw_sayad_bg(self, cv, x0, y0, w, h, scale):
+        """رسم پس‌زمینه‌ی چک صیادی خام روی Canvas."""
+        lc = "#b8bfce"
+        lc2 = "#d0d5e0"
+        fl = "#fafbfd"
+        ft = (_FONT_FAMILY, max(7, int(9 * scale / 3)))
+        ft_sm = (_FONT_FAMILY, max(6, int(7 * scale / 3)))
+
+        # پس‌زمینه‌ی چک
+        cv.create_rectangle(x0, y0, x0 + w, y0 + h, outline=lc, fill=fl, width=2)
+
+        # نوار بالا (هدر بانک)
+        hdr_h = h * 0.07
+        cv.create_rectangle(x0, y0, x0 + w, y0 + hdr_h, outline="", fill="#e8ecf4")
+        cv.create_text(x0 + w / 2, y0 + hdr_h / 2, text="چک صیادی بانکی",
+                       fill="#8892a8", font=ft, anchor="center")
+
+        # ── ردیف تاریخ (بالا-راست) ──
+        ty = y0 + h * 0.09
+        tx_start = x0 + w - w * 0.04
+        box_w = w * 0.065
+        box_h = h * 0.10
+        cv.create_text(tx_start, ty + box_h / 2, text="تاریخ:", fill="#8892a8",
+                       font=ft_sm, anchor="e")
+        for i, lbl in enumerate(["روز", "ماه", "سال"]):
+            bx = tx_start - w * 0.09 - i * (box_w + w * 0.01)
+            cv.create_rectangle(bx - box_w, ty, bx, ty + box_h, outline=lc2, fill="#ffffff")
+            cv.create_text(bx - box_w / 2, ty - h * 0.02, text=lbl, fill="#aab2c4",
+                           font=ft_sm, anchor="center")
+
+        # ── مبلغ عددی (بالا-چپ) ──
+        amt_y = ty
+        amt_x = x0 + w * 0.03
+        amt_w = w * 0.22
+        cv.create_rectangle(amt_x, amt_y, amt_x + amt_w, amt_y + box_h,
+                            outline=lc2, fill="#ffffff")
+        cv.create_text(amt_x + amt_w + w * 0.01, amt_y + box_h / 2, text="مبلغ:",
+                       fill="#8892a8", font=ft_sm, anchor="w")
+
+        # ── ردیف «در وجه» ──
+        py = y0 + h * 0.28
+        cv.create_text(x0 + w - w * 0.04, py, text="بپردازید به:", fill="#8892a8",
+                       font=ft_sm, anchor="e")
+        line_x_start = x0 + w * 0.06
+        line_x_end = x0 + w - w * 0.20
+        cv.create_line(line_x_start, py + h * 0.04, line_x_end, py + h * 0.04,
+                       fill=lc2, dash=(3, 3))
+
+        # ── ردیف «مبلغ به حروف» ──
+        ay = y0 + h * 0.40
+        cv.create_text(x0 + w - w * 0.04, ay, text="مبلغ:", fill="#8892a8",
+                       font=ft_sm, anchor="e")
+        cv.create_line(line_x_start, ay + h * 0.04, x0 + w - w * 0.10, ay + h * 0.04,
+                       fill=lc2, dash=(3, 3))
+
+        # ── ردیف «بابت» ──
+        dy = y0 + h * 0.54
+        cv.create_text(x0 + w - w * 0.04, dy, text="بابت:", fill="#8892a8",
+                       font=ft_sm, anchor="e")
+        cv.create_line(line_x_start, dy + h * 0.04, x0 + w - w * 0.10, dy + h * 0.04,
+                       fill=lc2, dash=(3, 3))
+
+        # ── شناسه صیاد (پایین) ──
+        sy = y0 + h * 0.74
+        cv.create_text(x0 + w / 2, sy, text="شناسه صیاد:  ____  ____  ____  ____",
+                       fill="#aab2c4", font=ft_sm, anchor="center")
+
+        # ── نوار پایین (امضا) ──
+        sg_y = y0 + h * 0.85
+        cv.create_line(x0 + w * 0.04, sg_y, x0 + w * 0.30, sg_y, fill=lc2)
+        cv.create_text(x0 + w * 0.17, sg_y + h * 0.06, text="امضا و مهر",
+                       fill="#bcc3d2", font=ft_sm, anchor="center")
+        # شماره حساب
+        cv.create_text(x0 + w - w * 0.04, sg_y + h * 0.06, text="شماره حساب: ........................",
+                       fill="#c8ced9", font=ft_sm, anchor="e")
+
     def _chq_refresh(self):
         from gui import cheque as chq
         if not hasattr(self, "_chq_canvas"):
             return
         data = self._chq_data()
-        # مبلغ به حروف
         self._chq_words.configure(text=chq.amount_words(data["amount"], data["unit"]) or "—")
 
         cv = self._chq_canvas
@@ -822,11 +928,11 @@ class InvoiceApp(_AppBase):
         scale = (cw - 20) / pw
         ch = ph * scale
         x0, y0 = 10, 10
-        # قاب چک
-        cv.create_rectangle(x0, y0, x0 + pw * scale, y0 + ch, outline="#c9cede",
-                            fill="#ffffff", width=2)
-        cv.create_text(x0 + pw * scale - 8, y0 + 8, text="نمونه چک", anchor="ne",
-                      fill="#c9cede", font=(_FONT_FAMILY, 9))
+
+        # رسم پس‌زمینه‌ی چک صیادی
+        self._chq_draw_sayad_bg(cv, x0, y0, pw * scale, ch, scale)
+
+        # رسم مقادیر فیلدها روی چک
         values = chq.build_values(data)
         ox, oy = cfg["offset"]["x"], cfg["offset"]["y"]
         for key, f in cfg["fields"].items():
@@ -846,8 +952,14 @@ class InvoiceApp(_AppBase):
 
     def _chq_build_pdf(self):
         from gui import cheque as chq
+        font_key = self._chq_selected_font()
+        self.settings.setdefault("cheque", {})["font"] = font_key
         try:
-            return chq.generate_pdf(self._chq_data(), self._chq_cfg)
+            store.save_settings(self.settings)
+        except Exception:
+            pass
+        try:
+            return chq.generate_pdf(self._chq_data(), self._chq_cfg, font_key=font_key)
         except ImportError:
             messagebox.showerror("کتابخانه لازم",
                                  "برای تولید PDF نیاز به reportlab است (در نسخه‌ی ویندوزی باندل شده).")
