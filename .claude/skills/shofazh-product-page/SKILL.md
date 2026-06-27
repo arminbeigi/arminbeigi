@@ -75,7 +75,7 @@ After all 7 answers are collected, summarize them in one short Persian message, 
 > The product photo always comes from the user, after Step 2b. If you find yourself building the page without it, you skipped the gate.
 
 ### Step 1: Read Template
-Read `shofazh-product-template.html` from the repo root to load the exact CSS framework, structure, and animation standards. The `.ran25-wrap` CSS is the immutable shell — only content, image, and hotspot positions change per product.
+Read `shofazh-product-template.html` from the repo root. If that file doesn't exist, read `ran25-product-content.html` instead. Load the exact CSS framework, structure, and animation standards. The `.ran25-wrap` CSS is the immutable shell — only content, image, and hotspot positions change per product.
 
 ### Step 2: Product Analysis (جمع‌آوری اطلاعات از برند + کاتالوگ + تأیید کاربر)
 

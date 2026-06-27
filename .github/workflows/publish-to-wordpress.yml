@@ -37,12 +37,10 @@ jobs:
             exit 0
           fi
 
-          # اگر wp-product-map.json روی این branch نبود، از main یا branch اصلی می‌گیریم
+          # اگر wp-product-map.json روی این branch نبود، از main می‌گیریم
           if [ ! -f "wp-product-map.json" ]; then
-            echo "wp-product-map.json not on this branch — fetching from origin/main or fallback branch"
-            git show origin/main:wp-product-map.json > wp-product-map.json 2>/dev/null || \
-            git show origin/claude/unclear-request-xe89t7:wp-product-map.json > wp-product-map.json 2>/dev/null || \
-            echo "{}" > wp-product-map.json
+            echo "wp-product-map.json not on this branch — fetching from origin/main"
+            git show origin/main:wp-product-map.json > wp-product-map.json 2>/dev/null || echo "{}" > wp-product-map.json
           fi
 
           for file in $changed; do

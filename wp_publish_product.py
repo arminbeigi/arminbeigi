@@ -48,10 +48,6 @@ def _safe_json(response: requests.Response) -> dict:
         return {}
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-# قیمت و JSON-LD
-# ══════════════════════════════════════════════════════════════════════════════
-
 def fetch_product_price(post_id: int) -> str:
     """قیمت فعال محصول را از WooCommerce API می‌گیرد"""
     r = requests.get(f"{WC_API}/products/{post_id}", auth=AUTH, headers=HEADERS, timeout=15)
@@ -89,10 +85,6 @@ def inject_price_into_html(html: str, price: str) -> str:
     return re.sub(r'<script\s+type="application/ld\+json">(.*?)</script>',
                   patch_schema, html, flags=re.DOTALL)
 
-
-# ══════════════════════════════════════════════════════════════════════════════
-# SEO metadata
-# ══════════════════════════════════════════════════════════════════════════════
 
 def parse_seo_file(path: Path) -> dict:
     """فایل {slug}-seo.md تولیدشده توسط اسکیل را می‌خواند"""
@@ -154,10 +146,6 @@ def build_seo_meta(seo: dict) -> dict:
     return m
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-# انتشار
-# ══════════════════════════════════════════════════════════════════════════════
-
 def publish_to_wp(post_id: int, html_path: Path, seo: dict, dry_run: bool = False) -> bool:
     html = html_path.read_text(encoding="utf-8")
 
@@ -176,8 +164,6 @@ def publish_to_wp(post_id: int, html_path: Path, seo: dict, dry_run: bool = Fals
         print(f"  price     : {price or '—'}")
         return True
 
-    # WP REST API — content.raw حفظ <style> را تضمین می‌کند
-    # Elementor غیرفعال می‌شود تا WooCommerce template، content را در تب توضیحات نشان دهد
     meta_payload = {
         "_elementor_edit_mode": "",
         "_elementor_data":      "[]",
@@ -208,7 +194,6 @@ def publish_to_wp(post_id: int, html_path: Path, seo: dict, dry_run: bool = Fals
         print(f"   Elementor : غیرفعال")
         return True
 
-    # fallback: WC API (style ممکن است strip شود)
     print(f"   WP API ناموفق ({r.status_code}) — WC API را امتحان می‌کنیم")
     wc_meta = [{"key": k, "value": v} for k, v in meta_payload.items()]
     r2 = requests.post(
@@ -227,10 +212,6 @@ def publish_to_wp(post_id: int, html_path: Path, seo: dict, dry_run: bool = Fals
     return False
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-# جستجوی محصول
-# ══════════════════════════════════════════════════════════════════════════════
-
 def find_product(term: str) -> None:
     """post-id محصول را با جستجوی نام پیدا می‌کند"""
     print(f"\n🔍 جستجو: {term}")
@@ -247,10 +228,6 @@ def find_product(term: str) -> None:
             return
     print("محصولی پیدا نشد.")
 
-
-# ══════════════════════════════════════════════════════════════════════════════
-# CLI
-# ══════════════════════════════════════════════════════════════════════════════
 
 def main():
     parser = argparse.ArgumentParser(description="انتشار صفحه محصول شوفاژ دات کام")
