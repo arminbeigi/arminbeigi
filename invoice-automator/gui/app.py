@@ -1390,7 +1390,7 @@ class InvoiceApp(_AppBase):
                      font=_font(13), fg_color=COLORS["input"], justify="right",
                      border_color=COLORS["border"], corner_radius=8, height=38).grid(
             row=3, column=0, sticky="ew", padx=18)
-        ctk.CTkLabel(bcard, text="نام کوتاه در لینک (لاتین) — مثلاً shofazh  ⇐  yarapro.ir/factor/shofazh-1024-k7m9",
+        ctk.CTkLabel(bcard, text="نام کوتاه در لینک (لاتین) — مثلاً shofazh  ⇐  yarapro.ir/inv/shofazh-1024-k7m",
                      font=_font(11, "bold"), text_color=COLORS["text_dim"], anchor="e").grid(
             row=4, column=0, sticky="ew", padx=18, pady=(10, 2))
         self.business_slug_var = ctk.StringVar(value=biz.get("url_slug", ""))

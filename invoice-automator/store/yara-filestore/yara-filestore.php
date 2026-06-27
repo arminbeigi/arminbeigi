@@ -14,7 +14,7 @@ if (!defined('ABSPATH')) exit;
 
 define('YARA_FS_VER', '1.1.0');
 define('YARA_FS_DIR', 'yara-files');           // پوشه داخل uploads
-define('YARA_FS_RAND_LEN', 4);                 // طول بخش تصادفیِ لینک (غیرقابل‌حدس)
+define('YARA_FS_RAND_LEN', 3);                 // طول بخش تصادفیِ لینک (غیرقابل‌حدس)
 
 // ───────────────────────────── فعال‌سازی: جدول + پوشه + rewrite ─────────────────────────────
 register_activation_hook(__FILE__, 'yara_fs_activate');
@@ -54,11 +54,11 @@ function yara_fs_path() {
     return trailingslashit($up['basedir']) . YARA_FS_DIR;
 }
 
-// ───────────────────────────── Rewrite:  /factor/{slug}  (و /f/ برای سازگاری) ─────────────────────────────
+// ───────────────────────────── Rewrite:  /inv/{slug}  ─────────────────────────────
 add_action('init', 'yara_fs_add_rewrite');
 function yara_fs_add_rewrite() {
+    add_rewrite_rule('^inv/([A-Za-z0-9\-]+)/?$', 'index.php?yara_file=$matches[1]', 'top');
     add_rewrite_rule('^factor/([A-Za-z0-9\-]+)/?$', 'index.php?yara_file=$matches[1]', 'top');
-    add_rewrite_rule('^f/([A-Za-z0-9\-]+)/?$', 'index.php?yara_file=$matches[1]', 'top');
 }
 add_filter('query_vars', function ($v) { $v[] = 'yara_file'; return $v; });
 
@@ -144,7 +144,7 @@ function yara_fs_upload(WP_REST_Request $req) {
     if (!file_exists($dir)) wp_mkdir_p($dir);
 
     // لینکِ معنادار و قابل‌اعتماد + بخش تصادفیِ غیرقابل‌حدس:
-    //   factor/{business}-{serial}-{rand}
+    //   inv/{business}-{serial}-{rand}
     global $wpdb;
     $table = $wpdb->prefix . 'yara_files';
     $base = yara_fs_slug_base($business, $serial);
@@ -165,7 +165,7 @@ function yara_fs_upload(WP_REST_Request $req) {
         'license' => $license, 'device' => $device,
     ]);
 
-    $url = home_url('/factor/' . $token);
+    $url = home_url('/inv/' . $token);
     return yara_fs_json(true, ['url' => $url, 'token' => $token]);
 }
 
@@ -260,7 +260,7 @@ function yara_fs_admin_page() {
     echo '<table class="wp-list-table widefat fixed striped"><thead><tr>'
         . '<th>تاریخ</th><th>شماره فاکتور</th><th>مشتری</th><th>لینک</th><th>بازدید</th></tr></thead><tbody>';
     if ($rows) foreach ($rows as $r) {
-        $url = home_url('/factor/' . $r->token);
+        $url = home_url('/inv/' . $r->token);
         printf('<tr><td>%s</td><td>%s</td><td>%s</td><td><a href="%s" target="_blank">%s</a></td><td>%d</td></tr>',
             esc_html($r->created), esc_html($r->serial), esc_html($r->name),
             esc_url($url), esc_html($url), (int) $r->hits);
