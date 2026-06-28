@@ -20,6 +20,7 @@ import time
 import shutil
 import yaml
 import logging
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from pathlib import Path
 from watchdog.observers import Observer
@@ -87,62 +88,44 @@ def process_invoice(pdf_path: str, config: dict) -> dict:
         logger.error(f"❌ وردپرس: {e}")
         report["fail"].append(f"wordpress: {e}")
 
-    # ── ۳. پیامک کاوه‌نگار ──
-    try:
+    # ── ۳-۶. ارسال موازی (پیامک، واتساپ، بله، روبیکا) ──
+    def send_sms():
         sms = KavenegarSMS(config["kavenegar"])
-        r = sms.send_invoice_sms(phone, info, short_link)
-        if r.get("success"):
-            logger.info(f"✅ پیامک → {phone}")
-            report["ok"].append("sms")
-        else:
-            logger.warning(f"⚠️ پیامک: {r.get('error')}")
-            report["fail"].append(f"sms: {r.get('error')}")
-    except Exception as e:
-        logger.error(f"❌ پیامک: {e}")
-        report["fail"].append(f"sms: {e}")
+        return "sms", sms.send_invoice_sms(phone, info, short_link)
 
-    # ── ۴. واتساپ ──
-    try:
+    def send_whatsapp():
         wa = WhatsAppSender(config.get("whatsapp", {}))
         r = wa.send_invoice(phone, pdf_path, info, short_link)
-        if r.get("success"):
-            logger.info(f"✅ واتساپ → {phone}")
-            report["ok"].append("whatsapp")
-        else:
-            if r.get("fallback_link"):
-                logger.info(f"📎 واتساپ دستی: {r['fallback_link']}")
-            report["fail"].append(f"whatsapp: {r.get('error','')}")
-    except Exception as e:
-        logger.error(f"❌ واتساپ: {e}")
-        report["fail"].append(f"whatsapp: {e}")
+        if r.get("fallback_link"):
+            logger.info(f"📎 واتساپ دستی: {r['fallback_link']}")
+        return "whatsapp", r
 
-    # ── ۵. بله ──
-    try:
+    def send_bale():
         bale = BaleSender(config.get("bale", {}))
-        r = bale.send_invoice(phone, pdf_path, info, short_link)
-        if r.get("success"):
-            logger.info(f"✅ بله → {phone}")
-            report["ok"].append("bale")
-        else:
-            logger.warning(f"⚠️ بله: {r.get('error')}")
-            report["fail"].append(f"bale: {r.get('error','')}")
-    except Exception as e:
-        logger.error(f"❌ بله: {e}")
-        report["fail"].append(f"bale: {e}")
+        return "bale", bale.send_invoice(phone, pdf_path, info, short_link)
 
-    # ── ۶. روبیکا ──
-    try:
+    def send_rubika():
         rubika = RubikaSender(config.get("rubika", {}))
-        r = rubika.send_invoice(phone, pdf_path, info, short_link)
-        if r.get("success"):
-            logger.info(f"✅ روبیکا → {phone}")
-            report["ok"].append("rubika")
-        else:
-            logger.warning(f"⚠️ روبیکا: {r.get('error')}")
-            report["fail"].append(f"rubika: {r.get('error','')}")
-    except Exception as e:
-        logger.error(f"❌ روبیکا: {e}")
-        report["fail"].append(f"rubika: {e}")
+        return "rubika", rubika.send_invoice(phone, pdf_path, info, short_link)
+
+    labels = {"sms": "پیامک", "whatsapp": "واتساپ", "bale": "بله", "rubika": "روبیکا"}
+
+    with ThreadPoolExecutor(max_workers=4) as executor:
+        futures = {executor.submit(fn): fn.__name__ for fn in (send_sms, send_whatsapp, send_bale, send_rubika)}
+        for future in as_completed(futures):
+            try:
+                key, r = future.result()
+                label = labels.get(key, key)
+                if r.get("success"):
+                    logger.info(f"✅ {label} → {phone}")
+                    report["ok"].append(key)
+                else:
+                    logger.warning(f"⚠️ {label}: {r.get('error')}")
+                    report["fail"].append(f"{key}: {r.get('error','')}")
+            except Exception as e:
+                fn_name = futures[future]
+                logger.error(f"❌ {fn_name}: {e}")
+                report["fail"].append(f"{fn_name}: {e}")
 
     # ── ۷. انتقال فایل ──
     if config.get("general", {}).get("move_after_process", True):
@@ -191,6 +174,8 @@ class InvoiceHandler(FileSystemEventHandler):
                 process_invoice(path, self.config)
             except Exception as e:
                 logger.error(f"❌ خطا: {e}")
+        # آزادسازی حافظه بعد از پردازش
+        self._done.discard(key)
 
 
 def main():

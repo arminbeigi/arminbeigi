@@ -1,0 +1,614 @@
+<!-- ===== محاسبه‌گر ظرفیت حرارتی شوفاژکار ===== -->
+<section class="hc" dir="rtl" lang="fa">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap');
+
+.hc {
+  position: relative;
+  margin: 48px auto;
+  max-width: 1140px;
+  border-radius: 32px;
+  overflow: hidden;
+  font-family: 'Vazirmatn', 'IRANSans', 'Tahoma', sans-serif;
+  background: #fff;
+  box-shadow: 0 8px 48px rgba(4, 78, 41, .10), 0 0 0 1px rgba(4, 78, 41, .07);
+}
+
+/* ===== layout ===== */
+.hc-inner {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  align-items: center;
+  gap: 0;
+  min-height: 600px;
+}
+
+/* ===== left: text ===== */
+.hc-text {
+  padding: 52px 48px 52px 32px;
+}
+
+.hc-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #064e29;
+  background: #d1fae5;
+  border: 1px solid #6ee7b7;
+  margin-bottom: 18px;
+}
+.hc-tag .dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #059669;
+  animation: hcPulse 1.8s ease-in-out infinite;
+}
+@keyframes hcPulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(5,150,105,.5); }
+  60%      { box-shadow: 0 0 0 7px rgba(5,150,105,0); }
+}
+
+.hc h2 {
+  margin: 0 0 14px;
+  font-size: clamp(22px, 2.4vw, 30px);
+  font-weight: 900;
+  color: #052e16;
+  line-height: 1.5;
+}
+.hc h2 em { font-style: normal; color: #059669; }
+
+.hc-desc {
+  font-size: 15px;
+  line-height: 2;
+  color: #374151;
+  margin: 0 0 28px;
+  max-width: 520px;
+}
+
+/* feature list */
+.hc-features {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 32px;
+}
+.hc-feat {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  transition: transform .25s, box-shadow .25s;
+}
+.hc-feat:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(5,150,105,.12);
+}
+.hc-feat-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: #d1fae5;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  color: #059669;
+}
+.hc-feat-icon svg { width: 18px; height: 18px; }
+.hc-feat-body strong {
+  display: block; font-size: 13px; font-weight: 700; color: #052e16; margin-bottom: 3px;
+}
+.hc-feat-body span { font-size: 12px; color: #4b5563; line-height: 1.6; }
+
+/* CTA */
+.hc-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 30px;
+  border-radius: 999px;
+  font-size: 14.5px;
+  font-weight: 800;
+  color: #fff;
+  background: linear-gradient(90deg, #059669, #10b981);
+  box-shadow: 0 8px 28px rgba(5,150,105,.30);
+  text-decoration: none;
+  transition: transform .3s, box-shadow .3s;
+}
+.hc-cta:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 14px 36px rgba(5,150,105,.45);
+}
+.hc-cta svg { transition: transform .3s; }
+.hc-cta:hover svg { transform: translateX(-4px); }
+
+/* ===== right: phone mockup ===== */
+.hc-phone-wrap {
+  background: linear-gradient(145deg, #f0fdf4 0%, #dcfce7 60%, #bbf7d0 100%);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* decorative circles */
+.hc-phone-wrap::before,
+.hc-phone-wrap::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.hc-phone-wrap::before {
+  width: 280px; height: 280px;
+  background: radial-gradient(circle, rgba(16,185,129,.18) 0%, transparent 70%);
+  top: -80px; left: -60px;
+}
+.hc-phone-wrap::after {
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(5,150,105,.12) 0%, transparent 70%);
+  bottom: -60px; right: -40px;
+}
+
+/* phone frame */
+.hc-phone {
+  width: 290px;
+  background: #0d1f15;
+  border-radius: 44px;
+  padding: 12px;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.08),
+    0 32px 64px rgba(4, 78, 41, .35),
+    0 8px 24px rgba(0,0,0,.4);
+  position: relative;
+  z-index: 1;
+  animation: hcFloat 4s ease-in-out infinite;
+}
+@keyframes hcFloat {
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
+}
+
+/* notch */
+.hc-notch {
+  width: 100px; height: 26px;
+  background: #0d1f15;
+  border-radius: 0 0 18px 18px;
+  margin: 0 auto 10px;
+  position: relative;
+  z-index: 2;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.hc-notch-cam {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #1a3326;
+  border: 1.5px solid #20c997;
+}
+.hc-notch-speaker {
+  width: 40px; height: 4px; border-radius: 2px; background: #1a3326;
+}
+
+/* screen */
+.hc-screen {
+  background: #f8fffe;
+  border-radius: 34px;
+  overflow: hidden;
+  padding: 18px 16px 20px;
+}
+
+/* app status bar */
+.hc-status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: #374151;
+  margin-bottom: 14px;
+  padding: 0 4px;
+}
+.hc-status-time { font-size: 11px; color: #111; }
+.hc-status-icons { display: flex; gap: 4px; align-items: center; }
+.hc-status-icons svg { width: 12px; height: 12px; color: #374151; }
+
+/* app header */
+.hc-app-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+  padding: 10px 12px;
+  background: linear-gradient(90deg, #052e16, #064e29);
+  border-radius: 16px;
+}
+.hc-app-logo {
+  width: 32px; height: 32px;
+  background: #10b981;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+}
+.hc-app-logo svg { width: 18px; height: 18px; color: #fff; }
+.hc-app-title { font-size: 11.5px; font-weight: 800; color: #fff; }
+.hc-app-sub { font-size: 9px; color: rgba(255,255,255,.65); }
+
+/* calculator card */
+.hc-calc-card {
+  background: #fff;
+  border: 1.5px solid #d1fae5;
+  border-radius: 16px;
+  padding: 14px 12px;
+  margin-bottom: 10px;
+}
+.hc-calc-label {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #6b7280;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.hc-calc-label svg { width: 10px; height: 10px; color: #059669; }
+
+.hc-calc-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+  margin-bottom: 8px;
+}
+.hc-input-mini {
+  background: #f0fdf4;
+  border: 1px solid #a7f3d0;
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #052e16;
+  font-family: 'Vazirmatn', sans-serif;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+  outline: none;
+  transition: border-color .2s;
+}
+.hc-input-mini:focus { border-color: #059669; }
+.hc-input-mini::placeholder { color: #9ca3af; font-size: 10px; }
+
+.hc-select-mini {
+  background: #f0fdf4;
+  border: 1px solid #a7f3d0;
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #052e16;
+  font-family: 'Vazirmatn', sans-serif;
+  width: 100%;
+  box-sizing: border-box;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  text-align: center;
+  grid-column: 1 / -1;
+  transition: border-color .2s;
+}
+.hc-select-mini:focus { border-color: #059669; }
+
+.hc-calc-btn {
+  width: 100%;
+  padding: 10px;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(90deg, #059669, #10b981);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  font-family: 'Vazirmatn', sans-serif;
+  cursor: pointer;
+  transition: opacity .2s, transform .15s;
+  margin-top: 4px;
+}
+.hc-calc-btn:hover { opacity: .9; transform: scale(.98); }
+.hc-calc-btn:active { transform: scale(.96); }
+
+/* result */
+.hc-result {
+  background: linear-gradient(135deg, #052e16 0%, #064e29 100%);
+  border-radius: 16px;
+  padding: 14px 12px;
+  margin-bottom: 10px;
+  text-align: center;
+  display: none;
+}
+.hc-result.visible { display: block; animation: hcResultIn .4s ease; }
+@keyframes hcResultIn {
+  from { opacity: 0; transform: scale(.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.hc-result-label { font-size: 9px; color: rgba(255,255,255,.6); margin-bottom: 4px; }
+.hc-result-kw {
+  font-size: 28px;
+  font-weight: 900;
+  color: #4ade80;
+  line-height: 1;
+  margin-bottom: 2px;
+}
+.hc-result-kw span { font-size: 13px; font-weight: 500; color: rgba(255,255,255,.7); }
+.hc-result-btu { font-size: 10px; color: rgba(255,255,255,.5); margin-bottom: 10px; }
+.hc-result-rec {
+  background: rgba(74, 222, 128, .15);
+  border: 1px solid rgba(74, 222, 128, .3);
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 10px;
+  color: #86efac;
+  line-height: 1.6;
+}
+.hc-result-rec strong { color: #4ade80; }
+
+/* bottom tip */
+.hc-app-tip {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 12px;
+  padding: 8px 10px;
+  font-size: 9.5px;
+  color: #78350f;
+  line-height: 1.6;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+.hc-app-tip svg { width: 12px; height: 12px; color: #d97706; flex-shrink: 0; margin-top: 1px; }
+
+/* ===== responsive ===== */
+@media (max-width: 860px) {
+  .hc-inner {
+    grid-template-columns: 1fr;
+  }
+  .hc-phone-wrap {
+    padding: 36px 24px 40px;
+  }
+  .hc-text {
+    padding: 40px 28px 32px;
+    text-align: center;
+  }
+  .hc-features { grid-template-columns: 1fr; }
+  .hc-desc { margin: 0 auto 28px; }
+  .hc-cta { margin: 0 auto; }
+}
+@media (max-width: 420px) {
+  .hc { border-radius: 20px; }
+  .hc-phone { width: 260px; }
+}
+</style>
+
+<!-- phone-wrap first on mobile (visual top) via order -->
+<div class="hc-inner">
+
+  <!-- ===== متن ===== -->
+  <div class="hc-text">
+    <div class="hc-tag">
+      <span class="dot"></span>
+      ابزار هوشمند شوفاژکار
+    </div>
+
+    <h2>
+      ظرفیت حرارتی مورد نیاز<br>
+      ساختمان‌تان را <em>آنی محاسبه کنید</em>
+    </h2>
+
+    <p class="hc-desc">
+      با وارد کردن متراژ، ارتفاع سقف، میزان عایق‌کاری و موقعیت جغرافیایی، دقیقاً بفهمید چه ظرفیتی از دیگ یا پکیج نیاز دارید — بدون پیچیدگی، بدون خطا.
+    </p>
+
+    <div class="hc-features">
+      <div class="hc-feat">
+        <div class="hc-feat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+            <path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/>
+          </svg>
+        </div>
+        <div class="hc-feat-body">
+          <strong>محاسبه آنی</strong>
+          <span>نتیجه در کمتر از یک ثانیه</span>
+        </div>
+      </div>
+      <div class="hc-feat">
+        <div class="hc-feat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+            <circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/>
+          </svg>
+        </div>
+        <div class="hc-feat-body">
+          <strong>استاندارد ایران</strong>
+          <span>بر اساس اقلیم و استاندارد ملی</span>
+        </div>
+      </div>
+      <div class="hc-feat">
+        <div class="hc-feat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+            <rect x="3" y="3" width="18" height="18" rx="4"/>
+            <path d="M9 12h6M12 9v6"/>
+          </svg>
+        </div>
+        <div class="hc-feat-body">
+          <strong>پیشنهاد دیگ</strong>
+          <span>مناسب‌ترین مدل را معرفی می‌کند</span>
+        </div>
+      </div>
+      <div class="hc-feat">
+        <div class="hc-feat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+          </svg>
+        </div>
+        <div class="hc-feat-body">
+          <strong>مشاور متخصص</strong>
+          <span>مشاوره رایگان پس از محاسبه</span>
+        </div>
+      </div>
+    </div>
+
+    <a class="hc-cta" href="https://shofazh.com/#contact">
+      دریافت مشاوره رایگان
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/>
+      </svg>
+    </a>
+  </div>
+
+  <!-- ===== موکاپ گوشی ===== -->
+  <div class="hc-phone-wrap">
+    <div class="hc-phone">
+      <!-- notch -->
+      <div class="hc-notch">
+        <div class="hc-notch-cam"></div>
+        <div class="hc-notch-speaker"></div>
+        <div class="hc-notch-cam"></div>
+      </div>
+
+      <!-- screen -->
+      <div class="hc-screen">
+
+        <!-- status bar -->
+        <div class="hc-status">
+          <span class="hc-status-time">۹:۴۱</span>
+          <div class="hc-status-icons">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 1l22 22M16.72 11.06A10.94 10.94 0 0119 12.55M5 12.55a10.94 10.94 0 015.17-2.39M10.71 5.05A16 16 0 0122.56 9M1.42 9a15.91 15.91 0 014.7-2.88M8.53 16.11a6 6 0 016.95 0M12 20h.01"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="7" width="20" height="11" rx="2"/><path d="M22 11v3"/></svg>
+          </div>
+        </div>
+
+        <!-- app header -->
+        <div class="hc-app-header">
+          <div class="hc-app-logo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
+              <path d="M12 8v4l3 3"/>
+            </svg>
+          </div>
+          <div>
+            <div class="hc-app-title">محاسبه‌گر حرارتی</div>
+            <div class="hc-app-sub">شوفاژکار — نسخه ۳.۱</div>
+          </div>
+        </div>
+
+        <!-- calculator card -->
+        <div class="hc-calc-card">
+          <div class="hc-calc-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+              <rect x="3" y="3" width="8" height="8" rx="1"/>
+              <rect x="13" y="3" width="8" height="8" rx="1"/>
+              <rect x="3" y="13" width="8" height="8" rx="1"/>
+              <path d="M13 17h8M17 13v8"/>
+            </svg>
+            مشخصات فضا
+          </div>
+
+          <div class="hc-calc-row">
+            <input class="hc-input-mini" id="hc-area" type="number" placeholder="متراژ (m²)" min="1" max="9999" />
+            <input class="hc-input-mini" id="hc-height" type="number" placeholder="ارتفاع سقف (m)" min="2" max="6" step="0.1" />
+          </div>
+
+          <select class="hc-select-mini" id="hc-insulation">
+            <option value="" disabled selected>سطح عایق‌کاری را انتخاب کنید</option>
+            <option value="poor">ضعیف — بدون عایق یا قدیمی</option>
+            <option value="average">متوسط — عایق‌کاری معمول</option>
+            <option value="good">خوب — عایق‌کاری استاندارد</option>
+            <option value="excellent">عالی — عایق‌کاری پیشرفته</option>
+          </select>
+
+          <select class="hc-select-mini" id="hc-climate" style="margin-top:7px">
+            <option value="" disabled selected>منطقه اقلیمی را انتخاب کنید</option>
+            <option value="very_cold">بسیار سرد — اردبیل، سردشت</option>
+            <option value="cold">سرد — تهران، تبریز، کرج</option>
+            <option value="moderate">معتدل — اصفهان، شیراز</option>
+            <option value="warm">گرم — اهواز، بندرعباس</option>
+          </select>
+
+          <button class="hc-calc-btn" onclick="hcCalculate()">
+            محاسبه ظرفیت حرارتی
+          </button>
+        </div>
+
+        <!-- result -->
+        <div class="hc-result" id="hc-result">
+          <div class="hc-result-label">ظرفیت حرارتی مورد نیاز</div>
+          <div class="hc-result-kw" id="hc-result-kw">— <span>kW</span></div>
+          <div class="hc-result-btu" id="hc-result-btu"></div>
+          <div class="hc-result-rec" id="hc-result-rec"></div>
+        </div>
+
+        <!-- tip -->
+        <div class="hc-app-tip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 8v4M12 16h.01"/>
+          </svg>
+          این عدد راهنماست — برای انتخاب نهایی دیگ با کارشناس شوفاژکار مشورت کنید.
+        </div>
+
+      </div><!-- /screen -->
+    </div><!-- /phone -->
+  </div><!-- /phone-wrap -->
+
+</div><!-- /inner -->
+
+<script>
+(function () {
+  const INSULATION = { poor: 2.2, average: 1.6, good: 1.1, excellent: 0.75 };
+  const CLIMATE    = { very_cold: 1.35, cold: 1.15, moderate: 1.0, warm: 0.8 };
+  const DELTA_T    = 40; // °C difference base
+
+  window.hcCalculate = function () {
+    var area       = parseFloat(document.getElementById('hc-area').value);
+    var height     = parseFloat(document.getElementById('hc-height').value);
+    var insulation = document.getElementById('hc-insulation').value;
+    var climate    = document.getElementById('hc-climate').value;
+
+    if (!area || !height || !insulation || !climate) {
+      alert('لطفاً تمام فیلدها را پر کنید.');
+      return;
+    }
+    if (area < 1 || area > 9999 || height < 2 || height > 6) {
+      alert('مقادیر وارد شده معتبر نیستند.');
+      return;
+    }
+
+    var volume  = area * height;
+    var uVal    = INSULATION[insulation];
+    var cFactor = CLIMATE[climate];
+
+    // Q (W) = Volume × U × ΔT × climate_factor
+    var watts  = volume * uVal * DELTA_T * cFactor;
+    var kw     = watts / 1000;
+    var btu    = Math.round(watts * 3.412);
+
+    document.getElementById('hc-result-kw').innerHTML =
+      kw.toFixed(1) + ' <span>kW</span>';
+    document.getElementById('hc-result-btu').textContent =
+      'معادل ' + btu.toLocaleString('fa') + ' BTU/h';
+
+    var rec;
+    if (kw <= 14)      rec = '<strong>پیشنهاد:</strong> پکیج دیواری ۱۲–۱۴ کیلووات شوفاژکار';
+    else if (kw <= 24) rec = '<strong>پیشنهاد:</strong> پکیج دیواری ۲۴ کیلووات شوفاژکار';
+    else if (kw <= 35) rec = '<strong>پیشنهاد:</strong> دیگ چدنی ۳۵ کیلووات شوفاژکار';
+    else if (kw <= 70) rec = '<strong>پیشنهاد:</strong> دیگ فولادی ۵۰–۷۰ کیلووات شوفاژکار';
+    else               rec = '<strong>پیشنهاد:</strong> دیگ مرکزی بالای ۷۰ کیلووات — با کارشناس مشورت کنید';
+
+    document.getElementById('hc-result-rec').innerHTML = rec;
+    document.getElementById('hc-result').classList.add('visible');
+  };
+}());
+</script>
+</section>
