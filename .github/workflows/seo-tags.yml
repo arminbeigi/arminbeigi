@@ -1,0 +1,28 @@
+name: SEO empty-tag cleanup
+
+# One-shot. Fires when the trigger file changes. Deletes (or previews) tags
+# with count <= max (default 0 = empty tags, attached to nothing -> safe).
+# Safe to delete this workflow after use.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'seo-fixes/.trigger-tags'
+
+jobs:
+  tags:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install requests
+      - name: Delete empty tags
+        env:
+          WP_USER: ${{ secrets.WP_USER }}
+          WP_APP_PASS: ${{ secrets.WP_APP_PASS }}
+        run: |
+          echo "===== DRY-RUN: count empty tags (no deletions) ====="
+          python seo-fixes/wp_seo_fixes.py --task delete-empty-tags --max-count 0

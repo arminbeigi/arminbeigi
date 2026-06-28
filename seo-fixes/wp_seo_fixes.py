@@ -40,6 +40,8 @@ HEADERS = {"User-Agent": "ShofazhSeoFixBot/1.0"}
 
 LD = re.compile(r'(<script type="application/ld\+json">)(.*?)(</script>)', re.DOTALL)
 
+EMPTY_TAG_MAX_COUNT = 0  # set in main(); delete tags with count <= this value
+
 
 def _need_auth():
     if not WP_APP_PASS:
@@ -292,18 +294,70 @@ def task_count(apply, limit, ids, slugs=None):
     print("This is the exact number the full strip-rating scan iterates over.")
 
 
+def _iter_terms(rest_base):
+    """Yield terms for a taxonomy rest_base via WP REST, ordered by count ascending."""
+    page = 1
+    while True:
+        r = _get(f"{WP_API}/{rest_base}",
+                 {"per_page": 100, "page": page, "orderby": "count", "order": "asc"},
+                 timeout=30)
+        if r.status_code != 200:
+            print(f"   list {rest_base} page {page} -> {r.status_code}: {r.text[:120]}")
+            break
+        batch = _safe_json(r)
+        if not batch:
+            break
+        for t in batch:
+            yield t
+        total_pages = int(r.headers.get("X-WP-TotalPages", page))
+        if page >= total_pages:
+            break
+        page += 1
+
+
+def task_delete_empty_tags(apply, limit, ids, slugs=None):
+    max_count = EMPTY_TAG_MAX_COUNT
+    print(f"== delete-empty-tags: tags with count <= {max_count} (post_tag + product_tag) ==")
+    grand = 0
+    for rest_base, label in [("tags", "post_tag"), ("product_tag", "product_tag")]:
+        print(f"\n--- {label}  (/{rest_base}) ---")
+        found = 0
+        for t in _iter_terms(rest_base):
+            c = t.get("count", 0)
+            if c > max_count:
+                break  # ordered ascending -> nothing else qualifies
+            found += 1
+            print(f"  id={t['id']} count={c} slug={t.get('slug','')!r} name={t.get('name','')!r}")
+            if apply:
+                d = requests.delete(f"{WP_API}/{rest_base}/{t['id']}",
+                                    params={"force": "true"},
+                                    auth=AUTH, headers=HEADERS, timeout=30)
+                ok = d.status_code == 200
+                print(f"     {'OK deleted' if ok else 'FAIL ' + str(d.status_code)}")
+                if ok:
+                    grand += 1
+                time.sleep(0.15)
+            if limit and found >= limit:
+                break
+        print(f"  {label}: {found} tag(s) with count <= {max_count}")
+    print(f"\n{'Deleted: ' + str(grand) if apply else 'DRY-RUN (no deletions)'}")
+
+
 def main():
     _need_auth()
     ap = argparse.ArgumentParser(description="shofazh.com SEO live fixes (REST)")
     ap.add_argument("--task", required=True,
-                    choices=["strip-rating", "delete-trashed", "fix-alt", "probe-titles", "count"])
+                    choices=["strip-rating", "delete-trashed", "fix-alt", "probe-titles", "count", "delete-empty-tags"])
     ap.add_argument("--apply", action="store_true",
                     help="actually write changes (default: dry-run, no writes)")
     ap.add_argument("--limit", type=int, default=0, help="max items to process (0 = all)")
     ap.add_argument("--ids", default="", help="comma-separated post/media IDs to target")
     ap.add_argument("--slugs", default="", help="comma-separated product slugs to target")
+    ap.add_argument("--max-count", type=int, default=0, help="for delete-empty-tags: delete tags with count <= this")
     args = ap.parse_args()
 
+    global EMPTY_TAG_MAX_COUNT
+    EMPTY_TAG_MAX_COUNT = args.max_count
     ids = [int(x) for x in args.ids.split(",") if x.strip().isdigit()] if args.ids else []
     slugs = [x.strip() for x in args.slugs.split(",") if x.strip()] if args.slugs else []
     mode = "APPLY (writing)" if args.apply else "DRY-RUN (no writes)"
@@ -315,6 +369,7 @@ def main():
         "fix-alt":        task_fix_alt,
         "probe-titles":   task_probe_titles,
         "count":          task_count,
+        "delete-empty-tags": task_delete_empty_tags,
     }[args.task](args.apply, args.limit, ids, slugs)
 
 
