@@ -37,3 +37,32 @@ submit a temporary removal to speed its drop from the index. No code change need
 - **Self-host fonts** (theme) — `performance-optimization-plan.md` §Phase 1.
 - **Security headers** (`.htaccess`/nginx) — `security-review.md` §1.
 - **robots.txt** param/login disallows — `technical-seo-checklist.md` §1.
+
+---
+
+## 4) robots.txt — block junk param/session URLs (added 2026-06-28)
+
+**Why:** `?login=true` and faceted-filter/session params create crawlable duplicate URLs
+that waste crawl budget (the audit flagged an indexed `?login=true` URL). These rules are
+WooCommerce-safe — they never block product or category pages.
+
+### Option A — paste (recommended, transparent)
+Yoast SEO → **Tools → File editor → robots.txt** → paste the contents of
+`seo-fixes/robots.txt.recommended` (merge with any custom rules you already have) → Save.
+If a physical `/robots.txt` exists at the web root, edit that file instead.
+
+### Option B — mu-plugin
+Upload `seo-fixes/mu-plugins/shofazh-robots.php` to `wp-content/mu-plugins/`. It appends
+the same Disallow rules to the virtual robots.txt automatically.
+
+> ⚠️ **Deindex note:** robots.txt `Disallow` blocks *crawling*, not indexing. For the
+> already-indexed `?login=true` URL, also either (a) submit it in **GSC → Removals**, or
+> (b) make sure those param URLs carry `noindex`/canonical (Yoast usually adds a
+> self-canonical). Disallowing a URL that is *already* indexed can keep it stuck in the
+> index because Google can no longer see a noindex on it — so for existing offenders,
+> prefer GSC Removals; use robots.txt to prevent *new* param URLs from being crawled.
+
+### Verify
+After deploying, open `https://shofazh.com/robots.txt` and confirm the new lines, then in
+GSC use **robots.txt Tester** / **URL Inspection** on a sample `?orderby=` URL to confirm
+it is "Blocked by robots.txt".

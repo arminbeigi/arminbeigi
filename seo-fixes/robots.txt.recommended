@@ -1,0 +1,30 @@
+# Recommended robots.txt for shofazh.com (WooCommerce + Yoast)
+# Paste this into: Yoast SEO → Tools → File editor → robots.txt
+# (or place as a physical /robots.txt at the web root).
+# WooCommerce-safe: blocks only junk param/session URLs, never product/category pages.
+
+User-agent: *
+
+# Allow WordPress AJAX (needed by many front-end features)
+Allow: /wp-admin/admin-ajax.php
+
+# Core WordPress / account & transactional pages (no SEO value)
+Disallow: /wp-admin/
+Disallow: /cart/
+Disallow: /checkout/
+Disallow: /my-account/
+
+# Session / action / faceted-filter parameters (crawl-budget wasters, duplicate content)
+Disallow: /*?login=
+Disallow: /*?add-to-cart=
+Disallow: /*?add_to_wishlist=
+Disallow: /*?removed_item=
+Disallow: /*?orderby=
+Disallow: /*?min_price=
+Disallow: /*?max_price=
+Disallow: /*?filter_
+Disallow: /*?s=
+Disallow: /*?p=
+
+# XML sitemap (Yoast)
+Sitemap: https://shofazh.com/sitemap_index.xml
