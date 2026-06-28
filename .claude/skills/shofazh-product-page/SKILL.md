@@ -283,7 +283,7 @@ The file MUST contain these fields (Persian labels):
 
 ### Step 4: Schema JSON-LD
 Embed inside `<script type="application/ld+json">` blocks:
-- `Product` (with offers, aggregateRating, brand)
+- `Product` (with offers, brand) — **do NOT add `aggregateRating`/`Review` unless the product has real, verifiable WooCommerce reviews.** Fabricated ratings violate Google's review-snippet policy and risk a manual action. Only emit a rating block when genuine reviews exist (prefer letting WooCommerce/Rank Math generate it from real review data).
 - `FAQPage` (mirror all FAQs from accordion)
 - `BreadcrumbList` (Home > Category > Subcategory > Product)
 

@@ -1,0 +1,58 @@
+name: SEO Live Fixes (manual)
+
+# Manual, controlled runner for the Phase 0 audit fixes.
+# DRY-RUN by default — set apply=true only after reviewing a dry-run.
+# Test first with a small limit (e.g. 3) before a full run.
+
+on:
+  workflow_dispatch:
+    inputs:
+      task:
+        description: 'Which fix to run'
+        required: true
+        type: choice
+        default: strip-rating
+        options:
+          - strip-rating
+          - delete-trashed
+          - fix-alt
+          - probe-titles
+      apply:
+        description: 'Actually write changes? (false = dry-run preview)'
+        required: true
+        type: boolean
+        default: false
+      limit:
+        description: 'Max items to process (0 = all). Use 3 to test first.'
+        required: false
+        default: '3'
+      ids:
+        description: 'Optional comma-separated IDs to target (overrides auto-scan)'
+        required: false
+        default: ''
+
+jobs:
+  seo-fix:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run SEO fix
+        env:
+          WP_USER: ${{ secrets.WP_USER }}
+          WP_APP_PASS: ${{ secrets.WP_APP_PASS }}
+        run: |
+          ARGS="--task ${{ inputs.task }} --limit ${{ inputs.limit }}"
+          if [ "${{ inputs.apply }}" = "true" ]; then ARGS="$ARGS --apply"; fi
+          if [ -n "${{ inputs.ids }}" ]; then ARGS="$ARGS --ids ${{ inputs.ids }}"; fi
+          echo "Running: python seo-fixes/wp_seo_fixes.py $ARGS"
+          python seo-fixes/wp_seo_fixes.py $ARGS
