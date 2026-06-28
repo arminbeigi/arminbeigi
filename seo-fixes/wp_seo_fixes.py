@@ -295,12 +295,15 @@ def task_count(apply, limit, ids, slugs=None):
 
 
 def _iter_terms(rest_base):
-    """Yield terms for a taxonomy rest_base via WP REST, ordered by count ascending."""
+    """Yield terms for a taxonomy rest_base via WP REST.
+    Light payload (_fields) and no `orderby=count` (that sort is too slow and
+    times out on large taxonomies). Default name order is fine; we filter
+    client-side."""
     page = 1
     while True:
         r = _get(f"{WP_API}/{rest_base}",
-                 {"per_page": 100, "page": page, "orderby": "count", "order": "asc"},
-                 timeout=30)
+                 {"per_page": 100, "page": page, "_fields": "id,count,slug,name"},
+                 timeout=60)
         if r.status_code != 200:
             print(f"   list {rest_base} page {page} -> {r.status_code}: {r.text[:120]}")
             break
@@ -318,29 +321,35 @@ def _iter_terms(rest_base):
 def task_delete_empty_tags(apply, limit, ids, slugs=None):
     max_count = EMPTY_TAG_MAX_COUNT
     print(f"== delete-empty-tags: tags with count <= {max_count} (post_tag + product_tag) ==")
-    grand = 0
+    grand_match = 0
+    grand_del = 0
     for rest_base, label in [("tags", "post_tag"), ("product_tag", "product_tag")]:
-        print(f"\n--- {label}  (/{rest_base}) ---")
-        found = 0
-        for t in _iter_terms(rest_base):
-            c = t.get("count", 0)
-            if c > max_count:
-                break  # ordered ascending -> nothing else qualifies
-            found += 1
-            print(f"  id={t['id']} count={c} slug={t.get('slug','')!r} name={t.get('name','')!r}")
-            if apply:
+        matched = [t for t in _iter_terms(rest_base) if t.get("count", 0) <= max_count]
+        if limit:
+            matched = matched[:limit]
+        print(f"\n--- {label}: {len(matched)} tag(s) with count <= {max_count} ---")
+        for t in matched[:20]:
+            print(f"  e.g. id={t['id']} count={t.get('count')} slug={t.get('slug','')!r} name={t.get('name','')!r}")
+        if len(matched) > 20:
+            print(f"  ... and {len(matched) - 20} more")
+        grand_match += len(matched)
+        if apply:
+            done = 0
+            deleted = 0
+            for t in matched:
                 d = requests.delete(f"{WP_API}/{rest_base}/{t['id']}",
                                     params={"force": "true"},
                                     auth=AUTH, headers=HEADERS, timeout=30)
-                ok = d.status_code == 200
-                print(f"     {'OK deleted' if ok else 'FAIL ' + str(d.status_code)}")
-                if ok:
-                    grand += 1
-                time.sleep(0.15)
-            if limit and found >= limit:
-                break
-        print(f"  {label}: {found} tag(s) with count <= {max_count}")
-    print(f"\n{'Deleted: ' + str(grand) if apply else 'DRY-RUN (no deletions)'}")
+                if d.status_code == 200:
+                    deleted += 1
+                done += 1
+                if done % 50 == 0:
+                    print(f"  ...{done}/{len(matched)} processed ({deleted} deleted)")
+                time.sleep(0.12)
+            grand_del += deleted
+            print(f"  {label}: deleted {deleted}/{len(matched)}")
+    print(f"\nMatched total: {grand_match} | "
+          f"{'Deleted: ' + str(grand_del) if apply else 'DRY-RUN (no deletions)'}")
 
 
 def main():
