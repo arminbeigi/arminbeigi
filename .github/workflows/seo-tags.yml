@@ -24,5 +24,5 @@ jobs:
           WP_USER: ${{ secrets.WP_USER }}
           WP_APP_PASS: ${{ secrets.WP_APP_PASS }}
         run: |
-          echo "===== DRY-RUN: count empty tags (no deletions) ====="
-          python seo-fixes/wp_seo_fixes.py --task delete-empty-tags --max-count 0
+          echo "===== APPLY: delete empty tags (count <= 0) ====="
+          python seo-fixes/wp_seo_fixes.py --task delete-empty-tags --max-count 0 --apply
