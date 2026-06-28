@@ -130,11 +130,23 @@ def iter_products(per_page=50, status="publish"):
         page += 1
 
 
-def task_strip_rating(apply, limit, ids):
+def task_strip_rating(apply, limit, ids, slugs=None):
     print("== strip-rating: remove fabricated AggregateRating from product content ==")
     targeted = 0
     fixed = 0
-    products = ([{"id": i} for i in ids] if ids else iter_products())
+    if ids:
+        products = [{"id": i} for i in ids]
+    elif slugs:
+        products = []
+        for slug in slugs:
+            r = _get(f"{WP_API}/product", {"slug": slug, "context": "edit"}, timeout=45)
+            batch = _safe_json(r) if r.status_code == 200 else []
+            if batch:
+                products.append(batch[0])
+            else:
+                print(f"  slug '{slug}': not found ({r.status_code})")
+    else:
+        products = iter_products()
     for p in products:
         pid = p["id"]
         # If we only had an id (from --ids), fetch full edit content
@@ -169,7 +181,7 @@ def task_strip_rating(apply, limit, ids):
 # ----------------------------------------------------------------------------
 # delete-trashed
 # ----------------------------------------------------------------------------
-def task_delete_trashed(apply, limit, ids):
+def task_delete_trashed(apply, limit, ids, slugs=None):
     print("== delete-trashed: permanently delete WooCommerce trashed products ==")
     r = requests.get(f"{WC_API}/products",
                      params={"status": "trash", "per_page": 100},
@@ -201,7 +213,7 @@ def task_delete_trashed(apply, limit, ids):
 # ----------------------------------------------------------------------------
 # fix-alt
 # ----------------------------------------------------------------------------
-def task_fix_alt(apply, limit, ids):
+def task_fix_alt(apply, limit, ids, slugs=None):
     print("== fix-alt: fill missing alt text on media images ==")
     fixed = 0
     page = 1
@@ -244,7 +256,7 @@ def task_fix_alt(apply, limit, ids):
 # ----------------------------------------------------------------------------
 # probe-titles (READ-ONLY)
 # ----------------------------------------------------------------------------
-def task_probe_titles(apply, limit, ids):
+def task_probe_titles(apply, limit, ids, slugs=None):
     print("== probe-titles: READ-ONLY feasibility check for the duplicated-sitename "
           "title fix via REST ==\n")
     # Core settings (site title / tagline)
@@ -279,9 +291,11 @@ def main():
                     help="actually write changes (default: dry-run, no writes)")
     ap.add_argument("--limit", type=int, default=0, help="max items to process (0 = all)")
     ap.add_argument("--ids", default="", help="comma-separated post/media IDs to target")
+    ap.add_argument("--slugs", default="", help="comma-separated product slugs to target")
     args = ap.parse_args()
 
     ids = [int(x) for x in args.ids.split(",") if x.strip().isdigit()] if args.ids else []
+    slugs = [x.strip() for x in args.slugs.split(",") if x.strip()] if args.slugs else []
     mode = "APPLY (writing)" if args.apply else "DRY-RUN (no writes)"
     print(f"Mode: {mode} | limit: {args.limit or 'all'} | ids: {ids or 'auto'}\n")
 
@@ -290,7 +304,7 @@ def main():
         "delete-trashed": task_delete_trashed,
         "fix-alt":        task_fix_alt,
         "probe-titles":   task_probe_titles,
-    }[args.task](args.apply, args.limit, ids)
+    }[args.task](args.apply, args.limit, ids, slugs)
 
 
 if __name__ == "__main__":
