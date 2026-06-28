@@ -282,11 +282,21 @@ def task_probe_titles(apply, limit, ids, slugs=None):
     print("         category title filter without touching plugin settings.")
 
 
+def task_count(apply, limit, ids, slugs=None):
+    """Light enumeration: count all published products (no content fetch)."""
+    print("== count: total published products in catalog ==")
+    n = 0
+    for _ in iter_products():
+        n += 1
+    print(f"\nTotal published products enumerated: {n}")
+    print("This is the exact number the full strip-rating scan iterates over.")
+
+
 def main():
     _need_auth()
     ap = argparse.ArgumentParser(description="shofazh.com SEO live fixes (REST)")
     ap.add_argument("--task", required=True,
-                    choices=["strip-rating", "delete-trashed", "fix-alt", "probe-titles"])
+                    choices=["strip-rating", "delete-trashed", "fix-alt", "probe-titles", "count"])
     ap.add_argument("--apply", action="store_true",
                     help="actually write changes (default: dry-run, no writes)")
     ap.add_argument("--limit", type=int, default=0, help="max items to process (0 = all)")
@@ -304,6 +314,7 @@ def main():
         "delete-trashed": task_delete_trashed,
         "fix-alt":        task_fix_alt,
         "probe-titles":   task_probe_titles,
+        "count":          task_count,
     }[args.task](args.apply, args.limit, ids, slugs)
 
 
