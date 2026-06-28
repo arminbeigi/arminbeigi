@@ -7,6 +7,7 @@ on:
       - 'main'
     paths:
       - '*-product-content.html'
+      - '*-seo.md'
       - 'wp-product-map.json'
 
 jobs:
@@ -31,9 +32,23 @@ jobs:
           WP_USER: ${{ secrets.WP_USER }}
           WP_APP_PASS: ${{ secrets.WP_APP_PASS }}
         run: |
-          changed=$(git diff-tree --no-commit-id -r --name-only HEAD | grep '\-product-content\.html' || true)
+          # HTML files that changed directly
+          html_changed=$(git diff-tree --no-commit-id -r --name-only HEAD | grep '\-product-content\.html' || true)
+
+          # SEO files that changed — find matching HTML files
+          seo_changed=$(git diff-tree --no-commit-id -r --name-only HEAD | grep '\-seo\.md' || true)
+          for seo_file in $seo_changed; do
+            slug=$(basename "$seo_file" "-seo.md")
+            html_file="${slug}-product-content.html"
+            if [ -f "$html_file" ]; then
+              html_changed=$(printf "%s\n%s" "$html_changed" "$html_file")
+            fi
+          done
+
+          # Deduplicate
+          changed=$(echo "$html_changed" | sort -u | sed '/^$/d')
           if [ -z "$changed" ]; then
-            echo "No product HTML files changed."
+            echo "No product HTML files to publish."
             exit 0
           fi
 

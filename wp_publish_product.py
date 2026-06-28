@@ -104,13 +104,26 @@ def parse_seo_file(path: Path) -> dict:
             fields["meta_description"] = value
         elif "Focus Keyphrase" in header or "کلمه کلیدی کانونی" in header:
             fields["focus_keyword"]    = value
+        elif "Secondary Keywords" in header or "کلمات کلیدی ثانویه" in header:
+            kws = [l.lstrip("- ").strip() for l in value.splitlines() if l.strip()]
+            fields["secondary_keywords"] = kws
         elif "URL Slug"        in header or "نامک پیشنهادی"      in header:
             fields["slug"]             = value.strip().strip("`")
+        elif "Image Alt"       in header or "متن جایگزین"        in header:
+            fields["image_alt"]        = value
+        elif "Breadcrumb"      in header or "نان‌مایه"            in header:
+            fields["breadcrumb_title"] = value
         elif "Open Graph"      in header or "شبکه‌های اجتماعی"   in header:
-            if "Title" in header or "عنوان" in header:
-                fields["og_title"]       = value
+            is_title = "Title" in header or "عنوان" in header
+            if is_title:
+                fields["og_title"] = value
             else:
                 fields["og_description"] = value
+            if "Twitter" in header:
+                if is_title:
+                    fields["twitter_title"] = value
+                else:
+                    fields["twitter_description"] = value
         elif "Twitter"         in header:
             if "Title" in header or "عنوان" in header:
                 fields["twitter_title"]       = value
@@ -129,7 +142,10 @@ def build_seo_meta(seo: dict) -> dict:
         m["rank_math_description"]  = seo["meta_description"]
         m["_yoast_wpseo_metadesc"]  = seo["meta_description"]
     if seo.get("focus_keyword"):
-        m["rank_math_focus_keyword"] = seo["focus_keyword"]
+        focus = seo["focus_keyword"]
+        if seo.get("secondary_keywords"):
+            focus += "," + ",".join(seo["secondary_keywords"])
+        m["rank_math_focus_keyword"] = focus
         m["_yoast_wpseo_focuskw"]    = seo["focus_keyword"]
     if seo.get("og_title"):
         m["rank_math_og_title"]              = seo["og_title"]
@@ -137,12 +153,19 @@ def build_seo_meta(seo: dict) -> dict:
     if seo.get("og_description"):
         m["rank_math_og_description"]        = seo["og_description"]
         m["_yoast_wpseo_opengraph-description"] = seo["og_description"]
-    if seo.get("twitter_title"):
-        m["rank_math_twitter_title"]         = seo["twitter_title"]
-        m["_yoast_wpseo_twitter-title"]      = seo["twitter_title"]
-    if seo.get("twitter_description"):
-        m["rank_math_twitter_description"]   = seo["twitter_description"]
-        m["_yoast_wpseo_twitter-description"] = seo["twitter_description"]
+    twitter_t = seo.get("twitter_title") or seo.get("og_title")
+    twitter_d = seo.get("twitter_description") or seo.get("og_description")
+    if twitter_t:
+        m["rank_math_twitter_use_og"]        = "off"
+        m["rank_math_twitter_title"]         = twitter_t
+        m["_yoast_wpseo_twitter-title"]      = twitter_t
+    if twitter_d:
+        m["rank_math_twitter_description"]   = twitter_d
+        m["_yoast_wpseo_twitter-description"] = twitter_d
+    if seo.get("breadcrumb_title"):
+        m["rank_math_breadcrumb_title"]      = seo["breadcrumb_title"]
+    if seo.get("image_alt"):
+        m["_wp_attachment_image_alt"]         = seo["image_alt"]
     return m
 
 
@@ -171,10 +194,14 @@ def publish_to_wp(post_id: int, html_path: Path, seo: dict, dry_run: bool = Fals
     }
     meta_payload.update(seo_meta)
 
+    wp_payload = {"content": {"raw": html}, "status": "publish", "meta": meta_payload}
+    if seo.get("slug"):
+        wp_payload["slug"] = seo["slug"]
+
     print(f"\n📤 ارسال به WP REST API (post-id={post_id})...")
     r = requests.post(
         f"{WP_API}/product/{post_id}",
-        json={"content": {"raw": html}, "status": "publish", "meta": meta_payload},
+        json=wp_payload,
         auth=AUTH, headers=HEADERS, timeout=60,
     )
     print(f"   POST → {r.status_code}")
@@ -256,8 +283,17 @@ def main():
     if seo_path.exists():
         seo = parse_seo_file(seo_path)
         print(f"\n📄 SEO: {seo_path.name}")
-        print(f"   عنوان   : {seo.get('seo_title', '—')}")
-        print(f"   کلیدواژه: {seo.get('focus_keyword', '—')}")
+        print(f"   عنوان      : {seo.get('seo_title', '—')}")
+        print(f"   توضیحات متا: {seo.get('meta_description', '—')[:60]}...")
+        print(f"   کلیدواژه   : {seo.get('focus_keyword', '—')}")
+        if seo.get("secondary_keywords"):
+            print(f"   ثانویه     : {', '.join(seo['secondary_keywords'])}")
+        print(f"   slug       : {seo.get('slug', '—')}")
+        print(f"   OG title   : {seo.get('og_title', '—')}")
+        print(f"   OG desc    : {seo.get('og_description', '—')[:60]}...")
+        print(f"   Twitter    : {seo.get('twitter_title', seo.get('og_title', '—'))}")
+        print(f"   نان‌مایه    : {seo.get('breadcrumb_title', '—')}")
+        print(f"   alt تصویر  : {seo.get('image_alt', '—')[:60]}...")
     else:
         print(f"⚠️  فایل SEO پیدا نشد — بدون SEO ادامه می‌دهد")
 
