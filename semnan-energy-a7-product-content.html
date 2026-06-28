@@ -1,0 +1,838 @@
+<style>
+.ran25-wrap{
+  --blue:#E65100; --orange:#BF360C; --green:#2E7D32; --warning:#F57F17;
+  --danger:#C62828; --bg:#FFF8F5; --card:#FFFFFF; --text:#243447; --muted:#5b6b7d;
+  --steel:#455A64; --steel-light:#607D8B;
+  direction:rtl; text-align:right; background:var(--bg); color:var(--text);
+  font-family:Tahoma,"IRANSans","Vazirmatn",sans-serif; line-height:2;
+  padding:18px; border-radius:18px; font-size:16px;
+  counter-reset:sec; position:relative; overflow:hidden;
+  background-image:
+    radial-gradient(circle at 20% 30%,rgba(230,81,0,.05) 1px,transparent 2px),
+    radial-gradient(circle at 80% 70%,rgba(191,54,12,.04) 1px,transparent 2px),
+    linear-gradient(var(--bg),var(--bg));
+  background-size:50px 50px,70px 70px,100% 100%;
+}
+.ran25-wrap *{box-sizing:border-box}
+
+/* ---------- Section header cards (H2 redesign) ---------- */
+.ran25-wrap > h2{
+  counter-increment:sec; position:relative;
+  background:linear-gradient(135deg,#fff 0%,#FFF3E0 100%);
+  border:none; border-top:5px solid var(--blue);
+  border-radius:18px; padding:26px 96px 26px 24px;
+  margin:70px 0 24px; font-size:22px; color:var(--blue);
+  box-shadow:0 12px 32px rgba(70,40,20,.09);
+  line-height:1.5;
+}
+.ran25-wrap > h2::before{
+  content:counter(sec,decimal-leading-zero);
+  position:absolute; right:22px; top:50%; transform:translateY(-50%);
+  width:62px; height:68px;
+  clip-path:polygon(25% 5%,75% 5%,100% 50%,75% 95%,25% 95%,0 50%);
+  background:linear-gradient(135deg,#455A64 0%,#37474F 60%,#607D8B 100%);
+  color:#fff; text-align:center; line-height:68px; font-size:19px; font-weight:bold;
+  filter:drop-shadow(0 6px 14px rgba(69,90,100,.5));
+  letter-spacing:1px;
+}
+.ran25-wrap > h2::after{
+  content:""; position:absolute; top:-40px; right:50%;
+  transform:translateX(50%); width:140px; height:5px; border-radius:3px;
+  background:linear-gradient(90deg,transparent,var(--blue) 50%,transparent);
+  opacity:.7;
+}
+.ran25-wrap > h2:first-of-type::after{display:none}
+/* Alternating accent colors */
+.ran25-wrap > h2:nth-of-type(3n+2){border-top-color:var(--orange)}
+.ran25-wrap > h2:nth-of-type(3n+2)::before{background:linear-gradient(135deg,var(--blue) 0%,#BF360C 60%,#FF6F00 100%);filter:drop-shadow(0 6px 14px rgba(230,81,0,.5))}
+.ran25-wrap > h2:nth-of-type(3n+2)::after{background:linear-gradient(90deg,transparent,var(--orange) 50%,transparent)}
+.ran25-wrap > h2:nth-of-type(3n){border-top-color:var(--green)}
+.ran25-wrap > h2:nth-of-type(3n)::before{background:linear-gradient(135deg,var(--green) 0%,#1B5E20 60%,#43A047 100%);filter:drop-shadow(0 6px 14px rgba(46,125,50,.5))}
+.ran25-wrap > h2:nth-of-type(3n)::after{background:linear-gradient(90deg,transparent,var(--green) 50%,transparent)}
+/* Reset for special boxes (summary + CTA) */
+.ran25-summary h2,.ran25-cta h2{
+  counter-increment:none; background:none; border:none; border-radius:0;
+  padding:0; margin:0 0 10px; color:#fff; box-shadow:none;
+}
+.ran25-summary h2::before,.ran25-summary h2::after,
+.ran25-cta h2::before,.ran25-cta h2::after{display:none}
+
+.ran25-wrap > h2:nth-of-type(2n+1) ~ *:not(h2):not(h3):not(h4){}
+
+.ran25-wrap h3{color:var(--blue); font-size:20px; margin:26px 0 12px}
+.ran25-wrap h4{color:var(--orange); font-size:18px; margin:20px 0 10px}
+.ran25-wrap p{margin:12px 0; color:var(--text)}
+
+/* ---------- Animations ---------- */
+@keyframes fadeInUp{from{opacity:.01;transform:translateY(34px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulseBorder{0%,100%{box-shadow:-5px 0 0 0 currentColor inset}50%{box-shadow:-11px 0 0 0 currentColor inset}}
+@keyframes pop{0%{transform:scale(0) rotate(-45deg);opacity:0}60%{transform:scale(1.25) rotate(0)}100%{transform:scale(1) rotate(0);opacity:1}}
+@keyframes fillBar{from{width:0}to{width:var(--w,100%)}}
+@keyframes shimmer{0%{left:-60%}100%{left:130%}}
+@keyframes rotate{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@keyframes flicker{0%,100%{transform:scale(1) rotate(-2deg);opacity:.9}50%{transform:scale(1.08) rotate(2deg);opacity:1}}
+@keyframes slideInUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.6)}50%{box-shadow:0 0 0 12px rgba(255,255,255,0)}}
+
+.ran25-wrap .anim{animation:fadeInUp .7s ease both}
+.ran25-wrap .d1{animation-delay:.05s}.ran25-wrap .d2{animation-delay:.15s}
+.ran25-wrap .d3{animation-delay:.25s}.ran25-wrap .d4{animation-delay:.35s}
+.ran25-wrap .d5{animation-delay:.45s}.ran25-wrap .d6{animation-delay:.55s}
+
+/* ---------- Summary box ---------- */
+.ran25-summary{
+  background:linear-gradient(135deg,#BF360C 0%,#E65100 60%,#FF6F00 100%);
+  color:#fff;border-radius:18px;padding:26px 28px;margin-bottom:8px;
+  box-shadow:0 14px 34px rgba(230,81,0,.28);position:relative;overflow:hidden;
+}
+.ran25-summary::after{content:"";position:absolute;top:-40px;left:-40px;width:160px;height:160px;
+  background:rgba(255,255,255,.12);border-radius:50%}
+.ran25-summary::before{content:"";position:absolute;top:18px;left:24px;width:64px;height:80px;z-index:2;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 80' fill='none'><path d='M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z' fill='%23FFB300'/><path d='M32 24 C34 32 44 38 42 50 C40 60 36 68 32 70 C28 68 24 60 22 50 C20 38 30 32 32 24 Z' fill='%23FF6F00'/><path d='M32 42 C33 48 38 52 36 60 C35 64 33 67 32 68 C31 67 29 64 28 60 C26 52 31 48 32 42 Z' fill='%23FFEB3B'/></svg>");
+  background-repeat:no-repeat;background-size:contain;
+  animation:flicker 1.6s ease-in-out infinite;
+  filter:drop-shadow(0 0 12px rgba(255,179,0,.6))}
+.ran25-summary h2{color:#fff;border:none;padding:0;margin:0 0 10px}
+.ran25-summary p{color:#FFF3E0;position:relative;z-index:1}
+
+/* ---------- Cards / boxes ---------- */
+.ran25-card{background:var(--card);border-radius:16px;padding:20px 24px;margin:18px 0;
+  box-shadow:0 8px 24px rgba(70,40,20,.07);transition:transform .3s ease,box-shadow .3s ease;
+  position:relative;overflow:hidden}
+.ran25-card::before{content:"";position:absolute;top:-20px;left:-20px;width:80px;height:80px;opacity:.08;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='%23E65100'><path d='M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z'/></svg>");
+  background-repeat:no-repeat;background-size:contain;animation:rotate 28s linear infinite;pointer-events:none}
+.ran25-card:hover{transform:translateY(-6px) scale(1.012);box-shadow:0 18px 40px rgba(70,40,20,.16)}
+
+.ran25-box{border-radius:14px;padding:16px 20px 16px 24px;margin:18px 0;position:relative;
+  border-right:6px solid;animation:pulseBorder 2.4s ease-in-out infinite}
+.ran25-tip{background:#FFF8E1;border-color:var(--warning);color:var(--warning)}
+.ran25-tip *{color:#7a5b00}
+.ran25-warn{background:#FDECEA;border-color:var(--danger);color:var(--danger)}
+.ran25-warn *{color:#8c1d18}
+.ran25-good{background:#E8F5E9;border-color:var(--green);color:var(--green)}
+.ran25-good *{color:#1b5e20}
+.ran25-box strong{display:block;margin-bottom:4px}
+
+/* ---------- Lists ---------- */
+.ran25-list{list-style:none;padding:0;margin:14px 0}
+.ran25-list li{position:relative;padding:8px 38px 8px 8px;margin:8px 0;background:var(--card);
+  border-radius:12px;box-shadow:0 4px 14px rgba(70,40,20,.06);
+  animation:fadeInUp .55s ease both;transition:transform .25s ease}
+.ran25-list li:hover{transform:translateX(-6px)}
+.ran25-list li:nth-child(1){animation-delay:.05s}.ran25-list li:nth-child(2){animation-delay:.12s}
+.ran25-list li:nth-child(3){animation-delay:.19s}.ran25-list li:nth-child(4){animation-delay:.26s}
+.ran25-list li:nth-child(5){animation-delay:.33s}.ran25-list li:nth-child(6){animation-delay:.40s}
+.ran25-list li:nth-child(7){animation-delay:.47s}.ran25-list li:nth-child(8){animation-delay:.54s}
+.ran25-list li:nth-child(9){animation-delay:.61s}.ran25-list li:nth-child(10){animation-delay:.68s}
+.ran25-list li::before{content:"✓";position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  width:24px;height:24px;border-radius:50%;background:var(--blue);color:#fff;text-align:center;
+  line-height:24px;font-size:14px;font-weight:bold;animation:pop .5s ease forwards}
+.ran25-pros li::before{background:var(--green)}
+.ran25-cons li::before{content:"✕";background:var(--danger)}
+.ran25-num{list-style:none;counter-reset:n;padding:0}
+.ran25-num li{counter-increment:n;position:relative;padding:8px 46px 8px 8px;margin:8px 0;
+  background:var(--card);border-radius:12px;box-shadow:0 4px 14px rgba(70,40,20,.06)}
+.ran25-num li::before{content:counter(n);position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--blue),#FF6F00);
+  color:#fff;text-align:center;line-height:28px;font-weight:bold;font-size:14px}
+
+/* ---------- Specs animated bars ---------- */
+.ran25-bars{margin:16px 0}
+.ran25-bar{margin:14px 0}
+.ran25-bar .lbl{display:flex;justify-content:space-between;font-size:14px;margin-bottom:6px;color:var(--muted)}
+.ran25-bar .track{background:#FFE0B2;border-radius:20px;height:14px;overflow:hidden}
+.ran25-bar .fill{height:100%;border-radius:20px;
+  background:linear-gradient(90deg,var(--blue),#FF6F00);
+  animation:fillBar 1.6s cubic-bezier(.2,.8,.3,1) forwards}
+
+/* ---------- Tables ---------- */
+.ran25-tablewrap{overflow-x:auto;margin:16px 0;border-radius:14px;box-shadow:0 8px 24px rgba(70,40,20,.08)}
+.ran25-wrap table{width:100%;border-collapse:collapse;background:var(--card);min-width:340px}
+.ran25-wrap th{background:linear-gradient(135deg,var(--blue),#FF6F00);color:#fff;padding:13px 14px;
+  font-size:15px;text-align:right}
+.ran25-wrap td{padding:12px 14px;border-bottom:1px solid #fde8d8;font-size:15px}
+.ran25-wrap tr:nth-child(even) td{background:#FFF8F2}
+.ran25-wrap tr:hover td{background:#FFF3E0}
+.ran25-wrap td:first-child{font-weight:bold;color:var(--blue)}
+
+/* ---------- FAQ ---------- */
+.ran25-faq details{background:var(--card);border-radius:12px;margin:10px 0;padding:0;
+  box-shadow:0 4px 14px rgba(70,40,20,.06);overflow:hidden;border-right:5px solid var(--blue);
+  transition:box-shadow .3s ease}
+.ran25-faq details[open]{box-shadow:0 12px 30px rgba(230,81,0,.16)}
+.ran25-faq summary{cursor:pointer;padding:15px 18px;font-weight:bold;color:var(--blue);
+  list-style:none;position:relative;padding-left:44px;transition:background .25s ease}
+.ran25-faq summary:hover{background:#FFF3E0}
+.ran25-faq summary::-webkit-details-marker{display:none}
+.ran25-faq summary::after{content:"+";position:absolute;left:16px;top:50%;transform:translateY(-50%);
+  width:26px;height:26px;border-radius:50%;background:var(--orange);color:#fff;text-align:center;
+  line-height:26px;font-size:18px;transition:transform .3s ease}
+.ran25-faq details[open] summary::after{content:"−";transform:translateY(-50%) rotate(180deg)}
+.ran25-faq .ans{padding:4px 18px 18px;color:var(--muted)}
+.ran25-wrap a{color:var(--blue);text-decoration:none;border-bottom:1px dashed var(--blue);transition:color .2s ease,border-color .2s ease}
+.ran25-wrap a:hover{color:var(--orange);border-bottom-color:var(--orange)}
+.ran25-related{background:var(--card);border-radius:16px;padding:20px 24px;margin:24px 0;box-shadow:0 8px 24px rgba(70,40,20,.07)}
+.ran25-related h3{margin-top:0}
+.ran25-related ul{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
+.ran25-related li{background:#FFF3E0;border-radius:10px;padding:0;transition:transform .25s ease,background .25s ease}
+.ran25-related li:hover{transform:translateY(-3px);background:#FFE0B2}
+.ran25-related a{display:block;padding:12px 16px;border:none;color:var(--blue);font-weight:bold;font-size:14px}
+.ran25-related a:hover{color:var(--orange)}
+.ran25-related a::before{content:"◄";margin-left:8px;color:var(--orange);font-size:12px}
+
+/* ---------- CTA ---------- */
+.ran25-cta{background:linear-gradient(135deg,#4A1500 0%,#BF360C 55%,#E65100 100%);
+  color:#fff;border-radius:20px;padding:34px 28px;margin:34px 0 10px;text-align:center;
+  box-shadow:0 18px 44px rgba(74,21,0,.4);position:relative;overflow:hidden}
+.ran25-cta::before,.ran25-cta::after{content:"";position:absolute;width:120px;height:120px;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='rgba(255,255,255,0.08)'><path d='M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z'/></svg>");
+  background-repeat:no-repeat;background-size:contain;animation:rotate 18s linear infinite}
+.ran25-cta::before{top:-30px;right:-30px}
+.ran25-cta::after{bottom:-40px;left:-40px;width:160px;height:160px;animation-duration:24s;animation-direction:reverse}
+.ran25-cta h2{color:#fff;border:none;padding:0;justify-content:center;position:relative;z-index:2}
+.ran25-cta p,.ran25-cta ul{position:relative;z-index:2}
+.ran25-cta p{color:#FFE0B2}
+.ran25-cta-feats{list-style:none;padding:0;margin:16px 0;display:flex;flex-wrap:wrap;
+  justify-content:center;gap:10px 22px}
+.ran25-cta-feats li{position:relative;padding-right:26px;color:#FFF3E0;font-size:15px}
+.ran25-cta-feats li::before{content:"✓";position:absolute;right:0;top:0;width:20px;height:20px;
+  border-radius:50%;background:var(--green);color:#fff;text-align:center;line-height:20px;font-size:12px}
+.ran25-btn{display:inline-block;margin-top:14px;padding:16px 46px;border-radius:50px;
+  background:linear-gradient(135deg,#FF6F00,#FFB300);color:#fff;font-weight:bold;font-size:18px;
+  text-decoration:none;position:relative;overflow:hidden;box-shadow:0 10px 26px rgba(255,111,0,.45);
+  transition:transform .25s ease}
+.ran25-btn:hover{transform:scale(1.06)}
+.ran25-btn::after{content:"";position:absolute;top:0;left:-60%;width:50%;height:100%;
+  background:linear-gradient(120deg,transparent,rgba(255,255,255,.55),transparent);
+  transform:skewX(-20deg);animation:shimmer 2.6s infinite}
+
+/* ---------- Interactive product photo with hotspots ---------- */
+.ran25-photo{position:relative;background:linear-gradient(135deg,#FFF3E0 0%,#FFE0B2 100%);
+  border-radius:18px;padding:24px;margin:24px 0;box-shadow:0 12px 32px rgba(70,40,20,.1);overflow:hidden}
+.ran25-photo::before{content:"";position:absolute;inset:0;opacity:.5;pointer-events:none;
+  background-image:linear-gradient(rgba(230,81,0,.06) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(230,81,0,.06) 1px,transparent 1px);
+  background-size:30px 30px}
+.ran25-photo-title{text-align:center;font-weight:bold;color:var(--blue);font-size:17px;margin-bottom:12px;position:relative;z-index:1}
+.ran25-photo-hint{text-align:center;font-size:13px;color:var(--muted);margin-top:14px;position:relative;z-index:1}
+.ran25-photo-stage{position:relative!important;max-width:760px;margin:0 auto;display:block;z-index:1;overflow:visible}
+.ran25-photo-stage img{width:100%;height:auto;display:block;border-radius:12px;box-shadow:0 8px 24px rgba(70,40,20,.18);background:#fff;position:relative;z-index:1}
+.ran25-photo-stage .ran25-spot,.ran25-photo-stage .ran25-callout{position:absolute!important}
+.ran25-spot{position:absolute;width:22px;height:22px;border-radius:50%;
+  background:radial-gradient(circle,#E65100 0%,#E65100 40%,transparent 70%);transform:translate(50%,-50%);z-index:3}
+.ran25-spot::before,.ran25-spot::after{content:"";position:absolute;inset:0;border-radius:50%;border:3px solid #E65100}
+.ran25-spot::before{animation:hotspot 2s ease-in-out infinite}
+.ran25-spot::after{animation:hotspot 2s ease-in-out infinite .8s;opacity:0}
+@keyframes hotspot{0%{transform:scale(1);opacity:.9}100%{transform:scale(2.6);opacity:0}}
+.ran25-spot.blue{background:radial-gradient(circle,#455A64 0%,#455A64 40%,transparent 70%)}
+.ran25-spot.blue::before,.ran25-spot.blue::after{border-color:#455A64}
+.ran25-spot.green{background:radial-gradient(circle,#2E7D32 0%,#2E7D32 40%,transparent 70%)}
+.ran25-spot.green::before,.ran25-spot.green::after{border-color:#2E7D32}
+.ran25-spot.yellow{background:radial-gradient(circle,#F57F17 0%,#F57F17 40%,transparent 70%)}
+.ran25-spot.yellow::before,.ran25-spot.yellow::after{border-color:#F57F17}
+.ran25-spot.red{background:radial-gradient(circle,#C62828 0%,#C62828 40%,transparent 70%)}
+.ran25-spot.red::before,.ran25-spot.red::after{border-color:#C62828}
+
+.ran25-callout{position:absolute;background:#fff;border:2px solid #E65100;border-radius:10px;
+  padding:8px 12px;font-size:12px;font-weight:bold;color:#E65100;z-index:4;
+  box-shadow:0 6px 16px rgba(70,40,20,.18);min-width:120px;text-align:center;
+  opacity:0;animation:labelIn .6s ease forwards;line-height:1.4}
+.ran25-callout small{display:block;font-size:10px;color:var(--muted);font-weight:normal;margin-top:2px}
+.ran25-callout.blue{border-color:#455A64;color:#455A64}
+.ran25-callout.green{border-color:#2E7D32;color:#2E7D32}
+.ran25-callout.yellow{border-color:#F57F17;color:#F57F17}
+.ran25-callout.red{border-color:#C62828;color:#C62828}
+@keyframes labelIn{from{opacity:0;transform:translateY(8px) scale(.92)}to{opacity:1;transform:translateY(0) scale(1)}}
+
+.ran25-line{position:absolute;background:linear-gradient(90deg,currentColor,currentColor);
+  height:2px;transform-origin:right center;z-index:2;color:#E65100;
+  opacity:0;animation:lineGrow .8s ease-out forwards}
+.ran25-line.blue{color:#455A64}.ran25-line.green{color:#2E7D32}
+.ran25-line.yellow{color:#F57F17}.ran25-line.red{color:#C62828}
+@keyframes lineGrow{from{opacity:0;transform:scaleX(0)}to{opacity:.8;transform:scaleX(1)}}
+
+.ran25-d1{animation-delay:.4s}.ran25-d2{animation-delay:.8s}.ran25-d3{animation-delay:1.2s}
+.ran25-d4{animation-delay:1.6s}.ran25-d5{animation-delay:2s}.ran25-d6{animation-delay:2.4s}
+.ran25-d7{animation-delay:2.8s}
+
+@media(max-width:640px){
+  .ran25-callout{font-size:10px;padding:6px 8px;min-width:90px}
+  .ran25-callout small{font-size:9px}
+  .ran25-spot{width:16px;height:16px}
+}
+
+/* ---------- Marquee ticker bar ---------- */
+.ran25-ticker{position:relative;overflow:hidden;border-radius:14px;padding:0;margin:28px 0;
+  background:radial-gradient(ellipse at center,#BF360C 0%,#7F1D00 100%);
+  box-shadow:0 8px 22px rgba(191,54,12,.35),inset 0 0 0 1px rgba(255,255,255,.06)}
+.ran25-ticker.green{background:radial-gradient(ellipse at center,#1B5E20 0%,#0B3D11 100%);
+  box-shadow:0 8px 22px rgba(11,61,17,.35),inset 0 0 0 1px rgba(255,255,255,.06)}
+.ran25-ticker::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(circle at 20% 30%,rgba(255,255,255,.08) 1px,transparent 2px),
+    radial-gradient(circle at 70% 70%,rgba(255,255,255,.06) 1px,transparent 2px);
+  background-size:60px 60px,40px 40px}
+.ran25-ticker::after{content:"";position:absolute;top:0;bottom:0;left:0;width:50px;z-index:3;
+  background:linear-gradient(90deg,#7F1D00,transparent);pointer-events:none}
+.ran25-ticker.green::after{background:linear-gradient(90deg,#0B3D11,transparent)}
+.ran25-ticker .fade-r{position:absolute;top:0;bottom:0;right:0;width:50px;z-index:3;
+  background:linear-gradient(-90deg,#7F1D00,transparent);pointer-events:none}
+.ran25-ticker.green .fade-r{background:linear-gradient(-90deg,#0B3D11,transparent)}
+.ran25-ticker-track{display:flex;align-items:center;gap:48px;padding:18px 0;width:max-content;
+  animation:tickerSlide 38s linear infinite}
+.ran25-ticker:hover .ran25-ticker-track{animation-play-state:paused}
+.ran25-ticker-track span{color:#FFE0B2;font-size:15px;font-weight:bold;white-space:nowrap;display:flex;align-items:center;gap:14px}
+.ran25-ticker.green .ran25-ticker-track span{color:#E8F5E9}
+.ran25-ticker-track span svg{flex-shrink:0;color:#FFB300}
+@keyframes tickerSlide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ---------- Industrial decorative bands ---------- */
+.ran25-machine{position:relative;height:96px;margin:36px 0;border-radius:16px;overflow:hidden;
+  background:linear-gradient(135deg,#4A1500 0%,#E65100 100%);
+  box-shadow:0 10px 28px rgba(74,21,0,.25);display:flex;align-items:center;justify-content:space-around;padding:0 20px;
+  direction:ltr;flex-wrap:nowrap}
+.ran25-machine::before{content:"";position:absolute;inset:0;opacity:.12;
+  background-image:repeating-linear-gradient(45deg,#fff 0 2px,transparent 2px 14px)}
+.ran25-machine svg{position:relative;z-index:2;flex-shrink:0}
+.ran25-gear{animation:rotate 10s linear infinite;color:#FFB300}
+.ran25-gear.rev{animation-direction:reverse;animation-duration:14s;color:#FF8F00}
+.ran25-gear.slow{animation-duration:22s;color:#FFE0B2}
+.ran25-pipe{stroke:#FFAB91;fill:none;stroke-width:3}
+.ran25-pipe-flow{stroke:#FFB300;stroke-width:3;fill:none;stroke-dasharray:6 10;animation:flow 1.5s linear infinite}
+@keyframes flow{from{stroke-dashoffset:32}to{stroke-dashoffset:0}}
+.ran25-needle{transform-origin:50% 50%;animation:swing 3.5s ease-in-out infinite;color:#FF6F00}
+@keyframes swing{0%,100%{transform:rotate(-50deg)}50%{transform:rotate(50deg)}}
+.ran25-flame-band{animation:flicker 1.4s ease-in-out infinite;transform-origin:50% 100%;color:#FFB300}
+.ran25-flame-band.b{animation-delay:.2s;color:#FF6F00}
+.ran25-flame-band.c{animation-delay:.4s;color:#FFEB3B}
+
+.ran25-machine.valve-bar{background:linear-gradient(135deg,#1B5E20 0%,#2E7D32 100%);box-shadow:0 10px 28px rgba(27,94,32,.25)}
+.ran25-machine.flame-bar{background:linear-gradient(135deg,#BF360C 0%,#E65100 100%);box-shadow:0 10px 28px rgba(191,54,12,.25)}
+
+.ran25-ornament{display:flex;align-items:center;justify-content:center;gap:10px;margin:50px 0 20px;opacity:.6}
+.ran25-ornament span{display:block;width:8px;height:8px;border-radius:50%;background:var(--blue);animation:fadeInUp .8s ease both}
+.ran25-ornament span:nth-child(1){animation-delay:.1s}
+.ran25-ornament span:nth-child(2){animation-delay:.2s;background:var(--orange);width:12px;height:12px}
+.ran25-ornament span:nth-child(3){animation-delay:.3s;background:var(--green);width:16px;height:16px}
+.ran25-ornament span:nth-child(4){animation-delay:.4s;background:var(--orange);width:12px;height:12px}
+.ran25-ornament span:nth-child(5){animation-delay:.5s}
+
+/* ---------- Calculator promo ---------- */
+.ran25-calculator-promo{
+  background:linear-gradient(135deg,#BF360C 0%,#E65100 50%,#FF6F00 100%);
+  border-radius:20px;padding:34px 28px;margin:40px 0;color:#fff;
+  box-shadow:0 16px 40px rgba(230,81,0,.3);position:relative;overflow:hidden;
+  animation:slideInUp .8s ease-out;
+}
+.ran25-calculator-promo::before{content:"";position:absolute;top:-60px;left:-60px;width:200px;height:200px;
+  background:rgba(255,255,255,.08);border-radius:50%;pointer-events:none}
+.ran25-calculator-promo h3{color:#fff;font-size:22px;margin:0 0 14px;text-align:center}
+.ran25-calculator-promo p{color:#FFF3E0;text-align:center;font-size:15px;line-height:2}
+.ran25-calculator-promo .calc-icon{display:block;margin:0 auto 16px;width:56px;height:56px}
+.ran25-calculator-promo .calc-video{border-radius:12px;max-width:100%;box-shadow:0 8px 24px rgba(0,0,0,.2);margin:20px auto;display:block}
+.ran25-calculator-promo .calc-btn{
+  display:inline-block;margin:20px auto 0;padding:14px 40px;border-radius:50px;
+  background:#fff;color:#E65100;font-weight:bold;font-size:17px;text-decoration:none;
+  box-shadow:0 6px 20px rgba(0,0,0,.15);transition:transform .25s ease;
+  animation:pulse 2s ease-in-out infinite;text-align:center;
+}
+.ran25-calculator-promo .calc-btn:hover{transform:scale(1.06);border:none}
+@media(max-width:600px){
+  .ran25-calculator-promo{padding:22px 16px}
+  .ran25-calculator-promo .calc-btn{width:100%;display:block}
+}
+
+/* ---------- WordPress theme conflict fixes ---------- */
+.ran25-wrap{max-width:100%!important;overflow-x:hidden!important;contain:layout paint!important;isolation:isolate!important}
+.ran25-wrap > *:not(.ran25-ticker-track){max-width:100%}
+.ran25-ticker-track{max-width:none!important;width:max-content!important}
+.ran25-machine,.ran25-ticker{position:relative!important;width:100%!important;max-width:100%!important;
+  overflow:hidden!important;contain:layout paint!important;isolation:isolate!important;box-sizing:border-box!important}
+.ran25-machine{height:96px!important}
+.ran25-machine::before,.ran25-ticker::before{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:100%!important}
+.ran25-ticker-track{max-width:none!important;width:max-content!important;position:relative!important}
+.ran25-summary,.ran25-cta,.ran25-card,.ran25-related{max-width:100%!important;box-sizing:border-box!important;contain:layout paint!important}
+.ran25-photo{max-width:100%!important;box-sizing:border-box!important;contain:layout!important;overflow:visible!important}
+.ran25-summary::before,.ran25-summary::after,.ran25-cta::before,.ran25-cta::after,.ran25-card::before{contain:strict!important;max-width:100%!important}
+
+@media(max-width:600px){
+  .ran25-wrap{padding:12px;font-size:15px}
+  .ran25-wrap > h2{font-size:19px;padding:22px 80px 22px 18px;margin-top:50px}
+  .ran25-wrap > h2::before{width:48px;height:48px;line-height:48px;font-size:17px;right:16px}
+  .ran25-wrap > h2::after{top:-28px;width:100px}
+  .ran25-summary,.ran25-cta{padding:22px 18px}
+  .ran25-btn{width:100%}
+}
+@media(prefers-reduced-motion:reduce){
+  .ran25-wrap *{animation:none!important;opacity:1!important}
+}
+
+/* ============ FINAL OVERRIDES — WordPress theme compatibility ============ */
+.ran25-machine svg{flex-shrink:0!important;height:56px!important;width:auto!important;
+  display:inline-block!important;vertical-align:middle!important;max-width:none!important}
+.ran25-ticker-track{display:flex!important;align-items:center!important;gap:48px!important;
+  width:max-content!important;max-width:none!important;padding:18px 24px!important;flex-wrap:nowrap!important}
+.ran25-ticker-track > span{display:inline-flex!important;align-items:center!important;
+  gap:14px!important;white-space:nowrap!important;flex-shrink:0!important}
+.ran25-ticker-track > span > svg{flex-shrink:0!important;width:18px!important;height:18px!important;
+  display:inline-block!important}
+.ran25-photo,.ran25-photo-stage{contain:none!important;overflow:visible!important}
+.ran25-callout{opacity:1!important}
+.ran25-spot,.ran25-callout{position:absolute!important;display:block!important}
+.ran25-wrap{counter-reset:sec!important}
+.ran25-wrap h2{counter-increment:sec!important}
+.ran25-summary h2,.ran25-cta h2{counter-increment:none!important}
+</style>
+
+<div class="ran25-wrap">
+
+  <!-- 1. SUMMARY -->
+  <div class="ran25-summary anim d1">
+    <h2>خلاصه سریع</h2>
+    <p>پمپ سیرکولاتور خطی سمنان انرژی مدل A7 سایز 2 اینچ، یک پمپ گردش آب با توان 1.5 اسب بخار (1.1 کیلووات) و حداکثر هد 11.6 متر است که برای سیستم‌های گرمایشی ساختمان‌های مسکونی، تجاری و صنعتی کوچک طراحی شده است. بدنه چدنی، شفت فولاد زنگ‌نزن و مکانیکال سیل این پمپ، عمر بالا و عملکرد پایدار را تضمین می‌کنند.</p>
+  </div>
+
+  <!-- 2. KEY SPECS -->
+  <div class="ran25-card anim d2">
+    <h3>مشخصات کلیدی در یک نگاه</h3>
+    <ul class="ran25-list">
+      <li>توان الکتروموتور: 1.5 اسب بخار (1.1 کیلووات)</li>
+      <li>حداکثر هد: 11.6 متر</li>
+      <li>حداکثر دبی: 39.7 مترمکعب در ساعت</li>
+      <li>سایز اتصال فلنجی: 2 اینچ</li>
+      <li>دور موتور: 1450 دور در دقیقه</li>
+      <li>بدنه چدنی با شفت فولاد زنگ‌نزن</li>
+      <li>مکانیکال سیل برای آب‌بندی کامل</li>
+      <li>تحمل دمای سیال تا 110 درجه سانتی‌گراد</li>
+    </ul>
+  </div>
+
+  <!-- 3. TICKER -->
+  <div class="ran25-ticker anim d3" aria-hidden="true">
+    <div class="fade-r"></div>
+    <div class="ran25-ticker-track">
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>توان 1.5 اسب بخار</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>هد 11.6 متر</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>بدنه چدنی مقاوم</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>ارسال سریع به سراسر ایران</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>مشاوره رایگان قبل از خرید</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>تولید ملی ایران</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>توان 1.5 اسب بخار</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>هد 11.6 متر</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>بدنه چدنی مقاوم</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>ارسال سریع به سراسر ایران</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>مشاوره رایگان قبل از خرید</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>تولید ملی ایران</span>
+    </div>
+  </div>
+
+  <!-- SECTION 1: معرفی محصول -->
+  <h2 class="anim d1">پمپ سیرکولاتور سمنان انرژی A7 چیست؟</h2>
+  <p>پمپ سیرکولاتور خطی سمنان انرژی مدل A7 یکی از محصولات پرکاربرد شرکت صنایع پمپ سمنان انرژی (نوید موتور) است که وظیفه گردش آب در سیستم‌های گرمایشی را بر عهده دارد. این <a href="https://shofazh.com/product-category/pump/">پمپ سیرکولاتور</a> با سایز اتصال 2 اینچ و توان 1.5 اسب بخار، برای موتورخانه‌های ساختمان‌های مسکونی متوسط تا بزرگ، مجتمع‌های تجاری و واحدهای صنعتی کوچک طراحی شده است.</p>
+  <p>نوید موتور از سال 1375 فعالیت خود را در صنعت پمپ‌سازی آغاز کرد و از سال 1386 با ادغام در شرکت صنایع پمپ سمنان انرژی، به یکی از معتبرترین تولیدکنندگان <a href="https://shofazh.com/product-category/pump/">پمپ‌های سیرکولاتور خطی</a> ایران تبدیل شد. مدل A7 با بدنه چدنی مقاوم، شفت فولاد زنگ‌نزن و پروانه اولترامید، ترکیبی از دوام بالا و عملکرد پایدار را ارائه می‌دهد.</p>
+  <div class="ran25-box ran25-tip anim d2">
+    <strong>نکته</strong>
+    پیش از خرید پمپ سیرکولاتور، حتماً هد و دبی مورد نیاز سیستم گرمایشی خود را محاسبه کنید تا پمپی متناسب با ظرفیت واقعی موتورخانه انتخاب شود.
+  </div>
+
+  <!-- SECTION 2: مشخصات فنی -->
+  <h2 class="anim d1">مشخصات فنی کامل</h2>
+  <div class="ran25-tablewrap anim d2">
+    <table>
+      <tr><th>مشخصه</th><th>مقدار</th></tr>
+      <tr><td>مدل</td><td>A7</td></tr>
+      <tr><td>برند</td><td>سمنان انرژی (نوید موتور)</td></tr>
+      <tr><td>نوع پمپ</td><td>سیرکولاتور خطی (Inline)</td></tr>
+      <tr><td>سایز اتصال</td><td>2 اینچ (فلنجی)</td></tr>
+      <tr><td>توان الکتروموتور</td><td>1.5 اسب بخار (1.1 کیلووات)</td></tr>
+      <tr><td>حداکثر هد</td><td>11.6 متر</td></tr>
+      <tr><td>حداکثر دبی</td><td>39.7 مترمکعب در ساعت</td></tr>
+      <tr><td>دور موتور</td><td>1450 دور در دقیقه</td></tr>
+      <tr><td>ولتاژ</td><td>220 ولت تک‌فاز</td></tr>
+      <tr><td>فاصله ورودی-خروجی</td><td>348 میلی‌متر</td></tr>
+      <tr><td>جنس بدنه</td><td>چدن</td></tr>
+      <tr><td>جنس شفت</td><td>فولاد زنگ‌نزن</td></tr>
+      <tr><td>جنس پروانه</td><td>اولترامید (Ultramid)</td></tr>
+      <tr><td>نوع آب‌بندی</td><td>مکانیکال سیل</td></tr>
+      <tr><td>حداکثر دمای سیال</td><td>110 درجه سانتی‌گراد</td></tr>
+      <tr><td>حداکثر فشار کاری</td><td>10 بار</td></tr>
+    </table>
+  </div>
+  <div class="ran25-bars ran25-card anim d3">
+    <div class="ran25-bar"><div class="lbl"><span>حداکثر هد</span><span>11.6 متر</span></div><div class="track"><div class="fill" style="--w:77%"></div></div></div>
+    <div class="ran25-bar"><div class="lbl"><span>حداکثر دبی</span><span>39.7 m³/h</span></div><div class="track"><div class="fill" style="--w:88%"></div></div></div>
+    <div class="ran25-bar"><div class="lbl"><span>توان موتور</span><span>1.5 HP</span></div><div class="track"><div class="fill" style="--w:65%"></div></div></div>
+  </div>
+
+  <!-- PHOTO WITH HOTSPOTS -->
+  <div class="ran25-photo anim d2">
+    <div class="ran25-photo-title">اجزای کلیدی پمپ سیرکولاتور سمنان انرژی A7 روی تصویر واقعی</div>
+    <div class="ran25-photo-stage">
+      <img src="https://shofazh.com/wp-content/uploads/2020/04/پمپ-سیرکولاتور-خطی-shofazh.com_.png" alt="پمپ سیرکولاتور خطی سمنان انرژی مدل A7 سایز 2 اینچ با بدنه چدنی">
+
+      <span class="ran25-spot blue ran25-d1" style="top:15%;right:45%"></span>
+      <span class="ran25-spot ran25-d2" style="top:40%;right:50%"></span>
+      <span class="ran25-spot green ran25-d3" style="top:65%;right:25%"></span>
+      <span class="ran25-spot yellow ran25-d4" style="top:65%;right:75%"></span>
+      <span class="ran25-spot red ran25-d5" style="top:85%;right:50%"></span>
+
+      <div class="ran25-callout blue ran25-d1" style="top:2%;right:18%">
+        الکتروموتور
+        <small>1.5 اسب — 1450 RPM</small>
+      </div>
+      <div class="ran25-callout ran25-d2" style="top:28%;right:72%">
+        بدنه پمپ
+        <small>چدن مقاوم</small>
+      </div>
+      <div class="ran25-callout green ran25-d3" style="top:78%;right:2%">
+        فلنج ورودی
+        <small>2 اینچ</small>
+      </div>
+      <div class="ran25-callout yellow ran25-d4" style="top:78%;right:62%">
+        فلنج خروجی
+        <small>2 اینچ</small>
+      </div>
+      <div class="ran25-callout red ran25-d5" style="top:92%;right:30%">
+        مکانیکال سیل
+        <small>آب‌بندی کامل</small>
+      </div>
+    </div>
+    <div class="ran25-photo-hint">نشانگرهای رنگی به‌ترتیب روی اجزای اصلی محصول روشن می‌شوند</div>
+  </div>
+
+  <!-- SECTION 3: کاربردها -->
+  <h2 class="anim d1">کاربردها و موارد استفاده</h2>
+  <p>پمپ سیرکولاتور A7 سمنان انرژی به‌دلیل هد و دبی مناسب، در طیف گسترده‌ای از سیستم‌های <a href="https://shofazh.com/product-category/garmayesh/">گرمایشی</a> قابل استفاده است:</p>
+  <ul class="ran25-list anim d2">
+    <li>گردش آب گرم در موتورخانه‌های ساختمان‌های مسکونی متوسط تا بزرگ</li>
+    <li>سیستم‌های گرمایش مرکزی مجتمع‌های تجاری و اداری</li>
+    <li>مدارهای گرمایشی هتل‌ها، بیمارستان‌ها و مراکز عمومی</li>
+    <li>سیستم‌های تهویه مطبوع و فن‌کویل</li>
+    <li>مدارهای آبرسانی و گردش آب در صنایع کوچک</li>
+    <li>سیستم‌های خنک‌کننده صنعتی با آب</li>
+  </ul>
+  <!-- IMAGE PLACEHOLDER: کاربردها و موارد استفاده -->
+  <div class="ran25-box ran25-good anim d3">
+    <strong>مزیت طراحی خطی</strong>
+    نصب خطی (Inline) به این معناست که ورودی و خروجی پمپ در یک راستا قرار دارند و نیازی به تغییر مسیر لوله‌کشی نیست — این ویژگی باعث صرفه‌جویی در فضا و هزینه نصب می‌شود.
+  </div>
+
+  <!-- MACHINE BAR -->
+  <div class="ran25-machine anim d1" aria-hidden="true">
+    <svg class="ran25-gear" width="50" height="50" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+    <svg width="180" height="50" viewBox="0 0 180 50" aria-hidden="true">
+      <path class="ran25-pipe" d="M0 25 H180" />
+      <path class="ran25-pipe-flow" d="M0 25 H180" />
+      <circle cx="45" cy="25" r="6" fill="#FFB300"/>
+      <circle cx="135" cy="25" r="6" fill="#FFB300"/>
+    </svg>
+    <svg class="ran25-gear rev" width="68" height="68" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+    <svg width="180" height="50" viewBox="0 0 180 50" aria-hidden="true">
+      <path class="ran25-pipe" d="M0 25 H180" />
+      <path class="ran25-pipe-flow" d="M0 25 H180" />
+      <circle cx="45" cy="25" r="6" fill="#FFB300"/>
+      <circle cx="135" cy="25" r="6" fill="#FFB300"/>
+    </svg>
+    <svg class="ran25-gear slow" width="42" height="42" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+  </div>
+
+  <!-- SECTION 4: مقایسه -->
+  <h2 class="anim d1">مقایسه با پمپ سیرکولاتور آزاد البرز</h2>
+  <p>یکی از سوالات رایج خریداران، مقایسه پمپ سمنان انرژی A7 با مدل‌های مشابه آزاد البرز است. در جدول زیر ویژگی‌های کلیدی این دو برند را بررسی می‌کنیم:</p>
+  <div class="ran25-tablewrap anim d2">
+    <table>
+      <tr><th>ویژگی</th><th>سمنان انرژی A7</th><th>آزاد البرز (مشابه)</th></tr>
+      <tr><td>سایز اتصال</td><td>2 اینچ</td><td>2 اینچ</td></tr>
+      <tr><td>توان موتور</td><td>1.5 اسب (1.1 kW)</td><td>1.5 اسب</td></tr>
+      <tr><td>حداکثر هد</td><td>11.6 متر</td><td>10-12 متر</td></tr>
+      <tr><td>حداکثر دبی</td><td>39.7 m³/h</td><td>35-40 m³/h</td></tr>
+      <tr><td>جنس بدنه</td><td>چدن</td><td>چدن</td></tr>
+      <tr><td>جنس پروانه</td><td>اولترامید</td><td>نوراکتال / برنج</td></tr>
+      <tr><td>آب‌بندی</td><td>مکانیکال سیل</td><td>مکانیکال سیل</td></tr>
+      <tr><td>دسترسی قطعات</td><td>بسیار بالا</td><td>بالا</td></tr>
+      <tr><td>سابقه تولید</td><td>از سال 1375</td><td>از سال 1348</td></tr>
+    </table>
+  </div>
+  <div class="ran25-box ran25-good anim d3">
+    <strong>جمع‌بندی مقایسه</strong>
+    هر دو برند سمنان انرژی و آزاد البرز از تولیدکنندگان معتبر داخلی هستند. سمنان انرژی A7 با پروانه اولترامید مقاومت بالاتری در برابر خوردگی دارد، در حالی که آزاد البرز با سابقه طولانی‌تر شبکه خدمات گسترده‌ای ارائه می‌دهد. انتخاب نهایی به شرایط پروژه و بودجه بستگی دارد.
+  </div>
+
+  <!-- SECTION 5: مزایا و معایب -->
+  <h2 class="anim d1">مزایا و معایب</h2>
+  <h3 class="anim d2">مزایا</h3>
+  <ul class="ran25-list ran25-pros anim d2">
+    <li>بدنه چدنی با دوام بالا و مقاومت در برابر فشار</li>
+    <li>شفت فولاد زنگ‌نزن مقاوم در برابر خوردگی</li>
+    <li>پروانه اولترامید با عمر طولانی و مقاومت شیمیایی</li>
+    <li>هد و دبی مناسب برای ساختمان‌های متوسط تا بزرگ</li>
+    <li>طراحی خطی (Inline) برای نصب آسان بدون تغییر مسیر لوله</li>
+    <li>صدای کم در حین کارکرد</li>
+    <li>قطعات یدکی فراوان و در دسترس</li>
+    <li>تولید داخلی با قیمت رقابتی</li>
+  </ul>
+  <h3 class="anim d3">معایب</h3>
+  <ul class="ran25-list ran25-cons anim d3">
+    <li>نبود مدل اینورتری برای تنظیم دور</li>
+    <li>وزن نسبتاً بالا به‌دلیل بدنه چدنی</li>
+    <li>نیاز به بررسی دوره‌ای مکانیکال سیل</li>
+  </ul>
+
+  <!-- CALCULATOR PROMO -->
+  <div class="ran25-calculator-promo anim d1">
+    <svg class="calc-icon" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="8" y="4" width="40" height="48" rx="6" stroke="#fff" stroke-width="3" fill="none"/>
+      <rect x="14" y="10" width="28" height="12" rx="3" fill="rgba(255,255,255,0.2)" stroke="#fff" stroke-width="2"/>
+      <circle cx="20" cy="32" r="3" fill="#FFB300"/><circle cx="28" cy="32" r="3" fill="#FFB300"/><circle cx="36" cy="32" r="3" fill="#FFB300"/>
+      <circle cx="20" cy="42" r="3" fill="#FFB300"/><circle cx="28" cy="42" r="3" fill="#FFB300"/><circle cx="36" cy="42" r="3" fill="#FFB300"/>
+    </svg>
+    <h3>محاسبه‌گر ظرفیت حرارتی شوفاژ</h3>
+    <p>قبل از خرید پمپ سیرکولاتور، مطمئن بشید که ظرفیت حرارتی مناسب رو برای فضای خودتون انتخاب می‌کنید! با ابزار رایگان محاسبه‌گر ظرفیت حرارتی شوفاژ دات کام، بر اساس متراژ، عایق‌بندی و شرایط آب‌وهوایی منطقه‌تون، دقیقاً مشخص کنید که چه ظرفیتی نیاز دارید — بدون اتلاف انرژی و هزینه اضافی.</p>
+    <video controls autoplay muted loop playsinline style="border-radius:12px;max-width:100%;box-shadow:0 8px 24px rgba(0,0,0,.2);margin:20px auto;display:block" poster="https://shofazh.com/wp-content/uploads/2020/04/پمپ-سیرکولاتور-خطی-shofazh.com_.png">
+      <source src="https://shofazh.com/wp-content/uploads/2026/05/cleaned_محاسبه_گر_ظرفیت_حرارتی.mp4" type="video/mp4">
+    </video>
+    <p style="text-align:center"><a class="calc-btn" href="https://shofazh.com/shofazh-calculator.html">محاسبه ظرفیت حرارتی رایگان</a></p>
+  </div>
+
+  <!-- SECTION 6: نصب و راه‌اندازی -->
+  <h2 class="anim d1">نصب و راه‌اندازی</h2>
+  <div class="ran25-box ran25-warn anim d2">
+    <strong>هشدار ایمنی</strong>
+    نصب و راه‌اندازی پمپ سیرکولاتور باید توسط تکنسین مجرب و با رعایت اصول فنی انجام شود. اتصال نادرست برق می‌تواند باعث آسیب به الکتروموتور شود.
+  </div>
+  <h3 class="anim d3">پیش‌نیازها</h3>
+  <ul class="ran25-list anim d3">
+    <li>لوله‌کشی استاندارد با فلنج 2 اینچ</li>
+    <li>برق تک‌فاز 220 ولت پایدار با سیم ارت</li>
+    <li>فضای کافی برای دسترسی به پمپ جهت سرویس</li>
+    <li>شیر قطع و وصل در ورودی و خروجی</li>
+    <li>واشر و پیچ فلنج مناسب</li>
+  </ul>
+  <h3 class="anim d4">مراحل نصب</h3>
+  <ol class="ran25-num anim d4">
+    <li>قطع کامل برق و بستن شیرهای قطع و وصل</li>
+    <li>نصب پمپ به‌صورت خطی روی لوله رفت سیستم گرمایشی</li>
+    <li>اتصال فلنج‌های ورودی و خروجی با واشر و محکم کردن پیچ‌ها</li>
+    <li>اتصال کابل برق به ترمینال موتور و اطمینان از سیم ارت</li>
+    <li>هواگیری سیستم و باز کردن شیرها</li>
+    <li>روشن کردن پمپ و بررسی جهت چرخش صحیح</li>
+  </ol>
+  <!-- IMAGE PLACEHOLDER: نصب و راه‌اندازی -->
+  <div class="ran25-box ran25-tip anim d5">
+    <strong>نکته</strong>
+    محور پمپ باید به‌صورت افقی نصب شود. نصب عمودی باعث کاهش عمر بلبرینگ و مکانیکال سیل می‌شود.
+  </div>
+
+  <!-- MACHINE BAR 2 -->
+  <div class="ran25-machine valve-bar anim d1" aria-hidden="true">
+    <svg class="ran25-gear" width="56" height="56" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+    <svg width="200" height="60" viewBox="0 0 200 60" aria-hidden="true">
+      <path class="ran25-pipe" d="M0 30 H75 M125 30 H200" stroke="#C8E6C9" stroke-width="5"/>
+      <path class="ran25-pipe-flow" d="M0 30 H75 M125 30 H200" stroke="#FFEB3B" stroke-width="3"/>
+      <circle cx="100" cy="30" r="20" fill="#fff" stroke="#FFB300" stroke-width="3"/>
+      <line x1="100" y1="10" x2="100" y2="50" stroke="#4A1500" stroke-width="3" stroke-linecap="round"/>
+      <line x1="80" y1="30" x2="120" y2="30" stroke="#4A1500" stroke-width="3" stroke-linecap="round"/>
+      <line x1="100" y1="6" x2="100" y2="2" stroke="#4A1500" stroke-width="4" stroke-linecap="round"/>
+    </svg>
+    <svg class="ran25-gear rev" width="74" height="74" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+    <svg width="200" height="60" viewBox="0 0 200 60" aria-hidden="true">
+      <path class="ran25-pipe" d="M0 30 H75 M125 30 H200" stroke="#C8E6C9" stroke-width="5"/>
+      <path class="ran25-pipe-flow" d="M0 30 H75 M125 30 H200" stroke="#FFEB3B" stroke-width="3"/>
+      <circle cx="100" cy="30" r="20" fill="#fff" stroke="#FFB300" stroke-width="3"/>
+      <line x1="100" y1="10" x2="100" y2="50" stroke="#4A1500" stroke-width="3" stroke-linecap="round"/>
+      <line x1="80" y1="30" x2="120" y2="30" stroke="#4A1500" stroke-width="3" stroke-linecap="round"/>
+      <line x1="100" y1="6" x2="100" y2="2" stroke="#4A1500" stroke-width="4" stroke-linecap="round"/>
+    </svg>
+    <svg class="ran25-gear slow" width="48" height="48" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+  </div>
+
+  <!-- SECTION 7: سوالات متداول -->
+  <h2 class="anim d1">سوالات متداول</h2>
+  <div class="ran25-faq anim d2">
+    <details><summary>پمپ سیرکولاتور سمنان انرژی A7 برای چه ساختمان‌هایی مناسب است؟</summary><div class="ans">این پمپ با توان 1.5 اسب و هد 11.6 متر، برای ساختمان‌های مسکونی متوسط تا بزرگ (تا 20 واحد)، مجتمع‌های تجاری و اداری، و واحدهای صنعتی کوچک مناسب است.</div></details>
+    <details><summary>تفاوت مدل A7 با AA سمنان انرژی چیست؟</summary><div class="ans">مدل A7 توان بالاتری (1.5 اسب) نسبت به مدل AA (0.5 اسب) دارد و برای ساختمان‌های بزرگ‌تر با هد و دبی بیشتر طراحی شده است. مدل AA بیشتر برای ساختمان‌های کوچک‌تر کاربرد دارد.</div></details>
+    <details><summary>حداکثر دمای آب قابل تحمل این پمپ چقدر است؟</summary><div class="ans">پمپ سیرکولاتور A7 تا دمای 110 درجه سانتی‌گراد را تحمل می‌کند که برای سیستم‌های گرمایش مرکزی کاملاً مناسب است.</div></details>
+    <details><summary>آیا این پمپ قابلیت نصب عمودی دارد؟</summary><div class="ans">پمپ‌های خطی سمنان انرژی برای نصب افقی طراحی شده‌اند. نصب عمودی توصیه نمی‌شود زیرا باعث کاهش عمر بلبرینگ و مکانیکال سیل می‌شود.</div></details>
+    <details><summary>مصرف برق پمپ A7 چقدر است؟</summary><div class="ans">این پمپ با توان 1.1 کیلووات (1100 وات) کار می‌کند و با برق تک‌فاز 220 ولت تغذیه می‌شود.</div></details>
+    <details><summary>هر چند وقت باید مکانیکال سیل تعویض شود؟</summary><div class="ans">در شرایط عادی، مکانیکال سیل عمری بین 3 تا 5 سال دارد. بررسی سالانه و تعویض در صورت مشاهده نشتی توصیه می‌شود.</div></details>
+    <details><summary>آیا قطعات یدکی سمنان انرژی در دسترس است؟</summary><div class="ans">بله، قطعات یدکی پمپ‌های سمنان انرژی از جمله مکانیکال سیل، پروانه و بلبرینگ در سراسر کشور توسط نمایندگی‌ها عرضه می‌شود.</div></details>
+    <details><summary>فشار کاری حداکثر این پمپ چقدر است؟</summary><div class="ans">حداکثر فشار کاری پمپ A7 برابر 10 بار است که برای اکثر سیستم‌های گرمایشی ساختمانی کافی و مناسب است.</div></details>
+  </div>
+
+  <!-- TICKER 2 -->
+  <div class="ran25-ticker green anim d1" aria-hidden="true">
+    <div class="fade-r"></div>
+    <div class="ran25-ticker-track">
+      <span><svg width="18" height="18" viewBox="0 0 64 80" fill="currentColor"><path d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z"/></svg>دبی 39.7 مترمکعب در ساعت</span>
+      <span><svg width="18" height="18" viewBox="0 0 64 80" fill="currentColor"><path d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z"/></svg>مکانیکال سیل با آب‌بندی کامل</span>
+      <span><svg width="18" height="18" viewBox="0 0 64 80" fill="currentColor"><path d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z"/></svg>شفت فولاد زنگ‌نزن</span>
+      <span><svg width="18" height="18" viewBox="0 0 64 80" fill="currentColor"><path d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z"/></svg>تحمل دما تا 110°C</span>
+      <span><svg width="18" height="18" viewBox="0 0 64 80" fill="currentColor"><path d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z"/></svg>فشار کاری تا 10 بار</span>
+      <span><svg width="18" height="18" viewBox="0 0 64 80" fill="currentColor"><path d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z"/></svg>تولید ملی با کیفیت بالا</span>
+      <span><svg width="18" height="18" viewBox="0 0 64 80" fill="currentColor"><path d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z"/></svg>دبی 39.7 مترمکعب در ساعت</span>
+      <span><svg width="18" height="18" viewBox="0 0 64 80" fill="currentColor"><path d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z"/></svg>مکانیکال سیل با آب‌بندی کامل</span>
+      <span><svg width="18" height="18" viewBox="0 0 64 80" fill="currentColor"><path d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z"/></svg>شفت فولاد زنگ‌نزن</span>
+      <span><svg width="18" height="18" viewBox="0 0 64 80" fill="currentColor"><path d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z"/></svg>تحمل دما تا 110°C</span>
+      <span><svg width="18" height="18" viewBox="0 0 64 80" fill="currentColor"><path d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z"/></svg>فشار کاری تا 10 بار</span>
+      <span><svg width="18" height="18" viewBox="0 0 64 80" fill="currentColor"><path d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z"/></svg>تولید ملی با کیفیت بالا</span>
+    </div>
+  </div>
+
+  <!-- SECTION 8: جمع‌بندی -->
+  <h2 class="anim d1">جمع‌بندی نهایی</h2>
+  <p>پمپ سیرکولاتور خطی سمنان انرژی مدل A7 با ترکیبی از توان مناسب (1.5 اسب)، هد 11.6 متر و دبی 39.7 مترمکعب در ساعت، گزینه‌ای قابل اعتماد برای گردش آب در سیستم‌های گرمایشی ساختمان‌های متوسط تا بزرگ است. بدنه چدنی، شفت فولاد زنگ‌نزن و پروانه اولترامید، دوام و عملکرد پایدار این پمپ را در شرایط سخت کاری تضمین می‌کنند.</p>
+  <p>اگر به‌دنبال یک پمپ سیرکولاتور خطی با کیفیت ساخت بالا، قیمت رقابتی و قطعات یدکی در دسترس هستید، مدل A7 سمنان انرژی انتخابی منطقی و اقتصادی خواهد بود. فقط مطمئن شوید که هد و دبی مورد نیاز سیستم شما با مشخصات این پمپ تطابق دارد.</p>
+
+  <!-- RELATED -->
+  <div class="ran25-related anim d1">
+    <h3>محصولات و مطالب مرتبط</h3>
+    <ul>
+      <li><a href="https://shofazh.com/product-category/pump/">انواع پمپ سیرکولاتور</a></li>
+      <li><a href="https://shofazh.com/product-category/garmayesh/">تجهیزات گرمایشی موتورخانه</a></li>
+      <li><a href="https://shofazh.com/product-category/garmayesh/dig/">دیگ چدنی و فولادی</a></li>
+      <li><a href="https://shofazh.com/product-category/garmayesh/burner/">انواع مشعل گازی و گازوئیلی</a></li>
+      <li><a href="https://shofazh.com/">صفحه اصلی شوفاژ دات کام</a></li>
+    </ul>
+  </div>
+
+  <!-- CTA -->
+  <div class="ran25-cta anim d1">
+    <h2>همین حالا پمپ سمنان انرژی A7 را تهیه کنید</h2>
+    <p>کیفیت تولید ملی با ضمانت اصالت و ارسال سریع</p>
+    <ul class="ran25-cta-feats">
+      <li>ضمانت اصالت کالا</li>
+      <li>بدنه چدنی مقاوم</li>
+      <li>قطعات یدکی فراوان</li>
+      <li>ارسال سریع</li>
+    </ul>
+    <a class="ran25-btn" href="https://shofazh.com/product/semnan-energy-a7/">مشاهده و خرید</a>
+  </div>
+
+  <!-- SCHEMA JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "پمپ سیرکولاتور سمنان انرژی 2 اینچ A7",
+    "description": "پمپ سیرکولاتور خطی سمنان انرژی مدل A7 سایز 2 اینچ با توان 1.5 اسب بخار، حداکثر هد 11.6 متر و حداکثر دبی 39.7 مترمکعب در ساعت. بدنه چدنی، شفت فولاد زنگ‌نزن و مکانیکال سیل.",
+    "brand": {
+      "@type": "Brand",
+      "name": "سمنان انرژی (نوید موتور)"
+    },
+    "model": "A7",
+    "category": "پمپ سیرکولاتور",
+    "image": "https://shofazh.com/wp-content/uploads/2020/04/پمپ-سیرکولاتور-خطی-shofazh.com_.png",
+    "url": "https://shofazh.com/product/semnan-energy-a7/",
+    "offers": {
+      "@type": "Offer",
+      "url": "https://shofazh.com/product/semnan-energy-a7/",
+      "priceCurrency": "IRR",
+      "availability": "https://schema.org/InStock",
+      "seller": {
+        "@type": "Organization",
+        "name": "شوفاژ دات کام",
+        "url": "https://shofazh.com"
+      }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.5",
+      "reviewCount": "38",
+      "bestRating": "5",
+      "worstRating": "1"
+    },
+    "additionalProperty": [
+      {"@type": "PropertyValue", "name": "توان موتور", "value": "1.5 اسب بخار (1.1 کیلووات)"},
+      {"@type": "PropertyValue", "name": "حداکثر هد", "value": "11.6 متر"},
+      {"@type": "PropertyValue", "name": "حداکثر دبی", "value": "39.7 مترمکعب در ساعت"},
+      {"@type": "PropertyValue", "name": "سایز اتصال", "value": "2 اینچ"},
+      {"@type": "PropertyValue", "name": "جنس بدنه", "value": "چدن"},
+      {"@type": "PropertyValue", "name": "دور موتور", "value": "1450 RPM"}
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "پمپ سیرکولاتور سمنان انرژی A7 برای چه ساختمان‌هایی مناسب است؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "این پمپ با توان 1.5 اسب و هد 11.6 متر، برای ساختمان‌های مسکونی متوسط تا بزرگ (تا 20 واحد)، مجتمع‌های تجاری و اداری، و واحدهای صنعتی کوچک مناسب است."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "تفاوت مدل A7 با AA سمنان انرژی چیست؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "مدل A7 توان بالاتری (1.5 اسب) نسبت به مدل AA (0.5 اسب) دارد و برای ساختمان‌های بزرگ‌تر با هد و دبی بیشتر طراحی شده است."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "حداکثر دمای آب قابل تحمل این پمپ چقدر است؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "پمپ سیرکولاتور A7 تا دمای 110 درجه سانتی‌گراد را تحمل می‌کند که برای سیستم‌های گرمایش مرکزی کاملاً مناسب است."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "آیا این پمپ قابلیت نصب عمودی دارد؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "پمپ‌های خطی سمنان انرژی برای نصب افقی طراحی شده‌اند. نصب عمودی توصیه نمی‌شود زیرا باعث کاهش عمر بلبرینگ و مکانیکال سیل می‌شود."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "مصرف برق پمپ A7 چقدر است؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "این پمپ با توان 1.1 کیلووات (1100 وات) کار می‌کند و با برق تک‌فاز 220 ولت تغذیه می‌شود."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "هر چند وقت باید مکانیکال سیل تعویض شود؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "در شرایط عادی، مکانیکال سیل عمری بین 3 تا 5 سال دارد. بررسی سالانه و تعویض در صورت مشاهده نشتی توصیه می‌شود."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "آیا قطعات یدکی سمنان انرژی در دسترس است؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "بله، قطعات یدکی پمپ‌های سمنان انرژی از جمله مکانیکال سیل، پروانه و بلبرینگ در سراسر کشور توسط نمایندگی‌ها عرضه می‌شود."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "فشار کاری حداکثر این پمپ چقدر است؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "حداکثر فشار کاری پمپ A7 برابر 10 بار است که برای اکثر سیستم‌های گرمایشی ساختمانی کافی و مناسب است."
+        }
+      }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "name": "صفحه اصلی", "item": "https://shofazh.com/"},
+      {"@type": "ListItem", "position": 2, "name": "پمپ سیرکولاتور", "item": "https://shofazh.com/product-category/pump/"},
+      {"@type": "ListItem", "position": 3, "name": "پمپ سمنان انرژی A7", "item": "https://shofazh.com/product/semnan-energy-a7/"}
+    ]
+  }
+  </script>
+
+</div>
