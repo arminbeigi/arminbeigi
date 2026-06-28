@@ -1,119 +1,27 @@
 /* ============================================================
    شوفاژ دات کام — اصلاح مقیاس‌پذیری صفحه اصلی المنتور
-   این CSS را در وردپرس > نمایش > سفارشی‌سازی > CSS اضافی
-   یا در المنتور > تنظیمات سایت > CSS سفارشی قرار دهید
+
+   CSS قبلی رو کامل پاک کن و فقط این رو بذار.
+   مسیر: وردپرس > نمایش > سفارشی‌سازی > CSS اضافی
    ============================================================ */
 
-/* --- 1. سکشن‌های المنتور: جلوگیری از جمع شدن در زوم کم --- */
-.elementor-section.elementor-section-boxed > .elementor-container {
-  max-width: min(1140px, 90vw) !important;
-}
+/* وقتی مرورگر zoom out میشه، viewport عریض‌تر از طراحی میشه.
+   این باعث میشه container المنتور (مثلاً 1140px) وسط صفحه کوچیک بمونه.
+   راه‌حل: عرض container رو نسبت به viewport تنظیم می‌کنیم. */
 
-.elementor-section.elementor-section-full_width > .elementor-container {
-  max-width: 100% !important;
-}
-
-/* --- 2. جلوگیری از overflow و اسکرول افقی --- */
-body.elementor-default,
-body.elementor-template-full-width {
-  overflow-x: hidden !important;
-}
-
-.elementor {
-  overflow-x: hidden !important;
-}
-
-/* --- 3. تصاویر و محصولات: مقیاس‌پذیری صحیح --- */
-.elementor-widget-image img,
-.elementor-widget-theme-post-featured-image img {
-  max-width: 100% !important;
-  height: auto !important;
-}
-
-/* --- 4. ستون‌ها: جلوگیری از سرریز در مقیاس کوچک --- */
-.elementor-column-wrap,
-.elementor-widget-wrap {
-  max-width: 100% !important;
-}
-
-/* --- 5. اسلایدر / کاروسل محصولات: عرض صحیح --- */
-.elementor-widget-image-carousel .swiper-container,
-.elementor-widget-image-carousel .swiper-wrapper,
-.elementor-widget-media-carousel .swiper-container,
-.elementor-widget-media-carousel .swiper-wrapper {
-  max-width: 100% !important;
-  overflow: hidden !important;
-}
-
-.elementor-widget-image-carousel .swiper-slide img {
-  width: 100% !important;
-  height: auto !important;
-  object-fit: contain;
-}
-
-/* --- 6. صفحات با زوم کمتر از ۱۰۰٪: اصلاح فاصله‌ها --- */
 @media screen and (min-width: 1400px) {
   .elementor-section.elementor-section-boxed > .elementor-container {
-    max-width: min(1320px, 88vw) !important;
+    max-width: 85% !important;
   }
 }
 
-@media screen and (min-width: 1800px) {
+@media screen and (min-width: 2000px) {
   .elementor-section.elementor-section-boxed > .elementor-container {
-    max-width: min(1540px, 85vw) !important;
+    max-width: 80% !important;
   }
 }
 
-@media screen and (min-width: 2200px) {
-  .elementor-section.elementor-section-boxed > .elementor-container {
-    max-width: min(1800px, 82vw) !important;
-  }
-}
-
-/* --- 7. گرید محصولات: ریسپانسیو بهتر --- */
-.elementor-widget-woocommerce-products .products,
-.elementor-widget-loop-grid .elementor-loop-container {
-  display: grid !important;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)) !important;
-  gap: 20px !important;
-  width: 100% !important;
-}
-
-/* --- 8. بنرها و تصاویر تمام‌عرض --- */
-.elementor-section[data-settings*="full_width"] .elementor-container,
-.elementor-section-stretched > .elementor-container {
-  max-width: 100% !important;
-  width: 100% !important;
-}
-
-/* --- 9. ویجت‌های با عرض ثابت: تبدیل به درصدی --- */
-.elementor-widget {
-  max-width: 100% !important;
-}
-
-.elementor-widget > .elementor-widget-container {
-  max-width: 100% !important;
-}
-
-/* --- 10. فونت‌ها: مقیاس بهتر در صفحات بزرگ --- */
-@media screen and (min-width: 1600px) {
-  .elementor-widget-heading .elementor-heading-title {
-    font-size: clamp(1rem, 2.5vw, 3rem) !important;
-  }
-}
-
-/* --- 11. اصلاح gap و padding سکشن‌ها --- */
-.elementor-section > .elementor-container > .elementor-row,
-.elementor-section > .elementor-container > .elementor-column {
-  max-width: 100% !important;
-}
-
-/* --- 12. جلوگیری از شکستن لایه‌بندی flex --- */
-.elementor-container {
-  flex-wrap: wrap !important;
-}
-
-.elementor-row {
-  flex-wrap: wrap !important;
-  width: 100% !important;
+/* جلوگیری از اسکرول افقی */
+body {
+  overflow-x: hidden !important;
 }
