@@ -104,8 +104,18 @@ def parse_seo_file(path: Path) -> dict:
             fields["meta_description"] = value
         elif "Focus Keyphrase" in header or "کلمه کلیدی کانونی" in header:
             fields["focus_keyword"]    = value
+        elif "Secondary Keywords" in header or "کلمات کلیدی ثانویه" in header:
+            kws = [kw.strip().lstrip("- ") for kw in value.splitlines() if kw.strip()]
+            fields["secondary_keywords"] = kws
         elif "URL Slug"        in header or "نامک پیشنهادی"      in header:
             fields["slug"]             = value.strip().strip("`")
+        elif ("Open Graph" in header or "شبکه‌های اجتماعی" in header) and ("Twitter" in header or "توییتر" in header):
+            if "Title" in header or "عنوان" in header:
+                fields["og_title"]       = value
+                fields["twitter_title"]  = value
+            else:
+                fields["og_description"]       = value
+                fields["twitter_description"]  = value
         elif "Open Graph"      in header or "شبکه‌های اجتماعی"   in header:
             if "Title" in header or "عنوان" in header:
                 fields["og_title"]       = value
@@ -129,7 +139,10 @@ def build_seo_meta(seo: dict) -> dict:
         m["rank_math_description"]  = seo["meta_description"]
         m["_yoast_wpseo_metadesc"]  = seo["meta_description"]
     if seo.get("focus_keyword"):
-        m["rank_math_focus_keyword"] = seo["focus_keyword"]
+        focus = seo["focus_keyword"]
+        if seo.get("secondary_keywords"):
+            focus = ", ".join([focus] + seo["secondary_keywords"])
+        m["rank_math_focus_keyword"] = focus
         m["_yoast_wpseo_focuskw"]    = seo["focus_keyword"]
     if seo.get("og_title"):
         m["rank_math_og_title"]              = seo["og_title"]
