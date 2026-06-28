@@ -9,23 +9,25 @@ You are building a complete, WordPress-ready Persian product page for shofazh.co
 
 ## Interactive Intake (MANDATORY)
 
-When this skill is invoked, you MUST collect inputs from the user through a series of `AskUserQuestion` calls — one question at a time, in Persian. Do NOT ask all at once, and do NOT proceed to Step 1 of the workflow until all required answers are collected.
+⛔ **CRITICAL ORDER — The FIRST `AskUserQuestion` call MUST be for the WordPress post-id. The product name is Q2. Do NOT reverse this order or skip Q1 for any reason — not even if the user already mentioned the product name in their message.**
+
+When this skill is invoked, call `AskUserQuestion` for each question below, one at a time, in Persian. Do NOT combine questions, do NOT infer answers from the user's initial message, and do NOT proceed to Step 1 until all 7 answers are collected and recorded.
 
 Ask in this exact order:
 
-**Question 1 — نام محصول**
+**Question 1 — شناسه وردپرس (post-id) — ALWAYS THE FIRST QUESTION**
+- header: "Post ID"
+- question: "سلام! برای شروع، شناسه عددی صفحه محصول در وردپرس رو بده.\n\nبدون post-id محتوا روی سایت منتشر نمی‌شه.\n\nبرای پیدا کردنش: پنل وردپرس → محصولات → روی محصول کلیک کن → در URL بالای مرورگر عدد بعد از ?post= رو ببین (مثلاً: post=4525)"
+- options:
+  - "بعداً اضافه می‌کنم (بدون انتشار خودکار)"
+- User types the number directly via "Other"
+- Record the answer as `post_id` (integer or null). If user chose "بعداً": set post_id = null and note that auto-publish will be skipped.
+- ⛔ DO NOT call AskUserQuestion for Q2 until Q1 is answered and post_id is recorded.
+
+**Question 2 — نام محصول**
 - header: "نام محصول"
 - question: "نام کامل محصول چیه؟ (مثلاً: مشعل گازوئیلی ایران رادیاتور PGN0)"
 - Free text via "Other" option only — provide 2 placeholder options like "مشعل گازسوز" / "مشعل گازوئیلی" so user can pick Other to type.
-
-**Question 2 — شناسه وردپرس (post-id) ⚠️ MANDATORY — ask this before anything else**
-- header: "Post ID"
-- question: "شناسه عددی صفحه محصول در وردپرس چیه؟ بدون این، محتوا روی سایت منتشر نمی‌شه.\n\nبرای پیدا کردنش: پنل وردپرس → محصولات → روی محصول کلیک کن → در URL بالای مرورگر عدد بعد از post= رو ببین (مثلاً: post=1234)"
-- options:
-  - "بعداً اضافه می‌کنم (بدون انتشار خودکار)"
-- User types the ID number directly via "Other"
-- If user skips or says "بعداً": record post_id as null in wp-product-map.json and warn the user that auto-publish will NOT happen until they add the ID
-- ⛔ DO NOT proceed to Q3 without recording this answer (null or a number)
 
 **Question 3 — لینک صفحه محصول**
 - header: "لینک محصول"
@@ -35,7 +37,7 @@ Ask in this exact order:
 **Question 4 — دسته‌بندی محصول**
 - header: "دسته‌بندی"
 - question: "محصول در کدوم دسته‌بندی قرار می‌گیره؟"
-- Before asking: infer the most likely category from the product name provided in Q1 (e.g. if name contains "گازسوز" → مشعل گازسوز, "گازوئیل" → مشعل گازوئیلی, "دوگانه" → مشعل دوگانه‌سوز, "پکیج" → پکیج دیواری, "دیگ" → دیگ چدنی, etc.)
+- Before asking: infer the most likely category from the product name provided in Q2 (e.g. if name contains "گازسوز" → مشعل گازسوز, "گازوئیل" → مشعل گازوئیلی, "دوگانه" → مشعل دوگانه‌سوز, "پکیج" → پکیج دیواری, "دیگ" → دیگ چدنی, etc.)
 - options:
   - "[حدس دسته‌بندی از روی نام محصول]" — e.g. "مشعل گازسوز (پیشنهاد)" (accent color per type: گازسوز→blue, گازوئیلی→red, دوگانه‌سوز→orange, others→blue)
   - "سایر" (user types via Other)
@@ -80,7 +82,7 @@ Read `shofazh-product-template.html` from the repo root. If that file doesn't ex
 ### Step 2: Product Analysis (جمع‌آوری اطلاعات از برند + کاتالوگ + تأیید کاربر)
 
 **2a — جستجو در سایت رسمی برند:**
-- از اسم محصول (Q1)، برند را شناسایی کن (مثلاً «ایران رادیاتور»، «شوفاژکار»، «گرم ایران»، «آذرنار»، ...).
+- از اسم محصول (Q2)، برند را شناسایی کن (مثلاً «ایران رادیاتور»، «شوفاژکار»، «گرم ایران»، «آذرنار»، ...).
 - سایت رسمی برند را پیدا کن و با WebFetch صفحه محصول مربوطه را واکشی کن تا مشخصات فنی واقعی را استخراج کنی:
   - ظرفیت حرارتی، توان الکتریکی، ابعاد، وزن، فشار کار، نوع سوخت، استانداردها، گواهینامه‌ها
   - هر داده فنی موجود روی سایت برند را استخراج کن
