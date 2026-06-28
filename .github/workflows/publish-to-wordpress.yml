@@ -8,6 +8,7 @@ on:
     paths:
       - '*-product-content.html'
       - 'wp-product-map.json'
+      - 'wp_publish_product.py'
 
 jobs:
   publish:

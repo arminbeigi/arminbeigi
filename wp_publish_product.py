@@ -189,9 +189,25 @@ def publish_to_wp(post_id: int, html_path: Path, seo: dict, dry_run: bool = Fals
         print(f"   لینک     : {link}")
         if style_ok is not None:
             print(f"   تگ <style>: {'حفظ شد ✓' if style_ok else 'ممکن است strip شده باشد — کش را چک کنید'}")
-        if seo.get("seo_title"):
-            print(f"   SEO title : {seo['seo_title']}")
         print(f"   Elementor : غیرفعال")
+
+        if seo_meta:
+            print(f"\n📝 ست کردن SEO meta با WooCommerce API...")
+            wc_seo_meta = [{"key": k, "value": v} for k, v in seo_meta.items()]
+            r_seo = requests.post(
+                f"{WC_API}/products/{post_id}",
+                json={"meta_data": wc_seo_meta},
+                auth=AUTH, headers=HEADERS, timeout=30,
+            )
+            if r_seo.status_code in (200, 201):
+                print(f"   ✅ SEO meta ست شد ({len(seo_meta)} فیلد)")
+                if seo.get("seo_title"):
+                    print(f"   SEO title : {seo['seo_title']}")
+                if seo.get("focus_keyword"):
+                    print(f"   Focus KW  : {seo['focus_keyword']}")
+            else:
+                print(f"   ⚠️  SEO meta ناموفق ({r_seo.status_code}): {r_seo.text[:200]}")
+
         return True
 
     print(f"   WP API ناموفق ({r.status_code}) — WC API را امتحان می‌کنیم")
