@@ -24,7 +24,5 @@ jobs:
           WP_USER: ${{ secrets.WP_USER }}
           WP_APP_PASS: ${{ secrets.WP_APP_PASS }}
         run: |
-          echo "================= DRY-RUN PREVIEW ================="
-          python seo-fixes/wp_seo_fixes.py --task strip-rating --limit 0
-          echo "================= APPLYING ======================="
-          python seo-fixes/wp_seo_fixes.py --task strip-rating --limit 0 --apply
+          echo "===== Targeted apply on known published product IDs ====="
+          python seo-fixes/wp_seo_fixes.py --task strip-rating --ids 4525,5202,13470,5044,5017,6088 --apply
