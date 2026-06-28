@@ -24,7 +24,5 @@ jobs:
           WP_USER: ${{ secrets.WP_USER }}
           WP_APP_PASS: ${{ secrets.WP_APP_PASS }}
         run: |
-          echo "===== VERIFY DB state for already-fixed #6088 (dry-run; 0 = DB clean -> cache) ====="
-          python seo-fixes/wp_seo_fixes.py --task strip-rating --ids 6088
-          echo "===== Targeted apply on remaining product slugs ====="
-          python seo-fixes/wp_seo_fixes.py --task strip-rating --slugs chauffagekarcomfort32fh2,iranradiator-l24ff,butane-perlapro24rsi,chauffagekar-super400 --apply
+          echo "===== Full-catalog strip-rating (single-pass apply, ALL products) ====="
+          python seo-fixes/wp_seo_fixes.py --task strip-rating --apply
