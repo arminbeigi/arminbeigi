@@ -91,23 +91,39 @@ def _strip_rating_from_html(html):
     return new_html, total[0]
 
 
-def iter_products(per_page=100, status="publish"):
-    """Yield product objects (edit context → includes content.raw)."""
+def _get(url, params, timeout, retries=3):
+    """GET with retry on transient timeouts/connection errors."""
+    last = None
+    for attempt in range(retries):
+        try:
+            return requests.get(url, params=params, auth=AUTH, headers=HEADERS, timeout=timeout)
+        except requests.exceptions.RequestException as e:
+            last = e
+            if attempt < retries - 1:
+                time.sleep(2 * (attempt + 1))
+    raise last
+
+
+def iter_products(per_page=50, status="publish"):
+    """Enumerate product IDs with a LIGHT call (ids only, no raw content), then
+    yield {"id": id}. The caller fetches each product individually with
+    context=edit — the same one-at-a-time pattern the publisher uses, which the
+    server can serve quickly (a bulk context=edit listing times out)."""
     page = 1
     while True:
-        r = requests.get(
+        r = _get(
             f"{WP_API}/product",
-            params={"per_page": per_page, "page": page, "status": status, "context": "edit"},
-            auth=AUTH, headers=HEADERS, timeout=30,
+            {"per_page": per_page, "page": page, "status": status, "_fields": "id"},
+            timeout=30,
         )
         if r.status_code != 200:
-            print(f"   list products page {page} → {r.status_code}: {r.text[:120]}")
+            print(f"   list product ids page {page} → {r.status_code}: {r.text[:120]}")
             break
         batch = _safe_json(r)
         if not batch:
             break
         for p in batch:
-            yield p
+            yield {"id": p["id"]}
         total_pages = int(r.headers.get("X-WP-TotalPages", page))
         if page >= total_pages:
             break
@@ -123,8 +139,7 @@ def task_strip_rating(apply, limit, ids):
         pid = p["id"]
         # If we only had an id (from --ids), fetch full edit content
         if "content" not in p:
-            r = requests.get(f"{WP_API}/product/{pid}", params={"context": "edit"},
-                             auth=AUTH, headers=HEADERS, timeout=30)
+            r = _get(f"{WP_API}/product/{pid}", {"context": "edit"}, timeout=45)
             if r.status_code != 200:
                 print(f"  #{pid}: fetch failed ({r.status_code})")
                 continue
