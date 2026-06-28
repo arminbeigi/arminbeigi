@@ -24,7 +24,5 @@ jobs:
           WP_USER: ${{ secrets.WP_USER }}
           WP_APP_PASS: ${{ secrets.WP_APP_PASS }}
         run: |
-          echo "===== Count + verify (no writes) ====="
+          echo "===== Count total products (fast, no writes) ====="
           python seo-fixes/wp_seo_fixes.py --task count
-          echo "----- re-scan all products for any fabricated rating (dry-run) -----"
-          python seo-fixes/wp_seo_fixes.py --task strip-rating
