@@ -1,0 +1,6 @@
+# machine-specific / regenerable graphify internals
+.graphify_python
+.graphify_root
+.graphify_labels.json
+.graphify_*.json
+cache/

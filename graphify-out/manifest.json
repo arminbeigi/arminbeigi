@@ -1,0 +1,1497 @@
+{
+  ".claude/settings.json": {
+    "mtime": 1782762137.4658246,
+    "ast_hash": "e51077b6a7f1f67afc748f1a32a1557d",
+    "semantic_hash": "e51077b6a7f1f67afc748f1a32a1557d"
+  },
+  "app.js": {
+    "mtime": 1782762066.8092656,
+    "ast_hash": "c364e27a984127e9845ea2434920a215",
+    "semantic_hash": "c364e27a984127e9845ea2434920a215"
+  },
+  "build_banner.py": {
+    "mtime": 1782762066.8092656,
+    "ast_hash": "0c3917f1cc24f47c51e5ed0710447788",
+    "semantic_hash": "0c3917f1cc24f47c51e5ed0710447788"
+  },
+  "dr-samim-website/app.js": {
+    "mtime": 1782762066.8292656,
+    "ast_hash": "c364e27a984127e9845ea2434920a215",
+    "semantic_hash": "c364e27a984127e9845ea2434920a215"
+  },
+  "gsc-auto-fixer.py": {
+    "mtime": 1782762066.8772655,
+    "ast_hash": "77ce012ca6ff1e665dea42d9cda68a6c",
+    "semantic_hash": "77ce012ca6ff1e665dea42d9cda68a6c"
+  },
+  "gsc-fixes.json": {
+    "mtime": 1782762066.8772655,
+    "ast_hash": "ab6a0bf013e7d418add868b1693b0d50",
+    "semantic_hash": "ab6a0bf013e7d418add868b1693b0d50"
+  },
+  "gsc-last-run.json": {
+    "mtime": 1782762066.8772655,
+    "ast_hash": "eb16bc0e21749e2ae11f8ff1229d4e6c",
+    "semantic_hash": "eb16bc0e21749e2ae11f8ff1229d4e6c"
+  },
+  "gsc-optimizer.py": {
+    "mtime": 1782762066.8772655,
+    "ast_hash": "8212e1d7072c8f57ec0989b8e8197bcf",
+    "semantic_hash": "8212e1d7072c8f57ec0989b8e8197bcf"
+  },
+  "gsc-windsor-integration.py": {
+    "mtime": 1782762066.8772655,
+    "ast_hash": "3250129008aca42f6b3f55b059eea225",
+    "semantic_hash": "3250129008aca42f6b3f55b059eea225"
+  },
+  "gsc_telegram_report.py": {
+    "mtime": 1782762066.8772655,
+    "ast_hash": "9035500c704ebad6673045fc1d104709",
+    "semantic_hash": "9035500c704ebad6673045fc1d104709"
+  },
+  "gsc_wp_mapper.py": {
+    "mtime": 1782762066.8772655,
+    "ast_hash": "516a62e2b71e2671937eb935f68a9ad3",
+    "semantic_hash": "516a62e2b71e2671937eb935f68a9ad3"
+  },
+  "invoice-automator/kavenegar/Kavenegar.class.php": {
+    "mtime": 1782762066.8772655,
+    "ast_hash": "093f2b76dc9c8503d491788708facf2c",
+    "semantic_hash": "093f2b76dc9c8503d491788708facf2c"
+  },
+  "invoice-automator/kavenegar/Sunwaysms.class.php": {
+    "mtime": 1782762066.8806791,
+    "ast_hash": "9108269ca62e1a8a625e9c2bbe67e75a",
+    "semantic_hash": "9108269ca62e1a8a625e9c2bbe67e75a"
+  },
+  "invoice-automator/kavenegar/assets/js/sunwaysms.js": {
+    "mtime": 1782762066.8817284,
+    "ast_hash": "c5e817c93acc2a3949eb47556a3277b6",
+    "semantic_hash": "c5e817c93acc2a3949eb47556a3277b6"
+  },
+  "invoice-automator/kavenegar/bin/kavenegar_cron.php": {
+    "mtime": 1782762066.8817284,
+    "ast_hash": "366f7544952266f5fc38308aeade3ac0",
+    "semantic_hash": "366f7544952266f5fc38308aeade3ac0"
+  },
+  "invoice-automator/kavenegar/bin/sendsms.php": {
+    "mtime": 1782762066.8827329,
+    "ast_hash": "26d44049b8a9615d52cd7cabaaa15850",
+    "semantic_hash": "26d44049b8a9615d52cd7cabaaa15850"
+  },
+  "invoice-automator/kavenegar/bin/sunwaysmstools.php": {
+    "mtime": 1782762066.8827329,
+    "ast_hash": "05d6b249685a93f2590e6a98cd424f3d",
+    "semantic_hash": "05d6b249685a93f2590e6a98cd424f3d"
+  },
+  "invoice-automator/kavenegar/functions.inc.php": {
+    "mtime": 1782762066.8827329,
+    "ast_hash": "abcf09b4d043707ffae0996af17d9ac7",
+    "semantic_hash": "abcf09b4d043707ffae0996af17d9ac7"
+  },
+  "invoice-automator/kavenegar/install.php": {
+    "mtime": 1782762066.8827329,
+    "ast_hash": "6abe813896e95721cab3810c99d5646b",
+    "semantic_hash": "6abe813896e95721cab3810c99d5646b"
+  },
+  "invoice-automator/kavenegar/page.kavenegar.php": {
+    "mtime": 1782762066.8827329,
+    "ast_hash": "dd36e0141e993bea9464a9b9aab91239",
+    "semantic_hash": "dd36e0141e993bea9464a9b9aab91239"
+  },
+  "invoice-automator/kavenegar/page.sunwaysms.php": {
+    "mtime": 1782762066.8827329,
+    "ast_hash": "2a4873972c267813e69b0b22f41bbcc0",
+    "semantic_hash": "2a4873972c267813e69b0b22f41bbcc0"
+  },
+  "invoice-automator/kavenegar/smsdata.php": {
+    "mtime": 1782762066.8827329,
+    "ast_hash": "f9c8205b90d0a06dc4a0f85e8f8a85be",
+    "semantic_hash": "f9c8205b90d0a06dc4a0f85e8f8a85be"
+  },
+  "invoice-automator/kavenegar/sounds/please-enter-your-mobile-num-then-press-pound.sln": {
+    "mtime": 1782762066.8827329,
+    "ast_hash": "49f0821d803b9f41dfd788255d517726",
+    "semantic_hash": "49f0821d803b9f41dfd788255d517726"
+  },
+  "invoice-automator/kavenegar/sounds/wrong-mobile-number.sln": {
+    "mtime": 1782762066.8855083,
+    "ast_hash": "3990fd77b3ac11f19fcdfd640f5d9638",
+    "semantic_hash": "3990fd77b3ac11f19fcdfd640f5d9638"
+  },
+  "invoice-automator/kavenegar/sunwayjdf.php": {
+    "mtime": 1782762066.8855083,
+    "ast_hash": "48dee6368189687397bad2be62765ec9",
+    "semantic_hash": "48dee6368189687397bad2be62765ec9"
+  },
+  "invoice-automator/kavenegar/uninstall.php": {
+    "mtime": 1782762066.8855083,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "invoice-automator/kavenegar/views/form.php": {
+    "mtime": 1782762066.8855083,
+    "ast_hash": "0105e5404b788384f61a8b7a67d45a4c",
+    "semantic_hash": "0105e5404b788384f61a8b7a67d45a4c"
+  },
+  "invoice-automator/kavenegar/views/grid.php": {
+    "mtime": 1782762066.8878725,
+    "ast_hash": "3b5fb9b392866bf414062e13096a96a2",
+    "semantic_hash": "3b5fb9b392866bf414062e13096a96a2"
+  },
+  "invoice-automator/kavenegar/views/main.php": {
+    "mtime": 1782762066.8878725,
+    "ast_hash": "61a1ac529ec944b6088d15d7e0edd647",
+    "semantic_hash": "61a1ac529ec944b6088d15d7e0edd647"
+  },
+  "invoice-automator/kavenegar/views/rnav.php": {
+    "mtime": 1782762066.8878725,
+    "ast_hash": "f3bf3f9533835e2040b5a12a32cf59b7",
+    "semantic_hash": "f3bf3f9533835e2040b5a12a32cf59b7"
+  },
+  "invoice-automator/main.py": {
+    "mtime": 1782762066.8878725,
+    "ast_hash": "d2991cfdf9b75c17e52a9b6ec4be5354",
+    "semantic_hash": "d2991cfdf9b75c17e52a9b6ec4be5354"
+  },
+  "invoice-automator/modules/__init__.py": {
+    "mtime": 1781022022.033128,
+    "ast_hash": "c046ec518f4b40dcdb92a0cfdacace75",
+    "semantic_hash": "c046ec518f4b40dcdb92a0cfdacace75"
+  },
+  "invoice-automator/modules/bale_sender.py": {
+    "mtime": 1781022022.034324,
+    "ast_hash": "386509cd1c996533f893f0784c1e944c",
+    "semantic_hash": "386509cd1c996533f893f0784c1e944c"
+  },
+  "invoice-automator/modules/pdf_parser.py": {
+    "mtime": 1781022022.034324,
+    "ast_hash": "62cbb2fecbc9d7833fe024a2863d28a6",
+    "semantic_hash": "62cbb2fecbc9d7833fe024a2863d28a6"
+  },
+  "invoice-automator/modules/rubika_sender.py": {
+    "mtime": 1781022022.034324,
+    "ast_hash": "f9c410c264971f56de24d47331ea3645",
+    "semantic_hash": "f9c410c264971f56de24d47331ea3645"
+  },
+  "invoice-automator/modules/sms_kavenegar.py": {
+    "mtime": 1781022022.034324,
+    "ast_hash": "7b2fb542b07fa9f6ef7a4a29228e671d",
+    "semantic_hash": "7b2fb542b07fa9f6ef7a4a29228e671d"
+  },
+  "invoice-automator/modules/whatsapp_sender.py": {
+    "mtime": 1781022022.034324,
+    "ast_hash": "90102d5f5f5b442c517b95b5ce120318",
+    "semantic_hash": "90102d5f5f5b442c517b95b5ce120318"
+  },
+  "invoice-automator/modules/wp_uploader.py": {
+    "mtime": 1781022022.034324,
+    "ast_hash": "b9b37bfb8765770051dbec8dfc45ba61",
+    "semantic_hash": "b9b37bfb8765770051dbec8dfc45ba61"
+  },
+  "invoice-automator/rubika_login.py": {
+    "mtime": 1781022022.034324,
+    "ast_hash": "7f243c5746c52d9c27d959db1c015684",
+    "semantic_hash": "7f243c5746c52d9c27d959db1c015684"
+  },
+  "invoice-automator/setup.sh": {
+    "mtime": 1781022022.034324,
+    "ast_hash": "1dae903e9b544d28e134fdce4fbb343d",
+    "semantic_hash": "1dae903e9b544d28e134fdce4fbb343d"
+  },
+  "invoice-automator/sunwaysms/Sunwaysms.class.php": {
+    "mtime": 1782762066.8892193,
+    "ast_hash": "9108269ca62e1a8a625e9c2bbe67e75a",
+    "semantic_hash": "9108269ca62e1a8a625e9c2bbe67e75a"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/Gruntfile.js": {
+    "mtime": 1782762066.8905697,
+    "ast_hash": "60091d6238ae4a5a0d5f27c3a13d0e60",
+    "semantic_hash": "60091d6238ae4a5a0d5f27c3a13d0e60"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/bower.json": {
+    "mtime": 1782762066.8905697,
+    "ast_hash": "50a5e6eea2642340836a94b0bbf5a1d2",
+    "semantic_hash": "50a5e6eea2642340836a94b0bbf5a1d2"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/config.js": {
+    "mtime": 1782762066.8905697,
+    "ast_hash": "182c464a2b7d58c6456784fc31552af7",
+    "semantic_hash": "182c464a2b7d58c6456784fc31552af7"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/gradlew": {
+    "mtime": 1782762066.894273,
+    "ast_hash": "a4199c659fc5a4eee3f9abdb88b9d3c8",
+    "semantic_hash": "a4199c659fc5a4eee3f9abdb88b9d3c8"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/jqGrid.jquery.json": {
+    "mtime": 1782762066.894273,
+    "ast_hash": "ae8eb4d9fbbdcf7e88c88f47c2c7a922",
+    "semantic_hash": "ae8eb4d9fbbdcf7e88c88f47c2c7a922"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/jqGrid.js": {
+    "mtime": 1782762066.894273,
+    "ast_hash": "cc76d3d0b12b9d0429a9a3d8ebcf7c1d",
+    "semantic_hash": "cc76d3d0b12b9d0429a9a3d8ebcf7c1d"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/jquery.js": {
+    "mtime": 1782762066.894273,
+    "ast_hash": "8fc25e27d42774aeae6edbc0a18b72aa",
+    "semantic_hash": "8fc25e27d42774aeae6edbc0a18b72aa"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/addons/ui.multiselect.js": {
+    "mtime": 1782762066.8962736,
+    "ast_hash": "23d3dda076b26baa352e067f7a4014d6",
+    "semantic_hash": "23d3dda076b26baa352e067f7a4014d6"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/grid.aria.js": {
+    "mtime": 1782762066.8962736,
+    "ast_hash": "a4eaf2efca6fb0063afde5dd7edb7220",
+    "semantic_hash": "a4eaf2efca6fb0063afde5dd7edb7220"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/grid.base.js": {
+    "mtime": 1782762066.8972654,
+    "ast_hash": "6edf871b90a971507695a293f595cbf6",
+    "semantic_hash": "6edf871b90a971507695a293f595cbf6"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/grid.celledit.js": {
+    "mtime": 1782762066.8972654,
+    "ast_hash": "e5369e6e04ad32cb46bb92c4d2f13551",
+    "semantic_hash": "e5369e6e04ad32cb46bb92c4d2f13551"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/grid.common.js": {
+    "mtime": 1782762066.8972654,
+    "ast_hash": "194d4890fdc7586df189695b206be209",
+    "semantic_hash": "194d4890fdc7586df189695b206be209"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/grid.export.js": {
+    "mtime": 1782762066.8972654,
+    "ast_hash": "1c82ff48fb10053bcd762e6c2ba279c7",
+    "semantic_hash": "1c82ff48fb10053bcd762e6c2ba279c7"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/grid.filter.js": {
+    "mtime": 1782762066.8972654,
+    "ast_hash": "4fd1009ed04e5f6678296cb12d47d18a",
+    "semantic_hash": "4fd1009ed04e5f6678296cb12d47d18a"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/grid.formedit.js": {
+    "mtime": 1782762066.9012656,
+    "ast_hash": "04c38badb6fe09841e98eefd997429c9",
+    "semantic_hash": "04c38badb6fe09841e98eefd997429c9"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/grid.frozenrows.js": {
+    "mtime": 1782762066.9012656,
+    "ast_hash": "3733a4b33e7ff3dd999854d59cf03401",
+    "semantic_hash": "3733a4b33e7ff3dd999854d59cf03401"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/grid.grouping.js": {
+    "mtime": 1782762066.9012656,
+    "ast_hash": "11a81312b770b07f59e47501318cb0e6",
+    "semantic_hash": "11a81312b770b07f59e47501318cb0e6"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/grid.import.js": {
+    "mtime": 1782762066.9012656,
+    "ast_hash": "e20536c640e779f02b55fabfec15e022",
+    "semantic_hash": "e20536c640e779f02b55fabfec15e022"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/grid.inlinedit.js": {
+    "mtime": 1782762066.9012656,
+    "ast_hash": "53a38ecdeaeb75626a57fb2dfc7cf71e",
+    "semantic_hash": "53a38ecdeaeb75626a57fb2dfc7cf71e"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/grid.jqueryui.js": {
+    "mtime": 1782762066.9012656,
+    "ast_hash": "8f8689a24b545b61163e26452b44612c",
+    "semantic_hash": "8f8689a24b545b61163e26452b44612c"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/grid.pivot.js": {
+    "mtime": 1782762066.9012656,
+    "ast_hash": "33fc8a48efcb30ef5da005b202d22726",
+    "semantic_hash": "33fc8a48efcb30ef5da005b202d22726"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/grid.subgrid.js": {
+    "mtime": 1782762066.9012656,
+    "ast_hash": "f3135c4d95c95c9718755221bacec687",
+    "semantic_hash": "f3135c4d95c95c9718755221bacec687"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/grid.transposed.js": {
+    "mtime": 1782762066.9012656,
+    "ast_hash": "d7165f474a884ec3f6ca8edde9ad8319",
+    "semantic_hash": "d7165f474a884ec3f6ca8edde9ad8319"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/grid.treegrid.js": {
+    "mtime": 1782762066.9012656,
+    "ast_hash": "11c371ea68c1685ef314f9f6987c9fc5",
+    "semantic_hash": "11c371ea68c1685ef314f9f6987c9fc5"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/grid.utils.js": {
+    "mtime": 1782762066.9012656,
+    "ast_hash": "2d07b345a93035c20d4b3631251a3f66",
+    "semantic_hash": "2d07b345a93035c20d4b3631251a3f66"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/i18n/grid.locale-ar.js": {
+    "mtime": 1782762066.9012656,
+    "ast_hash": "1296c6b3f3fea858fce64c9dc762cbd6",
+    "semantic_hash": "1296c6b3f3fea858fce64c9dc762cbd6"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/i18n/grid.locale-bg.js": {
+    "mtime": 1782762066.9057205,
+    "ast_hash": "c1f156debd2f7007fe2659ec5a0be228",
+    "semantic_hash": "c1f156debd2f7007fe2659ec5a0be228"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/i18n/grid.locale-ca.js": {
+    "mtime": 1782762066.9057205,
+    "ast_hash": "6d7c26860cb49a011b6b7a41775facbd",
+    "semantic_hash": "6d7c26860cb49a011b6b7a41775facbd"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/i18n/grid.locale-cn.js": {
+    "mtime": 1782762066.9057205,
+    "ast_hash": "899b6db9cf3e162b430476150a2b6807",
+    "semantic_hash": "899b6db9cf3e162b430476150a2b6807"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/i18n/grid.locale-cs.js": {
+    "mtime": 1782762066.9057205,
+    "ast_hash": "ef0b5d3c90cfb7755dd08d56c51acbe3",
+    "semantic_hash": "ef0b5d3c90cfb7755dd08d56c51acbe3"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/i18n/grid.locale-de.js": {
+    "mtime": 1782762066.9057205,
+    "ast_hash": "8414a0e4e011b0309a928e553e1d25e5",
+    "semantic_hash": "8414a0e4e011b0309a928e553e1d25e5"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/i18n/grid.locale-dk.js": {
+    "mtime": 1782762066.9057205,
+    "ast_hash": "ff1c400e1dc2c68ce7782b38fa4ab4de",
+    "semantic_hash": "ff1c400e1dc2c68ce7782b38fa4ab4de"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/i18n/grid.locale-el.js": {
+    "mtime": 1782762066.9057205,
+    "ast_hash": "c8da67dffdae693e7f0e02f6126419d6",
+    "semantic_hash": "c8da67dffdae693e7f0e02f6126419d6"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/i18n/grid.locale-en.js": {
+    "mtime": 1782762066.9057205,
+    "ast_hash": "b397898cf2aed0b3412640c6be00cbe8",
+    "semantic_hash": "b397898cf2aed0b3412640c6be00cbe8"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/i18n/grid.locale-es.js": {
+    "mtime": 1782762066.9057205,
+    "ast_hash": "7f7c5c88d651f0fa4bb1a358779e6881",
+    "semantic_hash": "7f7c5c88d651f0fa4bb1a358779e6881"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/i18n/grid.locale-fa.js": {
+    "mtime": 1782762066.9057205,
+    "ast_hash": "88602ca7a6d9af826321fd4fb9fc37ce",
+    "semantic_hash": "88602ca7a6d9af826321fd4fb9fc37ce"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/i18n/grid.locale-fi.js": {
+    "mtime": 1782762066.9057205,
+    "ast_hash": "dea9af344127bfdcfcdc53099d9ee53e",
+    "semantic_hash": "dea9af344127bfdcfcdc53099d9ee53e"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/i18n/grid.locale-fr.js": {
+    "mtime": 1782762066.9057205,
+    "ast_hash": "93321f98ca6d2ce49603841967e77ba1",
+    "semantic_hash": "93321f98ca6d2ce49603841967e77ba1"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/i18n/grid.locale-gl.js": {
+    "mtime": 1782762066.9057205,
+    "ast_hash": "e4a63cf6dd68e417b2aa190848239cb9",
+    "semantic_hash": "e4a63cf6dd68e417b2aa190848239cb9"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/i18n/grid.locale-he.js": {
+    "mtime": 1782762066.9057205,
+    "ast_hash": "63459d4b4b62a4b13e7b0ad784cf2aa2",
+    "semantic_hash": "63459d4b4b62a4b13e7b0ad784cf2aa2"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/i18n/grid.locale-hr.js": {
+    "mtime": 1782762066.9057205,
+    "ast_hash": "a9b303e207fb91df7b10dfc0d1e031e0",
+    "semantic_hash": "a9b303e207fb91df7b10dfc0d1e031e0"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/i18n/grid.locale-hu.js": {
+    "mtime": 1782762066.9057205,
+    "ast_hash": "515b5e6166b3b418913e38d8e1379870",
+    "semantic_hash": "515b5e6166b3b418913e38d8e1379870"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/i18n/grid.locale-id.js": {
+    "mtime": 1782762066.9057205,
+    "ast_hash": "6570b3c2be5ff188305197636f3e1471",
+    "semantic_hash": "6570b3c2be5ff188305197636f3e1471"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/i18n/grid.locale-is.js": {
+    "mtime": 1782762066.9057205,
+    "ast_hash": "a2542a6bbf112c5b4273869bc566c4b6",
+    "semantic_hash": "a2542a6bbf112c5b4273869bc566c4b6"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/i18n/grid.locale-it.js": {
+    "mtime": 1782762066.9057205,
+    "ast_hash": "ad17abb6afb9cb560808bf60bf656123",
+    "semantic_hash": "ad17abb6afb9cb560808bf60bf656123"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/i18n/grid.locale-ja.js": {
+    "mtime": 1782762066.9057205,
+    "ast_hash": "8c9fa8013f8a540fd05ffa48f3406272",
+    "semantic_hash": "8c9fa8013f8a540fd05ffa48f3406272"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/i18n/grid.locale-kr.js": {
+    "mtime": 1782762066.9057205,
+    "ast_hash": "985f093563731f7a84a649f9a47a537f",
+    "semantic_hash": "985f093563731f7a84a649f9a47a537f"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/i18n/grid.locale-lt.js": {
+    "mtime": 1782762066.9057205,
+    "ast_hash": "01f5ddf0b485992709604614467a768f",
+    "semantic_hash": "01f5ddf0b485992709604614467a768f"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/i18n/grid.locale-me.js": {
+    "mtime": 1782762066.9057205,
+    "ast_hash": "fc44d296ef89d0e05aa039029cc75bca",
+    "semantic_hash": "fc44d296ef89d0e05aa039029cc75bca"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/i18n/grid.locale-nl.js": {
+    "mtime": 1782762066.9092655,
+    "ast_hash": "cf09f353e31bb4e5a582e71d4412fe21",
+    "semantic_hash": "cf09f353e31bb4e5a582e71d4412fe21"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/i18n/grid.locale-no.js": {
+    "mtime": 1782762066.9092655,
+    "ast_hash": "35b9b318911e379e13eb6818c60c4de0",
+    "semantic_hash": "35b9b318911e379e13eb6818c60c4de0"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/i18n/grid.locale-pl.js": {
+    "mtime": 1782762066.9092655,
+    "ast_hash": "a6115bac2065a1d5d70acb574527fed9",
+    "semantic_hash": "a6115bac2065a1d5d70acb574527fed9"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/i18n/grid.locale-pt-br.js": {
+    "mtime": 1782762066.9092655,
+    "ast_hash": "aa7946efe53d23cf8d6833f45edff700",
+    "semantic_hash": "aa7946efe53d23cf8d6833f45edff700"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/i18n/grid.locale-pt.js": {
+    "mtime": 1782762066.9092655,
+    "ast_hash": "34be6329c0b21cf594ddadd8a863f8dd",
+    "semantic_hash": "34be6329c0b21cf594ddadd8a863f8dd"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/i18n/grid.locale-ro.js": {
+    "mtime": 1782762066.9092655,
+    "ast_hash": "904d9dfbd1ca98c5e8b498bffcb125b9",
+    "semantic_hash": "904d9dfbd1ca98c5e8b498bffcb125b9"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/i18n/grid.locale-ru.js": {
+    "mtime": 1782762066.9092655,
+    "ast_hash": "cb86b19db700d8f28243a8d7083bdff3",
+    "semantic_hash": "cb86b19db700d8f28243a8d7083bdff3"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/i18n/grid.locale-sk.js": {
+    "mtime": 1782762066.9092655,
+    "ast_hash": "49703afdf0e610bb2e00aff75261dcb0",
+    "semantic_hash": "49703afdf0e610bb2e00aff75261dcb0"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/i18n/grid.locale-sq.js": {
+    "mtime": 1782762066.9092655,
+    "ast_hash": "13cf70260b17d0926a7ee865a7c3d87d",
+    "semantic_hash": "13cf70260b17d0926a7ee865a7c3d87d"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/i18n/grid.locale-sr-latin.js": {
+    "mtime": 1782762066.9092655,
+    "ast_hash": "c017569364d1f784f03705654497e52a",
+    "semantic_hash": "c017569364d1f784f03705654497e52a"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/i18n/grid.locale-sr.js": {
+    "mtime": 1782762066.9092655,
+    "ast_hash": "e042a5493de82c8f821a3f51bbbe15dd",
+    "semantic_hash": "e042a5493de82c8f821a3f51bbbe15dd"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/i18n/grid.locale-sv.js": {
+    "mtime": 1782762066.9092655,
+    "ast_hash": "3b194f154dd94efa4586ab82844245fb",
+    "semantic_hash": "3b194f154dd94efa4586ab82844245fb"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/i18n/grid.locale-th.js": {
+    "mtime": 1782762066.9092655,
+    "ast_hash": "b6952e4e8c4e618d43efb7d43fd2bfa2",
+    "semantic_hash": "b6952e4e8c4e618d43efb7d43fd2bfa2"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/i18n/grid.locale-tr.js": {
+    "mtime": 1782762066.9092655,
+    "ast_hash": "0cb146185c05b7577692af42a6dddb02",
+    "semantic_hash": "0cb146185c05b7577692af42a6dddb02"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/i18n/grid.locale-tw.js": {
+    "mtime": 1782762066.9092655,
+    "ast_hash": "d507d5b2e40ebfd0aa20e330451e5bb0",
+    "semantic_hash": "d507d5b2e40ebfd0aa20e330451e5bb0"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/i18n/grid.locale-uk.js": {
+    "mtime": 1782762066.9092655,
+    "ast_hash": "1832d586b0908e179614a776b3b07da3",
+    "semantic_hash": "1832d586b0908e179614a776b3b07da3"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/i18n/grid.locale-vi.js": {
+    "mtime": 1782762066.9092655,
+    "ast_hash": "d9d53dfd6d67fbba2261d1ea15e94b70",
+    "semantic_hash": "d9d53dfd6d67fbba2261d1ea15e94b70"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/jqDnR.js": {
+    "mtime": 1782762066.9092655,
+    "ast_hash": "ea7e8ca4a18bf038d8c9297a0fd383ed",
+    "semantic_hash": "ea7e8ca4a18bf038d8c9297a0fd383ed"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/jqModal.js": {
+    "mtime": 1782762066.9092655,
+    "ast_hash": "a6b10a8d65c992b747b1bba4e6383190",
+    "semantic_hash": "a6b10a8d65c992b747b1bba4e6383190"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/jquery.fmatter.js": {
+    "mtime": 1782762066.9092655,
+    "ast_hash": "50b784c9d526daee0c60b5b27260504f",
+    "semantic_hash": "50b784c9d526daee0c60b5b27260504f"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/jquery.jqGrid.js": {
+    "mtime": 1782762066.9172657,
+    "ast_hash": "79d4089cacf31ca274f6d5df5c767f33",
+    "semantic_hash": "79d4089cacf31ca274f6d5df5c767f33"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/jquery.jqGrid.min.js": {
+    "mtime": 1782762066.9212656,
+    "ast_hash": "b3c72aa99997a098dca77ebf984e378d",
+    "semantic_hash": "b3c72aa99997a098dca77ebf984e378d"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/jquery.sortable.js": {
+    "mtime": 1782762066.9292655,
+    "ast_hash": "5bfafec2b9825deb2c26fa1c971d81b1",
+    "semantic_hash": "5bfafec2b9825deb2c26fa1c971d81b1"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/grid.aria.js": {
+    "mtime": 1782762066.9292655,
+    "ast_hash": "7daf5db6050c22fab4c0b78f683b0107",
+    "semantic_hash": "7daf5db6050c22fab4c0b78f683b0107"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/grid.base.js": {
+    "mtime": 1782762066.9314694,
+    "ast_hash": "8b4c756a3ec8e7c4316c051ad0ef53b1",
+    "semantic_hash": "8b4c756a3ec8e7c4316c051ad0ef53b1"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/grid.celledit.js": {
+    "mtime": 1782762066.9314694,
+    "ast_hash": "03ad9087b07a42c88ac49d9f2590536b",
+    "semantic_hash": "03ad9087b07a42c88ac49d9f2590536b"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/grid.common.js": {
+    "mtime": 1782762066.9314694,
+    "ast_hash": "b74ed674b6087f374f308401bf5c752b",
+    "semantic_hash": "b74ed674b6087f374f308401bf5c752b"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/grid.export.js": {
+    "mtime": 1782762066.9314694,
+    "ast_hash": "8147ff2d99b9a1312ab4c8470e03315d",
+    "semantic_hash": "8147ff2d99b9a1312ab4c8470e03315d"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/grid.filter.js": {
+    "mtime": 1782762066.9332654,
+    "ast_hash": "27103e612d48baba0283b20d8aa527d1",
+    "semantic_hash": "27103e612d48baba0283b20d8aa527d1"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/grid.formedit.js": {
+    "mtime": 1782762066.9332654,
+    "ast_hash": "2cdea5be8e94770ca934c6a0e28de2a0",
+    "semantic_hash": "2cdea5be8e94770ca934c6a0e28de2a0"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/grid.frozenrows.js": {
+    "mtime": 1782762066.9332654,
+    "ast_hash": "0ba83081a4c2d82662fddf57d5f6469e",
+    "semantic_hash": "0ba83081a4c2d82662fddf57d5f6469e"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/grid.grouping.js": {
+    "mtime": 1782762066.9332654,
+    "ast_hash": "a5d7e035bbfc6194c448b0d2b477801c",
+    "semantic_hash": "a5d7e035bbfc6194c448b0d2b477801c"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/grid.import.js": {
+    "mtime": 1782762066.9332654,
+    "ast_hash": "1f92cb7e2e1eaa878ea88afb3388481c",
+    "semantic_hash": "1f92cb7e2e1eaa878ea88afb3388481c"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/grid.inlinedit.js": {
+    "mtime": 1782762066.9332654,
+    "ast_hash": "be6cdcfc0c44be7c79c0a3af90a8e221",
+    "semantic_hash": "be6cdcfc0c44be7c79c0a3af90a8e221"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/grid.jqueryui.js": {
+    "mtime": 1782762066.9332654,
+    "ast_hash": "af3fc10a8c220cdfeac91093582e71ab",
+    "semantic_hash": "af3fc10a8c220cdfeac91093582e71ab"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/grid.pivot.js": {
+    "mtime": 1782762066.9332654,
+    "ast_hash": "cea5c1afe141c5a7d4ee981fa163de91",
+    "semantic_hash": "cea5c1afe141c5a7d4ee981fa163de91"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/grid.subgrid.js": {
+    "mtime": 1782762066.9332654,
+    "ast_hash": "78379c0f8f8c165fb52bb9e76bc40c92",
+    "semantic_hash": "78379c0f8f8c165fb52bb9e76bc40c92"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/grid.transposed.js": {
+    "mtime": 1782762066.9332654,
+    "ast_hash": "b163a27a9b999924e298924e137a7168",
+    "semantic_hash": "b163a27a9b999924e298924e137a7168"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/grid.treegrid.js": {
+    "mtime": 1782762066.9332654,
+    "ast_hash": "8d30875667de8faa0abc9f0c063bf3c4",
+    "semantic_hash": "8d30875667de8faa0abc9f0c063bf3c4"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/grid.utils.js": {
+    "mtime": 1782762066.9332654,
+    "ast_hash": "ff9f9efc79c970dfe449a9c12a1ec7ca",
+    "semantic_hash": "ff9f9efc79c970dfe449a9c12a1ec7ca"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/i18n/grid.locale-ar.js": {
+    "mtime": 1782762066.9332654,
+    "ast_hash": "a5d8a0fee448d0b56ee0d7a1f53dc4f9",
+    "semantic_hash": "a5d8a0fee448d0b56ee0d7a1f53dc4f9"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/i18n/grid.locale-bg.js": {
+    "mtime": 1782762066.9376905,
+    "ast_hash": "6ff7adb09690c64811732877042ed163",
+    "semantic_hash": "6ff7adb09690c64811732877042ed163"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/i18n/grid.locale-ca.js": {
+    "mtime": 1782762066.9376905,
+    "ast_hash": "9da71fbf56903a7f49313c3b2ac142f5",
+    "semantic_hash": "9da71fbf56903a7f49313c3b2ac142f5"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/i18n/grid.locale-cn.js": {
+    "mtime": 1782762066.9376905,
+    "ast_hash": "cd2368445871198b1305f6b03dee3eca",
+    "semantic_hash": "cd2368445871198b1305f6b03dee3eca"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/i18n/grid.locale-cs.js": {
+    "mtime": 1782762066.9376905,
+    "ast_hash": "dea0acebcc13e581f765acdbfcf28ece",
+    "semantic_hash": "dea0acebcc13e581f765acdbfcf28ece"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/i18n/grid.locale-de.js": {
+    "mtime": 1782762066.9376905,
+    "ast_hash": "041ca546bc5d865d3736cdd28d49eebf",
+    "semantic_hash": "041ca546bc5d865d3736cdd28d49eebf"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/i18n/grid.locale-dk.js": {
+    "mtime": 1782762066.9376905,
+    "ast_hash": "1c8248e9051b9468e9896e57a83793b5",
+    "semantic_hash": "1c8248e9051b9468e9896e57a83793b5"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/i18n/grid.locale-el.js": {
+    "mtime": 1782762066.9376905,
+    "ast_hash": "e87b00c883e4ec44f7e8ddc17ff8f445",
+    "semantic_hash": "e87b00c883e4ec44f7e8ddc17ff8f445"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/i18n/grid.locale-en.js": {
+    "mtime": 1782762066.9376905,
+    "ast_hash": "3ebb746e405288ebf12d3efc3b8db0bc",
+    "semantic_hash": "3ebb746e405288ebf12d3efc3b8db0bc"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/i18n/grid.locale-es.js": {
+    "mtime": 1782762066.9376905,
+    "ast_hash": "379850cdb61fa40d926a575b0348b85d",
+    "semantic_hash": "379850cdb61fa40d926a575b0348b85d"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/i18n/grid.locale-fa.js": {
+    "mtime": 1782762066.9376905,
+    "ast_hash": "70bb04d0c8c59dc622f135d92e252b18",
+    "semantic_hash": "70bb04d0c8c59dc622f135d92e252b18"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/i18n/grid.locale-fi.js": {
+    "mtime": 1782762066.9376905,
+    "ast_hash": "eb0ef5e0437ee5088fb8043f9979bde0",
+    "semantic_hash": "eb0ef5e0437ee5088fb8043f9979bde0"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/i18n/grid.locale-fr.js": {
+    "mtime": 1782762066.9376905,
+    "ast_hash": "528b2ffd6dbbf37b4d65cda764c4c212",
+    "semantic_hash": "528b2ffd6dbbf37b4d65cda764c4c212"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/i18n/grid.locale-gl.js": {
+    "mtime": 1782762066.9376905,
+    "ast_hash": "225883b84a00f2bfdd171b7555cdcc15",
+    "semantic_hash": "225883b84a00f2bfdd171b7555cdcc15"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/i18n/grid.locale-he.js": {
+    "mtime": 1782762066.9376905,
+    "ast_hash": "151527e7d47f66a90496402a7880a9c4",
+    "semantic_hash": "151527e7d47f66a90496402a7880a9c4"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/i18n/grid.locale-hr.js": {
+    "mtime": 1782762066.9376905,
+    "ast_hash": "32ea609574db76fd380dac49d028d4b5",
+    "semantic_hash": "32ea609574db76fd380dac49d028d4b5"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/i18n/grid.locale-hu.js": {
+    "mtime": 1782762066.9376905,
+    "ast_hash": "ea0384d8c3adee87edac17d9c27bc01a",
+    "semantic_hash": "ea0384d8c3adee87edac17d9c27bc01a"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/i18n/grid.locale-id.js": {
+    "mtime": 1782762066.9376905,
+    "ast_hash": "49a84b42bda7e7f87b164ecdb48adc55",
+    "semantic_hash": "49a84b42bda7e7f87b164ecdb48adc55"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/i18n/grid.locale-is.js": {
+    "mtime": 1782762066.9376905,
+    "ast_hash": "a9c7b941760115fd88bae3025c7cb5a6",
+    "semantic_hash": "a9c7b941760115fd88bae3025c7cb5a6"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/i18n/grid.locale-it.js": {
+    "mtime": 1782762066.9376905,
+    "ast_hash": "f6d8547a1076774435d8aabffdf8d6b3",
+    "semantic_hash": "f6d8547a1076774435d8aabffdf8d6b3"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/i18n/grid.locale-ja.js": {
+    "mtime": 1782762066.9376905,
+    "ast_hash": "7b9fc51d4c25a231216bde65b94880c6",
+    "semantic_hash": "7b9fc51d4c25a231216bde65b94880c6"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/i18n/grid.locale-kr.js": {
+    "mtime": 1782762066.9376905,
+    "ast_hash": "df720d7f60130eb07a9b7335295b7e33",
+    "semantic_hash": "df720d7f60130eb07a9b7335295b7e33"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/i18n/grid.locale-lt.js": {
+    "mtime": 1782762066.9376905,
+    "ast_hash": "9e07e7ce276d553d13c2b6a6e647b521",
+    "semantic_hash": "9e07e7ce276d553d13c2b6a6e647b521"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/i18n/grid.locale-me.js": {
+    "mtime": 1782762066.9376905,
+    "ast_hash": "300d6b41894f14cca3492a2686d42b06",
+    "semantic_hash": "300d6b41894f14cca3492a2686d42b06"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/i18n/grid.locale-nl.js": {
+    "mtime": 1782762066.9376905,
+    "ast_hash": "29d5c3a45e1308b15912787ef9a05439",
+    "semantic_hash": "29d5c3a45e1308b15912787ef9a05439"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/i18n/grid.locale-no.js": {
+    "mtime": 1782762066.9376905,
+    "ast_hash": "5e8d36250ad3c9803b60478ca511cb13",
+    "semantic_hash": "5e8d36250ad3c9803b60478ca511cb13"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/i18n/grid.locale-pl.js": {
+    "mtime": 1782762066.9376905,
+    "ast_hash": "dca24a8fea30761373ee65de6b14fdbe",
+    "semantic_hash": "dca24a8fea30761373ee65de6b14fdbe"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/i18n/grid.locale-pt-br.js": {
+    "mtime": 1782762066.9412656,
+    "ast_hash": "9798af047240b5d8a543bc32af41fe7a",
+    "semantic_hash": "9798af047240b5d8a543bc32af41fe7a"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/i18n/grid.locale-pt.js": {
+    "mtime": 1782762066.9412656,
+    "ast_hash": "d00df608a391ad83c6ab71c2abbf9deb",
+    "semantic_hash": "d00df608a391ad83c6ab71c2abbf9deb"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/i18n/grid.locale-ro.js": {
+    "mtime": 1782762066.9412656,
+    "ast_hash": "594634945241ce7f140c06c6b0ebfc53",
+    "semantic_hash": "594634945241ce7f140c06c6b0ebfc53"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/i18n/grid.locale-ru.js": {
+    "mtime": 1782762066.9412656,
+    "ast_hash": "638f9e702438ff0e9df65443c891408e",
+    "semantic_hash": "638f9e702438ff0e9df65443c891408e"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/i18n/grid.locale-sk.js": {
+    "mtime": 1782762066.9412656,
+    "ast_hash": "79308fd8e3d40bbd7690c9dad8d8ccd1",
+    "semantic_hash": "79308fd8e3d40bbd7690c9dad8d8ccd1"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/i18n/grid.locale-sq.js": {
+    "mtime": 1782762066.9412656,
+    "ast_hash": "1dff7946f4b8d585a45fa54e69e9e415",
+    "semantic_hash": "1dff7946f4b8d585a45fa54e69e9e415"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/i18n/grid.locale-sr-latin.js": {
+    "mtime": 1782762066.9412656,
+    "ast_hash": "2187dc5c1886c5887d2670b366a55daa",
+    "semantic_hash": "2187dc5c1886c5887d2670b366a55daa"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/i18n/grid.locale-sr.js": {
+    "mtime": 1782762066.9412656,
+    "ast_hash": "daad17bb480152a6161ee9470c112dcd",
+    "semantic_hash": "daad17bb480152a6161ee9470c112dcd"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/i18n/grid.locale-sv.js": {
+    "mtime": 1782762066.9412656,
+    "ast_hash": "c25870db4615b79e85f3c3bd3d83c53b",
+    "semantic_hash": "c25870db4615b79e85f3c3bd3d83c53b"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/i18n/grid.locale-th.js": {
+    "mtime": 1782762066.9412656,
+    "ast_hash": "35d73c39bc1272dbe832e1b03bcf0c16",
+    "semantic_hash": "35d73c39bc1272dbe832e1b03bcf0c16"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/i18n/grid.locale-tr.js": {
+    "mtime": 1782762066.9412656,
+    "ast_hash": "6b704270f2ee59705c5507da4dbd252b",
+    "semantic_hash": "6b704270f2ee59705c5507da4dbd252b"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/i18n/grid.locale-tw.js": {
+    "mtime": 1782762066.9412656,
+    "ast_hash": "8d78c424be4dbbb5510e952b60152d47",
+    "semantic_hash": "8d78c424be4dbbb5510e952b60152d47"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/i18n/grid.locale-ua.js": {
+    "mtime": 1782762066.9412656,
+    "ast_hash": "86a3d1869847fe0ed26fc52e11ecdf9f",
+    "semantic_hash": "86a3d1869847fe0ed26fc52e11ecdf9f"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/i18n/grid.locale-uk.js": {
+    "mtime": 1782762066.9412656,
+    "ast_hash": "17b2615dd0d8c58dd53f56726d4dc3d1",
+    "semantic_hash": "17b2615dd0d8c58dd53f56726d4dc3d1"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/i18n/grid.locale-vi.js": {
+    "mtime": 1782762066.9412656,
+    "ast_hash": "70afd238a836e6a61f4617d044e6bb7e",
+    "semantic_hash": "70afd238a836e6a61f4617d044e6bb7e"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/jqDnR.js": {
+    "mtime": 1782762066.9412656,
+    "ast_hash": "f439a1b1d0af84b5066b7c13ce6d7f08",
+    "semantic_hash": "f439a1b1d0af84b5066b7c13ce6d7f08"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/jqModal.js": {
+    "mtime": 1782762066.9412656,
+    "ast_hash": "97fe213635fb8d7340988039d4169496",
+    "semantic_hash": "97fe213635fb8d7340988039d4169496"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/jquery.fmatter.js": {
+    "mtime": 1782762066.9412656,
+    "ast_hash": "d87ea35eb98ea8fa6e54951cd341d95c",
+    "semantic_hash": "d87ea35eb98ea8fa6e54951cd341d95c"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/js/minified/jquery.sortable.js": {
+    "mtime": 1782762066.9412656,
+    "ast_hash": "69a7e4614a35c738751e4679e1225954",
+    "semantic_hash": "69a7e4614a35c738751e4679e1225954"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/package.json": {
+    "mtime": 1782762066.9412656,
+    "ast_hash": "0e3cc6121a5d7668e3d5fa0e4004cc68",
+    "semantic_hash": "0e3cc6121a5d7668e3d5fa0e4004cc68"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/plugins/grid.addons.js": {
+    "mtime": 1782762066.9412656,
+    "ast_hash": "b4f7b292a3056806d5a4a985e035d5fa",
+    "semantic_hash": "b4f7b292a3056806d5a4a985e035d5fa"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/plugins/grid.postext.js": {
+    "mtime": 1782762066.9457994,
+    "ast_hash": "407eede4120abbc4f879b856ecb14c51",
+    "semantic_hash": "407eede4120abbc4f879b856ecb14c51"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/plugins/grid.setcolumns.js": {
+    "mtime": 1782762066.9457994,
+    "ast_hash": "d5509f9b92409fc1fb5da8ce9d580655",
+    "semantic_hash": "d5509f9b92409fc1fb5da8ce9d580655"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/plugins/grid.tbltogrid.js": {
+    "mtime": 1782762066.9457994,
+    "ast_hash": "8037f60c5947965b928a5b1d58b20144",
+    "semantic_hash": "8037f60c5947965b928a5b1d58b20144"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/plugins/jquery.contextmenu.js": {
+    "mtime": 1782762066.9457994,
+    "ast_hash": "a42b17ed72c16aa69b48c63928402b84",
+    "semantic_hash": "a42b17ed72c16aa69b48c63928402b84"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/plugins/jquery.searchFilter.js": {
+    "mtime": 1782762066.9457994,
+    "ast_hash": "ccdc75752a7da82a07f54208d0b675c3",
+    "semantic_hash": "ccdc75752a7da82a07f54208d0b675c3"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/plugins/jquery.tablednd.js": {
+    "mtime": 1782762066.9457994,
+    "ast_hash": "eb1d5746dee056cb8c132b086fe01490",
+    "semantic_hash": "eb1d5746dee056cb8c132b086fe01490"
+  },
+  "invoice-automator/sunwaysms/assets/js/sunwaysms.js": {
+    "mtime": 1782762066.9457994,
+    "ast_hash": "c5e817c93acc2a3949eb47556a3277b6",
+    "semantic_hash": "c5e817c93acc2a3949eb47556a3277b6"
+  },
+  "invoice-automator/sunwaysms/bin/sendsms.php": {
+    "mtime": 1782762066.9457994,
+    "ast_hash": "d6699e8cb0343f6aa0729f22b1d6cc86",
+    "semantic_hash": "d6699e8cb0343f6aa0729f22b1d6cc86"
+  },
+  "invoice-automator/sunwaysms/bin/sunwaysmstools.php": {
+    "mtime": 1782762066.9479568,
+    "ast_hash": "f04290d7c2780d937608951ae035e1a1",
+    "semantic_hash": "f04290d7c2780d937608951ae035e1a1"
+  },
+  "invoice-automator/sunwaysms/functions.inc.php": {
+    "mtime": 1782762066.9479568,
+    "ast_hash": "77f2e99de294046a7866589a53e9f831",
+    "semantic_hash": "77f2e99de294046a7866589a53e9f831"
+  },
+  "invoice-automator/sunwaysms/install.php": {
+    "mtime": 1782762066.9479568,
+    "ast_hash": "9b399313f75af250217b1721fefb34d2",
+    "semantic_hash": "9b399313f75af250217b1721fefb34d2"
+  },
+  "invoice-automator/sunwaysms/page.sunwaysms.php": {
+    "mtime": 1782762066.9479568,
+    "ast_hash": "2a4873972c267813e69b0b22f41bbcc0",
+    "semantic_hash": "2a4873972c267813e69b0b22f41bbcc0"
+  },
+  "invoice-automator/sunwaysms/smsdata.php": {
+    "mtime": 1782762066.9479568,
+    "ast_hash": "f9c8205b90d0a06dc4a0f85e8f8a85be",
+    "semantic_hash": "f9c8205b90d0a06dc4a0f85e8f8a85be"
+  },
+  "invoice-automator/sunwaysms/sounds/please-enter-your-mobile-num-then-press-pound.sln": {
+    "mtime": 1782762066.9479568,
+    "ast_hash": "49f0821d803b9f41dfd788255d517726",
+    "semantic_hash": "49f0821d803b9f41dfd788255d517726"
+  },
+  "invoice-automator/sunwaysms/sounds/wrong-mobile-number.sln": {
+    "mtime": 1782762066.9494934,
+    "ast_hash": "3990fd77b3ac11f19fcdfd640f5d9638",
+    "semantic_hash": "3990fd77b3ac11f19fcdfd640f5d9638"
+  },
+  "invoice-automator/sunwaysms/sunwayjdf.php": {
+    "mtime": 1782762066.9494934,
+    "ast_hash": "48dee6368189687397bad2be62765ec9",
+    "semantic_hash": "48dee6368189687397bad2be62765ec9"
+  },
+  "invoice-automator/sunwaysms/uninstall.php": {
+    "mtime": 1782762066.9494934,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "invoice-automator/sunwaysms/views/form.php": {
+    "mtime": 1782762066.9494934,
+    "ast_hash": "0105e5404b788384f61a8b7a67d45a4c",
+    "semantic_hash": "0105e5404b788384f61a8b7a67d45a4c"
+  },
+  "invoice-automator/sunwaysms/views/grid.php": {
+    "mtime": 1782762066.9509206,
+    "ast_hash": "3b5fb9b392866bf414062e13096a96a2",
+    "semantic_hash": "3b5fb9b392866bf414062e13096a96a2"
+  },
+  "invoice-automator/sunwaysms/views/main.php": {
+    "mtime": 1782762066.9509206,
+    "ast_hash": "61a1ac529ec944b6088d15d7e0edd647",
+    "semantic_hash": "61a1ac529ec944b6088d15d7e0edd647"
+  },
+  "invoice-automator/sunwaysms/views/rnav.php": {
+    "mtime": 1782762066.9509206,
+    "ast_hash": "f3bf3f9533835e2040b5a12a32cf59b7",
+    "semantic_hash": "f3bf3f9533835e2040b5a12a32cf59b7"
+  },
+  "seo-fixes/mu-plugins/shofazh-robots.php": {
+    "mtime": 1782762066.9579887,
+    "ast_hash": "c97faf792a1ba3ce566cbcd5baf9ddab",
+    "semantic_hash": "c97faf792a1ba3ce566cbcd5baf9ddab"
+  },
+  "seo-fixes/mu-plugins/shofazh-title-fix.php": {
+    "mtime": 1782762066.9585004,
+    "ast_hash": "7ea913a3d6870501676f5a3a0eb94e4d",
+    "semantic_hash": "7ea913a3d6870501676f5a3a0eb94e4d"
+  },
+  "seo-fixes/wp_seo_fixes.py": {
+    "mtime": 1782762066.9585004,
+    "ast_hash": "fbf2bc7a6a0073d15b5b83052cd661c8",
+    "semantic_hash": "fbf2bc7a6a0073d15b5b83052cd661c8"
+  },
+  "setup-secrets-auto.py": {
+    "mtime": 1782762066.9585004,
+    "ast_hash": "5adf8cd6ee476d97e3ce2d83585cb647",
+    "semantic_hash": "5adf8cd6ee476d97e3ce2d83585cb647"
+  },
+  "wp-product-map.json": {
+    "mtime": 1782762066.9772656,
+    "ast_hash": "bed34a89835ab7ed075c60de3a4430d5",
+    "semantic_hash": "bed34a89835ab7ed075c60de3a4430d5"
+  },
+  "wp_publish_product.py": {
+    "mtime": 1782762066.9772656,
+    "ast_hash": "fde13f17a5f16fa45a9b3ac40d4a202e",
+    "semantic_hash": "fde13f17a5f16fa45a9b3ac40d4a202e"
+  },
+  ".claude/skills/shofazh-category-page/SKILL.md": {
+    "mtime": 1782762066.8066182,
+    "ast_hash": "6bca2b7d274d13496fa89bf10e12eb2c",
+    "semantic_hash": "6bca2b7d274d13496fa89bf10e12eb2c"
+  },
+  ".claude/skills/shofazh-category-page/category-template.html": {
+    "mtime": 1782762066.8074985,
+    "ast_hash": "397a986afa3b84b24b090fdda4144324",
+    "semantic_hash": "397a986afa3b84b24b090fdda4144324"
+  },
+  ".claude/skills/shofazh-product-page/SKILL.md": {
+    "mtime": 1782762066.8074985,
+    "ast_hash": "f0ab5c41a4c39a4d83a8bd84b00f4d1b",
+    "semantic_hash": "f0ab5c41a4c39a4d83a8bd84b00f4d1b"
+  },
+  ".github/workflows/deploy.yml": {
+    "mtime": 1782762066.808829,
+    "ast_hash": "7ded2f2c08015a3dbece8e95b8c1e06e",
+    "semantic_hash": "7ded2f2c08015a3dbece8e95b8c1e06e"
+  },
+  ".github/workflows/gsc-auto-fixer.yml": {
+    "mtime": 1782762066.8090794,
+    "ast_hash": "101e1bad721d6ab5ba216a20ae6167ff",
+    "semantic_hash": "101e1bad721d6ab5ba216a20ae6167ff"
+  },
+  ".github/workflows/publish-to-wordpress.yml": {
+    "mtime": 1782762066.8090794,
+    "ast_hash": "9db2c9d4edf275ac4007cbeccc43a017",
+    "semantic_hash": "9db2c9d4edf275ac4007cbeccc43a017"
+  },
+  ".github/workflows/seo-fixes.yml": {
+    "mtime": 1782762066.8090794,
+    "ast_hash": "711b1704479a0d63712f5c85fd59de5d",
+    "semantic_hash": "711b1704479a0d63712f5c85fd59de5d"
+  },
+  ".github/workflows/seo-tags.yml": {
+    "mtime": 1782762066.8090794,
+    "ast_hash": "d572f2146b555d72bde80fe90b4e0d6e",
+    "semantic_hash": "d572f2146b555d72bde80fe90b4e0d6e"
+  },
+  "CLAUDE.md": {
+    "mtime": 1782762137.4655883,
+    "ast_hash": "82efb97a359f5c7290bf2513d14686be",
+    "semantic_hash": "82efb97a359f5c7290bf2513d14686be"
+  },
+  "GITHUB-SECRETS-SETUP.md": {
+    "mtime": 1782762066.8090794,
+    "ast_hash": "4916009fc097dd52ed16fc37ed6510b3",
+    "semantic_hash": "4916009fc097dd52ed16fc37ed6510b3"
+  },
+  "GSC-AUTO-FIXER-SETUP.md": {
+    "mtime": 1782762066.8090794,
+    "ast_hash": "03e012e265ef3764c3eb88075596eb5d",
+    "semantic_hash": "03e012e265ef3764c3eb88075596eb5d"
+  },
+  "GSC-OPTIMIZER-README.md": {
+    "mtime": 1782762066.8092656,
+    "ast_hash": "088b39934b509a546c4ca36f28b97b69",
+    "semantic_hash": "088b39934b509a546c4ca36f28b97b69"
+  },
+  "PROJECT-SUMMARY.md": {
+    "mtime": 1782762066.8092656,
+    "ast_hash": "63af86aa05bfe17872101b3a30ca4ba5",
+    "semantic_hash": "63af86aa05bfe17872101b3a30ca4ba5"
+  },
+  "README-product-pipeline.md": {
+    "mtime": 1782762066.8092656,
+    "ast_hash": "28d89e995df41a3d6f240672bc1a9691",
+    "semantic_hash": "28d89e995df41a3d6f240672bc1a9691"
+  },
+  "banner-boiler.html": {
+    "mtime": 1782762066.8092656,
+    "ast_hash": "d209d5c405bf8823991d6462475b3718",
+    "semantic_hash": "d209d5c405bf8823991d6462475b3718"
+  },
+  "banner-pool.html": {
+    "mtime": 1782762066.8092656,
+    "ast_hash": "7e8a3ca04cd0668aa9201cda2de1ccc3",
+    "semantic_hash": "7e8a3ca04cd0668aa9201cda2de1ccc3"
+  },
+  "chauffagekar-green-boiler/index.html": {
+    "mtime": 1782762066.8092656,
+    "ast_hash": "9c790a5fd3e2ab1aa62c8471a1082309",
+    "semantic_hash": "9c790a5fd3e2ab1aa62c8471a1082309"
+  },
+  "comfort-32fh2-product-content.html": {
+    "mtime": 1782762066.8252656,
+    "ast_hash": "a1f311931ed5f1bb14043fd624c02a49",
+    "semantic_hash": "a1f311931ed5f1bb14043fd624c02a49"
+  },
+  "confident-50-product-content.html": {
+    "mtime": 1782762066.8252656,
+    "ast_hash": "4a7022a6623fa5ad67ca17c3f6f55733",
+    "semantic_hash": "4a7022a6623fa5ad67ca17c3f6f55733"
+  },
+  "confident-50-seo.md": {
+    "mtime": 1782762066.8252656,
+    "ast_hash": "96e2b76053a2bd316e01465f87c14a12",
+    "semantic_hash": "96e2b76053a2bd316e01465f87c14a12"
+  },
+  "dasht-reports/pish-factor-preview.html": {
+    "mtime": 1782762066.8292656,
+    "ast_hash": "c18ccde2b2445ed17f3b3e9d77c966c1",
+    "semantic_hash": "c18ccde2b2445ed17f3b3e9d77c966c1"
+  },
+  "dr-samim-website/index.html": {
+    "mtime": 1782762066.8412654,
+    "ast_hash": "77d013c86b4c25723c2846d1c0435595",
+    "semantic_hash": "77d013c86b4c25723c2846d1c0435595"
+  },
+  "elegant-24fx2-product-content.html": {
+    "mtime": 1782762066.8732655,
+    "ast_hash": "ea2e963187253b78daccc1ab6e5fed1e",
+    "semantic_hash": "ea2e963187253b78daccc1ab6e5fed1e"
+  },
+  "elegant-24fx2-seo.md": {
+    "mtime": 1782762066.8732655,
+    "ast_hash": "cf5a79a46b7ee11b4a288a6c78f55aef",
+    "semantic_hash": "cf5a79a46b7ee11b4a288a6c78f55aef"
+  },
+  "f55-product-content.html": {
+    "mtime": 1782762066.8772655,
+    "ast_hash": "c2c504cd0a688b9b583fe510fdd3838d",
+    "semantic_hash": "c2c504cd0a688b9b583fe510fdd3838d"
+  },
+  "f55-seo.md": {
+    "mtime": 1782762066.8772655,
+    "ast_hash": "2647534210b3ba2ba47ab84c16420569",
+    "semantic_hash": "2647534210b3ba2ba47ab84c16420569"
+  },
+  "index.html": {
+    "mtime": 1782762066.8772655,
+    "ast_hash": "77d013c86b4c25723c2846d1c0435595",
+    "semantic_hash": "77d013c86b4c25723c2846d1c0435595"
+  },
+  "invoice-automator/config.yaml": {
+    "mtime": 1781022022.0272777,
+    "ast_hash": "8b773178a7fd98dbe8152bd847453a0f",
+    "semantic_hash": "8b773178a7fd98dbe8152bd847453a0f"
+  },
+  "invoice-automator/requirements.txt": {
+    "mtime": 1781022022.034324,
+    "ast_hash": "e54d747b48605d560997fbdb0b06208a",
+    "semantic_hash": "e54d747b48605d560997fbdb0b06208a"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/README.md": {
+    "mtime": 1782762066.8905697,
+    "ast_hash": "93c7bc83b4fd490d0f6c503801be7830",
+    "semantic_hash": "93c7bc83b4fd490d0f6c503801be7830"
+  },
+  "invoice-automator/sunwaysms/assets/jqGrid-5.7.0/install.txt": {
+    "mtime": 1782762066.894273,
+    "ast_hash": "5307cc3f2512e0802db1dcb4180d4074",
+    "semantic_hash": "5307cc3f2512e0802db1dcb4180d4074"
+  },
+  "l24ff-product-content.html": {
+    "mtime": 1782762066.9509206,
+    "ast_hash": "4aaf0423560e47d845df38564877f5f0",
+    "semantic_hash": "4aaf0423560e47d845df38564877f5f0"
+  },
+  "manba-dojedare-300-litri-product-content.html": {
+    "mtime": 1782762066.9509206,
+    "ast_hash": "9daca25f59c17ec906162c48e287fc63",
+    "semantic_hash": "9daca25f59c17ec906162c48e287fc63"
+  },
+  "manba-dojedare-300-litri-seo.md": {
+    "mtime": 1782762066.9509206,
+    "ast_hash": "82d10533fcc5a48407f6aa1ee3a43a80",
+    "semantic_hash": "82d10533fcc5a48407f6aa1ee3a43a80"
+  },
+  "manba-dojedare-400-product-content.html": {
+    "mtime": 1782762066.9509206,
+    "ast_hash": "3aa32b7b6730864bae9adedfafdeb785",
+    "semantic_hash": "3aa32b7b6730864bae9adedfafdeb785"
+  },
+  "manba-dojedare-400-seo.md": {
+    "mtime": 1782762066.9509206,
+    "ast_hash": "93cde01bd134a481564aad87220272f7",
+    "semantic_hash": "93cde01bd134a481564aad87220272f7"
+  },
+  "package-chauffagekar-p7-product-content.html": {
+    "mtime": 1782762066.9532654,
+    "ast_hash": "2970959625378c6ea5c41bc925b33b7a",
+    "semantic_hash": "2970959625378c6ea5c41bc925b33b7a"
+  },
+  "package-chauffagekar-p7-seo.md": {
+    "mtime": 1782762066.9532654,
+    "ast_hash": "c9231bb105374f0de9fa27db112efea9",
+    "semantic_hash": "c9231bb105374f0de9fa27db112efea9"
+  },
+  "perlapro24rsi-product-content.html": {
+    "mtime": 1782762066.9532654,
+    "ast_hash": "d2d96f90e904b0a5cbf622529fd22584",
+    "semantic_hash": "d2d96f90e904b0a5cbf622529fd22584"
+  },
+  "ran25-compact.html": {
+    "mtime": 1782762066.9532654,
+    "ast_hash": "0adb0432860a525a3a1fa6637e9af27c",
+    "semantic_hash": "0adb0432860a525a3a1fa6637e9af27c"
+  },
+  "ran25-fixed.html": {
+    "mtime": 1782762066.9532654,
+    "ast_hash": "98a52c22e2cf147d8371609180fbd893",
+    "semantic_hash": "98a52c22e2cf147d8371609180fbd893"
+  },
+  "ran25-product-content.html": {
+    "mtime": 1782762066.9532654,
+    "ast_hash": "55ce78f1cf30139187c53395bb53815d",
+    "semantic_hash": "55ce78f1cf30139187c53395bb53815d"
+  },
+  "semnan-energy-a7-product-content.html": {
+    "mtime": 1782762066.9532654,
+    "ast_hash": "2083cd42403b9b8c0571808b263a385a",
+    "semantic_hash": "2083cd42403b9b8c0571808b263a385a"
+  },
+  "semnan-energy-a7-seo.md": {
+    "mtime": 1782762066.9532654,
+    "ast_hash": "839dc6e313d07905fd8025085ffc8e1c",
+    "semantic_hash": "839dc6e313d07905fd8025085ffc8e1c"
+  },
+  "seo-fixes/PHASE1-handoff.md": {
+    "mtime": 1782762066.9579887,
+    "ast_hash": "d6f0308601a006c5cc05629e533c7d15",
+    "semantic_hash": "d6f0308601a006c5cc05629e533c7d15"
+  },
+  "seo-fixes/README.md": {
+    "mtime": 1782762066.9579887,
+    "ast_hash": "defc091b8a323a576ebbb1c56c42eae8",
+    "semantic_hash": "defc091b8a323a576ebbb1c56c42eae8"
+  },
+  "shofazh-audit/accessibility-report.md": {
+    "mtime": 1782762066.9585004,
+    "ast_hash": "5e3e0b2f56ecd154098bf37a89d746cb",
+    "semantic_hash": "5e3e0b2f56ecd154098bf37a89d746cb"
+  },
+  "shofazh-audit/audit-report.md": {
+    "mtime": 1782762066.9594774,
+    "ast_hash": "54b7de81bdb14ddcf01f4bddf400274d",
+    "semantic_hash": "54b7de81bdb14ddcf01f4bddf400274d"
+  },
+  "shofazh-audit/cro-strategy.md": {
+    "mtime": 1782762066.9594774,
+    "ast_hash": "e3c2deca7b16ccf7aa3c639c58135cc1",
+    "semantic_hash": "e3c2deca7b16ccf7aa3c639c58135cc1"
+  },
+  "shofazh-audit/performance-optimization-plan.md": {
+    "mtime": 1782762066.9594774,
+    "ast_hash": "9bfdabd1d43bf08d6a1dbb71a2704ffd",
+    "semantic_hash": "9bfdabd1d43bf08d6a1dbb71a2704ffd"
+  },
+  "shofazh-audit/prioritized-roadmap.md": {
+    "mtime": 1782762066.9594774,
+    "ast_hash": "15167d9c9eadb42264b6063c4084c5d4",
+    "semantic_hash": "15167d9c9eadb42264b6063c4084c5d4"
+  },
+  "shofazh-audit/security-review.md": {
+    "mtime": 1782762066.9612656,
+    "ast_hash": "bbc92b039f022e38e030a27f80f3d317",
+    "semantic_hash": "bbc92b039f022e38e030a27f80f3d317"
+  },
+  "shofazh-audit/technical-seo-checklist.md": {
+    "mtime": 1782762066.9612656,
+    "ast_hash": "19cac92f773e473b2cec367143992624",
+    "semantic_hash": "19cac92f773e473b2cec367143992624"
+  },
+  "shofazh-audit/ui-ux-improvement-plan.md": {
+    "mtime": 1782762066.9612656,
+    "ast_hash": "aee7d4878bbf63ec8bf9be763e681996",
+    "semantic_hash": "aee7d4878bbf63ec8bf9be763e681996"
+  },
+  "shofazh-calculator-elementor.html": {
+    "mtime": 1782762066.9612656,
+    "ast_hash": "749362df01d2afee164e5b26def26ce1",
+    "semantic_hash": "749362df01d2afee164e5b26def26ce1"
+  },
+  "shofazh-calculator-section.html": {
+    "mtime": 1782762066.9612656,
+    "ast_hash": "637c74f934a6898e843dbeb7a553cf08",
+    "semantic_hash": "637c74f934a6898e843dbeb7a553cf08"
+  },
+  "shofazh-product-template.html": {
+    "mtime": 1782762066.9612656,
+    "ast_hash": "55ce78f1cf30139187c53395bb53815d",
+    "semantic_hash": "55ce78f1cf30139187c53395bb53815d"
+  },
+  "shofazh.html": {
+    "mtime": 1782762066.9732656,
+    "ast_hash": "49d864bad8a3d485e8727ca152843a2c",
+    "semantic_hash": "49d864bad8a3d485e8727ca152843a2c"
+  },
+  "super400-product-content.html": {
+    "mtime": 1782762066.9772656,
+    "ast_hash": "13c7ae545c7d6c570cc32d2fbf3e6608",
+    "semantic_hash": "13c7ae545c7d6c570cc32d2fbf3e6608"
+  },
+  "tarh-sabz-section.html": {
+    "mtime": 1782762066.9772656,
+    "ast_hash": "21560f9e84de8484b38ce38eb7f6286a",
+    "semantic_hash": "21560f9e84de8484b38ce38eb7f6286a"
+  },
+  "shofazh-audit/executive-summary.pdf": {
+    "mtime": 1782762066.9594774,
+    "ast_hash": "858187f2ff1a8f7ff1e8f5d6e71aa526",
+    "semantic_hash": "858187f2ff1a8f7ff1e8f5d6e71aa526"
+  },
+  "brand-poster.webp": {
+    "mtime": 1782762066.8092656,
+    "ast_hash": "fe84f4670b514e4ae683eb88cf8837b5",
+    "semantic_hash": "fe84f4670b514e4ae683eb88cf8837b5"
+  },
+  "clinic-1.webp": {
+    "mtime": 1782762066.8132656,
+    "ast_hash": "7723902ad968503c40f045e764625d92",
+    "semantic_hash": "7723902ad968503c40f045e764625d92"
+  },
+  "clinic-10.jpeg": {
+    "mtime": 1782762066.8132656,
+    "ast_hash": "7a6f72a9d1752be0b5db26bead028416",
+    "semantic_hash": "7a6f72a9d1752be0b5db26bead028416"
+  },
+  "clinic-11.jpeg": {
+    "mtime": 1782762066.8132656,
+    "ast_hash": "03493452b1242014a5bbea4e38129f3b",
+    "semantic_hash": "03493452b1242014a5bbea4e38129f3b"
+  },
+  "clinic-12.jpeg": {
+    "mtime": 1782762066.8132656,
+    "ast_hash": "a8961d546bcbd07e040d51274c65bc84",
+    "semantic_hash": "a8961d546bcbd07e040d51274c65bc84"
+  },
+  "clinic-2.webp": {
+    "mtime": 1782762066.8172655,
+    "ast_hash": "81e09ccb0a6184559ce56cc78f852f64",
+    "semantic_hash": "81e09ccb0a6184559ce56cc78f852f64"
+  },
+  "clinic-3.webp": {
+    "mtime": 1782762066.8172655,
+    "ast_hash": "c6f3e86fe192a0a9cd716428637b021d",
+    "semantic_hash": "c6f3e86fe192a0a9cd716428637b021d"
+  },
+  "clinic-4.webp": {
+    "mtime": 1782762066.8172655,
+    "ast_hash": "1bd7fdee0cdcb3e61d6b8079abdc4dc0",
+    "semantic_hash": "1bd7fdee0cdcb3e61d6b8079abdc4dc0"
+  },
+  "clinic-5.webp": {
+    "mtime": 1782762066.8212655,
+    "ast_hash": "9799b6bda645da74c18bb5259a1becc7",
+    "semantic_hash": "9799b6bda645da74c18bb5259a1becc7"
+  },
+  "clinic-6.webp": {
+    "mtime": 1782762066.8212655,
+    "ast_hash": "87e34f65e89e47e788447a4d668918a2",
+    "semantic_hash": "87e34f65e89e47e788447a4d668918a2"
+  },
+  "clinic-7.webp": {
+    "mtime": 1782762066.8212655,
+    "ast_hash": "cb0c28f40024f0d28b8106e251763052",
+    "semantic_hash": "cb0c28f40024f0d28b8106e251763052"
+  },
+  "clinic-8.webp": {
+    "mtime": 1782762066.8212655,
+    "ast_hash": "c539e20135b78bdcf13da1b93fe006f1",
+    "semantic_hash": "c539e20135b78bdcf13da1b93fe006f1"
+  },
+  "clinic-9.jpeg": {
+    "mtime": 1782762066.8212655,
+    "ast_hash": "ef77387ffa946155a2f316c86b3482e3",
+    "semantic_hash": "ef77387ffa946155a2f316c86b3482e3"
+  },
+  "doctor.jpg": {
+    "mtime": 1782762066.8292656,
+    "ast_hash": "1fce7230a20bf108028be568622c72ad",
+    "semantic_hash": "1fce7230a20bf108028be568622c72ad"
+  },
+  "dr-samim-website/brand-poster.webp": {
+    "mtime": 1782762066.833469,
+    "ast_hash": "fe84f4670b514e4ae683eb88cf8837b5",
+    "semantic_hash": "fe84f4670b514e4ae683eb88cf8837b5"
+  },
+  "dr-samim-website/clinic-1.webp": {
+    "mtime": 1782762066.833469,
+    "ast_hash": "7723902ad968503c40f045e764625d92",
+    "semantic_hash": "7723902ad968503c40f045e764625d92"
+  },
+  "dr-samim-website/clinic-10.jpeg": {
+    "mtime": 1782762066.833469,
+    "ast_hash": "7a6f72a9d1752be0b5db26bead028416",
+    "semantic_hash": "7a6f72a9d1752be0b5db26bead028416"
+  },
+  "dr-samim-website/clinic-11.jpeg": {
+    "mtime": 1782762066.833469,
+    "ast_hash": "03493452b1242014a5bbea4e38129f3b",
+    "semantic_hash": "03493452b1242014a5bbea4e38129f3b"
+  },
+  "dr-samim-website/clinic-12.jpeg": {
+    "mtime": 1782762066.833469,
+    "ast_hash": "a8961d546bcbd07e040d51274c65bc84",
+    "semantic_hash": "a8961d546bcbd07e040d51274c65bc84"
+  },
+  "dr-samim-website/clinic-2.webp": {
+    "mtime": 1782762066.8372655,
+    "ast_hash": "81e09ccb0a6184559ce56cc78f852f64",
+    "semantic_hash": "81e09ccb0a6184559ce56cc78f852f64"
+  },
+  "dr-samim-website/clinic-3.webp": {
+    "mtime": 1782762066.8372655,
+    "ast_hash": "c6f3e86fe192a0a9cd716428637b021d",
+    "semantic_hash": "c6f3e86fe192a0a9cd716428637b021d"
+  },
+  "dr-samim-website/clinic-4.webp": {
+    "mtime": 1782762066.8372655,
+    "ast_hash": "1bd7fdee0cdcb3e61d6b8079abdc4dc0",
+    "semantic_hash": "1bd7fdee0cdcb3e61d6b8079abdc4dc0"
+  },
+  "dr-samim-website/clinic-5.webp": {
+    "mtime": 1782762066.8372655,
+    "ast_hash": "9799b6bda645da74c18bb5259a1becc7",
+    "semantic_hash": "9799b6bda645da74c18bb5259a1becc7"
+  },
+  "dr-samim-website/clinic-6.webp": {
+    "mtime": 1782762066.8412654,
+    "ast_hash": "87e34f65e89e47e788447a4d668918a2",
+    "semantic_hash": "87e34f65e89e47e788447a4d668918a2"
+  },
+  "dr-samim-website/clinic-7.webp": {
+    "mtime": 1782762066.8412654,
+    "ast_hash": "cb0c28f40024f0d28b8106e251763052",
+    "semantic_hash": "cb0c28f40024f0d28b8106e251763052"
+  },
+  "dr-samim-website/clinic-8.webp": {
+    "mtime": 1782762066.8412654,
+    "ast_hash": "c539e20135b78bdcf13da1b93fe006f1",
+    "semantic_hash": "c539e20135b78bdcf13da1b93fe006f1"
+  },
+  "dr-samim-website/clinic-9.jpeg": {
+    "mtime": 1782762066.8412654,
+    "ast_hash": "ef77387ffa946155a2f316c86b3482e3",
+    "semantic_hash": "ef77387ffa946155a2f316c86b3482e3"
+  },
+  "dr-samim-website/doctor.jpg": {
+    "mtime": 1782762066.8412654,
+    "ast_hash": "1fce7230a20bf108028be568622c72ad",
+    "semantic_hash": "1fce7230a20bf108028be568622c72ad"
+  },
+  "dr-samim-website/logo-icon.png": {
+    "mtime": 1782762066.8452656,
+    "ast_hash": "a6306dde372670d4dea4607e3c2d2b2b",
+    "semantic_hash": "a6306dde372670d4dea4607e3c2d2b2b"
+  },
+  "dr-samim-website/logo-transparent.png": {
+    "mtime": 1782762066.8452656,
+    "ast_hash": "382f8e279f372ed43c205a199e88f5e8",
+    "semantic_hash": "382f8e279f372ed43c205a199e88f5e8"
+  },
+  "dr-samim-website/logo.png": {
+    "mtime": 1782762066.8732655,
+    "ast_hash": "b4103f3f71ca346cbd8386dd3194b16f",
+    "semantic_hash": "b4103f3f71ca346cbd8386dd3194b16f"
+  },
+  "dr-samim-website/logo.svg": {
+    "mtime": 1782762066.8732655,
+    "ast_hash": "f5088965771b36e30496803783d89f72",
+    "semantic_hash": "f5088965771b36e30496803783d89f72"
+  },
+  "logo.svg": {
+    "mtime": 1782762066.9509206,
+    "ast_hash": "f5088965771b36e30496803783d89f72",
+    "semantic_hash": "f5088965771b36e30496803783d89f72"
+  }
+}

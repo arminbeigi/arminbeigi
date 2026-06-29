@@ -1,0 +1,13 @@
+{
+  "runs": [
+    {
+      "date": "2026-06-29T19:53:05.373998+00:00",
+      "input_tokens": 785839,
+      "output_tokens": 0,
+      "files": 299,
+      "note": "subagent semantic extraction (combined in+out tokens)"
+    }
+  ],
+  "total_input_tokens": 785839,
+  "total_output_tokens": 0
+}
