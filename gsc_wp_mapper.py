@@ -34,6 +34,9 @@ class GSCWordPressMapper:
         # The LiteSpeed WAF blocks the default python-requests User-Agent.
         # wp_publish_product.py uses this UA and its writes succeed.
         self.headers = {"User-Agent": "ShofazhContentBot/1.0"}
+        # Cache of fetched product page HTML, keyed by URL, so the post-id and
+        # the current (pre-change) title/meta come from a single request.
+        self._page_html = {}
 
     def url_to_slug(self, gsc_url: str) -> Optional[str]:
         """
@@ -141,6 +144,7 @@ class GSCWordPressMapper:
                 print(f"   ⚠ Page fetch {page_url} → status {resp.status_code}")
                 return None
             html = resp.text
+            self._page_html[page_url] = html  # cache for current-SEO extraction
             m = re.search(r'postid-(\d+)', html)
             if m:
                 return int(m.group(1))
@@ -155,6 +159,38 @@ class GSCWordPressMapper:
         except requests.exceptions.RequestException as e:
             print(f"   ❌ Page fetch error: {e}")
             return None
+
+    def current_seo_from_page(self, page_url: str) -> Dict:
+        """
+        Read the live (pre-change) SEO title and meta description straight from
+        the public page HTML. This is what Yoast currently renders, so it's the
+        real "before" value — and it bypasses the firewall that blocks REST GETs.
+        """
+        import re
+        import html as _html
+        raw = self._page_html.get(page_url)
+        if raw is None:
+            # Fetch on demand (e.g. dry-run path) and cache it.
+            self._post_id_from_page(page_url)
+            raw = self._page_html.get(page_url, "")
+
+        title = ""
+        m = re.search(r'<title[^>]*>(.*?)</title>', raw, re.IGNORECASE | re.DOTALL)
+        if m:
+            title = _html.unescape(m.group(1)).strip()
+
+        metadesc = ""
+        for pat in (
+            r'<meta[^>]+name=["\']description["\'][^>]*content=["\'](.*?)["\']',
+            r'<meta[^>]+content=["\'](.*?)["\'][^>]*name=["\']description["\']',
+            r'<meta[^>]+property=["\']og:description["\'][^>]*content=["\'](.*?)["\']',
+        ):
+            m = re.search(pat, raw, re.IGNORECASE | re.DOTALL)
+            if m:
+                metadesc = _html.unescape(m.group(1)).strip()
+                break
+
+        return {'current_title': title, 'current_meta': metadesc}
 
     def fetch_current_seo(self, post_id: int, post_type: str = 'product') -> Dict:
         """

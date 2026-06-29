@@ -62,19 +62,20 @@ class GSCAutoFixer:
 
             post_id, post_type = result
 
-            # Fetch current SEO
-            seo = self.mapper.fetch_current_seo(post_id, post_type)
+            # Capture the live (pre-change) title/meta. For products the most
+            # reliable source is the rendered page HTML (REST GET is firewalled).
+            if post_type == 'product':
+                seo = self.mapper.current_seo_from_page(page_url)
+            else:
+                seo = self.mapper.fetch_current_seo(post_id, post_type)
             if not seo:
-                print(f"   ⚠ Skipping: Could not fetch current SEO")
-                issue['status'] = 'SKIPPED'
-                issue['skip_reason'] = 'SEO fetch failed'
-                continue
+                seo = {'current_title': '', 'current_meta': ''}
 
             # Enrich issue with WordPress data
             issue['post_id'] = post_id
             issue['post_type'] = post_type
-            issue['current_title'] = seo['current_title']
-            issue['current_meta'] = seo['current_meta']
+            issue['current_title'] = seo.get('current_title', '')
+            issue['current_meta'] = seo.get('current_meta', '')
             issue['status'] = 'PENDING'
             issue['skip_reason'] = None
 
