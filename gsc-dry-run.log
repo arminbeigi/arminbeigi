@@ -1,0 +1,49 @@
+✅ Loaded 2 issues from GSC
+
+🔍 Enriching GSC data with WordPress info...
+
+[1/2] قیمت پکیج بوتان + پکیج بیتا
+   ✓ Found product: slug=butane-bita22-sealed-boiler → post_id=3193
+   ⚠ Error reading current SEO (Expecting value: line 1 column 3 (char 2)) — proceeding
+   ✓ Post 3193 (product)
+[2/2] خرید رادیاتور
+   ✓ Found product: slug=dima-steel-radiator-2f → post_id=7635
+   ⚠ Error reading current SEO ('list' object has no attribute 'get') — proceeding
+   ✓ Post 7635 (product)
+
+================================================================================
+🔍 DRY RUN - Preview of Changes (No modifications yet)
+================================================================================
+
+[1] Query: قیمت پکیج بوتان + پکیج بیتا
+    Page: https://shofazh.com/product/butane-bita22-sealed-boiler/
+    Post-ID: 3193 (product)
+
+    Current Title: 
+    ➜ New Title:     قیمت پکیج بوتان بیتا ۲۲ محفظه‌دار | خرید از شوفاژ.کام
+
+    Current Meta:  
+    ➜ New Meta:     قیمت پکیج بوتان بیتا ۲۲ محفظه‌دار - قیمت رقابتی و ارسال سریع 📦 همین حالا سفارش دهید
+
+    Expected Gain: +61 clicks
+    Status: [PENDING APPROVAL] ⏳
+
+--------------------------------------------------------------------------------
+
+[2] Query: خرید رادیاتور
+    Page: https://shofazh.com/product/dima-steel-radiator-2f/
+    Post-ID: 7635 (product)
+
+    Current Title: 
+    ➜ New Title:     خرید رادیاتور فولادی دیما | قیمت و خرید از شوفاژ.کام
+
+    Current Meta:  
+    ➜ New Meta:     خرید رادیاتور فولادی دیما - قیمت رقابتی و ارسال سریع 📦 همین حالا سفارش دهید
+
+    Expected Gain: +6 clicks
+    Status: [PENDING APPROVAL] ⏳
+
+--------------------------------------------------------------------------------
+
+📊 Summary: 2 fixes | ~67 potential clicks
+
