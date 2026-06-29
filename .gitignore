@@ -5,3 +5,8 @@ __pycache__/
 invoice-automator/logs/*.log
 invoice-automator/processed/*.pdf
 invoice-automator/watch_folder/*.pdf
+
+# graphify internal/env-specific state (keep graph outputs, ignore machine paths + cache)
+graphify-out/.graphify_python
+graphify-out/.graphify_root
+graphify-out/cache/
