@@ -1,0 +1,1026 @@
+<style>
+.ran25-wrap{
+  --blue:#00838F; --orange:#FF6F00; --green:#2E7D32; --warning:#F57F17;
+  --danger:#C62828; --bg:#F6FCFC; --card:#FFFFFF; --text:#243447; --muted:#5b6b7d;
+  --steel:#455A64; --steel-light:#607D8B;
+  direction:rtl; text-align:right; background:var(--bg); color:var(--text);
+  font-family:Tahoma,"IRANSans","Vazirmatn",sans-serif; line-height:2;
+  padding:18px; border-radius:18px; font-size:16px;
+  counter-reset:sec; position:relative; overflow:hidden;
+  background-image:
+    radial-gradient(circle at 20% 30%,rgba(0,131,143,.05) 1px,transparent 2px),
+    radial-gradient(circle at 80% 70%,rgba(255,111,0,.04) 1px,transparent 2px),
+    linear-gradient(var(--bg),var(--bg));
+  background-size:50px 50px,70px 70px,100% 100%;
+}
+.ran25-wrap *{box-sizing:border-box}
+
+/* ---------- Section header cards (H2 redesign) ---------- */
+.ran25-wrap > h2{
+  counter-increment:sec; position:relative;
+  background:linear-gradient(135deg,#fff 0%,#E3F6F6 100%);
+  border:none; border-top:5px solid var(--blue);
+  border-radius:18px; padding:26px 96px 26px 24px;
+  margin:70px 0 24px; font-size:22px; color:var(--blue);
+  box-shadow:0 12px 32px rgba(20,40,70,.09);
+  line-height:1.5;
+}
+.ran25-wrap > h2::before{
+  content:counter(sec,decimal-leading-zero);
+  position:absolute; right:22px; top:50%; transform:translateY(-50%);
+  width:62px; height:68px;
+  clip-path:polygon(25% 5%,75% 5%,100% 50%,75% 95%,25% 95%,0 50%);
+  background:linear-gradient(135deg,var(--orange) 0%,#E65100 60%,#FF8F00 100%);
+  color:#fff; text-align:center; line-height:68px; font-size:19px; font-weight:bold;
+  filter:drop-shadow(0 6px 14px rgba(255,111,0,.5));
+  letter-spacing:1px;
+}
+.ran25-wrap > h2::after{
+  content:""; position:absolute; top:-40px; right:50%;
+  transform:translateX(50%); width:140px; height:5px; border-radius:3px;
+  background:linear-gradient(90deg,transparent,var(--orange) 50%,transparent);
+  opacity:.7;
+}
+.ran25-wrap > h2:first-of-type::after{display:none}
+/* Alternating accent colors */
+.ran25-wrap > h2:nth-of-type(3n+2){border-top-color:var(--orange)}
+.ran25-wrap > h2:nth-of-type(3n+2)::before{background:linear-gradient(135deg,var(--blue) 0%,#006064 60%,#00ACC1 100%);filter:drop-shadow(0 6px 14px rgba(0,131,143,.5))}
+.ran25-wrap > h2:nth-of-type(3n+2)::after{background:linear-gradient(90deg,transparent,var(--blue) 50%,transparent)}
+.ran25-wrap > h2:nth-of-type(3n){border-top-color:var(--green)}
+.ran25-wrap > h2:nth-of-type(3n)::before{background:linear-gradient(135deg,var(--green) 0%,#1B5E20 60%,#43A047 100%);filter:drop-shadow(0 6px 14px rgba(46,125,50,.5))}
+.ran25-wrap > h2:nth-of-type(3n)::after{background:linear-gradient(90deg,transparent,var(--green) 50%,transparent)}
+/* Reset for special boxes (summary + CTA) */
+.ran25-summary h2,.ran25-cta h2{
+  counter-increment:none; background:none; border:none; border-radius:0;
+  padding:0; margin:0 0 10px; color:#fff; box-shadow:none;
+}
+.ran25-summary h2::before,.ran25-summary h2::after,
+.ran25-cta h2::before,.ran25-cta h2::after{display:none}
+
+/* Content sections background zones - subtle alternating bands */
+.ran25-wrap > h2:nth-of-type(2n+1) ~ *:not(h2):not(h3):not(h4){}
+
+.ran25-wrap h3{color:var(--blue); font-size:20px; margin:26px 0 12px}
+.ran25-wrap h4{color:var(--orange); font-size:18px; margin:20px 0 10px}
+.ran25-wrap p{margin:12px 0; color:var(--text)}
+
+/* ---------- Animations ---------- */
+@keyframes fadeInUp{from{opacity:.01;transform:translateY(34px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulseBorder{0%,100%{box-shadow:-5px 0 0 0 currentColor inset}50%{box-shadow:-11px 0 0 0 currentColor inset}}
+@keyframes pop{0%{transform:scale(0) rotate(-45deg);opacity:0}60%{transform:scale(1.25) rotate(0)}100%{transform:scale(1) rotate(0);opacity:1}}
+@keyframes fillBar{from{width:0}to{width:var(--w,100%)}}
+@keyframes shimmer{0%{left:-60%}100%{left:130%}}
+@keyframes rotate{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@keyframes flicker{0%,100%{transform:scale(1) rotate(-2deg);opacity:.9}50%{transform:scale(1.08) rotate(2deg);opacity:1}}
+
+.ran25-wrap .anim{animation:fadeInUp .7s ease both}
+.ran25-wrap .d1{animation-delay:.05s}.ran25-wrap .d2{animation-delay:.15s}
+.ran25-wrap .d3{animation-delay:.25s}.ran25-wrap .d4{animation-delay:.35s}
+.ran25-wrap .d5{animation-delay:.45s}.ran25-wrap .d6{animation-delay:.55s}
+
+/* ---------- Summary box ---------- */
+.ran25-summary{
+  background:linear-gradient(135deg,#00838F 0%,#00ACC1 60%,#4DD0E1 100%);
+  color:#fff;border-radius:18px;padding:26px 28px;margin-bottom:8px;
+  box-shadow:0 14px 34px rgba(0,131,143,.28);position:relative;overflow:hidden;
+}
+.ran25-summary::after{content:"";position:absolute;top:-40px;left:-40px;width:160px;height:160px;
+  background:rgba(255,255,255,.12);border-radius:50%}
+.ran25-summary::before{content:"";position:absolute;top:18px;left:24px;width:64px;height:80px;z-index:2;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 80' fill='none'><path d='M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z' fill='%23FFB300'/><path d='M32 24 C34 32 44 38 42 50 C40 60 36 68 32 70 C28 68 24 60 22 50 C20 38 30 32 32 24 Z' fill='%23FF6F00'/><path d='M32 42 C33 48 38 52 36 60 C35 64 33 67 32 68 C31 67 29 64 28 60 C26 52 31 48 32 42 Z' fill='%23FFEB3B'/></svg>");
+  background-repeat:no-repeat;background-size:contain;
+  animation:flicker 1.6s ease-in-out infinite;
+  filter:drop-shadow(0 0 12px rgba(255,179,0,.6))}
+.ran25-summary h2{color:#fff;border:none;padding:0;margin:0 0 10px}
+.ran25-summary p{color:#e6fbfb;position:relative;z-index:1}
+
+/* ---------- Cards / boxes ---------- */
+.ran25-card{background:var(--card);border-radius:16px;padding:20px 24px;margin:18px 0;
+  box-shadow:0 8px 24px rgba(20,40,70,.07);transition:transform .3s ease,box-shadow .3s ease;
+  position:relative;overflow:hidden}
+.ran25-card::before{content:"";position:absolute;top:-20px;left:-20px;width:80px;height:80px;opacity:.08;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='%2300838F'><path d='M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z'/></svg>");
+  background-repeat:no-repeat;background-size:contain;animation:rotate 28s linear infinite;pointer-events:none}
+.ran25-card:hover{transform:translateY(-6px) scale(1.012);box-shadow:0 18px 40px rgba(20,40,70,.16)}
+
+.ran25-box{border-radius:14px;padding:16px 20px 16px 24px;margin:18px 0;position:relative;
+  border-right:6px solid;animation:pulseBorder 2.4s ease-in-out infinite}
+.ran25-tip{background:#FFF8E1;border-color:var(--warning);color:var(--warning)}
+.ran25-tip *{color:#7a5b00}
+.ran25-warn{background:#FDECEA;border-color:var(--danger);color:var(--danger)}
+.ran25-warn *{color:#8c1d18}
+.ran25-good{background:#E8F5E9;border-color:var(--green);color:var(--green)}
+.ran25-good *{color:#1b5e20}
+.ran25-box strong{display:block;margin-bottom:4px}
+
+/* ---------- Lists ---------- */
+.ran25-list{list-style:none;padding:0;margin:14px 0}
+.ran25-list li{position:relative;padding:8px 38px 8px 8px;margin:8px 0;background:var(--card);
+  border-radius:12px;box-shadow:0 4px 14px rgba(20,40,70,.06);
+  animation:fadeInUp .55s ease both;transition:transform .25s ease}
+.ran25-list li:hover{transform:translateX(-6px)}
+.ran25-list li:nth-child(1){animation-delay:.05s}.ran25-list li:nth-child(2){animation-delay:.12s}
+.ran25-list li:nth-child(3){animation-delay:.19s}.ran25-list li:nth-child(4){animation-delay:.26s}
+.ran25-list li:nth-child(5){animation-delay:.33s}.ran25-list li:nth-child(6){animation-delay:.40s}
+.ran25-list li:nth-child(7){animation-delay:.47s}.ran25-list li:nth-child(8){animation-delay:.54s}
+.ran25-list li:nth-child(9){animation-delay:.61s}.ran25-list li:nth-child(10){animation-delay:.68s}
+.ran25-list li::before{content:"✓";position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  width:24px;height:24px;border-radius:50%;background:var(--blue);color:#fff;text-align:center;
+  line-height:24px;font-size:14px;font-weight:bold;animation:pop .5s ease forwards}
+.ran25-pros li::before{background:var(--green)}
+.ran25-cons li::before{content:"✕";background:var(--danger)}
+.ran25-num{list-style:none;counter-reset:n;padding:0}
+.ran25-num li{counter-increment:n;position:relative;padding:8px 46px 8px 8px;margin:8px 0;
+  background:var(--card);border-radius:12px;box-shadow:0 4px 14px rgba(20,40,70,.06)}
+.ran25-num li::before{content:counter(n);position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--orange),#FFA000);
+  color:#fff;text-align:center;line-height:28px;font-weight:bold;font-size:14px}
+
+/* ---------- Specs animated bars ---------- */
+.ran25-bars{margin:16px 0}
+.ran25-bar{margin:14px 0}
+.ran25-bar .lbl{display:flex;justify-content:space-between;font-size:14px;margin-bottom:6px;color:var(--muted)}
+.ran25-bar .track{background:#D9F0F1;border-radius:20px;height:14px;overflow:hidden}
+.ran25-bar .fill{height:100%;border-radius:20px;
+  background:linear-gradient(90deg,var(--blue),var(--orange));
+  animation:fillBar 1.6s cubic-bezier(.2,.8,.3,1) forwards}
+
+/* ---------- Tables ---------- */
+.ran25-tablewrap{overflow-x:auto;margin:16px 0;border-radius:14px;box-shadow:0 8px 24px rgba(20,40,70,.08)}
+.ran25-wrap table{width:100%;border-collapse:collapse;background:var(--card);min-width:340px}
+.ran25-wrap th{background:linear-gradient(135deg,var(--blue),#00ACC1);color:#fff;padding:13px 14px;
+  font-size:15px;text-align:right}
+.ran25-wrap td{padding:12px 14px;border-bottom:1px solid #eef2f8;font-size:15px}
+.ran25-wrap tr:nth-child(even) td{background:#F1FAFB}
+.ran25-wrap tr:hover td{background:#E3F6F6}
+.ran25-wrap td:first-child{font-weight:bold;color:var(--blue)}
+
+/* ---------- FAQ ---------- */
+.ran25-faq details{background:var(--card);border-radius:12px;margin:10px 0;padding:0;
+  box-shadow:0 4px 14px rgba(20,40,70,.06);overflow:hidden;border-right:5px solid var(--blue);
+  transition:box-shadow .3s ease}
+.ran25-faq details[open]{box-shadow:0 12px 30px rgba(0,131,143,.16)}
+.ran25-faq summary{cursor:pointer;padding:15px 18px;font-weight:bold;color:var(--blue);
+  list-style:none;position:relative;padding-left:44px;transition:background .25s ease}
+.ran25-faq summary:hover{background:#EFFafa}
+.ran25-faq summary::-webkit-details-marker{display:none}
+.ran25-faq summary::after{content:"+";position:absolute;left:16px;top:50%;transform:translateY(-50%);
+  width:26px;height:26px;border-radius:50%;background:var(--orange);color:#fff;text-align:center;
+  line-height:26px;font-size:18px;transition:transform .3s ease}
+.ran25-faq details[open] summary::after{content:"−";transform:translateY(-50%) rotate(180deg)}
+.ran25-faq .ans{padding:4px 18px 18px;color:var(--muted)}
+.ran25-wrap a{color:var(--blue);text-decoration:none;border-bottom:1px dashed var(--blue);transition:color .2s ease,border-color .2s ease}
+.ran25-wrap a:hover{color:var(--orange);border-bottom-color:var(--orange)}
+.ran25-related{background:var(--card);border-radius:16px;padding:20px 24px;margin:24px 0;box-shadow:0 8px 24px rgba(20,40,70,.07)}
+.ran25-related h3{margin-top:0}
+.ran25-related ul{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
+.ran25-related li{background:#EFFAFA;border-radius:10px;padding:0;transition:transform .25s ease,background .25s ease}
+.ran25-related li:hover{transform:translateY(-3px);background:#DBF3F4}
+.ran25-related a{display:block;padding:12px 16px;border:none;color:var(--blue);font-weight:bold;font-size:14px}
+.ran25-related a:hover{color:var(--orange)}
+.ran25-related a::before{content:"◄";margin-left:8px;color:var(--orange);font-size:12px}
+
+/* ---------- CTA ---------- */
+.ran25-cta{background:linear-gradient(135deg,#012F33 0%,#006064 55%,#00838F 100%);
+  color:#fff;border-radius:20px;padding:34px 28px;margin:34px 0 10px;text-align:center;
+  box-shadow:0 18px 44px rgba(1,47,51,.4);position:relative;overflow:hidden}
+.ran25-cta::before,.ran25-cta::after{content:"";position:absolute;width:120px;height:120px;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='rgba(255,255,255,0.08)'><path d='M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z'/></svg>");
+  background-repeat:no-repeat;background-size:contain;animation:rotate 18s linear infinite}
+.ran25-cta::before{top:-30px;right:-30px}
+.ran25-cta::after{bottom:-40px;left:-40px;width:160px;height:160px;animation-duration:24s;animation-direction:reverse}
+.ran25-cta h2{color:#fff;border:none;padding:0;justify-content:center;position:relative;z-index:2}
+.ran25-cta p,.ran25-cta ul{position:relative;z-index:2}
+.ran25-cta p{color:#cdeeef}
+.ran25-cta-feats{list-style:none;padding:0;margin:16px 0;display:flex;flex-wrap:wrap;
+  justify-content:center;gap:10px 22px}
+.ran25-cta-feats li{position:relative;padding-right:26px;color:#e6fbfb;font-size:15px}
+.ran25-cta-feats li::before{content:"✓";position:absolute;right:0;top:0;width:20px;height:20px;
+  border-radius:50%;background:var(--green);color:#fff;text-align:center;line-height:20px;font-size:12px}
+.ran25-btn{display:inline-block;margin-top:14px;padding:16px 46px;border-radius:50px;
+  background:linear-gradient(135deg,var(--orange),#FFA000);color:#fff;font-weight:bold;font-size:18px;
+  text-decoration:none;position:relative;overflow:hidden;box-shadow:0 10px 26px rgba(255,111,0,.45);
+  transition:transform .25s ease}
+.ran25-btn:hover{transform:scale(1.06)}
+.ran25-btn::after{content:"";position:absolute;top:0;left:-60%;width:50%;height:100%;
+  background:linear-gradient(120deg,transparent,rgba(255,255,255,.55),transparent);
+  transform:skewX(-20deg);animation:shimmer 2.6s infinite}
+
+/* ---------- Interactive product photo with hotspots ---------- */
+.ran25-photo{position:relative;background:linear-gradient(135deg,#EFFAFA 0%,#DBF3F4 100%);
+  border-radius:18px;padding:24px;margin:24px 0;box-shadow:0 12px 32px rgba(20,40,70,.1);overflow:hidden}
+.ran25-photo::before{content:"";position:absolute;inset:0;opacity:.5;pointer-events:none;
+  background-image:linear-gradient(rgba(0,131,143,.06) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,131,143,.06) 1px,transparent 1px);
+  background-size:30px 30px}
+.ran25-photo-title{text-align:center;font-weight:bold;color:var(--blue);font-size:17px;margin-bottom:12px;position:relative;z-index:1}
+.ran25-photo-hint{text-align:center;font-size:13px;color:var(--muted);margin-top:14px;position:relative;z-index:1}
+.ran25-photo-stage{position:relative!important;max-width:760px;margin:0 auto;display:block;z-index:1;overflow:visible}
+.ran25-photo-stage img{width:100%;height:auto;display:block;border-radius:12px;box-shadow:0 8px 24px rgba(20,40,70,.18);background:#fff;position:relative;z-index:1}
+.ran25-photo-stage .ran25-spot,.ran25-photo-stage .ran25-callout{position:absolute!important}
+.ran25-spot{position:absolute;width:22px;height:22px;border-radius:50%;
+  background:radial-gradient(circle,#FF6F00 0%,#FF6F00 40%,transparent 70%);transform:translate(50%,-50%);z-index:3}
+.ran25-spot::before,.ran25-spot::after{content:"";position:absolute;inset:0;border-radius:50%;border:3px solid #FF6F00}
+.ran25-spot::before{animation:hotspot 2s ease-in-out infinite}
+.ran25-spot::after{animation:hotspot 2s ease-in-out infinite .8s;opacity:0}
+@keyframes hotspot{0%{transform:scale(1);opacity:.9}100%{transform:scale(2.6);opacity:0}}
+.ran25-spot.blue{background:radial-gradient(circle,#00838F 0%,#00838F 40%,transparent 70%)}
+.ran25-spot.blue::before,.ran25-spot.blue::after{border-color:#00838F}
+.ran25-spot.green{background:radial-gradient(circle,#2E7D32 0%,#2E7D32 40%,transparent 70%)}
+.ran25-spot.green::before,.ran25-spot.green::after{border-color:#2E7D32}
+.ran25-spot.yellow{background:radial-gradient(circle,#F57F17 0%,#F57F17 40%,transparent 70%)}
+.ran25-spot.yellow::before,.ran25-spot.yellow::after{border-color:#F57F17}
+.ran25-spot.red{background:radial-gradient(circle,#C62828 0%,#C62828 40%,transparent 70%)}
+.ran25-spot.red::before,.ran25-spot.red::after{border-color:#C62828}
+
+.ran25-callout{position:absolute;background:#fff;border:2px solid #FF6F00;border-radius:10px;
+  padding:8px 12px;font-size:12px;font-weight:bold;color:#FF6F00;z-index:4;
+  box-shadow:0 6px 16px rgba(20,40,70,.18);min-width:120px;text-align:center;
+  opacity:0;animation:labelIn .6s ease forwards;line-height:1.4}
+.ran25-callout small{display:block;font-size:10px;color:var(--muted);font-weight:normal;margin-top:2px}
+.ran25-callout.blue{border-color:#00838F;color:#00838F}
+.ran25-callout.green{border-color:#2E7D32;color:#2E7D32}
+.ran25-callout.yellow{border-color:#F57F17;color:#F57F17}
+.ran25-callout.red{border-color:#C62828;color:#C62828}
+@keyframes labelIn{from{opacity:0;transform:translateY(8px) scale(.92)}to{opacity:1;transform:translateY(0) scale(1)}}
+
+.ran25-line{position:absolute;background:linear-gradient(90deg,currentColor,currentColor);
+  height:2px;transform-origin:right center;z-index:2;color:#FF6F00;
+  opacity:0;animation:lineGrow .8s ease-out forwards}
+.ran25-line.blue{color:#00838F}.ran25-line.green{color:#2E7D32}
+.ran25-line.yellow{color:#F57F17}.ran25-line.red{color:#C62828}
+@keyframes lineGrow{from{opacity:0;transform:scaleX(0)}to{opacity:.8;transform:scaleX(1)}}
+
+.ran25-d1{animation-delay:.4s}.ran25-d2{animation-delay:.8s}.ran25-d3{animation-delay:1.2s}
+.ran25-d4{animation-delay:1.6s}.ran25-d5{animation-delay:2s}.ran25-d6{animation-delay:2.4s}
+.ran25-d7{animation-delay:2.8s}
+
+@media(max-width:640px){
+  .ran25-callout{font-size:10px;padding:6px 8px;min-width:90px}
+  .ran25-callout small{font-size:9px}
+  .ran25-spot{width:16px;height:16px}
+}
+
+/* ---------- Marquee ticker bar ---------- */
+.ran25-ticker{position:relative;overflow:hidden;border-radius:14px;padding:0;margin:28px 0;
+  background:radial-gradient(ellipse at center,#1B5E20 0%,#0B3D11 100%);
+  box-shadow:0 8px 22px rgba(11,61,17,.35),inset 0 0 0 1px rgba(255,255,255,.06)}
+.ran25-ticker.blue{background:radial-gradient(ellipse at center,#006064 0%,#00363A 100%);
+  box-shadow:0 8px 22px rgba(0,96,100,.35),inset 0 0 0 1px rgba(255,255,255,.06)}
+.ran25-ticker::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(circle at 20% 30%,rgba(255,255,255,.08) 1px,transparent 2px),
+    radial-gradient(circle at 70% 70%,rgba(255,255,255,.06) 1px,transparent 2px);
+  background-size:60px 60px,40px 40px}
+.ran25-ticker::after{content:"";position:absolute;top:0;bottom:0;left:0;width:50px;z-index:3;
+  background:linear-gradient(90deg,#0B3D11,transparent);pointer-events:none}
+.ran25-ticker.blue::after{background:linear-gradient(90deg,#00363A,transparent)}
+.ran25-ticker .fade-r{position:absolute;top:0;bottom:0;right:0;width:50px;z-index:3;
+  background:linear-gradient(-90deg,#0B3D11,transparent);pointer-events:none}
+.ran25-ticker.blue .fade-r{background:linear-gradient(-90deg,#00363A,transparent)}
+.ran25-ticker-track{display:flex;align-items:center;gap:48px;padding:18px 0;width:max-content;
+  animation:tickerSlide 38s linear infinite}
+.ran25-ticker:hover .ran25-ticker-track{animation-play-state:paused}
+.ran25-ticker-track span{color:#E8F5E9;font-size:15px;font-weight:bold;white-space:nowrap;display:flex;align-items:center;gap:14px}
+.ran25-ticker.blue .ran25-ticker-track span{color:#E0F7F8}
+.ran25-ticker-track span svg{flex-shrink:0;color:#FFB300}
+.ran25-ticker.blue .ran25-ticker-track span svg{color:#FF8F00}
+@keyframes tickerSlide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ---------- Industrial decorative bands ---------- */
+.ran25-machine{position:relative;height:96px;margin:36px 0;border-radius:16px;overflow:hidden;
+  background:linear-gradient(135deg,#012F33 0%,#00838F 100%);
+  box-shadow:0 10px 28px rgba(1,47,51,.25);display:flex;align-items:center;justify-content:space-around;padding:0 20px;
+  direction:ltr;flex-wrap:nowrap}
+.ran25-machine::before{content:"";position:absolute;inset:0;opacity:.12;
+  background-image:repeating-linear-gradient(45deg,#fff 0 2px,transparent 2px 14px)}
+.ran25-machine svg{position:relative;z-index:2;flex-shrink:0}
+.ran25-gear{animation:rotate 10s linear infinite;color:#FFB300}
+.ran25-gear.rev{animation-direction:reverse;animation-duration:14s;color:#4DD0E1}
+.ran25-gear.slow{animation-duration:22s;color:#A5D6A7}
+.ran25-pipe{stroke:#80DEEA;fill:none;stroke-width:3}
+.ran25-pipe-flow{stroke:#FFB300;stroke-width:3;fill:none;stroke-dasharray:6 10;animation:flow 1.5s linear infinite}
+@keyframes flow{from{stroke-dashoffset:32}to{stroke-dashoffset:0}}
+.ran25-needle{transform-origin:50% 50%;animation:swing 3.5s ease-in-out infinite;color:#FF6F00}
+@keyframes swing{0%,100%{transform:rotate(-50deg)}50%{transform:rotate(50deg)}}
+.ran25-flame-band{animation:flicker 1.4s ease-in-out infinite;transform-origin:50% 100%;color:#FFB300}
+.ran25-flame-band.b{animation-delay:.2s;color:#FF6F00}
+.ran25-flame-band.c{animation-delay:.4s;color:#FFEB3B}
+
+/* variant 2: machine bar with valves */
+.ran25-machine.valve-bar{background:linear-gradient(135deg,#1B5E20 0%,#2E7D32 100%);box-shadow:0 10px 28px rgba(27,94,32,.25)}
+/* variant 3: machine bar with flames */
+.ran25-machine.flame-bar{background:linear-gradient(135deg,#BF360C 0%,#E65100 100%);box-shadow:0 10px 28px rgba(191,54,12,.25)}
+
+/* Decorative section ornament */
+.ran25-ornament{display:flex;align-items:center;justify-content:center;gap:10px;margin:50px 0 20px;opacity:.6}
+.ran25-ornament span{display:block;width:8px;height:8px;border-radius:50%;background:var(--orange);animation:fadeInUp .8s ease both}
+.ran25-ornament span:nth-child(1){animation-delay:.1s}
+.ran25-ornament span:nth-child(2){animation-delay:.2s;background:var(--blue);width:12px;height:12px}
+.ran25-ornament span:nth-child(3){animation-delay:.3s;background:var(--green);width:16px;height:16px}
+.ran25-ornament span:nth-child(4){animation-delay:.4s;background:var(--blue);width:12px;height:12px}
+.ran25-ornament span:nth-child(5){animation-delay:.5s}
+
+/* ---------- Calculator promo block ---------- */
+.ran25-calc-promo{position:relative;overflow:hidden;border-radius:20px;margin:40px 0;padding:30px 28px;
+  background:linear-gradient(135deg,#006064 0%,#00838F 50%,#0097A7 100%);color:#fff;
+  box-shadow:0 18px 44px rgba(0,96,100,.4);
+  animation:slideInUp .8s ease-out both}
+@keyframes slideInUp{from{opacity:0;transform:translateY(60px)}to{opacity:1;transform:translateY(0)}}
+.ran25-calc-promo::before{content:"";position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,255,.14),transparent 70%);pointer-events:none}
+.ran25-calc-promo::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.10;
+  background-image:linear-gradient(rgba(255,255,255,.6) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.6) 1px,transparent 1px);
+  background-size:34px 34px}
+.ran25-calc-inner{position:relative;z-index:2;display:flex;gap:26px;align-items:center;flex-wrap:wrap}
+.ran25-calc-text{flex:1 1 280px;min-width:260px}
+.ran25-calc-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.16);
+  border:1px solid rgba(255,255,255,.3);border-radius:50px;padding:6px 16px;font-size:13px;font-weight:bold;margin-bottom:14px}
+.ran25-calc-badge svg{flex-shrink:0;color:#FFD54F}
+.ran25-calc-text h3{color:#fff;font-size:23px;margin:0 0 12px;line-height:1.5}
+.ran25-calc-text p{color:#e0f7f8;margin:8px 0;font-size:15px}
+.ran25-calc-text ul{list-style:none;padding:0;margin:14px 0}
+.ran25-calc-text ul li{position:relative;padding:5px 28px 5px 0;color:#e6fbfb;font-size:14.5px}
+.ran25-calc-text ul li::before{content:"✓";position:absolute;right:0;top:5px;width:20px;height:20px;border-radius:50%;
+  background:#FFB300;color:#006064;text-align:center;line-height:20px;font-size:12px;font-weight:bold}
+.ran25-calc-media{flex:1 1 300px;min-width:260px}
+.ran25-calc-media video{width:100%;max-width:100%;border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,.32);
+  background:#00363a;display:block}
+.ran25-calc-cta{display:inline-flex;align-items:center;gap:10px;margin-top:18px;padding:14px 36px;border-radius:50px;
+  background:#fff;color:#006064;font-weight:bold;font-size:16.5px;text-decoration:none;border:none;
+  box-shadow:0 8px 22px rgba(0,0,0,.22);transition:transform .25s ease;animation:ctaPulse 2.2s ease-in-out infinite}
+.ran25-calc-cta:hover{transform:scale(1.05);color:#006064;border:none}
+.ran25-calc-cta .dot{width:10px;height:10px;border-radius:50%;background:#2E7D32;box-shadow:0 0 0 0 rgba(46,125,50,.6);
+  animation:dotPulse 1.6s infinite}
+@keyframes ctaPulse{0%,100%{box-shadow:0 8px 22px rgba(0,0,0,.22)}50%{box-shadow:0 8px 30px rgba(255,255,255,.55)}}
+@keyframes dotPulse{0%{box-shadow:0 0 0 0 rgba(46,125,50,.6)}70%{box-shadow:0 0 0 10px rgba(46,125,50,0)}100%{box-shadow:0 0 0 0 rgba(46,125,50,0)}}
+@media(max-width:640px){.ran25-calc-inner{flex-direction:column}.ran25-calc-cta{width:100%;justify-content:center}}
+
+/* ---------- WiFi smart feature block ---------- */
+.ran25-smart{position:relative;overflow:hidden;border-radius:18px;margin:24px 0;padding:26px 26px;
+  background:linear-gradient(135deg,#E0F7F8 0%,#F6FCFC 100%);border:1px solid #B2EBF2;
+  box-shadow:0 10px 28px rgba(0,131,143,.12)}
+.ran25-smart-head{display:flex;align-items:center;gap:14px;margin-bottom:10px}
+.ran25-smart-head .ico{flex-shrink:0;width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#00838F,#00ACC1);box-shadow:0 8px 18px rgba(0,131,143,.35)}
+.ran25-smart-head .ico svg{width:28px;height:28px;color:#fff}
+.ran25-smart-head h3{margin:0;color:#006064}
+.ran25-smart-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:14px}
+.ran25-smart-grid .it{background:#fff;border-radius:12px;padding:14px 16px;box-shadow:0 4px 14px rgba(0,131,143,.08);
+  border-right:4px solid #00838F}
+.ran25-smart-grid .it b{display:block;color:#00838F;margin-bottom:4px;font-size:15px}
+.ran25-smart-grid .it span{font-size:13.5px;color:var(--muted)}
+
+/* ---------- WordPress theme conflict fixes ---------- */
+.ran25-wrap{max-width:100%!important;overflow-x:hidden!important;contain:layout paint!important;isolation:isolate!important}
+.ran25-wrap > *:not(.ran25-ticker-track){max-width:100%}
+.ran25-ticker-track{max-width:none!important;width:max-content!important}
+.ran25-machine,.ran25-ticker{position:relative!important;width:100%!important;max-width:100%!important;
+  overflow:hidden!important;contain:layout paint!important;isolation:isolate!important;box-sizing:border-box!important}
+.ran25-machine{height:96px!important}
+.ran25-machine::before,.ran25-ticker::before{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:100%!important}
+.ran25-ticker-track{max-width:none!important;width:max-content!important;position:relative!important}
+.ran25-summary,.ran25-cta,.ran25-card,.ran25-related{max-width:100%!important;box-sizing:border-box!important;contain:layout paint!important}
+.ran25-photo{max-width:100%!important;box-sizing:border-box!important;contain:layout!important;overflow:visible!important}
+.ran25-summary::before,.ran25-summary::after,.ran25-cta::before,.ran25-cta::after,.ran25-card::before{contain:strict!important;max-width:100%!important}
+
+@media(max-width:600px){
+  .ran25-wrap{padding:12px;font-size:15px}
+  .ran25-wrap > h2{font-size:19px;padding:22px 80px 22px 18px;margin-top:50px}
+  .ran25-wrap > h2::before{width:48px;height:48px;line-height:48px;font-size:17px;right:16px}
+  .ran25-wrap > h2::after{top:-28px;width:100px}
+  .ran25-summary,.ran25-cta{padding:22px 18px}
+  .ran25-btn{width:100%}
+}
+@media(prefers-reduced-motion:reduce){
+  .ran25-wrap *{animation:none!important;opacity:1!important}
+}
+
+/* ============ FINAL OVERRIDES — WordPress theme compatibility ============ */
+/* SVG sizing inside industrial machine bars (WP strips width/height attrs) */
+.ran25-machine svg{flex-shrink:0!important;height:56px!important;width:auto!important;
+  display:inline-block!important;vertical-align:middle!important;max-width:none!important}
+
+/* Ticker layout & SVG sizing */
+.ran25-ticker-track{display:flex!important;align-items:center!important;gap:48px!important;
+  width:max-content!important;max-width:none!important;padding:18px 24px!important;flex-wrap:nowrap!important}
+.ran25-ticker-track > span{display:inline-flex!important;align-items:center!important;
+  gap:14px!important;white-space:nowrap!important;flex-shrink:0!important}
+.ran25-ticker-track > span > svg{flex-shrink:0!important;width:18px!important;height:18px!important;
+  display:inline-block!important}
+
+/* Photo overlay: callouts/spots visible immediately regardless of animation state */
+.ran25-photo,.ran25-photo-stage{contain:none!important;overflow:visible!important}
+.ran25-callout{opacity:1!important}
+.ran25-spot,.ran25-callout{position:absolute!important;display:block!important}
+
+/* Counter for section badges — use descendant selector for WP wrapper compat */
+.ran25-wrap{counter-reset:sec!important}
+.ran25-wrap h2{counter-increment:sec!important}
+.ran25-summary h2,.ran25-cta h2{counter-increment:none!important}
+</style>
+
+<div class="ran25-wrap">
+
+  <!-- 1. SUMMARY -->
+  <div class="ran25-summary anim d1">
+    <h2>خلاصه سریع</h2>
+    <p>پکیج دیواری شوفاژکار کانفیدنت ۵۰ (Confident 50) یک پکیج دو مبدل فن‌دار با ظرفیت حرارتی ۵۰ کیلووات (نزدیک به ۴۳٬۰۰۰ کیلوکالری بر ساعت) است که با داشتن بالاترین ظرفیت در میان پکیج‌های دیواری بازار، برای فضاهای بزرگ تا حدود ۳۵۰ مترمربع و مناطق سردسیر طراحی شده است. مهم‌ترین مزیت این مدل، مجهز بودن به سامانهٔ کنترل هوشمند از راه دور با قابلیت اتصال به Wi-Fi و اپلیکیشن موبایل است که آن را به گزینه‌ای بی‌رقیب در رده ظرفیت ۵۰ کیلووات تبدیل می‌کند. دبی آبگرم بهداشتی ۲۵٫۵ لیتر بر دقیقه، سیستم عیب‌یابی هوشمند، سازگاری با گرمایش از کف و گارانتی ۲۴ ماههٔ قطعات، این پکیج را به انتخابی مطمئن برای واحدهای مسکونی بزرگ تبدیل کرده است.</p>
+  </div>
+
+  <!-- 2. KEY SPECS -->
+  <div class="ran25-card anim d2">
+    <h3>مشخصات کلیدی در یک نگاه</h3>
+    <ul class="ran25-list">
+      <li>ظرفیت حرارتی ۵۰ کیلووات (≈ ۴۳٬۰۰۰ kcal/h) — بالاترین رده پکیج دیواری</li>
+      <li>پوشش گرمایش فضایی تا حدود ۳۵۰ مترمربع</li>
+      <li>کنترل هوشمند از راه دور با Wi-Fi و اپلیکیشن موبایل</li>
+      <li>پکیج دو مبدل فن‌دار (محفظه احتراق بسته)</li>
+      <li>دبی آبگرم بهداشتی ۲۵٫۵ لیتر بر دقیقه</li>
+      <li>سیستم عیب‌یابی هوشمند و کم‌صدا در راه‌اندازی</li>
+      <li>سازگار با سیستم گرمایش از کف و ترموستات اتاقی</li>
+      <li>سوخت گاز طبیعی شهری و گارانتی ۲۴ ماههٔ قطعات</li>
+    </ul>
+  </div>
+
+  <!-- 3. TICKER -->
+  <div class="ran25-ticker blue anim d3" aria-hidden="true">
+    <div class="fade-r"></div>
+    <div class="ran25-ticker-track">
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>بالاترین ظرفیت پکیج دیواری</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>کنترل هوشمند با Wi-Fi</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>پوشش تا ۳۵۰ مترمربع</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>گارانتی اصلی شوفاژکار</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>ارسال سریع به سراسر ایران</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>مشاوره رایگان قبل از خرید</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>بالاترین ظرفیت پکیج دیواری</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>کنترل هوشمند با Wi-Fi</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>پوشش تا ۳۵۰ مترمربع</span>
+      <span><svg width="18" height="18" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>گارانتی اصلی شوفاژکار</span>
+    </div>
+  </div>
+
+  <h2 class="anim d1">پکیج دیواری شوفاژکار کانفیدنت ۵۰ چیست؟</h2>
+  <p>پکیج دیواری شوفاژکار کانفیدنت ۵۰ یکی از پرظرفیت‌ترین مدل‌های خانوادهٔ <a href="https://shofazh.com/product-category/garmayesh/packages/chauffagekar-package/">پکیج‌های دیواری شوفاژکار</a> است که برای تأمین همزمان گرمایش رادیاتوری و آبگرم بهداشتی در ساختمان‌های بزرگ مسکونی طراحی شده است. این محصول از نوع پکیج دو مبدل فن‌دار با محفظهٔ احتراق بسته است؛ یعنی هوای لازم برای احتراق از بیرون ساختمان تأمین و دود نیز از طریق دودکش فن‌دار به بیرون هدایت می‌شود. این ساختار، علاوه بر ایمنی بالاتر، امکان نصب در فضاهای بسته و آپارتمانی را فراهم می‌کند.</p>
+  <p>آنچه کانفیدنت ۵۰ را از سایر پکیج‌های دیواری متمایز می‌کند، ترکیب دو ویژگی کلیدی است: نخست، ظرفیت حرارتی بسیار بالای ۵۰ کیلووات که در میان پکیج‌های دیواری رایج بازار کم‌نظیر است و دوم، سامانهٔ کنترل هوشمند مبتنی بر Wi-Fi که به کاربر اجازه می‌دهد دمای منزل را از راه دور و با گوشی موبایل مدیریت کند. این دو ویژگی در کنار هم، کانفیدنت ۵۰ را به انتخابی منطقی برای خانه‌های ویلایی، دوبلکس‌ها و واحدهای بزرگ تبدیل کرده‌اند؛ جایی که پکیج‌های دیواری معمولی با ظرفیت ۲۴ تا ۳۶ هزار کیلوکالری دیگر پاسخگو نیستند.</p>
+  <p>برند شوفاژکار به‌عنوان یکی از قدیمی‌ترین و معتبرترین تولیدکنندگان تجهیزات گرمایشی ایران شناخته می‌شود و محصولاتش به‌خاطر دوام، شبکهٔ گستردهٔ خدمات پس از فروش و دسترسی آسان به قطعات یدکی، در میان مصرف‌کنندگان جایگاه ویژه‌ای دارند. مدل کانفیدنت در واقع نسل به‌روزشده و هوشمند پکیج‌های دیواری این برند است که فناوری اتصال بی‌سیم را با ظرفیت بالا ترکیب کرده است.</p>
+  <div class="ran25-box ran25-tip anim d2">
+    <strong>نکته</strong>
+    پیش از خرید، حتماً متراژ و میزان اتلاف حرارتی ساختمان خود را با ظرفیت کانفیدنت ۵۰ (تا حدود ۳۵۰ مترمربع) تطبیق دهید؛ ظرفیت بسیار بالاتر از نیاز واقعی، باعث روشن و خاموش شدن مکرر دستگاه و افزایش مصرف گاز می‌شود.
+  </div>
+
+  <!-- IMAGE PLACEHOLDER: بعد از بخش «معرفی محصول» — تصویر کنترل پکیج با اپلیکیشن موبایل و Wi-Fi -->
+
+  <!-- 2. HEAT CAPACITY -->
+  <h2 class="anim d1">ظرفیت حرارتی ۵۰ کیلووات؛ بزرگ‌ترین پکیج دیواری</h2>
+  <p>ظرفیت حرارتی مهم‌ترین معیار انتخاب یک پکیج است و تعیین می‌کند که دستگاه برای چه متراژ و چند رادیاتوری مناسب است. پکیج دیواری کانفیدنت ۵۰ با ظرفیت اسمی ۵۰ کیلووات (معادل تقریبی ۴۳٬۰۰۰ کیلوکالری بر ساعت)، در بالاترین رده پکیج‌های دیواری قرار می‌گیرد. این عدد به‌مراتب بیشتر از پکیج‌های پرفروش ۲۴ و ۳۲ هزار است و همین موضوع، کانفیدنت ۵۰ را برای فضاهایی مناسب می‌کند که پیش‌تر تنها با پکیج زمینی یا موتورخانه قابل گرمایش بودند.</p>
+  <div class="ran25-tablewrap anim d2">
+    <table>
+      <tr><th>پارامتر</th><th>مقدار</th></tr>
+      <tr><td>ظرفیت حرارتی اسمی</td><td>۵۰ کیلووات (≈ ۴۳٬۰۰۰ kcal/h)</td></tr>
+      <tr><td>متراژ تحت پوشش</td><td>تا حدود ۳۵۰ مترمربع</td></tr>
+      <tr><td>دبی آبگرم بهداشتی</td><td>۲۵٫۵ لیتر بر دقیقه</td></tr>
+      <tr><td>حداکثر دمای مدار گرمایش</td><td>۸۰ درجه سانتی‌گراد</td></tr>
+      <tr><td>حداکثر دمای آبگرم مصرفی</td><td>۵۵ درجه سانتی‌گراد</td></tr>
+    </table>
+  </div>
+  <div class="ran25-bars ran25-card anim d3">
+    <div class="ran25-bar"><div class="lbl"><span>ظرفیت حرارتی نسبت به پکیج دیواری معمول</span><span>۵۰ کیلووات</span></div><div class="track"><div class="fill" style="--w:100%"></div></div></div>
+    <div class="ran25-bar"><div class="lbl"><span>توان تأمین آبگرم بهداشتی</span><span>۲۵٫۵ لیتر/دقیقه</span></div><div class="track"><div class="fill" style="--w:94%"></div></div></div>
+    <div class="ran25-bar"><div class="lbl"><span>پوشش متراژ ساختمان</span><span>تا ۳۵۰ متر</span></div><div class="track"><div class="fill" style="--w:96%"></div></div></div>
+  </div>
+  <p>دبی بالای ۲۵٫۵ لیتر بر دقیقه آبگرم بهداشتی به این معناست که کانفیدنت ۵۰ می‌تواند به‌راحتی چند مصرف‌کنندهٔ آبگرم (مثلاً دو حمام به‌صورت هم‌زمان) را پشتیبانی کند؛ ویژگی‌ای که در خانه‌های پرجمعیت و بزرگ اهمیت زیادی دارد. در عین حال، حداکثر دمای ۸۰ درجهٔ مدار گرمایش، گرمایش سریع رادیاتورها را حتی در سرمای شدید زمستان تضمین می‌کند.</p>
+  <div class="ran25-box ran25-warn anim d4">
+    <strong>هشدار</strong>
+    استفاده از پکیجی با ظرفیت کمتر از نیاز واقعی ساختمان، باعث می‌شود دستگاه به‌طور مداوم در حداکثر توان کار کند، گرمای کافی تولید نشود و عمر قطعات کاهش یابد. برای فضاهای بزرگ، ظرفیت ۵۰ کیلووات کانفیدنت یک انتخاب مطمئن است.
+  </div>
+
+  <!-- 3. SMART / WIFI -->
+  <h2 class="anim d1">کنترل هوشمند و قابلیت Wi-Fi کانفیدنت ۵۰</h2>
+  <p>برجسته‌ترین ویژگی پکیج کانفیدنت ۵۰، مجهز بودن آن به سامانهٔ کنترل هوشمند از راه دور است. این پکیج با اتصال به شبکهٔ Wi-Fi منزل و از طریق یک اپلیکیشن اختصاصی روی گوشی موبایل، به شما اجازه می‌دهد دمای ساختمان را از هر نقطه‌ای کنترل کنید؛ بدون آنکه نیاز باشد به‌صورت فیزیکی پای دستگاه بروید. این قابلیت در رده ظرفیت ۵۰ کیلووات، کانفیدنت را تقریباً بی‌رقیب می‌کند.</p>
+  <div class="ran25-smart anim d2">
+    <div class="ran25-smart-head">
+      <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg></span>
+      <h3>مدیریت گرمایش از راه دور با موبایل</h3>
+    </div>
+    <p>با سامانهٔ هوشمند کانفیدنت ۵۰ می‌توانید قبل از رسیدن به منزل، خانه را گرم کنید، برنامهٔ زمانی روشن و خاموش شدن تنظیم کنید و مصرف انرژی را بهینه نمایید. این هوشمندی نه‌تنها رفاه شما را افزایش می‌دهد، بلکه با جلوگیری از گرمایش بی‌مورد، در هزینهٔ گاز نیز صرفه‌جویی می‌کند.</p>
+    <div class="ran25-smart-grid">
+      <div class="it"><b>اتصال Wi-Fi</b><span>کنترل پکیج از طریق اینترنت و اپلیکیشن موبایل از هر مکان</span></div>
+      <div class="it"><b>زمان‌بندی هوشمند</b><span>تنظیم برنامهٔ روشن/خاموش بر اساس ساعات حضور در منزل</span></div>
+      <div class="it"><b>عیب‌یابی هوشمند</b><span>شناسایی سریع خطاها و نمایش وضعیت دستگاه</span></div>
+      <div class="it"><b>سازگار با ترموستات</b><span>امکان اتصال ترموستات اتاقی برای تنظیم دقیق دما</span></div>
+    </div>
+  </div>
+  <div class="ran25-box ran25-good anim d3">
+    <strong>چرا اهمیت دارد؟</strong>
+    قابلیت کنترل از راه دور به‌ویژه برای خانه‌های ویلایی، خانه‌های دوم و افرادی که ساعات کاری نامنظم دارند بسیار ارزشمند است؛ شما همیشه به خانه‌ای گرم می‌رسید و در زمان نبودن، انرژی هدر نمی‌رود.
+  </div>
+
+  <!-- 4. FULL SPECS + PHOTO -->
+  <h2 class="anim d1">مشخصات فنی کامل کانفیدنت ۵۰</h2>
+  <div class="ran25-tablewrap anim d2">
+    <table>
+      <tr><th>مشخصه</th><th>مقدار</th></tr>
+      <tr><td>مدل</td><td>کانفیدنت ۵۰ (Confident 50)</td></tr>
+      <tr><td>برند</td><td>شوفاژکار</td></tr>
+      <tr><td>نوع محصول</td><td>پکیج دیواری دو مبدل فن‌دار</td></tr>
+      <tr><td>ظرفیت حرارتی اسمی</td><td>۵۰ کیلووات (≈ ۴۳٬۰۰۰ kcal/h)</td></tr>
+      <tr><td>متراژ تحت پوشش</td><td>تا حدود ۳۵۰ مترمربع</td></tr>
+      <tr><td>دبی آبگرم بهداشتی</td><td>۲۵٫۵ لیتر بر دقیقه</td></tr>
+      <tr><td>حداکثر دمای مدار گرمایش</td><td>۸۰ درجه سانتی‌گراد</td></tr>
+      <tr><td>حداکثر دمای آبگرم مصرفی</td><td>۵۵ درجه سانتی‌گراد</td></tr>
+      <tr><td>نوع محفظهٔ احتراق</td><td>بسته (فن‌دار)</td></tr>
+      <tr><td>کنترل هوشمند</td><td>Wi-Fi و اپلیکیشن موبایل</td></tr>
+      <tr><td>سیستم عیب‌یابی</td><td>هوشمند</td></tr>
+      <tr><td>سازگاری با گرمایش از کف</td><td>دارد</td></tr>
+      <tr><td>ترموستات اتاقی</td><td>قابل اتصال</td></tr>
+      <tr><td>وزن دستگاه</td><td>حدود ۴۶ کیلوگرم</td></tr>
+      <tr><td>نوع سوخت</td><td>گاز طبیعی شهری</td></tr>
+      <tr><td>برق ورودی</td><td>۲۲۰ ولت / ۵۰ هرتز</td></tr>
+      <tr><td>گارانتی</td><td>۲۴ ماه گارانتی قطعات (رسمی شوفاژکار)</td></tr>
+    </table>
+  </div>
+  <div class="ran25-photo anim d2">
+    <div class="ran25-photo-title">اجزای کلیدی پکیج کانفیدنت ۵۰ روی تصویر واقعی محصول</div>
+    <div class="ran25-photo-stage">
+      <img src="https://shofazh.com/wp-content/uploads/2026/05/web13.webp" alt="پکیج دیواری شوفاژکار کانفیدنت ۵۰ با کنترل هوشمند Wi-Fi و ظرفیت ۵۰ کیلووات">
+
+      <!-- HOTSPOTS — موقعیت‌ها قابل تنظیم با درصد (نیازمند بررسی چشمی در مرورگر) -->
+      <span class="ran25-spot blue ran25-d1" style="top:24%;right:50%"></span>
+      <span class="ran25-spot ran25-d2" style="top:16%;right:34%"></span>
+      <span class="ran25-spot green ran25-d3" style="top:46%;right:60%"></span>
+      <span class="ran25-spot yellow ran25-d4" style="top:58%;right:38%"></span>
+      <span class="ran25-spot ran25-d5" style="top:84%;right:46%"></span>
+      <span class="ran25-spot red ran25-d6" style="top:40%;right:30%"></span>
+
+      <!-- CALLOUT LABELS -->
+      <div class="ran25-callout blue ran25-d1" style="top:4%;right:40%">
+        پنل نمایش هوشمند
+        <small>کنترل Wi-Fi</small>
+      </div>
+      <div class="ran25-callout ran25-d2" style="top:6%;right:4%">
+        فن و محفظهٔ احتراق
+        <small>سیستم بسته فن‌دار</small>
+      </div>
+      <div class="ran25-callout green ran25-d3" style="top:40%;right:74%">
+        مبدل اصلی حرارت
+        <small>ظرفیت ۵۰ کیلووات</small>
+      </div>
+      <div class="ran25-callout yellow ran25-d4" style="top:60%;right:6%">
+        پمپ سیرکولاتور
+        <small>گردش آب گرمایش</small>
+      </div>
+      <div class="ran25-callout ran25-d5" style="top:88%;right:62%">
+        اتصالات آب و گاز
+        <small>ورودی و خروجی‌ها</small>
+      </div>
+      <div class="ran25-callout red ran25-d6" style="top:24%;right:8%">
+        مبدل آبگرم بهداشتی
+        <small>دبی ۲۵٫۵ لیتر/دقیقه</small>
+      </div>
+    </div>
+    <div class="ran25-photo-hint">نشانگرهای رنگی به‌ترتیب روی اجزای اصلی محصول روشن می‌شوند (موقعیت برچسب‌ها قابل تنظیم است)</div>
+  </div>
+
+  <h3 class="anim d3">اجزای اصلی کانفیدنت ۵۰</h3>
+  <ul class="ran25-list anim d3">
+    <li>مبدل اصلی حرارت برای گرمایش آب مدار شوفاژ</li>
+    <li>مبدل ثانویه (آبگرم بهداشتی) با دبی بالا</li>
+    <li>فن و محفظهٔ احتراق بسته برای تخلیهٔ ایمن دود</li>
+    <li>پمپ سیرکولاتور جهت گردش آب در رادیاتورها</li>
+    <li>منبع انبساط برای جذب افزایش حجم آب گرم</li>
+    <li>پنل نمایش دیجیتال با ماژول کنترل هوشمند Wi-Fi</li>
+    <li>سامانهٔ ایمنی و عیب‌یاب الکترونیکی</li>
+  </ul>
+  <div class="ran25-box ran25-tip anim d4">
+    <strong>نکته</strong>
+    در پکیج‌های دو مبدل مانند کانفیدنت ۵۰، آبگرم بهداشتی و آب گرمایش از دو مدار جدا عبور می‌کنند؛ همین موضوع از رسوب‌گرفتگی سریع مبدل اصلی جلوگیری کرده و کیفیت آبگرم بهداشتی را بالا می‌برد.
+  </div>
+
+  <!-- 5. APPLICATIONS -->
+  <h2 class="anim d1">کاربردها و موارد استفاده</h2>
+  <p>پکیج دیواری کانفیدنت ۵۰ به‌دلیل ظرفیت حرارتی بالا و توان تأمین هم‌زمان گرمایش و آبگرم بهداشتی فراوان، به‌طور ویژه برای فضاهای بزرگ مسکونی طراحی شده است. این محصول جایی می‌درخشد که یک پکیج دیواری معمولی دیگر کفایت نمی‌کند، اما کاربر نمی‌خواهد به سراغ موتورخانه و پکیج زمینی حجیم برود.</p>
+  <h3 class="anim d2">مناسب برای</h3>
+  <ul class="ran25-list ran25-pros anim d2">
+    <li>خانه‌های ویلایی و دوبلکس با متراژ بالا تا حدود ۳۵۰ متر</li>
+    <li>آپارتمان‌های بزرگ با تعداد رادیاتور زیاد</li>
+    <li>واحدهای مسکونی در مناطق سردسیر با نیاز گرمایشی بالا</li>
+    <li>خانه‌هایی با چند سرویس بهداشتی و نیاز به آبگرم هم‌زمان</li>
+    <li>کاربرانی که به کنترل هوشمند و مدیریت از راه دور اهمیت می‌دهند</li>
+  </ul>
+  <h3 class="anim d3">نامناسب برای</h3>
+  <ul class="ran25-list ran25-cons anim d3">
+    <li>واحدهای کوچک زیر ۱۰۰ متر که پکیج کم‌ظرفیت‌تر اقتصادی‌تر است</li>
+    <li>مجتمع‌های بسیار بزرگ نیازمند موتورخانهٔ مرکزی صنعتی</li>
+    <li>مکان‌هایی که امکان تأمین گاز شهری استاندارد ندارند</li>
+  </ul>
+  <div class="ran25-box ran25-good anim d4">
+    <strong>پیشنهاد</strong>
+    اگر یک خانهٔ ویلایی یا واحد بزرگ مسکونی دارید و از کمبود گرمایش یا افت آبگرم در زمان مصرف هم‌زمان خسته شده‌اید، کانفیدنت ۵۰ با ظرفیت ۵۰ کیلووات و دبی ۲۵٫۵ لیتری، این مشکل را به‌طور کامل حل می‌کند.
+  </div>
+
+  <!-- IMAGE PLACEHOLDER: بعد از بخش «کاربردها» — تصویر فضای داخلی خانهٔ بزرگ گرم در زمستان -->
+
+  <!-- 6. COMPARISON -->
+  <div class="ran25-machine flame-bar anim d1" aria-hidden="true">
+    <svg width="60" height="76" viewBox="0 0 64 80">
+      <path class="ran25-flame-band c" d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z" fill="currentColor"/>
+      <path class="ran25-flame-band b" d="M32 24 C34 32 44 38 42 50 C40 60 36 68 32 70 C28 68 24 60 22 50 C20 38 30 32 32 24 Z" fill="currentColor"/>
+      <path class="ran25-flame-band" d="M32 42 C33 48 38 52 36 60 C35 64 33 67 32 68 C31 67 29 64 28 60 C26 52 31 48 32 42 Z" fill="currentColor"/>
+    </svg>
+    <svg width="84" height="84" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="42" fill="#fff" stroke="#012F33" stroke-width="3"/>
+      <circle cx="50" cy="50" r="38" fill="none" stroke="#FF6F00" stroke-width="2" stroke-dasharray="3 5"/>
+      <text x="22" y="56" fill="#012F33" font-size="9" font-weight="bold">0</text>
+      <text x="70" y="56" fill="#C62828" font-size="9" font-weight="bold">MAX</text>
+      <text x="44" y="28" fill="#012F33" font-size="9" font-weight="bold">bar</text>
+      <line class="ran25-needle" x1="50" y1="50" x2="50" y2="20" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="50" cy="50" r="5" fill="#012F33"/>
+    </svg>
+    <svg width="60" height="76" viewBox="0 0 64 80">
+      <path class="ran25-flame-band b" d="M32 4 C36 18 52 24 50 44 C49 60 40 72 32 76 C24 72 15 60 14 44 C12 24 28 18 32 4 Z" fill="currentColor"/>
+      <path class="ran25-flame-band c" d="M32 24 C34 32 44 38 42 50 C40 60 36 68 32 70 C28 68 24 60 22 50 C20 38 30 32 32 24 Z" fill="currentColor"/>
+      <path class="ran25-flame-band" d="M32 42 C33 48 38 52 36 60 C35 64 33 67 32 68 C31 67 29 64 28 60 C26 52 31 48 32 42 Z" fill="currentColor"/>
+    </svg>
+  </div>
+
+  <h2 class="anim d1">مقایسه پکیج دیواری پرظرفیت با گزینه‌های دیگر</h2>
+  <p>یکی از پرتکرارترین سؤالات خریداران فضاهای بزرگ این است که برای گرمایش یک خانهٔ ویلایی، پکیج دیواری پرظرفیت بهتر است یا پکیج زمینی و موتورخانه. هرکدام مزایای خود را دارند؛ جدول زیر تفاوت‌های کلیدی کانفیدنت ۵۰ را با گزینه‌های جایگزین نشان می‌دهد تا انتخابی آگاهانه داشته باشید:</p>
+  <div class="ran25-tablewrap anim d2">
+    <table>
+      <tr><th>ویژگی</th><th>کانفیدنت ۵۰ (دیواری پرظرفیت)</th><th>پکیج دیواری معمولی</th><th>پکیج زمینی / موتورخانه</th></tr>
+      <tr><td>ظرفیت حرارتی</td><td>۵۰ کیلووات (بسیار بالا)</td><td>۲۴ تا ۳۶ هزار (متوسط)</td><td>بالا تا صنعتی</td></tr>
+      <tr><td>فضای اشغال‌شده</td><td>روی دیوار، کم</td><td>روی دیوار، کم</td><td>روی زمین، زیاد</td></tr>
+      <tr><td>کنترل هوشمند Wi-Fi</td><td>دارد</td><td>اغلب ندارد</td><td>معمولاً ندارد</td></tr>
+      <tr><td>مناسب متراژ بزرگ</td><td>بله، تا ۳۵۰ متر</td><td>خیر</td><td>بله</td></tr>
+      <tr><td>سهولت نصب</td><td>بالا</td><td>بالا</td><td>متوسط</td></tr>
+    </table>
+  </div>
+  <div class="ran25-box ran25-good anim d3">
+    <strong>جمع‌بندی مقایسه</strong>
+    اگر فضای بزرگی دارید اما نمی‌خواهید درگیر حجم و نصب پیچیدهٔ موتورخانه شوید، کانفیدنت ۵۰ بهترین تعادل را ارائه می‌دهد: ظرفیت بالای پکیج زمینی، در قالب فشرده و هوشمند یک پکیج دیواری.
+  </div>
+  <h3 class="anim d1">چرا کانفیدنت ۵۰ در رده خود بی‌رقیب است؟</h3>
+  <ul class="ran25-list anim d2">
+    <li>تلفیق ظرفیت بسیار بالا با ابعاد و نصب یک پکیج دیواری</li>
+    <li>کنترل هوشمند Wi-Fi که در پکیج‌های دیواری پرظرفیت کمیاب است</li>
+    <li>دبی آبگرم بهداشتی بالا برای مصرف هم‌زمان چند نقطه</li>
+    <li>پشتوانهٔ برند معتبر شوفاژکار و خدمات پس از فروش گسترده</li>
+  </ul>
+
+  <!-- 7. PROS / CONS -->
+  <div class="ran25-machine anim d1" aria-hidden="true">
+    <svg class="ran25-gear" width="50" height="50" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+    <svg width="180" height="50" viewBox="0 0 180 50" aria-hidden="true">
+      <path class="ran25-pipe" d="M0 25 H180" />
+      <path class="ran25-pipe-flow" d="M0 25 H180" />
+      <circle cx="45" cy="25" r="6" fill="#FFB300"/>
+      <circle cx="135" cy="25" r="6" fill="#FFB300"/>
+    </svg>
+    <svg class="ran25-gear rev" width="68" height="68" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+    <svg width="180" height="50" viewBox="0 0 180 50" aria-hidden="true">
+      <path class="ran25-pipe" d="M0 25 H180" />
+      <path class="ran25-pipe-flow" d="M0 25 H180" />
+      <circle cx="45" cy="25" r="6" fill="#FFB300"/>
+      <circle cx="135" cy="25" r="6" fill="#FFB300"/>
+    </svg>
+    <svg class="ran25-gear slow" width="42" height="42" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+  </div>
+
+  <h2 class="anim d1">مزایا و معایب کانفیدنت ۵۰</h2>
+  <h3 class="anim d2">مزایا</h3>
+  <ul class="ran25-list ran25-pros anim d2">
+    <li>بالاترین ظرفیت حرارتی (۵۰ کیلووات) در میان پکیج‌های دیواری</li>
+    <li>کنترل هوشمند از راه دور با Wi-Fi و اپلیکیشن موبایل</li>
+    <li>پوشش فضای بزرگ تا حدود ۳۵۰ مترمربع</li>
+    <li>دبی بالای آبگرم بهداشتی (۲۵٫۵ لیتر بر دقیقه)</li>
+    <li>دو مبدل مجزا و سیستم احتراق بسته فن‌دار ایمن</li>
+    <li>سازگار با گرمایش از کف و ترموستات اتاقی</li>
+    <li>سیستم عیب‌یابی هوشمند و راه‌اندازی کم‌صدا</li>
+    <li>برند معتبر شوفاژکار با خدمات پس از فروش گسترده</li>
+  </ul>
+  <h3 class="anim d3">معایب</h3>
+  <ul class="ran25-list ran25-cons anim d3">
+    <li>قیمت بالاتر نسبت به پکیج‌های دیواری کم‌ظرفیت</li>
+    <li>برای واحدهای کوچک، ظرفیت آن بیش از نیاز و غیراقتصادی است</li>
+    <li>نیاز به بستر Wi-Fi پایدار برای بهره‌گیری کامل از قابلیت هوشمند</li>
+    <li>نیاز به سرویس دوره‌ای برای حفظ بازدهی و کیفیت آبگرم</li>
+  </ul>
+
+  <!-- ★★★ CALCULATOR PROMO ★★★ -->
+  <div class="ran25-calc-promo anim d1">
+    <div class="ran25-calc-inner">
+      <div class="ran25-calc-text">
+        <span class="ran25-calc-badge">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="8" y2="10"/><line x1="12" y1="10" x2="12" y2="10"/><line x1="16" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="8" y2="14"/><line x1="12" y1="14" x2="12" y2="14"/><line x1="8" y1="18" x2="16" y2="18"/></svg>
+          ابزار رایگان شوفاژ دات کام
+        </span>
+        <h3>قبل از خرید، ظرفیت حرارتی مورد نیازتان را دقیق محاسبه کنید!</h3>
+        <p>مطمئن نیستید کانفیدنت ۵۰ برای متراژ ساختمان شما کافی است یا ظرفیت کمتری هم پاسخگوست؟ با محاسبه‌گر آنلاین و رایگان شوفاژ دات کام، ظرفیت حرارتی دقیق فضای خود را بر اساس متراژ، عایق‌بندی و شرایط آب‌وهوایی به‌دست آورید و بدون اتلاف انرژی و هزینهٔ اضافی، درست‌ترین انتخاب را انجام دهید.</p>
+        <ul>
+          <li>محاسبهٔ دقیق ظرفیت حرارتی بر اساس متراژ و عایق‌بندی</li>
+          <li>انتخاب صحیح پکیج بدون اتلاف انرژی و هزینه</li>
+          <li>کاملاً رایگان و آنلاین — بدون نیاز به نصب</li>
+          <li>جلوگیری از خرید پکیج با ظرفیت نامناسب (کم یا زیاد)</li>
+        </ul>
+        <a class="ran25-calc-cta" href="https://shofazh.com/shofazh-calculator.html"><span class="dot"></span>محاسبهٔ ظرفیت حرارتی رایگان</a>
+      </div>
+      <div class="ran25-calc-media">
+        <video controls autoplay muted loop playsinline poster="https://shofazh.com/wp-content/uploads/2026/05/web13.webp">
+          <source src="https://shofazh.com/wp-content/uploads/2026/05/cleaned_محاسبه_گر_ظرفیت_حرارتی.mp4" type="video/mp4">
+          مرورگر شما از پخش ویدیو پشتیبانی نمی‌کند.
+        </video>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. INSTALL -->
+  <h2 class="anim d1">نصب و راه‌اندازی کانفیدنت ۵۰</h2>
+  <div class="ran25-box ran25-warn anim d2">
+    <strong>هشدار ایمنی</strong>
+    نصب و راه‌اندازی پکیج گازسوز باید فقط توسط تکنسین دارای صلاحیت و با رعایت کامل اصول ایمنی گاز انجام شود. هرگونه نشتی گاز خطر انفجار و مسمومیت دارد.
+  </div>
+  <h3 class="anim d3">پیش‌نیازهای نصب</h3>
+  <ul class="ran25-list anim d3">
+    <li>دیوار مقاوم و تراز برای تحمل وزن دستگاه</li>
+    <li>لوله‌کشی گاز استاندارد با فشار مناسب</li>
+    <li>مسیر دودکش فن‌دار استاندارد (هواکش دوجداره)</li>
+    <li>برق تک‌فاز پایدار ۲۲۰ ولت با سیم ارت مطمئن</li>
+    <li>دسترسی به شبکهٔ Wi-Fi برای فعال‌سازی کنترل هوشمند</li>
+  </ul>
+  <h3 class="anim d4">مراحل نصب</h3>
+  <ol class="ran25-num anim d4">
+    <li>نصب و تراز کردن پکیج روی دیوار مقاوم در ارتفاع مناسب</li>
+    <li>اتصال لوله‌های رفت و برگشت آب شوفاژ به دستگاه</li>
+    <li>اتصال لولهٔ گاز و تست کامل نشتی</li>
+    <li>نصب دودکش فن‌دار و آب‌بندی مسیر خروج دود</li>
+    <li>اتصال برق و سیم ارت به ترمینال دستگاه</li>
+    <li>آبگیری سیستم، هواگیری رادیاتورها و تنظیم فشار مدار</li>
+    <li>اتصال به Wi-Fi، نصب اپلیکیشن و تست عملکرد هوشمند</li>
+  </ol>
+  <div class="ran25-box ran25-tip anim d5">
+    <strong>نکته</strong>
+    پس از راه‌اندازی، فشار آب مدار شوفاژ را در محدودهٔ توصیه‌شده تنظیم کنید و عملکرد سامانهٔ هوشمند را با اپلیکیشن بررسی نمایید تا از اتصال پایدار Wi-Fi و کنترل صحیح دما مطمئن شوید.
+  </div>
+
+  <!-- IMAGE PLACEHOLDER: بعد از بخش «نصب و راه‌اندازی» — تصویر تکنسین در حال نصب پکیج دیواری -->
+
+  <!-- 9. MAINTENANCE -->
+  <h2 class="anim d1">نگهداری و سرویس دوره‌ای</h2>
+  <h3 class="anim d2">برنامهٔ سرویس</h3>
+  <div class="ran25-tablewrap anim d2">
+    <table>
+      <tr><th>عملیات</th><th>دورهٔ زمانی</th></tr>
+      <tr><td>بررسی فشار آب مدار و هواگیری رادیاتورها</td><td>ماهانه در فصل سرما</td></tr>
+      <tr><td>تمیزکاری مبدل‌ها و مجرای هوا</td><td>هر ۶ ماه</td></tr>
+      <tr><td>رسوب‌زدایی مبدل آبگرم بهداشتی</td><td>سالانه</td></tr>
+      <tr><td>سرویس کامل و بررسی احتراق و فن</td><td>ابتدای هر فصل سرما</td></tr>
+    </table>
+  </div>
+  <h3 class="anim d3">خرابی‌های رایج و علت احتمالی</h3>
+  <div class="ran25-tablewrap anim d3">
+    <table>
+      <tr><th>علامت خرابی</th><th>علت احتمالی</th></tr>
+      <tr><td>گرم نشدن کافی رادیاتورها</td><td>هواگیری نشدن مدار یا افت فشار آب</td></tr>
+      <tr><td>ضعیف بودن آبگرم بهداشتی</td><td>رسوب‌گرفتگی مبدل ثانویه</td></tr>
+      <tr><td>قطع شدن اتصال هوشمند</td><td>ضعف سیگنال Wi-Fi یا نیاز به تنظیم مجدد اپلیکیشن</td></tr>
+      <tr><td>نمایش کد خطا روی پنل</td><td>عملکرد سیستم عیب‌یاب؛ مراجعه به دفترچهٔ راهنما</td></tr>
+    </table>
+  </div>
+  <div class="ran25-box ran25-warn anim d4">
+    <strong>هشدار</strong>
+    در صورت استشمام بوی گاز، فوراً شیر اصلی گاز را ببندید، محیط را تهویه کنید و از روشن یا خاموش کردن هرگونه کلید برق خودداری نمایید.
+  </div>
+
+  <!-- 10. WARRANTY -->
+  <div class="ran25-machine valve-bar anim d1" aria-hidden="true">
+    <svg class="ran25-gear" width="56" height="56" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+    <svg width="200" height="60" viewBox="0 0 200 60" aria-hidden="true">
+      <path class="ran25-pipe" d="M0 30 H75 M125 30 H200" stroke="#C8E6C9" stroke-width="5"/>
+      <path class="ran25-pipe-flow" d="M0 30 H75 M125 30 H200" stroke="#FFEB3B" stroke-width="3"/>
+      <circle cx="100" cy="30" r="20" fill="#fff" stroke="#FFB300" stroke-width="3"/>
+      <line x1="100" y1="10" x2="100" y2="50" stroke="#012F33" stroke-width="3" stroke-linecap="round"/>
+      <line x1="80" y1="30" x2="120" y2="30" stroke="#012F33" stroke-width="3" stroke-linecap="round"/>
+      <line x1="100" y1="6" x2="100" y2="2" stroke="#012F33" stroke-width="4" stroke-linecap="round"/>
+    </svg>
+    <svg class="ran25-gear rev" width="74" height="74" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+    <svg width="200" height="60" viewBox="0 0 200 60" aria-hidden="true">
+      <path class="ran25-pipe" d="M0 30 H75 M125 30 H200" stroke="#C8E6C9" stroke-width="5"/>
+      <path class="ran25-pipe-flow" d="M0 30 H75 M125 30 H200" stroke="#FFEB3B" stroke-width="3"/>
+      <circle cx="100" cy="30" r="20" fill="#fff" stroke="#FFB300" stroke-width="3"/>
+      <line x1="100" y1="10" x2="100" y2="50" stroke="#012F33" stroke-width="3" stroke-linecap="round"/>
+      <line x1="80" y1="30" x2="120" y2="30" stroke="#012F33" stroke-width="3" stroke-linecap="round"/>
+      <line x1="100" y1="6" x2="100" y2="2" stroke="#012F33" stroke-width="4" stroke-linecap="round"/>
+    </svg>
+    <svg class="ran25-gear slow" width="48" height="48" viewBox="0 0 100 100" fill="currentColor"><path d="M50 14 L57 14 L60 24 L67 28 L77 24 L82 30 L78 39 L82 47 L92 50 L92 57 L82 60 L78 67 L82 77 L77 82 L67 78 L60 82 L57 92 L50 92 L47 82 L40 78 L30 82 L24 77 L28 67 L24 60 L14 57 L14 50 L24 47 L28 39 L24 30 L30 24 L40 28 L47 24 Z M50 38 A12 12 0 1 0 50 62 A12 12 0 1 0 50 38 Z"/></svg>
+  </div>
+
+  <h2 class="anim d1">گارانتی و خدمات پس از فروش</h2>
+  <h3 class="anim d2">گارانتی</h3>
+  <ul class="ran25-list ran25-pros anim d2">
+    <li>۲۴ ماه گارانتی قطعات با پوشش ایرادات فنی</li>
+    <li>برچسب اصالت و کد رهگیری معتبر شوفاژکار</li>
+    <li>پشتوانهٔ یکی از قدیمی‌ترین برندهای گرمایشی کشور</li>
+  </ul>
+  <h3 class="anim d3">خدمات پس از فروش</h3>
+  <ul class="ran25-list ran25-pros anim d3">
+    <li>تأمین قطعات یدکی اصلی</li>
+    <li>شبکهٔ گستردهٔ نمایندگان مجاز در سراسر کشور</li>
+    <li>پشتیبانی فنی و راهنمایی فعال‌سازی سامانهٔ هوشمند</li>
+  </ul>
+  <div class="ran25-box ran25-tip anim d4">
+    <strong>نکته</strong>
+    برای حفظ اعتبار گارانتی، نصب و سرویس پکیج را به افراد دارای صلاحیت بسپارید و فاکتور خرید و کارت گارانتی را نزد خود نگه دارید.
+  </div>
+
+  <!-- 11. BUYING GUIDE -->
+  <h2 class="anim d1">راهنمای خرید کانفیدنت ۵۰</h2>
+  <p>پیش از خرید، موارد زیر را بررسی کنید تا انتخابی مطمئن و بدون پشیمانی داشته باشید:</p>
+  <ul class="ran25-list anim d2">
+    <li>تطبیق ظرفیت ۵۰ کیلووات با متراژ و اتلاف حرارتی ساختمان</li>
+    <li>اطمینان از اصالت کالا و وجود برچسب گارانتی شوفاژکار</li>
+    <li>بررسی پایداری شبکهٔ Wi-Fi محل نصب برای کنترل هوشمند</li>
+    <li>هماهنگی مسیر دودکش فن‌دار با شرایط ساختمان</li>
+    <li>اطمینان از تأمین گاز شهری استاندارد و برق پایدار</li>
+  </ul>
+  <div class="ran25-box ran25-good anim d3">
+    <strong>پیشنهاد</strong>
+    خرید از فروشگاه‌های معتبر مانند <a href="https://shofazh.com/">شوفاژ دات کام</a> تضمین‌کنندهٔ اصالت کالا، گارانتی واقعی و دسترسی به خدمات پس از فروش است. برای انتخاب ظرفیت درست، از <a href="https://shofazh.com/shofazh-calculator.html">محاسبه‌گر ظرفیت حرارتی رایگان</a> استفاده کنید و سایر <a href="https://shofazh.com/product-category/garmayesh/packages/">پکیج‌های دیواری</a> را نیز مقایسه نمایید.
+  </div>
+
+  <!-- 12. FAQ -->
+  <h2 class="anim d1">سوالات متداول</h2>
+  <div class="ran25-faq anim d2">
+    <details><summary>ظرفیت حرارتی پکیج کانفیدنت ۵۰ چقدر است؟</summary><div class="ans">ظرفیت حرارتی اسمی این پکیج ۵۰ کیلووات معادل تقریبی ۴۳٬۰۰۰ کیلوکالری بر ساعت است و در بالاترین رده پکیج‌های دیواری قرار می‌گیرد.</div></details>
+    <details><summary>کانفیدنت ۵۰ برای چه متراژی مناسب است؟</summary><div class="ans">این پکیج برای فضاهای بزرگ تا حدود ۳۵۰ مترمربع مناسب است؛ برای تعیین دقیق، متراژ و عایق‌بندی ساختمان را با محاسبه‌گر ظرفیت حرارتی بررسی کنید.</div></details>
+    <details><summary>قابلیت کنترل هوشمند و Wi-Fi چگونه کار می‌کند؟</summary><div class="ans">پکیج به شبکهٔ Wi-Fi منزل متصل می‌شود و از طریق اپلیکیشن موبایل می‌توانید دمای خانه را از راه دور تنظیم، زمان‌بندی و مدیریت کنید.</div></details>
+    <details><summary>دبی آبگرم بهداشتی کانفیدنت ۵۰ چقدر است؟</summary><div class="ans">دبی آبگرم بهداشتی این مدل ۲۵٫۵ لیتر بر دقیقه است که برای مصرف هم‌زمان چند نقطه (مانند دو حمام) کافی است.</div></details>
+    <details><summary>این پکیج دو مبدل است یا تک مبدل؟</summary><div class="ans">کانفیدنت ۵۰ یک پکیج دو مبدل فن‌دار است؛ یعنی برای گرمایش و آبگرم بهداشتی دو مبدل جداگانه دارد که کیفیت آبگرم را بالا می‌برد.</div></details>
+    <details><summary>آیا کانفیدنت ۵۰ با گرمایش از کف سازگار است؟</summary><div class="ans">بله، این پکیج با سیستم گرمایش از کف سازگار است و امکان اتصال ترموستات اتاقی نیز دارد.</div></details>
+    <details><summary>گارانتی این محصول چند ساله است؟</summary><div class="ans">پکیج کانفیدنت ۵۰ با ۲۴ ماه گارانتی قطعات و خدمات پس از فروش رسمی شوفاژکار عرضه می‌شود.</div></details>
+    <details><summary>تفاوت کانفیدنت ۵۰ با پکیج دیواری معمولی چیست؟</summary><div class="ans">کانفیدنت ۵۰ ظرفیت بسیار بالاتری (۵۰ کیلووات) دارد، مجهز به کنترل هوشمند Wi-Fi است و برای فضاهای بزرگ طراحی شده؛ در حالی که پکیج‌های دیواری معمولی برای واحدهای کوچک‌تر مناسب‌اند.</div></details>
+  </div>
+
+  <!-- 13. CONCLUSION -->
+  <h2 class="anim d1">جمع‌بندی نهایی</h2>
+  <p>پکیج دیواری شوفاژکار کانفیدنت ۵۰ با ظرفیت حرارتی ۵۰ کیلووات، پوشش فضای تا ۳۵۰ مترمربع و دبی آبگرم بهداشتی ۲۵٫۵ لیتر بر دقیقه، یکی از پرظرفیت‌ترین و کامل‌ترین پکیج‌های دیواری بازار است. اما آنچه این مدل را واقعاً متمایز می‌کند، سامانهٔ کنترل هوشمند مبتنی بر Wi-Fi است که امکان مدیریت گرمایش از راه دور را فراهم می‌کند؛ ترکیبی که در رده ظرفیت ۵۰ کیلووات تقریباً بی‌رقیب است.</p>
+  <p>اگر صاحب یک خانهٔ ویلایی، دوبلکس یا واحد بزرگ مسکونی هستید و به دنبال راهکاری فشرده، پرقدرت و هوشمند برای گرمایش و آبگرم بهداشتی می‌گردید، کانفیدنت ۵۰ گزینه‌ای ارزشمند خواهد بود؛ به‌شرط آنکه ظرفیت آن را با متراژ ساختمان تطبیق دهید و سرویس دوره‌ای را جدی بگیرید. برای انتخاب دقیق ظرفیت، حتماً پیش از خرید از محاسبه‌گر رایگان شوفاژ دات کام استفاده کنید.</p>
+
+  <!-- 14. RELATED + CTA -->
+  <div class="ran25-related anim d1">
+    <h3>محصولات و مطالب مرتبط</h3>
+    <ul>
+      <li><a href="https://shofazh.com/product-category/garmayesh/packages/">همه پکیج‌های دیواری و زمینی</a></li>
+      <li><a href="https://shofazh.com/product-category/garmayesh/packages/chauffagekar-package/">پکیج‌های شوفاژکار</a></li>
+      <li><a href="https://shofazh.com/product-category/garmayesh/">تجهیزات گرمایشی موتورخانه</a></li>
+      <li><a href="https://shofazh.com/shofazh-calculator.html">محاسبه‌گر ظرفیت حرارتی رایگان</a></li>
+      <li><a href="https://shofazh.com/product-category/garmayesh/dig/">دیگ چدنی و فولادی موتورخانه</a></li>
+      <li><a href="https://shofazh.com/">صفحه اصلی شوفاژ دات کام</a></li>
+    </ul>
+  </div>
+
+  <div class="ran25-cta anim d1">
+    <h2>همین حالا پکیج دیواری شوفاژکار کانفیدنت ۵۰ را تهیه کنید</h2>
+    <p>ظرفیت بی‌رقیب ۵۰ کیلووات همراه با کنترل هوشمند Wi-Fi و ضمانت اصالت کالا</p>
+    <ul class="ran25-cta-feats">
+      <li>ضمانت اصالت کالا</li>
+      <li>گارانتی رسمی شوفاژکار</li>
+      <li>کنترل هوشمند Wi-Fi</li>
+      <li>ارسال سریع</li>
+    </ul>
+    <a class="ran25-btn" href="https://shofazh.com/product/%d9%be%da%a9%db%8c%d8%ac-%d8%af%db%8c%d9%88%d8%a7%d8%b1%db%8c-%d8%b4%d9%88%d9%81%d8%a7%da%98%da%a9%d8%a7%d8%b1-%da%a9%d8%a7%d9%86%d9%81%db%8c%d9%86%d8%af%d8%aa-50kw/">مشاهده و خرید محصول</a>
+  </div>
+
+</div>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "پکیج دیواری شوفاژکار کانفیدنت ۵۰",
+  "image": "https://shofazh.com/wp-content/uploads/2026/05/web13.webp",
+  "description": "پکیج دیواری شوفاژکار کانفیدنت ۵۰ (Confident 50) یک پکیج دو مبدل فن‌دار با ظرفیت حرارتی ۵۰ کیلووات (≈ ۴۳۰۰۰ کیلوکالری بر ساعت)، مجهز به کنترل هوشمند Wi-Fi و اپلیکیشن موبایل، دبی آبگرم بهداشتی ۲۵.۵ لیتر بر دقیقه و پوشش فضای تا ۳۵۰ مترمربع؛ بالاترین ظرفیت در میان پکیج‌های دیواری.",
+  "sku": "CHK-CONFIDENT-50",
+  "mpn": "Confident-50",
+  "brand": {
+    "@type": "Brand",
+    "name": "شوفاژکار"
+  },
+  "category": "پکیج دیواری",
+  "offers": {
+    "@type": "Offer",
+    "url": "https://shofazh.com/product/%d9%be%da%a9%db%8c%d8%ac-%d8%af%db%8c%d9%88%d8%a7%d8%b1%db%8c-%d8%b4%d9%88%d9%81%d8%a7%da%98%da%a9%d8%a7%d8%b1-%da%a9%d8%a7%d9%86%d9%81%db%8c%d9%86%d8%af%d8%aa-50kw/",
+    "priceCurrency": "IRR",
+    "availability": "https://schema.org/InStock",
+    "seller": {
+      "@type": "Organization",
+      "name": "شوفاژ دات کام"
+    }
+  }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "ظرفیت حرارتی پکیج کانفیدنت ۵۰ چقدر است؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "ظرفیت حرارتی اسمی این پکیج ۵۰ کیلووات معادل تقریبی ۴۳۰۰۰ کیلوکالری بر ساعت است و در بالاترین رده پکیج‌های دیواری قرار می‌گیرد."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "کانفیدنت ۵۰ برای چه متراژی مناسب است؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "این پکیج برای فضاهای بزرگ تا حدود ۳۵۰ مترمربع مناسب است؛ برای تعیین دقیق، متراژ و عایق‌بندی ساختمان را با محاسبه‌گر ظرفیت حرارتی بررسی کنید."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "قابلیت کنترل هوشمند و Wi-Fi چگونه کار می‌کند؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "پکیج به شبکهٔ Wi-Fi منزل متصل می‌شود و از طریق اپلیکیشن موبایل می‌توانید دمای خانه را از راه دور تنظیم، زمان‌بندی و مدیریت کنید."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "دبی آبگرم بهداشتی کانفیدنت ۵۰ چقدر است؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "دبی آبگرم بهداشتی این مدل ۲۵.۵ لیتر بر دقیقه است که برای مصرف هم‌زمان چند نقطه مانند دو حمام کافی است."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "این پکیج دو مبدل است یا تک مبدل؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "کانفیدنت ۵۰ یک پکیج دو مبدل فن‌دار است؛ یعنی برای گرمایش و آبگرم بهداشتی دو مبدل جداگانه دارد که کیفیت آبگرم را بالا می‌برد."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "آیا کانفیدنت ۵۰ با گرمایش از کف سازگار است؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "بله، این پکیج با سیستم گرمایش از کف سازگار است و امکان اتصال ترموستات اتاقی نیز دارد."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "گارانتی این محصول چند ساله است؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "پکیج کانفیدنت ۵۰ با ۲۴ ماه گارانتی قطعات و خدمات پس از فروش رسمی شوفاژکار عرضه می‌شود."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "تفاوت کانفیدنت ۵۰ با پکیج دیواری معمولی چیست؟",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "کانفیدنت ۵۰ ظرفیت بسیار بالاتری (۵۰ کیلووات) دارد، مجهز به کنترل هوشمند Wi-Fi است و برای فضاهای بزرگ طراحی شده؛ در حالی که پکیج‌های دیواری معمولی برای واحدهای کوچک‌تر مناسب‌اند."
+      }
+    }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "خانه",
+      "item": "https://shofazh.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "تجهیزات گرمایشی",
+      "item": "https://shofazh.com/product-category/garmayesh/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "پکیج دیواری",
+      "item": "https://shofazh.com/product-category/garmayesh/packages/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 4,
+      "name": "پکیج دیواری شوفاژکار کانفیدنت ۵۰",
+      "item": "https://shofazh.com/product/%d9%be%da%a9%db%8c%d8%ac-%d8%af%db%8c%d9%88%d8%a7%d8%b1%db%8c-%d8%b4%d9%88%d9%81%d8%a7%da%98%da%a9%d8%a7%d8%b1-%da%a9%d8%a7%d9%86%d9%81%db%8c%d9%86%d8%af%d8%aa-50kw/"
+    }
+  ]
+}
+</script>
