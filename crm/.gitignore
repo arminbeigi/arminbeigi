@@ -1,0 +1,36 @@
+# dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# prisma — engines pre-fetched locally (sandbox proxy workaround) و کلاینت تولیدشده
+**/.prisma-engines/
+**/node_modules/.prisma/
+apps/api/src/generated/
+
+# env
+.env
+.env.local
+.env.*.local
+
+# build
+dist/
+.next/
+out/
+build/
+*.tsbuildinfo
+
+# logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# os / editor
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# docker volumes (local)
+.volumes/
+pgdata/
