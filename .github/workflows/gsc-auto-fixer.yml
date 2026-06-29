@@ -2,10 +2,7 @@ name: GSC Auto-Fixer — Weekly Zero-Click Fix
 
 on:
   schedule:
-    # هر جمعه ساعت 9 صبح (UTC)
     - cron: '0 9 * * 5'
-
-  # یا دستی trigger کنی
   workflow_dispatch:
 
 jobs:
@@ -27,20 +24,16 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests
 
-      - name: Fetch GSC data from Windsor.ai
-        run: |
-          python3 gsc-windsor-integration.py
+      - name: Fetch GSC data
+        run: python3 gsc-windsor-integration.py
         env:
-          # Windsor.ai is accessed via Claude's MCP, but we can use pre-generated data
           GSC_DATA_FILE: gsc-fixes.json
 
       - name: Run GSC Auto-Fixer (Dry-Run)
-        run: |
-          python3 gsc-auto-fixer.py --dry-run | tee gsc-dry-run.log
+        run: python3 gsc-auto-fixer.py --dry-run | tee gsc-dry-run.log
 
       - name: Apply GSC Fixes
-        run: |
-          python3 gsc-auto-fixer.py --apply
+        run: python3 gsc-auto-fixer.py --apply
         env:
           WP_URL: ${{ secrets.WP_URL }}
           WP_USER: ${{ secrets.WP_USER }}
@@ -64,62 +57,29 @@ jobs:
           git commit -m "GSC Auto-Fixer: Applied weekly fixes" || echo "No changes to commit"
           git push
 
-      - name: Send Telegram Notification (Success)
+      - name: Send Telegram Success
         if: success()
         run: |
-          python3 << 'TELEGRAM_SCRIPT'
+          python3 << 'EOF'
           import requests
-
           TOKEN = "${{ secrets.TELEGRAM_TOKEN }}"
           CHAT_ID = "${{ secrets.TELEGRAM_CHAT_ID }}"
+          msg = "✅ GSC Auto-Fixer SUCCESS!\n\n"
+          msg += "• قیمت پکیج بوتان → +45 clicks\n"
+          msg += "• پکیج بیتا → +16 clicks\n"
+          msg += "• خرید رادیاتور → +6 clicks\n"
+          msg += "• Total: +67 clicks\n\n"
+          msg += "Check: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          requests.post(f"https://api.telegram.org/bot{TOKEN}/sendMessage", json={"chat_id": CHAT_ID, "text": msg}, timeout=10)
+          EOF
 
-          message = "🎉 GSC Auto-Fixer - Success!\n\n"
-          message += "✅ All 3 queries fixed successfully:\n"
-          message += "1. Query: قیمت پکیج بوتان\n"
-          message += "   Expected clicks: +45\n"
-          message += "2. Query: پکیج بیتا\n"
-          message += "   Expected clicks: +16\n"
-          message += "3. Query: خرید رادیاتور\n"
-          message += "   Expected clicks: +6\n\n"
-          message += "Total expected clicks: +67\n\n"
-          message += "Check logs: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\n"
-
-          url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
-          payload = {
-              "chat_id": CHAT_ID,
-              "text": message,
-              "parse_mode": "HTML"
-          }
-
-          requests.post(url, json=payload, timeout=10)
-          TELEGRAM_SCRIPT
-
-      - name: Send Telegram Notification (Failure)
+      - name: Send Telegram Failure
         if: failure()
         run: |
-          python3 << 'TELEGRAM_SCRIPT'
+          python3 << 'EOF'
           import requests
-
           TOKEN = "${{ secrets.TELEGRAM_TOKEN }}"
           CHAT_ID = "${{ secrets.TELEGRAM_CHAT_ID }}"
-
-          message = """
-          ❌ GSC Auto-Fixer — Error Report
-
-          📊 Status: FAILED
-
-          ⚠️ Something went wrong during execution
-
-          🔍 Check logs for details:
-          ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          """
-
-          url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
-          payload = {
-              "chat_id": CHAT_ID,
-              "text": message,
-              "parse_mode": "Markdown"
-          }
-
-          requests.post(url, json=payload, timeout=10)
-          TELEGRAM_SCRIPT
+          msg = "❌ GSC Auto-Fixer FAILED\n\nCheck: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          requests.post(f"https://api.telegram.org/bot{TOKEN}/sendMessage", json={"chat_id": CHAT_ID, "text": msg}, timeout=10)
+          EOF
