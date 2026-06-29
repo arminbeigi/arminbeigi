@@ -28,6 +28,7 @@ class GSCWordPressMapper:
         self.wp_pass = wp_pass or os.environ.get('WP_APP_PASS', '')
 
         self.wp_api = f"{self.wp_url}/wp-json/wp/v2"
+        self.wc_api = f"{self.wp_url}/wp-json/wc/v3"
         self.auth = (self.wp_user, self.wp_pass)
         self.timeout = 30
 
@@ -100,9 +101,11 @@ class GSCWordPressMapper:
                     return (term_id, 'product_cat')
 
             elif post_type == 'product':
-                # Product lookup
+                # WooCommerce products live on the wc/v3 API, not wp/v2.
+                # The wp/v2/product?slug lookup returns empty on this site.
                 response = requests.get(
-                    f"{self.wp_api}/product?slug={slug}",
+                    f"{self.wc_api}/products",
+                    params={"slug": slug},
                     auth=self.auth,
                     timeout=self.timeout
                 )
@@ -111,7 +114,7 @@ class GSCWordPressMapper:
                     print(f"   ✓ Found product: slug={slug} → post_id={post_id}")
                     return (post_id, 'product')
 
-            print(f"   ⚠ Not found: {post_type} slug={slug}")
+            print(f"   ⚠ Not found: {post_type} slug={slug} (status {response.status_code})")
             return None
 
         except requests.exceptions.RequestException as e:
