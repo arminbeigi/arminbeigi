@@ -1,0 +1,53 @@
+{
+  "timestamp": "2026-06-29T12:41:32.324669",
+  "fixes": [
+    {
+      "query": "قیمت پکیج بوتان",
+      "current_status": "Position 8.5 | 2283 impressions",
+      "problem": "صفر کلیک - title و meta description نامرتبط",
+      "recommended_title": "قیمت پکیج بوتان | خرید از شوفاژ.کام",
+      "recommended_meta": "قیمت پکیج بوتان - قیمت رقابتی و ارسال سریع 📦 سفارش دهید",
+      "expected_gain": "+45 clicks",
+      "action_priority": "HIGH",
+      "steps": [
+        "1. به WordPress پنل برو",
+        "2. صفحه‌ای برای query 'قیمت پکیج بوتان' پیدا کن",
+        "3. Title رو به عنوان پیشنهاد‌شده تغییر بده",
+        "4. Meta description رو آپدیت کن",
+        "5. کش سایت رو پاک کن"
+      ]
+    },
+    {
+      "query": "پکیج بیتا",
+      "current_status": "Position 6.9 | 826 impressions",
+      "problem": "صفر کلیک - title و meta description نامرتبط",
+      "recommended_title": "پکیج بیتا | خرید از شوفاژ.کام",
+      "recommended_meta": "پکیج بیتا - قیمت رقابتی و ارسال سریع 📦 سفارش دهید",
+      "expected_gain": "+16 clicks",
+      "action_priority": "HIGH",
+      "steps": [
+        "1. به WordPress پنل برو",
+        "2. صفحه‌ای برای query 'پکیج بیتا' پیدا کن",
+        "3. Title رو به عنوان پیشنهاد‌شده تغییر بده",
+        "4. Meta description رو آپدیت کن",
+        "5. کش سایت رو پاک کن"
+      ]
+    },
+    {
+      "query": "خرید رادیاتور",
+      "current_status": "Position 11.5 | 348 impressions",
+      "problem": "صفر کلیک - title و meta description نامرتبط",
+      "recommended_title": "خرید رادیاتور | خرید از شوفاژ.کام",
+      "recommended_meta": "خرید رادیاتور - قیمت رقابتی و ارسال سریع 📦 سفارش دهید",
+      "expected_gain": "+6 clicks",
+      "action_priority": "MEDIUM",
+      "steps": [
+        "1. به WordPress پنل برو",
+        "2. صفحه‌ای برای query 'خرید رادیاتور' پیدا کن",
+        "3. Title رو به عنوان پیشنهاد‌شده تغییر بده",
+        "4. Meta description رو آپدیت کن",
+        "5. کش سایت رو پاک کن"
+      ]
+    }
+  ]
+}
