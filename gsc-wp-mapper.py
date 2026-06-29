@@ -120,7 +120,7 @@ class GSCWordPressMapper:
 
     def fetch_current_seo(self, post_id: int, post_type: str = 'product') -> Dict:
         """
-        Fetch current title and meta description from WordPress
+        Fetch current title and meta description from WordPress (Yoast SEO only)
         """
         try:
             response = requests.get(
@@ -138,15 +138,9 @@ class GSCWordPressMapper:
             return {
                 'post_id': post_id,
                 'post_type': post_type,
-                'title': post_data.get('title', {}).get('rendered', ''),
-                'current_title': post_data.get('title', {}).get('rendered', ''),
-                'rank_math_title': meta.get('rank_math_title', ''),
-                'yoast_title': meta.get('_yoast_wpseo_title', ''),
-                'current_meta': meta.get('rank_math_description', '') or meta.get('_yoast_wpseo_metadesc', ''),
-                'rank_math_description': meta.get('rank_math_description', ''),
-                'yoast_meta': meta.get('_yoast_wpseo_metadesc', ''),
-                'rank_math_keyword': meta.get('rank_math_focus_keyword', ''),
-                'yoast_keyword': meta.get('_yoast_wpseo_focuskw', ''),
+                'current_title': meta.get('_yoast_wpseo_title', '') or post_data.get('title', {}).get('rendered', ''),
+                'current_meta': meta.get('_yoast_wpseo_metadesc', ''),
+                'current_keyword': meta.get('_yoast_wpseo_focuskw', ''),
             }
         except Exception as e:
             print(f"   ❌ Error fetching SEO: {e}")
@@ -154,7 +148,7 @@ class GSCWordPressMapper:
 
     def build_update_payload(self, suggested_title: str, suggested_meta: str, keyword: str = None) -> Dict:
         """
-        Build REST API payload for both Rank Math and Yoast
+        Build REST API payload for Yoast SEO only
 
         Follows pattern from wp_publish_product.py (lines 197-220)
         """
@@ -162,12 +156,7 @@ class GSCWordPressMapper:
 
         return {
             "meta": {
-                # Rank Math fields
-                "rank_math_title": suggested_title,
-                "rank_math_description": suggested_meta,
-                "rank_math_focus_keyword": keyword,
-
-                # Yoast SEO fields (concurrent support)
+                # Yoast SEO fields
                 "_yoast_wpseo_title": suggested_title,
                 "_yoast_wpseo_metadesc": suggested_meta,
                 "_yoast_wpseo_focuskw": keyword,

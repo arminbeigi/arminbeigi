@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
 GSC Auto-Fixer: Interactive workflow to identify and fix zero-click queries in WordPress
+Uses Yoast SEO only
 
 Usage:
   python3 gsc-auto-fixer.py --dry-run          ← Preview what would change
@@ -140,13 +141,13 @@ class GSCAutoFixer:
                 print("Please answer 'yes' or 'no'")
 
     def apply_fixes(self) -> None:
-        """Apply approved fixes to WordPress"""
+        """Apply approved fixes to WordPress (Yoast SEO only)"""
         if not self.enriched_issues:
             print("❌ No issues to apply")
             return
 
         print("\n" + "=" * 80)
-        print("✅ Applying Fixes to WordPress")
+        print("✅ Applying Fixes to WordPress (Yoast SEO)")
         print("=" * 80 + "\n")
 
         successful = 0
@@ -160,20 +161,20 @@ class GSCAutoFixer:
             new_meta = issue['recommended_meta']
             keyword = query
 
-            print(f"[{i}/{len(self.enriched_issues)}] Updating: {query}")
+            print(f"[{i}/{len(self.enriched_issues)}] {query}")
 
-            # Build payload
+            # Build Yoast-only payload
             payload = self.mapper.build_update_payload(new_title, new_meta, keyword)
 
             # Apply update
             if self.mapper.apply_metadata_update(post_id, post_type, payload):
                 successful += 1
                 self.log_change(issue, success=True)
-                print(f"   ✅ Success\n")
+                print(f"   ✅ Post {post_id} updated\n")
             else:
                 failed += 1
                 self.log_change(issue, success=False)
-                print(f"   ❌ Failed\n")
+                print(f"   ❌ Failed to update post {post_id}\n")
 
         print("=" * 80)
         print(f"📊 Results: {successful} successful, {failed} failed")
@@ -181,7 +182,7 @@ class GSCAutoFixer:
         print()
 
         if successful > 0:
-            print("✨ Fixes applied! Monitor GSC for changes in 7-14 days.")
+            print("✨ Yoast metadata updated! Monitor GSC for changes in 7-14 days.")
 
     def log_change(self, issue: dict, success: bool) -> None:
         """Log applied changes for audit trail"""
