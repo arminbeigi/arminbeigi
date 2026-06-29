@@ -130,7 +130,12 @@ class GSCAutoFixer:
         print()
 
     def ask_approval(self) -> bool:
-        """Ask user for approval before applying"""
+        """Ask user for approval before applying (skip in CI/non-interactive)"""
+        import sys
+        if not sys.stdin.isatty():
+            print("✅ Auto-approving (CI environment detected)")
+            return True
+
         while True:
             response = input("Apply these fixes to WordPress? (yes/no): ").strip().lower()
             if response in ['yes', 'y']:
