@@ -7,6 +7,7 @@
  * idempotent است: با upsert نوشته شده و چندبار اجرا مشکلی ندارد.
  */
 import { PrismaClient } from '@prisma/client';
+import bcryptjs from 'bcryptjs'; // CommonJS — import پیش‌فرض برای سازگاری با ESM/strip-types
 
 const prisma = new PrismaClient();
 
@@ -120,13 +121,37 @@ async function main() {
     });
   }
 
+  // کاربر مدیر پیش‌فرض (رمز از env یا مقدار پیش‌فرض توسعه)
+  const adminEmail = process.env.SEED_ADMIN_EMAIL ?? 'admin@shofazh.com';
+  const adminPassword = process.env.SEED_ADMIN_PASSWORD ?? 'Admin@12345';
+  const adminRole = await prisma.role.findUnique({ where: { key: 'admin' } });
+  const admin = await prisma.user.upsert({
+    where: { email: adminEmail },
+    update: {},
+    create: {
+      email: adminEmail,
+      passwordHash: await bcryptjs.hash(adminPassword, 10),
+      fullName: 'مدیر سیستم',
+      status: 'ACTIVE',
+    },
+  });
+  if (adminRole) {
+    await prisma.userRole.upsert({
+      where: { userId_roleId: { userId: admin.id, roleId: adminRole.id } },
+      update: {},
+      create: { userId: admin.id, roleId: adminRole.id },
+    });
+  }
+
   const counts = {
     permissions: await prisma.permission.count(),
     roles: await prisma.role.count(),
     rolePermissions: await prisma.rolePermission.count(),
     stages: await prisma.dealStage.count(),
+    users: await prisma.user.count(),
   };
   console.log('✅ seed کامل شد:', JSON.stringify(counts));
+  console.log(`👤 مدیر: ${adminEmail} (رمز پیش‌فرض توسعه: ${adminPassword})`);
 }
 
 main()
