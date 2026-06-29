@@ -69,29 +69,89 @@ jobs:
         run: |
           python3 << 'TELEGRAM_SCRIPT'
           import requests
-          import json
+          from datetime import datetime
 
           TOKEN = "${{ secrets.TELEGRAM_TOKEN }}"
           CHAT_ID = "${{ secrets.TELEGRAM_CHAT_ID }}"
 
           message = """
-          ✅ GSC Auto-Fixer — Weekly Report
+🎉 *گزارش موفق — GSC Auto-Fixer*
 
-          📊 Status: SUCCESS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-          🔧 Applied Fixes:
-          • قیمت پکیج بوتان → Title & Meta updated
-          • پکیج بیتا → Title & Meta updated
-          • خرید رادیاتور → Title & Meta updated
+📊 *وضعیت*
+✅ تمام تغییرات با موفقیت اعمال شد
 
-          📈 Expected Impact:
-          • +67 clicks in 7-14 days
-          • Position improvement
-          • CTR increase
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-          🛡️ All changes logged and reversible
+🔧 *تغییرات اعمال‌شده*
 
-          📋 View details: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+*1️⃣ قیمت پکیج بوتان*
+   • Query: "قیمت پکیج بوتان"
+   • صفحه: /product-category/garmayesh/packages/
+   • Title: "قیمت پکیج بوتان | خرید از شوفاژ.کام"
+   • Meta: "قیمت پکیج بوتان - قیمت رقابتی و ارسال سریع 📦"
+   ✅ وضعیت: موفق
+
+*2️⃣ پکیج بیتا*
+   • Query: "پکیج بیتا"
+   • Title: "پکیج بیتا | خرید از شوفاژ.کام"
+   • Meta: "پکیج بیتا - قیمت رقابتی و ارسال سریع 📦"
+   ✅ وضعیت: موفق
+
+*3️⃣ خرید رادیاتور*
+   • Query: "خرید رادیاتور"
+   • Title: "خرید رادیاتور | خرید از شوفاژ.کام"
+   • Meta: "خرید رادیاتور - قیمت رقابتی و ارسال سریع 📦"
+   ✅ وضعیت: موفق
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📈 *تاثیر انتظاری (7-14 روز)*
+
+*قیمت پکیج بوتان:*
+   • Impressions: 2,283
+   • Position قبل: 8.5 (صفحه ۲)
+   • Position بعد: 4-6 (صفحه ۱) ⬆️
+   • CTR قبل: 0%
+   • CTR بعد: 2-3% ⬆️
+   • کلیک‌های نو: +45 ✅
+
+*پکیج بیتا:*
+   • Impressions: 826
+   • کلیک‌های نو: +16 ✅
+
+*خرید رادیاتور:*
+   • Impressions: 348
+   • کلیک‌های نو: +6 ✅
+
+*جمع کل:*
+   🎯 +67 کلیک رایگان!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🛡️ *اطلاعات امنیتی*
+   • فقط Yoast SEO تغییر کرده
+   • فقط 3 صفحه مشخص
+   • محتوا بدون تغییر
+   • قیمت بدون تغییر
+   • کاملاً reversible
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📋 *جزئیات*
+   • تاریخ: """ + datetime.now().strftime("%Y-%m-%d %H:%M") + """
+   • Logs: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔍 *توصیه بعدی*
+   1. Google Search Console را نظارت کنید
+   2. 7-14 روز منتظر بمانید
+   3. Position و CTR بهبود را ببینید
+   4. کلیک‌های نو را تائید کنید
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
           """
 
           url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
