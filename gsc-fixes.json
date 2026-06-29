@@ -1,53 +1,27 @@
 {
-  "timestamp": "2026-06-29T12:41:32.324669",
+  "timestamp": "2026-06-29T14:50:00.000000",
   "fixes": [
     {
-      "query": "قیمت پکیج بوتان",
-      "current_status": "Position 8.5 | 2283 impressions",
-      "problem": "صفر کلیک - title و meta description نامرتبط",
-      "recommended_title": "قیمت پکیج بوتان | خرید از شوفاژ.کام",
-      "recommended_meta": "قیمت پکیج بوتان - قیمت رقابتی و ارسال سریع 📦 سفارش دهید",
-      "expected_gain": "+45 clicks",
-      "action_priority": "HIGH",
-      "steps": [
-        "1. به WordPress پنل برو",
-        "2. صفحه‌ای برای query 'قیمت پکیج بوتان' پیدا کن",
-        "3. Title رو به عنوان پیشنهاد‌شده تغییر بده",
-        "4. Meta description رو آپدیت کن",
-        "5. کش سایت رو پاک کن"
-      ]
-    },
-    {
-      "query": "پکیج بیتا",
-      "current_status": "Position 6.9 | 826 impressions",
-      "problem": "صفر کلیک - title و meta description نامرتبط",
-      "recommended_title": "پکیج بیتا | خرید از شوفاژ.کام",
-      "recommended_meta": "پکیج بیتا - قیمت رقابتی و ارسال سریع 📦 سفارش دهید",
-      "expected_gain": "+16 clicks",
-      "action_priority": "HIGH",
-      "steps": [
-        "1. به WordPress پنل برو",
-        "2. صفحه‌ای برای query 'پکیج بیتا' پیدا کن",
-        "3. Title رو به عنوان پیشنهاد‌شده تغییر بده",
-        "4. Meta description رو آپدیت کن",
-        "5. کش سایت رو پاک کن"
-      ]
+      "query": "قیمت پکیج بوتان + پکیج بیتا",
+      "page": "https://shofazh.com/product/butane-bita22-sealed-boiler/",
+      "current_status": "Position 8.6 | 2825 impressions (combined)",
+      "problem": "صفر کلیک - title و meta description نامرتبط با کوئری‌های 'قیمت پکیج بوتان' و 'پکیج بیتا'",
+      "recommended_title": "قیمت پکیج بوتان بیتا ۲۲ محفظه‌دار | خرید از شوفاژ.کام",
+      "recommended_meta": "قیمت پکیج بوتان بیتا ۲۲ محفظه‌دار - قیمت رقابتی و ارسال سریع 📦 همین حالا سفارش دهید",
+      "focus_keyword": "قیمت پکیج بوتان",
+      "expected_gain": "+61 clicks",
+      "action_priority": "HIGH"
     },
     {
       "query": "خرید رادیاتور",
-      "current_status": "Position 11.5 | 348 impressions",
-      "problem": "صفر کلیک - title و meta description نامرتبط",
-      "recommended_title": "خرید رادیاتور | خرید از شوفاژ.کام",
-      "recommended_meta": "خرید رادیاتور - قیمت رقابتی و ارسال سریع 📦 سفارش دهید",
+      "page": "https://shofazh.com/product/dima-steel-radiator-2f/",
+      "current_status": "Position 10.1 | 291 impressions",
+      "problem": "صفر کلیک - title و meta description نامرتبط با کوئری 'خرید رادیاتور'",
+      "recommended_title": "خرید رادیاتور فولادی دیما | قیمت و خرید از شوفاژ.کام",
+      "recommended_meta": "خرید رادیاتور فولادی دیما - قیمت رقابتی و ارسال سریع 📦 همین حالا سفارش دهید",
+      "focus_keyword": "خرید رادیاتور",
       "expected_gain": "+6 clicks",
-      "action_priority": "MEDIUM",
-      "steps": [
-        "1. به WordPress پنل برو",
-        "2. صفحه‌ای برای query 'خرید رادیاتور' پیدا کن",
-        "3. Title رو به عنوان پیشنهاد‌شده تغییر بده",
-        "4. Meta description رو آپدیت کن",
-        "5. کش سایت رو پاک کن"
-      ]
+      "action_priority": "MEDIUM"
     }
   ]
 }
