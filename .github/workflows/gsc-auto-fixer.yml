@@ -65,9 +65,9 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GSC Auto-Fixer"
-          git add gsc-fixes.json gsc-fixes-applied.log
+          git add -A
           git commit -m "GSC Auto-Fixer: Applied weekly fixes" || echo "No changes to commit"
-          git push
+          git push || echo "Nothing to push"
 
       - name: Send Telegram Success
         if: success()
