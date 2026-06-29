@@ -4,6 +4,14 @@ on:
   schedule:
     - cron: '0 9 * * 5'
   workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'gsc-fixes.json'
+      - 'gsc-auto-fixer.py'
+      - 'gsc_wp_mapper.py'
+      - '.github/workflows/gsc-auto-fixer.yml'
 
 jobs:
   gsc-auto-fixer:
