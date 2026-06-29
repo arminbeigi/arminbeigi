@@ -36,7 +36,7 @@ Value: admin
 #### Secret 3:
 ```
 Name: WP_APP_PASS
-Value: XGMz B2pD n1Mh zvjY GoUn 0l0E
+Value: <YOUR_WP_APP_PASSWORD>
 ```
 → Add secret
 
@@ -60,7 +60,7 @@ gh auth login
 # Set secrets
 echo "https://shofazh.com" | gh secret set WP_URL
 echo "admin" | gh secret set WP_USER
-echo "XGMz B2pD n1Mh zvjY GoUn 0l0E" | gh secret set WP_APP_PASS
+echo "<YOUR_WP_APP_PASSWORD>" | gh secret set WP_APP_PASS
 echo "https://hooks.slack.com/..." | gh secret set SLACK_WEBHOOK  # optional
 ```
 

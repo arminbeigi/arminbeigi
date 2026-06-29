@@ -41,7 +41,7 @@ GitHub → Settings → Secrets → Add 3 Secret:
 ```
 WP_URL = https://shofazh.com
 WP_USER = admin
-WP_APP_PASS = XGMz B2pD n1Mh zvjY GoUn 0l0E
+WP_APP_PASS = <YOUR_WP_APP_PASSWORD>
 ```
 
 ---

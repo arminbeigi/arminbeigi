@@ -22,7 +22,7 @@ GitHub → Settings → Secrets and variables → Actions → New repository sec
 
 ```
 نام: WP_APP_PASS
-مقدار: XGMz B2pD n1Mh zvjY GoUn 0l0E
+مقدار: <YOUR_WP_APP_PASSWORD>
 ```
 
 ```
@@ -101,7 +101,7 @@ GitHub → Actions → GSC Auto-Fixer → [Latest Run]
 # Local test:
 export WP_URL="https://shofazh.com"
 export WP_USER="admin"
-export WP_APP_PASS="XGMz B2pD n1Mh zvjY GoUn 0l0E"
+export WP_APP_PASS="<YOUR_WP_APP_PASSWORD>"
 
 python3 gsc-auto-fixer.py --dry-run
 ```
