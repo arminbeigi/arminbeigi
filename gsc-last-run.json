@@ -1,0 +1,31 @@
+{
+  "timestamp": "2026-06-29T15:21:12.681269",
+  "successful": 2,
+  "failed": 0,
+  "results": [
+    {
+      "query": "قیمت پکیج بوتان + پکیج بیتا",
+      "page": "https://shofazh.com/product/butane-bita22-sealed-boiler/",
+      "post_id": 3193,
+      "focus_keyword": "قیمت پکیج بوتان",
+      "current_title": "",
+      "new_title": "قیمت پکیج بوتان بیتا ۲۲ محفظه‌دار | خرید از شوفاژ.کام",
+      "current_meta": "",
+      "new_meta": "قیمت پکیج بوتان بیتا ۲۲ محفظه‌دار - قیمت رقابتی و ارسال سریع 📦 همین حالا سفارش دهید",
+      "expected_gain": "+61 clicks",
+      "success": true
+    },
+    {
+      "query": "خرید رادیاتور",
+      "page": "https://shofazh.com/product/dima-steel-radiator-2f/",
+      "post_id": 7635,
+      "focus_keyword": "خرید رادیاتور",
+      "current_title": "",
+      "new_title": "خرید رادیاتور فولادی دیما | قیمت و خرید از شوفاژ.کام",
+      "current_meta": "",
+      "new_meta": "خرید رادیاتور فولادی دیما - قیمت رقابتی و ارسال سریع 📦 همین حالا سفارش دهید",
+      "expected_gain": "+6 clicks",
+      "success": true
+    }
+  ]
+}
