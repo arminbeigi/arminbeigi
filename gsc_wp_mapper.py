@@ -31,6 +31,9 @@ class GSCWordPressMapper:
         self.wc_api = f"{self.wp_url}/wp-json/wc/v3"
         self.auth = (self.wp_user, self.wp_pass)
         self.timeout = 30
+        # The LiteSpeed WAF blocks the default python-requests User-Agent.
+        # wp_publish_product.py uses this UA and its writes succeed.
+        self.headers = {"User-Agent": "ShofazhContentBot/1.0"}
 
     def url_to_slug(self, gsc_url: str) -> Optional[str]:
         """
@@ -93,6 +96,7 @@ class GSCWordPressMapper:
                 response = requests.get(
                     f"{self.wp_api}/product_cat?slug={slug.split('/')[-1]}",
                     auth=self.auth,
+                    headers=self.headers,
                     timeout=self.timeout
                 )
                 if response.status_code == 200 and response.json():
@@ -170,6 +174,7 @@ class GSCWordPressMapper:
             response = requests.get(
                 f"{self.wp_api}/{post_type}/{post_id}",
                 auth=self.auth,
+                headers=self.headers,
                 timeout=self.timeout
             )
 
@@ -219,6 +224,7 @@ class GSCWordPressMapper:
                 f"{self.wp_api}/{post_type}/{post_id}",
                 json=payload,
                 auth=self.auth,
+                headers=self.headers,
                 timeout=self.timeout
             )
 
@@ -226,7 +232,7 @@ class GSCWordPressMapper:
                 print(f"   ✓ Updated post {post_id}")
                 return True
             else:
-                print(f"   ❌ REST API returned {response.status_code}: {response.text}")
+                print(f"   ❌ REST API returned {response.status_code}: {response.text[:200]}")
                 return False
 
         except Exception as e:
