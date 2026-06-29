@@ -157,6 +157,7 @@ class GSCAutoFixer:
 
         successful = 0
         failed = 0
+        run_results = []
 
         for i, issue in enumerate(self.enriched_issues, 1):
             query = issue['query']
@@ -164,7 +165,7 @@ class GSCAutoFixer:
             post_type = issue['post_type']
             new_title = issue['recommended_title']
             new_meta = issue['recommended_meta']
-            keyword = query
+            keyword = issue.get('focus_keyword', query)
 
             print(f"[{i}/{len(self.enriched_issues)}] {query}")
 
@@ -172,7 +173,8 @@ class GSCAutoFixer:
             payload = self.mapper.build_update_payload(new_title, new_meta, keyword)
 
             # Apply update
-            if self.mapper.apply_metadata_update(post_id, post_type, payload):
+            ok = self.mapper.apply_metadata_update(post_id, post_type, payload)
+            if ok:
                 successful += 1
                 self.log_change(issue, success=True)
                 print(f"   ✅ Post {post_id} updated\n")
@@ -180,6 +182,31 @@ class GSCAutoFixer:
                 failed += 1
                 self.log_change(issue, success=False)
                 print(f"   ❌ Failed to update post {post_id}\n")
+
+            run_results.append({
+                'query': query,
+                'page': issue['page'],
+                'post_id': post_id,
+                'focus_keyword': keyword,
+                'current_title': issue.get('current_title', ''),
+                'new_title': new_title,
+                'current_meta': issue.get('current_meta', ''),
+                'new_meta': new_meta,
+                'expected_gain': issue.get('expected_gain', ''),
+                'success': ok,
+            })
+
+        # Overwrite a single-run summary the Telegram report reads from
+        try:
+            with open('gsc-last-run.json', 'w', encoding='utf-8') as f:
+                json.dump({
+                    'timestamp': datetime.now().isoformat(),
+                    'successful': successful,
+                    'failed': failed,
+                    'results': run_results,
+                }, f, ensure_ascii=False, indent=2)
+        except Exception as e:
+            print(f"⚠ Warning: Could not write gsc-last-run.json: {e}")
 
         print("=" * 80)
         print(f"📊 Results: {successful} successful, {failed} failed")
@@ -198,10 +225,12 @@ class GSCAutoFixer:
                     'query': issue['query'],
                     'page': issue['page'],
                     'post_id': issue['post_id'],
+                    'focus_keyword': issue.get('focus_keyword', issue['query']),
                     'current_title': issue['current_title'],
                     'new_title': issue['recommended_title'],
                     'current_meta': issue['current_meta'],
                     'new_meta': issue['recommended_meta'],
+                    'expected_gain': issue.get('expected_gain', ''),
                     'success': success,
                 }, ensure_ascii=False) + '\n')
         except Exception as e:
