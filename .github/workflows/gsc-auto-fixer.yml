@@ -68,8 +68,10 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GSC Auto-Fixer"
-          git add -A
-          git commit -m "GSC Auto-Fixer: Applied weekly fixes" || echo "No changes to commit"
+          # Only commit audit logs. Avoid gsc-fixes.json (its timestamp changes
+          # every run and is a push-trigger path → would cause an infinite loop).
+          git add gsc-dry-run.log gsc-fixes-applied.log 2>/dev/null || true
+          git commit -m "GSC Auto-Fixer: audit log [skip ci]" || echo "No changes to commit"
           git push || echo "Nothing to push"
 
       - name: Send Telegram Success
