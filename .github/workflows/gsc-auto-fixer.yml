@@ -1,0 +1,117 @@
+name: GSC Auto-Fixer — Weekly Zero-Click Fix
+
+on:
+  schedule:
+    # هر جمعه ساعت 9 صبح (UTC)
+    - cron: '0 9 * * 5'
+
+  # یا دستی trigger کنی
+  workflow_dispatch:
+
+jobs:
+  gsc-auto-fixer:
+    runs-on: ubuntu-latest
+    name: Fix Zero-Click GSC Queries
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - name: Fetch GSC data from Windsor.ai
+        run: |
+          python3 gsc-windsor-integration.py
+        env:
+          # Windsor.ai is accessed via Claude's MCP, but we can use pre-generated data
+          GSC_DATA_FILE: gsc-fixes.json
+
+      - name: Run GSC Auto-Fixer (Dry-Run)
+        run: |
+          python3 gsc-auto-fixer.py --dry-run | tee gsc-dry-run.log
+
+      - name: Apply GSC Fixes
+        run: |
+          python3 gsc-auto-fixer.py --apply
+        env:
+          WP_URL: ${{ secrets.WP_URL }}
+          WP_USER: ${{ secrets.WP_USER }}
+          WP_APP_PASS: ${{ secrets.WP_APP_PASS }}
+
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: gsc-fixer-logs
+          path: |
+            gsc-dry-run.log
+            gsc-fixes-applied.log
+
+      - name: Commit changes
+        if: success()
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GSC Auto-Fixer"
+          git add gsc-fixes.json gsc-fixes-applied.log
+          git commit -m "GSC Auto-Fixer: Applied weekly fixes" || echo "No changes to commit"
+          git push
+
+      - name: Slack Notification (Success)
+        if: success()
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          webhook-url: ${{ secrets.SLACK_WEBHOOK }}
+          payload: |
+            {
+              "text": "✅ GSC Auto-Fixer: Weekly fixes applied successfully",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*✅ GSC Auto-Fixer Completed*\n\n📊 Fixed zero-click queries in Yoast SEO\n🔍 Monitor GSC for changes in 7-14 days"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Workflow Run>"
+                  }
+                }
+              ]
+            }
+
+      - name: Slack Notification (Failure)
+        if: failure()
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          webhook-url: ${{ secrets.SLACK_WEBHOOK }}
+          payload: |
+            {
+              "text": "❌ GSC Auto-Fixer: Failed",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*❌ GSC Auto-Fixer Failed*\n\n⚠️ Check logs for details"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Workflow Run>"
+                  }
+                }
+              ]
+            }
