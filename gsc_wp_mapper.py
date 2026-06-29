@@ -101,11 +101,11 @@ class GSCWordPressMapper:
                     return (term_id, 'product_cat')
 
             elif post_type == 'product':
-                # WooCommerce products live on the wc/v3 API, not wp/v2.
-                # The wp/v2/product?slug lookup returns empty on this site.
+                # wp/v2/product/{id} works with app-password auth (see wp_publish_product.py),
+                # so products are registered in wp/v2. Look up the id by slug here.
                 response = requests.get(
-                    f"{self.wc_api}/products",
-                    params={"slug": slug},
+                    f"{self.wp_api}/product",
+                    params={"slug": slug, "status": "publish"},
                     auth=self.auth,
                     timeout=self.timeout
                 )
@@ -113,6 +113,11 @@ class GSCWordPressMapper:
                     post_id = response.json()[0]['id']
                     print(f"   ✓ Found product: slug={slug} → post_id={post_id}")
                     return (post_id, 'product')
+
+                # Diagnostic: show why nothing matched
+                body = response.text[:200].replace('\n', ' ')
+                print(f"   ⚠ wp/v2/product?slug={slug} → status {response.status_code}, body: {body}")
+                return None
 
             print(f"   ⚠ Not found: {post_type} slug={slug} (status {response.status_code})")
             return None
