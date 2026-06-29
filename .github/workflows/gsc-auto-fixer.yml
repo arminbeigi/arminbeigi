@@ -13,6 +13,9 @@ on:
       - 'gsc_wp_mapper.py'
       - '.github/workflows/gsc-auto-fixer.yml'
 
+permissions:
+  contents: write
+
 jobs:
   gsc-auto-fixer:
     runs-on: ubuntu-latest
@@ -76,12 +79,17 @@ jobs:
           import requests
           TOKEN = "${{ secrets.TELEGRAM_TOKEN }}"
           CHAT_ID = "${{ secrets.TELEGRAM_CHAT_ID }}"
-          msg = "✅ GSC Auto-Fixer SUCCESS!\n\n"
-          msg += "• قیمت پکیج بوتان → +45 clicks\n"
-          msg += "• پکیج بیتا → +16 clicks\n"
-          msg += "• خرید رادیاتور → +6 clicks\n"
-          msg += "• Total: +67 clicks\n\n"
-          msg += "Check: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          msg = "✅ گزارش GSC Auto-Fixer — موفق\n\n"
+          msg += "Yoast SEO دو صفحه محصول به‌روزرسانی شد:\n\n"
+          msg += "۱) پکیج بوتان بیتا ۲۲ محفظه‌دار\n"
+          msg += "   کوئری‌ها: «قیمت پکیج بوتان» + «پکیج بیتا»\n"
+          msg += "   نمایش: ۲٬۸۲۵ | موقعیت ~۸.۶ | کلیک انتظاری: +۶۱\n\n"
+          msg += "۲) رادیاتور فولادی دیما\n"
+          msg += "   کوئری: «خرید رادیاتور»\n"
+          msg += "   نمایش: ۲۹۱ | موقعیت ~۱۰.۱ | کلیک انتظاری: +۶\n\n"
+          msg += "مجموع کلیک انتظاری (۷ تا ۱۴ روز): +۶۷\n"
+          msg += "فقط Yoast تغییر کرد؛ محتوا و قیمت دست‌نخورده و قابل بازگشت.\n\n"
+          msg += "لاگ: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           requests.post(f"https://api.telegram.org/bot{TOKEN}/sendMessage", json={"chat_id": CHAT_ID, "text": msg}, timeout=10)
           EOF
 
