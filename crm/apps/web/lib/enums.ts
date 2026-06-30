@@ -54,5 +54,45 @@ export const CALL_INTENT: Record<string, string> = {
   UNKNOWN: 'نامشخص',
 };
 
+export const PROJECT_TYPE: Record<string, string> = {
+  ENGINE_ROOM: 'موتورخانه',
+  WALL_PACKAGE: 'پکیج دیواری',
+  CAST_IRON_BOILER: 'دیگ چدنی',
+  STEEL_BOILER: 'دیگ فولادی',
+  INSTALLATION: 'نصب',
+  SERVICE: 'سرویس',
+};
+
+export const PROJECT_STATUS: Record<string, string> = {
+  DRAFT: 'پیش‌نویس',
+  SURVEY: 'بازدید فنی',
+  PROPOSAL: 'پیشنهاد قیمت',
+  IN_PROGRESS: 'در حال اجرا',
+  ON_HOLD: 'متوقف',
+  COMPLETED: 'تکمیل‌شده',
+  CANCELLED: 'لغوشده',
+};
+
+export const PROJECT_STATUS_TONE: Record<string, string> = {
+  DRAFT: 'bg-steel-100 text-steel-600',
+  SURVEY: 'bg-sky-100 text-sky-700',
+  PROPOSAL: 'bg-amber-100 text-amber-700',
+  IN_PROGRESS: 'bg-flame-100 text-flame-600',
+  ON_HOLD: 'bg-yellow-100 text-yellow-700',
+  COMPLETED: 'bg-emerald-100 text-emerald-700',
+  CANCELLED: 'bg-red-100 text-red-700',
+};
+
+/** انتقال‌های مجاز وضعیت پروژه — هم‌راستا با state machine بک‌اند */
+export const PROJECT_TRANSITIONS: Record<string, string[]> = {
+  DRAFT: ['SURVEY', 'CANCELLED'],
+  SURVEY: ['PROPOSAL', 'CANCELLED'],
+  PROPOSAL: ['IN_PROGRESS', 'CANCELLED'],
+  IN_PROGRESS: ['ON_HOLD', 'COMPLETED', 'CANCELLED'],
+  ON_HOLD: ['IN_PROGRESS', 'CANCELLED'],
+  COMPLETED: [],
+  CANCELLED: [],
+};
+
 export const label = (map: Record<string, string>, key: string | null | undefined): string =>
   (key && map[key]) || key || '—';

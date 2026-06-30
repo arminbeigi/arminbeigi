@@ -100,6 +100,39 @@ export interface Pipeline {
   stages: DealStage[];
 }
 
+export interface ProjectItem {
+  id: string;
+  title: string;
+  quantity: number;
+  unitIrr: string;
+  productId: string | null;
+  productName: string | null;
+}
+
+export interface Project {
+  id: string;
+  code: string;
+  title: string;
+  type: string;
+  status: string;
+  customerId: string;
+  customerName: string | null;
+  managerId: string | null;
+  managerName: string | null;
+  description: string | null;
+  buildingArea: number | null;
+  floors: number | null;
+  units: number | null;
+  heatLoadKcal: number | null;
+  estimatedIrr: string | null;
+  finalIrr: string | null;
+  scheduledAt: string | null;
+  completedAt: string | null;
+  items: ProjectItem[];
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface ApiErrorBody {
   statusCode: number;
   error: string;
