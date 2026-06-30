@@ -59,13 +59,57 @@ export interface Call {
   status: string;
   fromNumber: string;
   toNumber: string;
+  did?: string | null;
+  queue?: string | null;
   agentName: string | null;
   customerId: string | null;
   customerName: string | null;
   customerType: string | null;
+  customerStatus?: string | null;
+  dealId?: string | null;
+  ticketId?: string | null;
+  waitSeconds?: number | null;
   talkSeconds: number | null;
   startedAt: string;
+  answeredAt?: string | null;
+  endedAt?: string | null;
+  recordingUrl?: string | null;
+  transcript?: string | null;
   intent: string;
+}
+
+export interface ProductRec {
+  id: string;
+  name: string;
+  sku: string;
+  category: string;
+}
+
+export interface CallAnalysis {
+  callId: string;
+  transcript: string | null;
+  summary: string | null;
+  intent: string;
+  confidence: number;
+  leadScore: number | null;
+  recommendations: ProductRec[];
+}
+
+export interface AiInsight {
+  id: string;
+  type: string;
+  summary: string | null;
+  intent: string | null;
+  score: number | null;
+  confidence: number | null;
+  payload: unknown;
+  model: string | null;
+  createdAt: string;
+}
+
+export interface AiStatus {
+  llm: 'mock' | 'real';
+  stt: 'mock' | 'real';
 }
 
 export interface Deal {

@@ -54,6 +54,14 @@ export const CALL_INTENT: Record<string, string> = {
   UNKNOWN: 'نامشخص',
 };
 
+export const CALL_INTENT_TONE: Record<string, string> = {
+  PURCHASE: 'bg-emerald-100 text-emerald-700',
+  BREAKDOWN: 'bg-red-100 text-red-700',
+  INSTALLATION: 'bg-flame-100 text-flame-600',
+  SERVICE: 'bg-sky-100 text-sky-700',
+  UNKNOWN: 'bg-steel-100 text-steel-500',
+};
+
 export const PROJECT_TYPE: Record<string, string> = {
   ENGINE_ROOM: 'موتورخانه',
   WALL_PACKAGE: 'پکیج دیواری',

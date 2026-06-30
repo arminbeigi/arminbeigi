@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import clsx from 'clsx';
 import { ArrowDownLeft, ArrowUpRight, ArrowLeftRight } from 'lucide-react';
 import { CALL_DIRECTION, CALL_STATUS, label } from '@/lib/enums';
@@ -16,11 +17,13 @@ function DirectionIcon({ direction }: { direction: string }) {
 }
 
 export function CallRow({ call }: { call: Call }) {
+  const router = useRouter();
   const active = isActiveCall(call.status);
   return (
     <div
+      onClick={() => router.push(`/dashboard/calls/${call.id}`)}
       className={clsx(
-        'flex items-center gap-3 px-5 py-3 transition-colors',
+        'flex cursor-pointer items-center gap-3 px-5 py-3 transition-colors',
         active ? 'bg-amber-50' : 'hover:bg-steel-50',
       )}
     >
@@ -43,6 +46,7 @@ export function CallRow({ call }: { call: Call }) {
           {call.customerId ? (
             <Link
               href={`/dashboard/customers/${call.customerId}`}
+              onClick={(e) => e.stopPropagation()}
               className="truncate font-medium text-steel-900 hover:text-steel-600"
             >
               {call.customerName ?? toFa(call.fromNumber)}
