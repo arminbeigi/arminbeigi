@@ -1,8 +1,11 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { LoggerModule } from 'nestjs-pino';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
+import { Env } from './config/env.validation';
+import { buildLoggerParams } from './config/logger.config';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 import { PermissionsGuard } from './common/guards/permissions.guard';
 import { validateEnv } from './config/env.validation';
@@ -23,6 +26,12 @@ import { UsersModule } from './modules/users/users.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, validate: validateEnv }),
+    // لاگ ساخت‌یافته (pino) با correlation-id — سطح از LOG_LEVEL خوانده می‌شود
+    LoggerModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService<Env, true>) =>
+        buildLoggerParams(config.get('LOG_LEVEL', { infer: true })),
+    }),
     // محدودیت نرخ سراسری (ضد brute-force/سوءاستفاده): ۱۰۰ درخواست در دقیقه به‌ازای هر IP.
     // مسیرهای حساس (auth) سقف سخت‌گیرانه‌ترِ خود را با @Throttle تعریف می‌کنند.
     ThrottlerModule.forRoot([{ name: 'default', ttl: 60_000, limit: 100 }]),

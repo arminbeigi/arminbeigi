@@ -18,6 +18,8 @@ export const envSchema = z.object({
   // اختیاری‌ها (در فازهای بعد استفاده می‌شوند)
   REDIS_URL: z.string().optional(),
   CORS_ORIGINS: z.string().default('*'),
+  // سطح لاگ ساخت‌یافته (pino): trace|debug|info|warn|error|fatal
+  LOG_LEVEL: z.enum(['trace', 'debug', 'info', 'warn', 'error', 'fatal']).default('info'),
 
   // ── Issabel / Asterisk AMI (فاز ۴) ─────────────────────────────────────────
   AMI_MOCK: z

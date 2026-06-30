@@ -6,16 +6,19 @@ import { IoAdapter } from '@nestjs/platform-socket.io';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import helmet from 'helmet';
 import { json, urlencoded } from 'express';
+import { Logger } from 'nestjs-pino';
 import { AppModule } from './app.module';
 import { Env } from './config/env.validation';
 import { PrismaService } from './prisma/prisma.service';
 
 async function bootstrap(): Promise<void> {
   // bodyParser پیش‌فرض غیرفعال است تا parserهای خودمان با محدودیت حجم مشخص اعمال شوند.
+  // bufferLogs تا زمان آماده‌شدن لاگر pino، پیام‌های اولیه را نگه می‌دارد.
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-    bufferLogs: false,
+    bufferLogs: true,
     bodyParser: false,
   });
+  app.useLogger(app.get(Logger)); // لاگر ساخت‌یافته‌ی pino جایگزین لاگر پیش‌فرض
   const config = app.get(ConfigService<Env, true>);
   const isProd = config.get('NODE_ENV', { infer: true }) === 'production';
 
