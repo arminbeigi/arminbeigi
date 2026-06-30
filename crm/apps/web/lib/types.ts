@@ -72,11 +72,32 @@ export interface Deal {
   id: string;
   title: string;
   status: string;
+  customerId: string;
   customerName: string | null;
+  pipelineId: string;
+  stageId: string;
   stageKey: string | null;
   stageName: string | null;
   amountIrr: string;
   ownerName: string | null;
+  lostReason: string | null;
+}
+
+export interface DealStage {
+  id: string;
+  key: string;
+  name: string;
+  order: number;
+  probability: number;
+  isWon: boolean;
+  isLost: boolean;
+}
+
+export interface Pipeline {
+  id: string;
+  name: string;
+  isDefault: boolean;
+  stages: DealStage[];
 }
 
 export interface ApiErrorBody {

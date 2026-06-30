@@ -77,8 +77,16 @@ export class CustomersRepository {
     skip: number;
     take: number;
   }): Promise<{ ids: string[]; total: number }> {
+    // ترکیب trigram (تحمل غلط املایی) با ILIKE زیررشته‌ای (برای عبارت‌های کوتاه)؛
+    // هر دو از همان ایندکس GIN trigram روی fa_normalize بهره می‌برند.
+    const pat = Prisma.sql`'%' || fa_normalize(${params.q}) || '%'`;
     const conditions: Prisma.Sql[] = [
-      Prisma.sql`(fa_normalize("displayName") % fa_normalize(${params.q}) OR fa_normalize(coalesce("companyName",'')) % fa_normalize(${params.q}))`,
+      Prisma.sql`(
+        fa_normalize("displayName") % fa_normalize(${params.q})
+        OR fa_normalize(coalesce("companyName",'')) % fa_normalize(${params.q})
+        OR fa_normalize("displayName") ILIKE ${pat}
+        OR fa_normalize(coalesce("companyName",'')) ILIKE ${pat}
+      )`,
     ];
     if (params.type) conditions.push(Prisma.sql`"type" = ${params.type}::"CustomerType"`);
     if (params.status) conditions.push(Prisma.sql`"status" = ${params.status}::"CustomerStatus"`);
