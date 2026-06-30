@@ -5,6 +5,9 @@ export function toFa(input: string | number): string {
   return String(input).replace(/[0-9]/g, (d) => FA[Number(d)]);
 }
 
+/** نمایش رشته با ارقام فارسی (نام مستعار توصیفی برای toFa) */
+export const normalizeForDisplay = toFa;
+
 /** جداکننده‌ی هزارگان + ارقام فارسی */
 export function faNumber(value: number | string): string {
   const n = typeof value === 'string' ? Number(value) : value;

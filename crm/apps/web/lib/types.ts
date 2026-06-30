@@ -84,3 +84,13 @@ export interface ApiErrorBody {
   error: string;
   message: string | string[];
 }
+
+export interface TelephonyStatus {
+  mode: 'mock' | 'real';
+  connected: boolean;
+}
+
+export interface OriginateResult {
+  uniqueId: string;
+  actionId: string;
+}
