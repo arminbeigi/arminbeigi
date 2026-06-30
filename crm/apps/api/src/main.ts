@@ -2,14 +2,15 @@ import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { IoAdapter } from '@nestjs/platform-socket.io';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import helmet from 'helmet';
 import { json, urlencoded } from 'express';
 import { Logger } from 'nestjs-pino';
 import { AppModule } from './app.module';
+import { RedisIoAdapter } from './common/adapters/redis-io.adapter';
 import { Env } from './config/env.validation';
 import { PrismaService } from './prisma/prisma.service';
+import { REDIS_CLIENT, RedisClient } from './redis/redis.module';
 
 async function bootstrap(): Promise<void> {
   // bodyParser پیش‌فرض غیرفعال است تا parserهای خودمان با محدودیت حجم مشخص اعمال شوند.
@@ -37,8 +38,14 @@ async function bootstrap(): Promise<void> {
   app.use(json({ limit: '1mb' }));
   app.use(urlencoded({ extended: true, limit: '1mb' }));
 
-  // آداپتور Socket.IO برای Realtime (فاز ۷)
-  app.useWebSocketAdapter(new IoAdapter(app));
+  // آداپتور Socket.IO برای Realtime (فاز ۷) — با پشتیبانی Redis برای مقیاس چنداینستنسی (H4).
+  // اگر Redis در دسترس باشد، رویدادها بین اینستنس‌ها پخش می‌شوند؛ وگرنه حالت تک‌اینستنس.
+  const ioAdapter = new RedisIoAdapter(app);
+  const redisClient = app.get<RedisClient>(REDIS_CLIENT, { strict: false });
+  if (redisClient) {
+    ioAdapter.connectToRedis(redisClient);
+  }
+  app.useWebSocketAdapter(ioAdapter);
 
   // اعتبارسنجی سراسری ورودی‌ها
   app.useGlobalPipes(
