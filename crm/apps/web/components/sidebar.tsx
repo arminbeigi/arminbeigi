@@ -1,8 +1,8 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Flame } from 'lucide-react';
 import clsx from 'clsx';
 import { MENU } from '@/lib/menu';
 import { useAuth } from '@/lib/auth';
@@ -15,13 +15,19 @@ export function Sidebar() {
 
   return (
     <aside className="flex h-screen w-64 shrink-0 flex-col bg-steel-900 text-steel-100">
-      <div className="flex items-center gap-2 px-5 py-5 border-b border-steel-800">
-        <span className="grid h-9 w-9 place-items-center rounded-lg bg-flame-600">
-          <Flame size={20} className="text-white" />
-        </span>
-        <div className="leading-tight">
-          <div className="text-base font-bold text-white">شفازح</div>
-          <div className="text-[11px] text-steel-400">سامانه مدیریت تأسیسات</div>
+      <div className="border-b border-steel-800 px-4 py-5">
+        <Link href="/dashboard" className="block rounded-lg bg-white px-3 py-2.5">
+          <Image
+            src="/logo.jpeg"
+            alt="شفازح — سامانه مدیریت تأسیسات"
+            width={1000}
+            height={324}
+            priority
+            className="h-auto w-full"
+          />
+        </Link>
+        <div className="mt-2 text-center text-[11px] text-steel-400">
+          سامانه مدیریت تأسیسات
         </div>
       </div>
 

@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, type FormEvent } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { Flame, LoaderCircle, Lock, Mail } from 'lucide-react';
+import { LoaderCircle, Lock, Mail } from 'lucide-react';
 import { useAuth } from '@/lib/auth';
 import { ApiError } from '@/lib/api';
 
@@ -31,14 +32,18 @@ export default function LoginPage() {
   return (
     <main className="grid min-h-screen place-items-center bg-steel-900 p-4">
       <div className="w-full max-w-sm">
-        <div className="mb-6 flex flex-col items-center gap-3 text-center">
-          <span className="grid h-14 w-14 place-items-center rounded-2xl bg-flame-600">
-            <Flame size={28} className="text-white" />
-          </span>
-          <div>
-            <h1 className="text-2xl font-bold text-white">شفازح CRM</h1>
-            <p className="text-sm text-steel-400">ورود به سامانه مدیریت تأسیسات</p>
+        <div className="mb-6 flex flex-col items-center gap-4 text-center">
+          <div className="w-60 rounded-2xl bg-white px-6 py-4 shadow-card">
+            <Image
+              src="/logo.jpeg"
+              alt="شفازح — سامانه مدیریت تأسیسات"
+              width={1000}
+              height={324}
+              priority
+              className="h-auto w-full"
+            />
           </div>
+          <p className="text-sm text-steel-400">ورود به سامانه مدیریت تأسیسات</p>
         </div>
 
         <form onSubmit={onSubmit} className="card p-6 space-y-4">
