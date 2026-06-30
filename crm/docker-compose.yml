@@ -72,7 +72,9 @@ services:
     environment:
       NODE_ENV: production
       PORT: '4000'
-      DATABASE_URL: postgresql://${POSTGRES_USER:-shofazh}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-shofazh}?schema=public
+      # connection_limit: اندازه‌ی استخر اتصال Prisma به‌ازای هر اینستنس (پیش‌فرض ۱۰)؛
+      # pool_timeout: ثانیه انتظار برای اتصال آزاد؛ connect_timeout: مهلت اتصال اولیه.
+      DATABASE_URL: postgresql://${POSTGRES_USER:-shofazh}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-shofazh}?schema=public&connection_limit=${DB_POOL_SIZE:-10}&pool_timeout=20&connect_timeout=10
       REDIS_URL: redis://redis:6379
       CORS_ORIGINS: ${CORS_ORIGINS:-*}
       LOG_LEVEL: ${LOG_LEVEL:-info}

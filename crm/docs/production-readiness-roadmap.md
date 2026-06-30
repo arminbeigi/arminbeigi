@@ -87,7 +87,9 @@
 - [x] H3 — Health liveness/readiness + Redis — ✅ اجراشده (terminus، ۷۱ تست سبز، 503 زنده). سند: `hardening-h3-health.md`
 - [x] H4 — Realtime Redis adapter — ✅ اجراشده (cross-instance زنده ۳/۳). سند: `hardening-h4-realtime-scale.md`
 - [x] H5 — Graceful shutdown — ✅ اجراشده (SIGTERM زنده، خروج تمیز). سند: `hardening-h5-graceful-shutdown.md`
-- [ ] H6 (در دست اقدام)
+- [x] H6 — Compression + Prisma pool/timeouts — ✅ اجراشده (کاهش ۷۸٪ زنده، ۷۱ تست). سند: `hardening-h6-compression-pool.md`
+
+**همه‌ی آیتم‌های Critical و High کامل شدند.** مرحله‌ی بعد: ماژول‌های سازمانی (بخش ۴).
 
 ### افزوده‌های Medium کشف‌شده حین اجرا
 - **راه‌اندازی ESLint** (flat config) برای api و web + افزودن گام lint به CI

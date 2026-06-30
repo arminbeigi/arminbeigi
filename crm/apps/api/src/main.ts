@@ -4,6 +4,7 @@ import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import helmet from 'helmet';
+import compression from 'compression';
 import { json, urlencoded } from 'express';
 import { Logger } from 'nestjs-pino';
 import { AppModule } from './app.module';
@@ -32,6 +33,9 @@ async function bootstrap(): Promise<void> {
   // چون API و فرانت هم‌مبدأ پشت Nginx سرو می‌شوند، CSP در این لایه غیرفعال است
   // (هدرهای امنیتی صفحه در لایه‌ی فرانت/Nginx اعمال می‌شوند).
   app.use(helmet({ contentSecurityPolicy: false, crossOriginResourcePolicy: { policy: 'cross-origin' } }));
+
+  // فشرده‌سازی پاسخ‌ها (gzip) — کاهش پهنای‌باند برای پاسخ‌های JSON بزرگ
+  app.use(compression());
 
   // محدودیت حجم بدنه‌ی درخواست (دفاع در برابر payload بزرگ/DoS)
   app.use(json({ limit: '1mb' }));
