@@ -79,7 +79,7 @@
 
 ## ۶) پیشرفت
 - [x] C1 — Throttler + lockout — ✅ اجراشده (مهاجرت 0003، ۵۹ تست سبز، e2e زنده). سند: `hardening-c1-auth-bruteforce.md`
-- [ ] C2 — Helmet + CORS + Swagger gate
+- [x] C2 — Helmet + CORS + Swagger gate + body limit — ✅ اجراشده (۶۲ تست سبز، هدر/۴۱۳ زنده). سند: `hardening-c2-http-security.md`
 - [ ] C3 — Backup/DR
 - [ ] C4 — CI pipeline
 - [ ] H1..H6

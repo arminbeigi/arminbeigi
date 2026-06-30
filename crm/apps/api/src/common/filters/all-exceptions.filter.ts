@@ -35,6 +35,11 @@ export class AllExceptionsFilter implements ExceptionFilter {
         message = r.message ?? message;
         error = r.error ?? exception.name;
       }
+    } else if (this.isHttpErrorLike(exception)) {
+      // خطاهای سبک http-errors (مثل PayloadTooLarge از body-parser) که HttpException نیستند
+      status = exception.status;
+      message = exception.message || message;
+      error = exception.name || error;
     } else if (exception instanceof Error) {
       this.logger.error(exception.message, exception.stack);
     }
@@ -46,5 +51,12 @@ export class AllExceptionsFilter implements ExceptionFilter {
       path: request.url,
       timestamp: new Date().toISOString(),
     });
+  }
+
+  /** خطاهای دارای کد وضعیت معتبر (۴۰۰–۵۹۹) به‌سبک http-errors */
+  private isHttpErrorLike(e: unknown): e is { status: number; message: string; name: string } {
+    if (typeof e !== 'object' || e === null) return false;
+    const status = (e as { status?: unknown }).status;
+    return typeof status === 'number' && status >= 400 && status < 600;
   }
 }
