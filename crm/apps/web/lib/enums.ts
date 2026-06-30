@@ -94,5 +94,30 @@ export const PROJECT_TRANSITIONS: Record<string, string[]> = {
   CANCELLED: [],
 };
 
+export const PRODUCT_CATEGORY: Record<string, string> = {
+  BOILER: 'دیگ / پکیج',
+  BURNER: 'مشعل',
+  PUMP: 'پمپ',
+  TANK: 'منبع / مخزن',
+  RADIATOR: 'رادیاتور',
+  ACCESSORY: 'متعلقات',
+};
+
+export const FUEL_TYPE: Record<string, string> = {
+  GAS: 'گازی',
+  GASOIL: 'گازوئیلی',
+  DUAL: 'دوگانه‌سوز',
+  ELECTRIC: 'برقی',
+  NONE: 'بدون سوخت',
+};
+
+export const BOILER_KIND: Record<string, string> = {
+  WALL_PACKAGE: 'پکیج دیواری',
+  CAST_IRON: 'دیگ چدنی',
+  STEEL: 'دیگ فولادی',
+  GROUND: 'زمینی',
+  NONE: 'نامشخص',
+};
+
 export const label = (map: Record<string, string>, key: string | null | undefined): string =>
   (key && map[key]) || key || '—';

@@ -100,6 +100,32 @@ export interface Pipeline {
   stages: DealStage[];
 }
 
+export interface Brand {
+  id: string;
+  name: string;
+  nameFa: string | null;
+  country: string | null;
+}
+
+export interface Product {
+  id: string;
+  sku: string;
+  name: string;
+  category: string;
+  boilerKind: string;
+  fuelType: string;
+  brandId: string | null;
+  brandName: string | null;
+  description: string | null;
+  capacityKcal: number | null;
+  capacityKw: number | null;
+  material: string | null;
+  priceIrr: string | null;
+  stockQty: number;
+  warrantyMo: number | null;
+  isActive: boolean;
+}
+
 export interface ProjectItem {
   id: string;
   title: string;
