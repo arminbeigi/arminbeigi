@@ -31,6 +31,14 @@ export const envSchema = z.object({
   // مسیر فایل‌های ضبط روی سرور Asterisk و مسیر عمومی همگام‌شده
   AMI_RECORDING_DIR: z.string().default('/var/spool/asterisk/monitor'),
   RECORDING_PUBLIC_BASE: z.string().default('/recordings'),
+
+  // ── لایه‌ی AI خودمیزبان (فاز ۶) ─────────────────────────────────────────────
+  AI_MOCK: z.enum(['true', 'false']).default('true').transform((v) => v === 'true'),
+  AI_BASE_URL: z.string().default('http://ai-inference:8000/v1'), // سرور سازگار با OpenAI
+  AI_MODEL: z.string().default('qwen2.5-14b-instruct'),
+  AI_API_KEY: z.string().default('not-needed'),
+  STT_MOCK: z.enum(['true', 'false']).default('true').transform((v) => v === 'true'),
+  STT_BASE_URL: z.string().default('http://stt-whisper:9000'), // سرویس Whisper خودمیزبان
 });
 
 export type Env = z.infer<typeof envSchema>;
