@@ -19,6 +19,11 @@ export class UsersService {
     return this.usersRepo.findByIdWithAccess(id);
   }
 
+  /** یافتن اپراتور بر اساس داخلی تلفن (برای تطبیق تماس) */
+  findByExtension(extension: string) {
+    return this.usersRepo.findByExtension(extension);
+  }
+
   async getProfile(id: string): Promise<UserWithAccess> {
     const user = await this.usersRepo.findByIdWithAccess(id);
     if (!user) throw new NotFoundException('کاربر یافت نشد');

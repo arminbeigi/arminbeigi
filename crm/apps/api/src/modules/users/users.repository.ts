@@ -23,6 +23,11 @@ export class UsersRepository {
     return this.prisma.user.findUnique({ where: { email } });
   }
 
+  /** یافتن اپراتور بر اساس داخلی تلفن (Issabel) — اولین فعال */
+  findByExtension(extension: string): Promise<User | null> {
+    return this.prisma.user.findFirst({ where: { extension, status: 'ACTIVE' } });
+  }
+
   findByEmailWithAccess(email: string): Promise<UserWithAccess | null> {
     return this.prisma.user.findUnique({ where: { email }, include: ACCESS_INCLUDE });
   }

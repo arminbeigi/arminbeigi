@@ -1,5 +1,5 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Customer, CustomerStatus, CustomerType, LeadSource, Prisma } from '@prisma/client';
 import { PaginatedResult } from '../../common/dto/pagination.dto';
 import { normalizePhone } from '../../common/utils/persian';
 import { CustomersRepository, NormalizedPhoneInput } from './customers.repository';
@@ -100,9 +100,30 @@ export class CustomersService {
   async lookupByPhone(
     number: string,
   ): Promise<{ found: boolean; customer: CustomerResponseDto | null }> {
-    const normalized = normalizePhone(number);
-    const customer = await this.repo.findCustomerByPhone(normalized);
+    const customer = await this.findRawByPhone(number);
     return { found: Boolean(customer), customer: customer ? CustomerResponseDto.from(customer) : null };
+  }
+
+  /** تطبیق خام مشتری با شماره (برای لایه‌ی تلفنی) — موجودیت برمی‌گرداند نه DTO */
+  findRawByPhone(number: string): Promise<Customer | null> {
+    return this.repo.findCustomerByPhone(normalizePhone(number));
+  }
+
+  /**
+   * ساخت خودکار «سرنخ» برای تماس‌گیرنده‌ی ناشناس (استفاده در لایه‌ی تلفنی/Issabel).
+   * نام نمایشی موقت = شماره‌ی نرمال‌شده؛ بعداً اپراتور تکمیل می‌کند.
+   */
+  async createLeadFromCall(rawNumber: string, source: LeadSource): Promise<Customer> {
+    const normalized = normalizePhone(rawNumber);
+    return this.repo.create({
+      base: {
+        type: CustomerType.RESIDENTIAL,
+        status: CustomerStatus.LEAD,
+        displayName: `تماس‌گیرنده ${normalized}`,
+        source,
+      },
+      phones: [{ number: normalized, rawNumber, isPrimary: true }],
+    });
   }
 
   // ── کمکی‌ها ─────────────────────────────────────────────────────────────────
