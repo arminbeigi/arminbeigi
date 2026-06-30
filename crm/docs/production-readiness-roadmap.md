@@ -78,7 +78,7 @@
 4. هر قابلیت پیش از رفتن به بعدی، کامل و آماده‌ی تولید شود.
 
 ## ۶) پیشرفت
-- [ ] C1 — Throttler + lockout
+- [x] C1 — Throttler + lockout — ✅ اجراشده (مهاجرت 0003، ۵۹ تست سبز، e2e زنده). سند: `hardening-c1-auth-bruteforce.md`
 - [ ] C2 — Helmet + CORS + Swagger gate
 - [ ] C3 — Backup/DR
 - [ ] C4 — CI pipeline

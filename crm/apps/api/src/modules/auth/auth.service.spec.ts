@@ -15,16 +15,19 @@ describe('AuthService', () => {
     jest.Mock
   >;
   let jwt: { signAsync: jest.Mock; verifyAsync: jest.Mock };
-  let prisma: { refreshToken: Record<string, jest.Mock> };
+  let prisma: { refreshToken: Record<string, jest.Mock>; user: Record<string, jest.Mock> };
 
-  const baseUser = (passwordHash: string): UserWithAccess =>
+  const baseUser = (passwordHash: string, overrides: Partial<UserWithAccess> = {}): UserWithAccess =>
     ({
       id: 'u1',
       email: 'admin@shofazh.com',
       fullName: 'مدیر سیستم',
       status: 'ACTIVE',
       passwordHash,
+      failedLoginAttempts: 0,
+      lockedUntil: null,
       roles: [],
+      ...overrides,
     }) as unknown as UserWithAccess;
 
   beforeEach(() => {
@@ -45,6 +48,9 @@ describe('AuthService', () => {
         findUnique: jest.fn(),
         update: jest.fn().mockResolvedValue({}),
         updateMany: jest.fn().mockResolvedValue({ count: 1 }),
+      },
+      user: {
+        update: jest.fn().mockResolvedValue({}),
       },
     };
     const config = {
@@ -95,6 +101,52 @@ describe('AuthService', () => {
       await expect(
         service.login({ email: 'x@y.com', password: 'whatever12' }),
       ).rejects.toBeInstanceOf(UnauthorizedException);
+    });
+
+    it('با رمز نادرست، شمارنده‌ی تلاش ناموفق افزایش می‌یابد', async () => {
+      const pwHash = await hash('correct-password', 10);
+      users.findByEmailWithAccess.mockResolvedValue(baseUser(pwHash, { failedLoginAttempts: 2 }));
+      await expect(
+        service.login({ email: 'admin@shofazh.com', password: 'wrong' }),
+      ).rejects.toBeInstanceOf(UnauthorizedException);
+      expect(prisma.user.update).toHaveBeenCalledWith({
+        where: { id: 'u1' },
+        data: { failedLoginAttempts: 3, lockedUntil: undefined },
+      });
+    });
+
+    it('با رسیدن به سقف تلاش ناموفق، حساب قفل می‌شود', async () => {
+      const pwHash = await hash('correct-password', 10);
+      users.findByEmailWithAccess.mockResolvedValue(baseUser(pwHash, { failedLoginAttempts: 4 }));
+      await expect(
+        service.login({ email: 'admin@shofazh.com', password: 'wrong' }),
+      ).rejects.toBeInstanceOf(UnauthorizedException);
+      const arg = prisma.user.update.mock.calls[0][0];
+      expect(arg.data.failedLoginAttempts).toBe(0);
+      expect(arg.data.lockedUntil).toBeInstanceOf(Date);
+      expect(arg.data.lockedUntil.getTime()).toBeGreaterThan(Date.now());
+    });
+
+    it('حساب قفل‌شده حتی با رمز درست رد می‌شود', async () => {
+      const pwHash = await hash('Admin@12345', 10);
+      users.findByEmailWithAccess.mockResolvedValue(
+        baseUser(pwHash, { lockedUntil: new Date(Date.now() + 5 * 60_000) }),
+      );
+      await expect(
+        service.login({ email: 'admin@shofazh.com', password: 'Admin@12345' }),
+      ).rejects.toThrow(/قفل/);
+      // نباید توکن صادر شود
+      expect(prisma.refreshToken.create).not.toHaveBeenCalled();
+    });
+
+    it('ورود موفق پس از تلاش‌های ناموفق، شمارنده را صفر می‌کند', async () => {
+      const pwHash = await hash('Admin@12345', 10);
+      users.findByEmailWithAccess.mockResolvedValue(baseUser(pwHash, { failedLoginAttempts: 3 }));
+      await service.login({ email: 'admin@shofazh.com', password: 'Admin@12345' });
+      expect(prisma.user.update).toHaveBeenCalledWith({
+        where: { id: 'u1' },
+        data: { failedLoginAttempts: 0, lockedUntil: null },
+      });
     });
   });
 

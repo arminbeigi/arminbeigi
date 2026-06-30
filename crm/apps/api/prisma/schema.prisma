@@ -177,6 +177,9 @@ model User {
   extension    String? // داخلی تلفن (Issabel) برای مسیریابی پاپ‌آپ تماس
   avatarUrl    String?
   lastLoginAt  DateTime?
+  // محافظت brute-force: شمارش تلاش‌های ناموفق و قفل موقت حساب (سخت‌سازی C1)
+  failedLoginAttempts Int       @default(0)
+  lockedUntil         DateTime?
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
 

@@ -19,6 +19,10 @@ interface RefreshPayload {
   jti: string;
 }
 
+/** سقف تلاش ناموفق پیش از قفل، و مدت قفل (دقیقه) — دفاع لایه‌ی حساب (مکمل throttler IP) */
+const MAX_FAILED_ATTEMPTS = 5;
+const LOCK_MINUTES = 15;
+
 @Injectable()
 export class AuthService {
   private readonly accessSecret: string;
@@ -61,9 +65,42 @@ export class AuthService {
     const user = await this.users.findByEmailWithAccess(email);
     if (!user) throw new UnauthorizedException('ایمیل یا رمز عبور نادرست است');
     if (user.status !== 'ACTIVE') throw new UnauthorizedException('حساب کاربری غیرفعال است');
+
+    // قفل موقت حساب پس از تلاش‌های ناموفق متوالی (دفاع brute-force در سطح حساب)
+    if (user.lockedUntil && user.lockedUntil.getTime() > Date.now()) {
+      const minutes = Math.ceil((user.lockedUntil.getTime() - Date.now()) / 60000);
+      throw new UnauthorizedException(
+        `به‌دلیل تلاش‌های ناموفق، حساب موقتاً قفل شده است. ${minutes} دقیقه دیگر دوباره تلاش کنید.`,
+      );
+    }
+
     const ok = await compare(password, user.passwordHash);
-    if (!ok) throw new UnauthorizedException('ایمیل یا رمز عبور نادرست است');
+    if (!ok) {
+      await this.registerFailedAttempt(user.id, user.failedLoginAttempts);
+      throw new UnauthorizedException('ایمیل یا رمز عبور نادرست است');
+    }
+
+    // ورود موفق ⇒ صفر کردن شمارنده و رفع قفل (در صورت وجود)
+    if (user.failedLoginAttempts > 0 || user.lockedUntil) {
+      await this.prisma.user.update({
+        where: { id: user.id },
+        data: { failedLoginAttempts: 0, lockedUntil: null },
+      });
+    }
     return user;
+  }
+
+  /** ثبت یک تلاش ناموفق؛ با رسیدن به سقف، حساب موقتاً قفل می‌شود. */
+  private async registerFailedAttempt(userId: string, current: number): Promise<void> {
+    const attempts = current + 1;
+    const locked = attempts >= MAX_FAILED_ATTEMPTS;
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        failedLoginAttempts: locked ? 0 : attempts,
+        lockedUntil: locked ? new Date(Date.now() + LOCK_MINUTES * 60_000) : undefined,
+      },
+    });
   }
 
   // ── چرخش refresh با تشخیص استفاده‌ی مجدد ────────────────────────────────────
