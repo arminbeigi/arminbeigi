@@ -38,6 +38,28 @@ services:
       timeout: 3s
       retries: 20
 
+  # پشتیبان‌گیری دوره‌ای از دیتابیس (pg_dump فشرده + چرخش نگه‌داری).
+  # پشتیبان‌ها در volume جداگانه‌ی «backups» و قابل کپی به خارج از سرور‌اند.
+  backup:
+    image: postgres:16
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PGHOST: postgres
+      PGPORT: '5432'
+      POSTGRES_USER: ${POSTGRES_USER:-shofazh}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD لازم است}
+      POSTGRES_DB: ${POSTGRES_DB:-shofazh}
+      BACKUP_DIR: /backups
+      BACKUP_INTERVAL: ${BACKUP_INTERVAL:-86400}
+      RETENTION_DAYS: ${BACKUP_RETENTION_DAYS:-14}
+    volumes:
+      - ./scripts:/scripts:ro
+      - backups:/backups
+    entrypoint: ['/bin/sh', '/scripts/backup-loop.sh']
+
   api:
     build:
       context: ./apps/api
@@ -99,3 +121,4 @@ services:
 volumes:
   pgdata:
   redisdata:
+  backups:
