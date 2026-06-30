@@ -1,4 +1,4 @@
-import { INestApplication, Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 
 @Injectable()
@@ -16,14 +16,9 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
     this.logger.log('اتصال به PostgreSQL برقرار شد');
   }
 
+  /** هنگام خاموشی (SIGTERM/SIGINT) از طریق app.enableShutdownHooks فراخوانی می‌شود */
   async onModuleDestroy(): Promise<void> {
     await this.$disconnect();
-  }
-
-  /** بستن تمیز اپ هنگام دریافت سیگنال خاموشی */
-  async enableShutdownHooks(app: INestApplication): Promise<void> {
-    process.on('beforeExit', () => {
-      void app.close();
-    });
+    this.logger.log('اتصال PostgreSQL بسته شد');
   }
 }

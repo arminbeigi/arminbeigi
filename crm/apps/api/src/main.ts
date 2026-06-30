@@ -9,7 +9,6 @@ import { Logger } from 'nestjs-pino';
 import { AppModule } from './app.module';
 import { RedisIoAdapter } from './common/adapters/redis-io.adapter';
 import { Env } from './config/env.validation';
-import { PrismaService } from './prisma/prisma.service';
 import { REDIS_CLIENT, RedisClient } from './redis/redis.module';
 
 async function bootstrap(): Promise<void> {
@@ -72,9 +71,9 @@ async function bootstrap(): Promise<void> {
     app.enableCors({ origin: origins.split(','), credentials: true });
   }
 
-  // خاموشی تمیز Prisma
-  const prisma = app.get(PrismaService);
-  await prisma.enableShutdownHooks(app);
+  // خاموشی تمیز و قابل‌اعتماد: با دریافت SIGTERM/SIGINT، Nest چرخه‌ی حیات خاموشی را اجرا
+  // می‌کند (بستن سرور HTTP، قطع Prisma و Redis از طریق onModuleDestroy/onApplicationShutdown).
+  app.enableShutdownHooks();
 
   // مستندات Swagger — به‌صورت پیش‌فرض در تولید غیرفعال (مگر SWAGGER_ENABLED=true)
   if (!isProd || process.env.SWAGGER_ENABLED === 'true') {

@@ -86,7 +86,8 @@
 - [x] H2 — Structured logging + correlation-id — ✅ اجراشده (pino، ۶۸ تست سبز، JSON/هدر زنده). سند: `hardening-h2-structured-logging.md`
 - [x] H3 — Health liveness/readiness + Redis — ✅ اجراشده (terminus، ۷۱ تست سبز، 503 زنده). سند: `hardening-h3-health.md`
 - [x] H4 — Realtime Redis adapter — ✅ اجراشده (cross-instance زنده ۳/۳). سند: `hardening-h4-realtime-scale.md`
-- [ ] H5..H6 (در دست اقدام)
+- [x] H5 — Graceful shutdown — ✅ اجراشده (SIGTERM زنده، خروج تمیز). سند: `hardening-h5-graceful-shutdown.md`
+- [ ] H6 (در دست اقدام)
 
 ### افزوده‌های Medium کشف‌شده حین اجرا
 - **راه‌اندازی ESLint** (flat config) برای api و web + افزودن گام lint به CI
