@@ -1,5 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { Permissions } from '../../common/decorators/permissions.decorator';
 import { PaginatedResult } from '../../common/dto/pagination.dto';
 import { CreateProjectItemDto } from './dto/create-project-item.dto';
@@ -46,8 +47,11 @@ export class ProjectsController {
   @Delete(':id')
   @Permissions('projects:write')
   @ApiOperation({ summary: 'حذف پروژه' })
-  remove(@Param('id') id: string): Promise<{ success: true }> {
-    return this.projects.remove(id);
+  remove(
+    @Param('id') id: string,
+    @CurrentUser('sub') actorId: string,
+  ): Promise<{ success: true }> {
+    return this.projects.remove(id, actorId);
   }
 
   @Post(':id/items')

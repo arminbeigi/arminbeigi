@@ -2,6 +2,7 @@ import { ConflictException, Injectable, NotFoundException } from '@nestjs/common
 import { Customer, CustomerStatus, CustomerType, LeadSource, Prisma } from '@prisma/client';
 import { PaginatedResult } from '../../common/dto/pagination.dto';
 import { normalizePhone } from '../../common/utils/persian';
+import { AuditService } from '../../modules/audit/audit.service';
 import { CustomersRepository, NormalizedPhoneInput } from './customers.repository';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { CreatePhoneDto } from './dto/create-phone.dto';
@@ -11,7 +12,10 @@ import { UpdateCustomerDto } from './dto/update-customer.dto';
 
 @Injectable()
 export class CustomersService {
-  constructor(private readonly repo: CustomersRepository) {}
+  constructor(
+    private readonly repo: CustomersRepository,
+    private readonly audit: AuditService,
+  ) {}
 
   async create(dto: CreateCustomerDto, currentUserId: string): Promise<CustomerResponseDto> {
     const { phones, ownerId, ...rest } = dto;
@@ -74,9 +78,15 @@ export class CustomersService {
     }
   }
 
-  async remove(id: string): Promise<{ success: true }> {
+  async remove(id: string, actorId?: string): Promise<{ success: true }> {
     await this.ensureExists(id);
     await this.repo.delete(id);
+    await this.audit.record({
+      actorId,
+      action: 'deleted',
+      entityType: 'CUSTOMER',
+      entityId: id,
+    });
     return { success: true };
   }
 

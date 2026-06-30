@@ -9,6 +9,7 @@ import { validateEnv } from './config/env.validation';
 import { HealthController } from './health/health.controller';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { AuditModule } from './modules/audit/audit.module';
 import { AiModule } from './modules/ai/ai.module';
 import { CallsModule } from './modules/calls/calls.module';
 import { CustomersModule } from './modules/customers/customers.module';
@@ -26,6 +27,7 @@ import { UsersModule } from './modules/users/users.module';
     // مسیرهای حساس (auth) سقف سخت‌گیرانه‌ترِ خود را با @Throttle تعریف می‌کنند.
     ThrottlerModule.forRoot([{ name: 'default', ttl: 60_000, limit: 100 }]),
     PrismaModule,
+    AuditModule,
     UsersModule,
     AuthModule,
     CustomersModule,

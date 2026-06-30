@@ -41,7 +41,9 @@ describe('CustomersService', () => {
       deletePhone: jest.fn().mockResolvedValue(undefined),
       findCustomerByPhone: jest.fn(),
     };
-    service = new CustomersService(repo as unknown as CustomersRepository);
+    service = new CustomersService(repo as unknown as CustomersRepository, {
+      record: jest.fn(),
+    } as never);
   });
 
   describe('create', () => {

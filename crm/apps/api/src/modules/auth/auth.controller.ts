@@ -1,6 +1,7 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Request } from 'express';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { Public } from '../../common/decorators/public.decorator';
 import { AuthUser } from '../../common/types/auth-user';
@@ -36,8 +37,8 @@ export class AuthController {
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'ورود و دریافت توکن دسترسی/تازه‌سازی' })
-  login(@Body() dto: LoginDto): Promise<AuthTokensDto> {
-    return this.auth.login(dto);
+  login(@Body() dto: LoginDto, @Req() req: Request): Promise<AuthTokensDto> {
+    return this.auth.login(dto, { ip: req.ip, userAgent: req.get('user-agent') ?? undefined });
   }
 
   @Public()

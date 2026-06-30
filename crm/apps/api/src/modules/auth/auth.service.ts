@@ -6,6 +6,7 @@ import { createHash, randomUUID } from 'crypto';
 import { AuthUser } from '../../common/types/auth-user';
 import { Env } from '../../config/env.validation';
 import { PrismaService } from '../../prisma/prisma.service';
+import { AuditService } from '../../modules/audit/audit.service';
 import { UserResponseDto } from '../../modules/users/dto/user-response.dto';
 import { UsersService } from '../../modules/users/users.service';
 import { UserWithAccess } from '../../modules/users/users.repository';
@@ -17,6 +18,12 @@ interface RefreshPayload {
   sub: string;
   family: string;
   jti: string;
+}
+
+/** زمینه‌ی درخواست برای ممیزی (IP و عامل کاربر) — اختیاری */
+export interface AuthContext {
+  ip?: string;
+  userAgent?: string;
 }
 
 /** سقف تلاش ناموفق پیش از قفل، و مدت قفل (دقیقه) — دفاع لایه‌ی حساب (مکمل throttler IP) */
@@ -34,6 +41,7 @@ export class AuthService {
     private readonly users: UsersService,
     private readonly jwt: JwtService,
     private readonly prisma: PrismaService,
+    private readonly audit: AuditService,
     config: ConfigService<Env, true>,
   ) {
     this.accessSecret = config.get('JWT_ACCESS_SECRET', { infer: true });
@@ -55,15 +63,34 @@ export class AuthService {
     return this.login({ email: dto.email, password: dto.password });
   }
 
-  async login(dto: LoginDto): Promise<AuthTokensDto> {
-    const user = await this.validateCredentials(dto.email, dto.password);
+  async login(dto: LoginDto, ctx?: AuthContext): Promise<AuthTokensDto> {
+    const user = await this.validateCredentials(dto.email, dto.password, ctx);
     await this.users.updateLastLogin(user.id);
+    await this.audit.record({
+      actorId: user.id,
+      action: 'login_success',
+      entityType: 'AUTH',
+      entityId: user.id,
+      metadata: { email: user.email, ip: ctx?.ip, userAgent: ctx?.userAgent },
+    });
     return this.issueTokens(user, randomUUID());
   }
 
-  async validateCredentials(email: string, password: string): Promise<UserWithAccess> {
+  async validateCredentials(
+    email: string,
+    password: string,
+    ctx?: AuthContext,
+  ): Promise<UserWithAccess> {
     const user = await this.users.findByEmailWithAccess(email);
-    if (!user) throw new UnauthorizedException('ایمیل یا رمز عبور نادرست است');
+    if (!user) {
+      await this.audit.record({
+        action: 'login_failed',
+        entityType: 'AUTH',
+        entityId: 'unknown',
+        metadata: { email, reason: 'user_not_found', ip: ctx?.ip },
+      });
+      throw new UnauthorizedException('ایمیل یا رمز عبور نادرست است');
+    }
     if (user.status !== 'ACTIVE') throw new UnauthorizedException('حساب کاربری غیرفعال است');
 
     // قفل موقت حساب پس از تلاش‌های ناموفق متوالی (دفاع brute-force در سطح حساب)
@@ -76,7 +103,14 @@ export class AuthService {
 
     const ok = await compare(password, user.passwordHash);
     if (!ok) {
-      await this.registerFailedAttempt(user.id, user.failedLoginAttempts);
+      const locked = await this.registerFailedAttempt(user.id, user.failedLoginAttempts);
+      await this.audit.record({
+        actorId: user.id,
+        action: locked ? 'account_locked' : 'login_failed',
+        entityType: 'AUTH',
+        entityId: user.id,
+        metadata: { email, reason: 'bad_password', ip: ctx?.ip },
+      });
       throw new UnauthorizedException('ایمیل یا رمز عبور نادرست است');
     }
 
@@ -90,8 +124,8 @@ export class AuthService {
     return user;
   }
 
-  /** ثبت یک تلاش ناموفق؛ با رسیدن به سقف، حساب موقتاً قفل می‌شود. */
-  private async registerFailedAttempt(userId: string, current: number): Promise<void> {
+  /** ثبت یک تلاش ناموفق؛ با رسیدن به سقف، حساب موقتاً قفل می‌شود. خروجی: آیا قفل شد؟ */
+  private async registerFailedAttempt(userId: string, current: number): Promise<boolean> {
     const attempts = current + 1;
     const locked = attempts >= MAX_FAILED_ATTEMPTS;
     await this.prisma.user.update({
@@ -101,6 +135,7 @@ export class AuthService {
         lockedUntil: locked ? new Date(Date.now() + LOCK_MINUTES * 60_000) : undefined,
       },
     });
+    return locked;
   }
 
   // ── چرخش refresh با تشخیص استفاده‌ی مجدد ────────────────────────────────────

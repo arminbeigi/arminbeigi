@@ -63,8 +63,11 @@ export class DealsController {
   @Delete(':id')
   @Permissions('deals:write')
   @ApiOperation({ summary: 'حذف معامله' })
-  remove(@Param('id') id: string): Promise<{ success: true }> {
-    return this.deals.remove(id);
+  remove(
+    @Param('id') id: string,
+    @CurrentUser('sub') actorId: string,
+  ): Promise<{ success: true }> {
+    return this.deals.remove(id, actorId);
   }
 
   @Post(':id/items')

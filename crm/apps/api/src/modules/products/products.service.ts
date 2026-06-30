@@ -1,6 +1,7 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { Brand, Prisma } from '@prisma/client';
 import { PaginatedResult } from '../../common/dto/pagination.dto';
+import { AuditService } from '../../modules/audit/audit.service';
 import { ProductFilters, ProductsRepository } from './products.repository';
 import { CreateBrandDto } from './dto/create-brand.dto';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -10,7 +11,10 @@ import { UpdateProductDto } from './dto/update-product.dto';
 
 @Injectable()
 export class ProductsService {
-  constructor(private readonly repo: ProductsRepository) {}
+  constructor(
+    private readonly repo: ProductsRepository,
+    private readonly audit: AuditService,
+  ) {}
 
   // ── برندها ──────────────────────────────────────────────────────────────────
   async createBrand(dto: CreateBrandDto): Promise<Brand> {
@@ -86,9 +90,10 @@ export class ProductsService {
     }
   }
 
-  async remove(id: string): Promise<{ success: true }> {
+  async remove(id: string, actorId?: string): Promise<{ success: true }> {
     await this.ensureExists(id);
     await this.repo.delete(id);
+    await this.audit.record({ actorId, action: 'deleted', entityType: 'PRODUCT', entityId: id });
     return { success: true };
   }
 

@@ -82,7 +82,8 @@
 - [x] C2 — Helmet + CORS + Swagger gate + body limit — ✅ اجراشده (۶۲ تست سبز، هدر/۴۱۳ زنده). سند: `hardening-c2-http-security.md`
 - [x] C3 — Backup/DR — ✅ اجراشده (round-trip زنده ۱۸→۰→۱۸، سرویس backup در compose). سند: `disaster-recovery.md`
 - [x] C4 — CI pipeline — ✅ اجراشده (۴ job: api/migrations/web/docker؛ همه محلی سبز). سند: `hardening-c4-ci.md`
-- [ ] H1..H6 (در دست اقدام پس از Critical)
+- [x] H1 — Audit trail — ✅ اجراشده (مهاجرت 0004، ۶۵ تست سبز، e2e زنده). سند: `hardening-h1-audit-trail.md`
+- [ ] H2..H6 (در دست اقدام)
 
 ### افزوده‌های Medium کشف‌شده حین اجرا
 - **راه‌اندازی ESLint** (flat config) برای api و web + افزودن گام lint به CI

@@ -48,7 +48,9 @@ describe('ProjectsService', () => {
       findItem: jest.fn(),
       deleteItem: jest.fn().mockResolvedValue(undefined),
     };
-    service = new ProjectsService(repo as unknown as ProjectsRepository);
+    service = new ProjectsService(repo as unknown as ProjectsRepository, {
+      record: jest.fn(),
+    } as never);
   });
 
   it('create: مشتری را connect و اقلام را می‌سازد', async () => {

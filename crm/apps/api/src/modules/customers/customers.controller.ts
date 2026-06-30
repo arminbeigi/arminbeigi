@@ -69,8 +69,11 @@ export class CustomersController {
   @Delete(':id')
   @Permissions('customers:delete')
   @ApiOperation({ summary: 'حذف مشتری' })
-  remove(@Param('id') id: string): Promise<{ success: true }> {
-    return this.customers.remove(id);
+  remove(
+    @Param('id') id: string,
+    @CurrentUser('sub') actorId: string,
+  ): Promise<{ success: true }> {
+    return this.customers.remove(id, actorId);
   }
 
   @Post(':id/phones')

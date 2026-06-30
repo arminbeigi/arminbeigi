@@ -52,7 +52,7 @@ describe('DealsService', () => {
       findItems: jest.fn(),
       setAmount: jest.fn(),
     };
-    service = new DealsService(repo as unknown as DealsRepository);
+    service = new DealsService(repo as unknown as DealsRepository, { record: jest.fn() } as never);
   });
 
   it('create: پایپ‌لاین/مرحله پیش‌فرض و مبلغ خودکار از اقلام', async () => {

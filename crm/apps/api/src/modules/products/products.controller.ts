@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Brand } from '@prisma/client';
+import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { Permissions } from '../../common/decorators/permissions.decorator';
 import { PaginatedResult } from '../../common/dto/pagination.dto';
 import { CreateBrandDto } from './dto/create-brand.dto';
@@ -63,7 +64,10 @@ export class ProductsController {
   @Delete(':id')
   @Permissions('products:delete')
   @ApiOperation({ summary: 'حذف محصول' })
-  remove(@Param('id') id: string): Promise<{ success: true }> {
-    return this.products.remove(id);
+  remove(
+    @Param('id') id: string,
+    @CurrentUser('sub') actorId: string,
+  ): Promise<{ success: true }> {
+    return this.products.remove(id, actorId);
   }
 }

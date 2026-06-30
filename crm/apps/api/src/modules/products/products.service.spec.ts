@@ -49,7 +49,9 @@ describe('ProductsService', () => {
       fuzzySearchIds: jest.fn(),
       findManyByIdsOrdered: jest.fn(),
     };
-    service = new ProductsService(repo as unknown as ProductsRepository);
+    service = new ProductsService(repo as unknown as ProductsRepository, {
+      record: jest.fn(),
+    } as never);
   });
 
   it('create: برند را connect می‌کند و قیمت Decimal را رشته برمی‌گرداند', async () => {

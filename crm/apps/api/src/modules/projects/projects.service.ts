@@ -6,6 +6,7 @@ import { CreateProjectDto } from './dto/create-project.dto';
 import { ProjectResponseDto } from './dto/project-response.dto';
 import { QueryProjectsDto } from './dto/query-projects.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
+import { AuditService } from '../../modules/audit/audit.service';
 import { ProjectFilters, ProjectsRepository } from './projects.repository';
 
 /** انتقال‌های مجاز وضعیت پروژه (گردش‌کار HVAC) */
@@ -21,7 +22,10 @@ const TRANSITIONS: Record<ProjectStatus, ProjectStatus[]> = {
 
 @Injectable()
 export class ProjectsService {
-  constructor(private readonly repo: ProjectsRepository) {}
+  constructor(
+    private readonly repo: ProjectsRepository,
+    private readonly audit: AuditService,
+  ) {}
 
   async create(dto: CreateProjectDto): Promise<ProjectResponseDto> {
     const { customerId, addressId, managerId, items, scheduledAt, status, ...rest } = dto;
@@ -99,9 +103,10 @@ export class ProjectsService {
     }
   }
 
-  async remove(id: string): Promise<{ success: true }> {
+  async remove(id: string, actorId?: string): Promise<{ success: true }> {
     await this.ensureExists(id);
     await this.repo.delete(id);
+    await this.audit.record({ actorId, action: 'deleted', entityType: 'PROJECT', entityId: id });
     return { success: true };
   }
 

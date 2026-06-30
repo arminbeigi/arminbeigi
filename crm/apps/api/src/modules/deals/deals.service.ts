@@ -7,6 +7,7 @@ import { DealResponseDto } from './dto/deal-response.dto';
 import { MoveDealDto } from './dto/move-deal.dto';
 import { QueryDealsDto } from './dto/query-deals.dto';
 import { UpdateDealDto } from './dto/update-deal.dto';
+import { AuditService } from '../../modules/audit/audit.service';
 import { DealFilters, DealsRepository } from './deals.repository';
 
 interface AmountLine {
@@ -17,7 +18,10 @@ interface AmountLine {
 
 @Injectable()
 export class DealsService {
-  constructor(private readonly repo: DealsRepository) {}
+  constructor(
+    private readonly repo: DealsRepository,
+    private readonly audit: AuditService,
+  ) {}
 
   listPipelines(): Promise<(Pipeline & { stages: DealStage[] })[]> {
     return this.repo.listPipelines();
@@ -137,9 +141,10 @@ export class DealsService {
     return DealResponseDto.from(updated);
   }
 
-  async remove(id: string): Promise<{ success: true }> {
+  async remove(id: string, actorId?: string): Promise<{ success: true }> {
     await this.ensureExists(id);
     await this.repo.delete(id);
+    await this.audit.record({ actorId, action: 'deleted', entityType: 'DEAL', entityId: id });
     return { success: true };
   }
 

@@ -16,6 +16,7 @@ describe('AuthService', () => {
   >;
   let jwt: { signAsync: jest.Mock; verifyAsync: jest.Mock };
   let prisma: { refreshToken: Record<string, jest.Mock>; user: Record<string, jest.Mock> };
+  let audit: { record: jest.Mock };
 
   const baseUser = (passwordHash: string, overrides: Partial<UserWithAccess> = {}): UserWithAccess =>
     ({
@@ -53,6 +54,7 @@ describe('AuthService', () => {
         update: jest.fn().mockResolvedValue({}),
       },
     };
+    audit = { record: jest.fn().mockResolvedValue(undefined) };
     const config = {
       get: (k: string) =>
         ({
@@ -67,6 +69,7 @@ describe('AuthService', () => {
       users as unknown as UsersService,
       jwt as never,
       prisma as never,
+      audit as never,
       config as never,
     );
   });
@@ -86,6 +89,10 @@ describe('AuthService', () => {
       // توکن خام ذخیره نمی‌شود؛ فقط هش
       const stored = prisma.refreshToken.create.mock.calls[0][0].data.tokenHash;
       expect(stored).toMatch(/^[a-f0-9]{64}$/);
+      // رویداد ممیزی ورود موفق ثبت می‌شود
+      expect(audit.record).toHaveBeenCalledWith(
+        expect.objectContaining({ action: 'login_success', entityType: 'AUTH' }),
+      );
     });
 
     it('با رمز نادرست، خطای احراز هویت می‌دهد', async () => {
@@ -125,6 +132,10 @@ describe('AuthService', () => {
       expect(arg.data.failedLoginAttempts).toBe(0);
       expect(arg.data.lockedUntil).toBeInstanceOf(Date);
       expect(arg.data.lockedUntil.getTime()).toBeGreaterThan(Date.now());
+      // رویداد قفل حساب ممیزی می‌شود
+      expect(audit.record).toHaveBeenCalledWith(
+        expect.objectContaining({ action: 'account_locked', entityType: 'AUTH' }),
+      );
     });
 
     it('حساب قفل‌شده حتی با رمز درست رد می‌شود', async () => {
