@@ -9,6 +9,7 @@ import { HealthController } from './health/health.controller';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { CustomersModule } from './modules/customers/customers.module';
+import { ProductsModule } from './modules/products/products.module';
 import { UsersModule } from './modules/users/users.module';
 
 @Module({
@@ -18,6 +19,7 @@ import { UsersModule } from './modules/users/users.module';
     UsersModule,
     AuthModule,
     CustomersModule,
+    ProductsModule,
   ],
   controllers: [HealthController],
   providers: [
