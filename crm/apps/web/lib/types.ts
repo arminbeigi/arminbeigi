@@ -112,6 +112,13 @@ export interface AiStatus {
   stt: 'mock' | 'real';
 }
 
+export interface CrmPopup {
+  call: Call;
+  matched: boolean;
+  leadCreated: boolean;
+  agentExtension?: string;
+}
+
 export interface Deal {
   id: string;
   title: string;

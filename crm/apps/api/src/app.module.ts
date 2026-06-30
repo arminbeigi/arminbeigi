@@ -14,6 +14,7 @@ import { CustomersModule } from './modules/customers/customers.module';
 import { DealsModule } from './modules/deals/deals.module';
 import { ProductsModule } from './modules/products/products.module';
 import { ProjectsModule } from './modules/projects/projects.module';
+import { RealtimeModule } from './modules/realtime/realtime.module';
 import { TelephonyModule } from './modules/telephony/telephony.module';
 import { UsersModule } from './modules/users/users.module';
 
@@ -30,6 +31,7 @@ import { UsersModule } from './modules/users/users.module';
     CallsModule,
     TelephonyModule,
     AiModule,
+    RealtimeModule,
   ],
   controllers: [HealthController],
   providers: [

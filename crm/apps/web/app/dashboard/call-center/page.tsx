@@ -24,11 +24,11 @@ export default function CallCenterPage() {
     refetchInterval: 8000,
   });
 
-  // فید زنده — هر ۴ ثانیه به‌روزرسانی (در فاز ۷ با WebSocket جایگزین می‌شود)
+  // فید زنده — به‌روزرسانی اصلی از طریق WebSocket (RealtimeProvider)؛ polling فقط fallback است
   const feed = useQuery({
     queryKey: ['call-feed'],
     queryFn: async () => (await api.get<Paginated<Call>>('/calls?limit=12')).data,
-    refetchInterval: 4000,
+    refetchInterval: 20000,
   });
 
   const refreshFeed = () => void qc.invalidateQueries({ queryKey: ['call-feed'] });
