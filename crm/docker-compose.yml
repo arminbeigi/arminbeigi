@@ -97,6 +97,17 @@ services:
     # دسترسی به سرویس‌های میزبان (مثل Ollama روی مک): host.docker.internal
     extra_hosts:
       - 'host.docker.internal:host-gateway'
+    # liveness از طریق Node (تصویر slim بدون curl) — برای سالم‌اعلام‌شدن سرویس
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:4000/api/health/live').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
 
   web:
     build:

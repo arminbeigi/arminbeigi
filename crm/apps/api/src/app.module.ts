@@ -9,8 +9,9 @@ import { buildLoggerParams } from './config/logger.config';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 import { PermissionsGuard } from './common/guards/permissions.guard';
 import { validateEnv } from './config/env.validation';
-import { HealthController } from './health/health.controller';
+import { HealthModule } from './health/health.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { RedisModule } from './redis/redis.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { AuditModule } from './modules/audit/audit.module';
 import { AiModule } from './modules/ai/ai.module';
@@ -36,7 +37,9 @@ import { UsersModule } from './modules/users/users.module';
     // مسیرهای حساس (auth) سقف سخت‌گیرانه‌ترِ خود را با @Throttle تعریف می‌کنند.
     ThrottlerModule.forRoot([{ name: 'default', ttl: 60_000, limit: 100 }]),
     PrismaModule,
+    RedisModule,
     AuditModule,
+    HealthModule,
     UsersModule,
     AuthModule,
     CustomersModule,
@@ -48,7 +51,6 @@ import { UsersModule } from './modules/users/users.module';
     AiModule,
     RealtimeModule,
   ],
-  controllers: [HealthController],
   providers: [
     // ترتیب مهم است: ابتدا محدودیت نرخ، سپس احراز هویت، سپس بررسی مجوز
     { provide: APP_GUARD, useClass: ThrottlerGuard },

@@ -84,7 +84,8 @@
 - [x] C4 — CI pipeline — ✅ اجراشده (۴ job: api/migrations/web/docker؛ همه محلی سبز). سند: `hardening-c4-ci.md`
 - [x] H1 — Audit trail — ✅ اجراشده (مهاجرت 0004، ۶۵ تست سبز، e2e زنده). سند: `hardening-h1-audit-trail.md`
 - [x] H2 — Structured logging + correlation-id — ✅ اجراشده (pino، ۶۸ تست سبز، JSON/هدر زنده). سند: `hardening-h2-structured-logging.md`
-- [ ] H3..H6 (در دست اقدام)
+- [x] H3 — Health liveness/readiness + Redis — ✅ اجراشده (terminus، ۷۱ تست سبز، 503 زنده). سند: `hardening-h3-health.md`
+- [ ] H4..H6 (در دست اقدام)
 
 ### افزوده‌های Medium کشف‌شده حین اجرا
 - **راه‌اندازی ESLint** (flat config) برای api و web + افزودن گام lint به CI
