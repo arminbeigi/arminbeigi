@@ -81,5 +81,9 @@
 - [x] C1 — Throttler + lockout — ✅ اجراشده (مهاجرت 0003، ۵۹ تست سبز، e2e زنده). سند: `hardening-c1-auth-bruteforce.md`
 - [x] C2 — Helmet + CORS + Swagger gate + body limit — ✅ اجراشده (۶۲ تست سبز، هدر/۴۱۳ زنده). سند: `hardening-c2-http-security.md`
 - [x] C3 — Backup/DR — ✅ اجراشده (round-trip زنده ۱۸→۰→۱۸، سرویس backup در compose). سند: `disaster-recovery.md`
-- [ ] C4 — CI pipeline
-- [ ] H1..H6
+- [x] C4 — CI pipeline — ✅ اجراشده (۴ job: api/migrations/web/docker؛ همه محلی سبز). سند: `hardening-c4-ci.md`
+- [ ] H1..H6 (در دست اقدام پس از Critical)
+
+### افزوده‌های Medium کشف‌شده حین اجرا
+- **راه‌اندازی ESLint** (flat config) برای api و web + افزودن گام lint به CI
+  (اسکریپت lint موجود بود ولی ESLint نصب/پیکربندی نشده بود).

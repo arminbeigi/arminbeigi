@@ -1,0 +1,121 @@
+name: CRM CI
+
+# خط‌لوله‌ی یکپارچه‌سازی پیوسته‌ی شفازح CRM.
+# فقط هنگام تغییر فایل‌های زیر crm/ اجرا می‌شود تا با گردش‌کارهای SEO تداخل نکند.
+on:
+  push:
+    branches: ['**']
+    paths:
+      - 'crm/**'
+      - '.github/workflows/crm-ci.yml'
+  pull_request:
+    paths:
+      - 'crm/**'
+      - '.github/workflows/crm-ci.yml'
+
+# لغو اجراهای قدیمی همان شاخه هنگام push جدید
+concurrency:
+  group: crm-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CHECKPOINT_DISABLE: '1' # غیرفعال‌کردن تله‌متری Prisma در CI
+
+jobs:
+  # ── بک‌اند: build + تست واحد + اعتبارسنجی اسکیمای Prisma ──
+  api:
+    name: API (build · test · prisma)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: crm/apps/api
+    env:
+      # برای prisma validate لازم است؛ مقدار واقعی نیست (فقط برای resolve شدن env)
+      DATABASE_URL: postgresql://user:pass@localhost:5432/db?schema=public
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: crm/apps/api/package-lock.json
+      - name: نصب وابستگی‌ها
+        run: npm ci
+      - name: تولید Prisma Client
+        run: npx prisma generate
+      - name: اعتبارسنجی اسکیمای Prisma
+        run: npx prisma validate
+      - name: ساخت
+        run: npm run build
+      - name: تست واحد
+        run: npm test -- --ci
+
+  # ── اعتبارسنجی مهاجرت‌ها روی PostgreSQL واقعی ──
+  migrations:
+    name: Migrations (deploy · status)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: crm/apps/api
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: shofazh
+          POSTGRES_PASSWORD: shofazh
+          POSTGRES_DB: shofazh_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U shofazh -d shofazh_ci"
+          --health-interval 5s --health-timeout 5s --health-retries 20
+    env:
+      DATABASE_URL: postgresql://shofazh:shofazh@localhost:5432/shofazh_ci?schema=public
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: crm/apps/api/package-lock.json
+      - name: نصب وابستگی‌ها
+        run: npm ci
+      - name: اعمال مهاجرت‌ها
+        run: npx prisma migrate deploy
+      - name: بررسی وضعیت مهاجرت‌ها (بدون drift)
+        run: npx prisma migrate status
+
+  # ── فرانت: بررسی نوع‌ها + ساخت ──
+  web:
+    name: Web (typecheck · build)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: crm/apps/web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: crm/apps/web/package-lock.json
+      - name: نصب وابستگی‌ها
+        run: npm ci
+      - name: بررسی نوع‌ها
+        run: npm run typecheck
+      - name: ساخت
+        run: npm run build
+        env:
+          NEXT_PUBLIC_API_URL: /api
+          NEXT_TELEMETRY_DISABLED: '1'
+
+  # ── صحت Dockerfileها (build بدون push) ──
+  docker:
+    name: Docker build (api · web)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: build ایمیج API
+        run: docker build -t shofazh-api:ci crm/apps/api
+      - name: build ایمیج Web
+        run: docker build -t shofazh-web:ci --build-arg NEXT_PUBLIC_API_URL=/api crm/apps/web
