@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  direction: rtl;
+}
+
+body {
+  @apply bg-steel-50 text-steel-900 font-sans antialiased;
+}
+
+/* اعداد فارسی برای نمایش */
+.nums-fa {
+  font-feature-settings: 'ss01';
+}
+
+/* اسکرول‌بار ظریف */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-steel-300 rounded-full;
+}
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-primary {
+    @apply btn bg-steel-700 text-white hover:bg-steel-800;
+  }
+  .btn-accent {
+    @apply btn bg-flame-600 text-white hover:bg-flame-700;
+  }
+  .btn-ghost {
+    @apply btn text-steel-600 hover:bg-steel-100;
+  }
+  .card {
+    @apply rounded-xl bg-white shadow-card border border-steel-100;
+  }
+  .input {
+    @apply w-full rounded-lg border border-steel-200 bg-white px-3 py-2 text-sm outline-none focus:border-steel-500 focus:ring-2 focus:ring-steel-200;
+  }
+  .badge {
+    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
+  }
+}
