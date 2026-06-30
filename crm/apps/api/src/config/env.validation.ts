@@ -18,6 +18,19 @@ export const envSchema = z.object({
   // اختیاری‌ها (در فازهای بعد استفاده می‌شوند)
   REDIS_URL: z.string().optional(),
   CORS_ORIGINS: z.string().default('*'),
+
+  // ── Issabel / Asterisk AMI (فاز ۴) ─────────────────────────────────────────
+  AMI_MOCK: z
+    .enum(['true', 'false'])
+    .default('true')
+    .transform((v) => v === 'true'),
+  AMI_HOST: z.string().default('127.0.0.1'),
+  AMI_PORT: z.coerce.number().int().positive().default(5038),
+  AMI_USERNAME: z.string().default('crm'),
+  AMI_SECRET: z.string().default('change-me'),
+  // مسیر فایل‌های ضبط روی سرور Asterisk و مسیر عمومی همگام‌شده
+  AMI_RECORDING_DIR: z.string().default('/var/spool/asterisk/monitor'),
+  RECORDING_PUBLIC_BASE: z.string().default('/recordings'),
 });
 
 export type Env = z.infer<typeof envSchema>;

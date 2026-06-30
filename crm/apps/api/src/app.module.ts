@@ -13,6 +13,7 @@ import { CustomersModule } from './modules/customers/customers.module';
 import { DealsModule } from './modules/deals/deals.module';
 import { ProductsModule } from './modules/products/products.module';
 import { ProjectsModule } from './modules/projects/projects.module';
+import { TelephonyModule } from './modules/telephony/telephony.module';
 import { UsersModule } from './modules/users/users.module';
 
 @Module({
@@ -26,6 +27,7 @@ import { UsersModule } from './modules/users/users.module';
     ProjectsModule,
     DealsModule,
     CallsModule,
+    TelephonyModule,
   ],
   controllers: [HealthController],
   providers: [

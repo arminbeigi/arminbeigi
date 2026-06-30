@@ -110,6 +110,11 @@ export class CallsService {
     return CallResponseDto.from(call);
   }
 
+  async findByUniqueId(uniqueId: string): Promise<CallResponseDto | null> {
+    const call = await this.repo.findByUniqueId(uniqueId);
+    return call ? CallResponseDto.from(call) : null;
+  }
+
   async list(query: QueryCallsDto): Promise<PaginatedResult<CallResponseDto>> {
     const filters: CallFilters = {
       direction: query.direction,
