@@ -29,6 +29,7 @@ import { TelephonyModule } from './modules/telephony/telephony.module';
 import { TicketsModule } from './modules/tickets/tickets.module';
 import { TimelineModule } from './modules/timeline/timeline.module';
 import { UsersModule } from './modules/users/users.module';
+import { WorkflowModule } from './modules/workflow/workflow.module';
 
 @Module({
   imports: [
@@ -62,6 +63,7 @@ import { UsersModule } from './modules/users/users.module';
     NotificationsModule,
     AssetsModule,
     SearchModule,
+    WorkflowModule,
   ],
   providers: [
     // ترتیب مهم است: ابتدا محدودیت نرخ، سپس احراز هویت، سپس بررسی مجوز

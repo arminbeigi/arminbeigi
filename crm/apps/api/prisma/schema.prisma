@@ -747,6 +747,49 @@ enum NotificationPriority {
   URGENT
 }
 
+enum WorkflowRunStatus {
+  SUCCESS
+  FAILED
+  SKIPPED // شرط‌ها برقرار نبود
+}
+
+// تعریف گردش‌کار خودکار (H7.5-6) — trigger/conditions/actions به‌صورت JSON انعطاف‌پذیر
+model Workflow {
+  id           String   @id @default(cuid())
+  name         String
+  description  String?
+  triggerEvent String // نام رویداد دامنه (مثل ticket.created)
+  conditions   Json     @default("[]") // [{ field, op, value }]
+  actions      Json     @default("[]") // [{ type, params, delayMs?, retries? }]
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  runs WorkflowRun[]
+
+  @@index([triggerEvent, isActive])
+}
+
+// لاگ اجرای گردش‌کار
+model WorkflowRun {
+  id         String            @id @default(cuid())
+  workflowId String
+  eventName  String
+  entityType String?
+  entityId   String?
+  status     WorkflowRunStatus
+  log        Json? // مراحل و نتیجه‌ی هر اکشن
+  error      String?
+  startedAt  DateTime          @default(now())
+  finishedAt DateTime?
+
+  workflow Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+
+  @@index([workflowId])
+  @@index([status])
+  @@index([startedAt])
+}
+
 // نوع تجهیز HVAC (H7.5 — بنیان دارایی برای نگهداری/گارانتی/موجودی/قرارداد)
 enum AssetKind {
   WALL_BOILER // پکیج دیواری
