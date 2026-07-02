@@ -83,4 +83,19 @@ export class RealtimeGateway
   broadcast(event: string, data: unknown): void {
     this.server?.emit(event, data);
   }
+
+  /**
+   * انتشار رویداد تیکت به نقش‌های مرتبط با پشتیبانی + مسئول تیکت (در صورت وجود).
+   * با آداپتور Redis (H4)، این رویداد بین همه‌ی اینستنس‌ها هم پخش می‌شود.
+   */
+  emitTicketEvent(
+    event: 'ticket:created' | 'ticket:updated',
+    data: { ticketId: string; [key: string]: unknown },
+    assigneeId?: string | null,
+  ): void {
+    if (!this.server) return;
+    const rooms = ['role:admin', 'role:technician', 'role:call_center', 'role:sales_manager'];
+    if (assigneeId) rooms.push(`user:${assigneeId}`);
+    this.server.to(rooms).emit(event, data);
+  }
 }

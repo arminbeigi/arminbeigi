@@ -152,6 +152,7 @@ enum InsightType {
   LEAD_SCORE // امتیاز سرنخ
   PRODUCT_RECOMMENDATION // پیشنهاد محصول
   NEXT_ACTION // اقدام بعدی
+  TICKET_CLASSIFICATION // دسته‌بندی خودکار تیکت (دسته/اولویت/قطعه)
 }
 
 enum EntityType {

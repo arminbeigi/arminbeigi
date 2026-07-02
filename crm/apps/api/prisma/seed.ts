@@ -27,6 +27,7 @@ const PERMISSIONS: { key: string; group: string; name: string }[] = [
   { key: 'calls:manage', group: 'تماس‌ها', name: 'مدیریت تماس و کلیک‌تو‌کال' },
   { key: 'tickets:read', group: 'تیکت‌ها', name: 'مشاهده تیکت‌ها' },
   { key: 'tickets:write', group: 'تیکت‌ها', name: 'ایجاد/ویرایش تیکت' },
+  { key: 'tickets:delete', group: 'تیکت‌ها', name: 'حذف تیکت' },
   { key: 'reports:read', group: 'گزارش‌ها', name: 'مشاهده گزارش‌ها' },
   { key: 'ai:use', group: 'دستیار هوشمند', name: 'استفاده از دستیار هوشمند' },
   { key: 'users:manage', group: 'تنظیمات', name: 'مدیریت کاربران و نقش‌ها' },

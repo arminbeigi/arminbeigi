@@ -3,6 +3,7 @@ import { IntentType, Prisma, ProductCategory } from '@prisma/client';
 import { faNormalizeText } from '../../common/utils/persian';
 import { PrismaService } from '../../prisma/prisma.service';
 import { detectIntent } from './intent';
+import { classifyTicket, TicketClassification } from './ticket-classify';
 import {
   ILlmProvider,
   ISttProvider,
@@ -41,6 +42,38 @@ export class AiService {
 
   status(): { llm: 'mock' | 'real'; stt: 'mock' | 'real' } {
     return { llm: this.llm.mode(), stt: this.stt.mode() };
+  }
+
+  /**
+   * دسته‌بندی متن تیکت (موضوع + توضیحات) به دسته/اولویت/قطعه — موتور قاعده‌محورِ فارسی.
+   * بدون اثر جانبی؛ ماژول تیکت برای پیشنهاد مقادیر اولیه از این استفاده می‌کند.
+   */
+  classifyTicketText(text: string | null | undefined): TicketClassification {
+    return classifyTicket(text);
+  }
+
+  /** ثبت بینش دسته‌بندی تیکت در AIInsight (پس از ساخت/به‌روزرسانی تیکت). */
+  async recordTicketInsight(
+    ticketId: string,
+    customerId: string | null,
+    result: TicketClassification,
+  ): Promise<void> {
+    await this.prisma.aIInsight.create({
+      data: {
+        type: 'TICKET_CLASSIFICATION',
+        entityType: 'TICKET',
+        ticketId,
+        customerId,
+        confidence: result.confidence,
+        model: this.llm.mode() === 'mock' ? 'rules-fa' : 'self-hosted',
+        payload: {
+          category: result.category,
+          priority: result.priority,
+          component: result.component,
+          scores: result.scores,
+        },
+      },
+    });
   }
 
   /**
