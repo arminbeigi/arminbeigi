@@ -24,6 +24,7 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
 import { ProductsModule } from './modules/products/products.module';
 import { ProjectsModule } from './modules/projects/projects.module';
 import { RealtimeModule } from './modules/realtime/realtime.module';
+import { SearchModule } from './modules/search/search.module';
 import { TelephonyModule } from './modules/telephony/telephony.module';
 import { TicketsModule } from './modules/tickets/tickets.module';
 import { TimelineModule } from './modules/timeline/timeline.module';
@@ -60,6 +61,7 @@ import { UsersModule } from './modules/users/users.module';
     TimelineModule,
     NotificationsModule,
     AssetsModule,
+    SearchModule,
   ],
   providers: [
     // ترتیب مهم است: ابتدا محدودیت نرخ، سپس احراز هویت، سپس بررسی مجوز

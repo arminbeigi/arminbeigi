@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation';
 import { LoaderCircle } from 'lucide-react';
 import { Sidebar } from '@/components/sidebar';
 import { Topbar } from '@/components/topbar';
+import { CommandPalette } from '@/components/search/command-palette';
 import { useRequireAuth } from '@/lib/auth';
 import { MENU } from '@/lib/menu';
 
@@ -33,6 +34,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <Topbar title={titleFor(pathname)} />
         <main className="flex-1 overflow-y-auto p-6">{children}</main>
       </div>
+      <CommandPalette />
     </div>
   );
 }

@@ -12,10 +12,16 @@ export function Topbar({ title }: { title: string }) {
       <h1 className="text-lg font-bold text-steel-900">{title}</h1>
 
       <div className="flex items-center gap-3">
-        <div className="hidden md:flex items-center gap-2 rounded-lg bg-steel-50 px-3 py-1.5 text-sm text-steel-400">
+        <button
+          type="button"
+          onClick={() => window.dispatchEvent(new CustomEvent('shofazh:open-search'))}
+          className="hidden md:flex items-center gap-2 rounded-lg bg-steel-50 px-3 py-1.5 text-sm text-steel-400 hover:bg-steel-100"
+          title="جست‌وجوی سراسری (Ctrl+K)"
+        >
           <Search size={16} />
           <span>جست‌وجو…</span>
-        </div>
+          <kbd className="rounded bg-white px-1.5 py-0.5 text-[10px] text-steel-400">Ctrl K</kbd>
+        </button>
 
         <NotificationBell />
 
