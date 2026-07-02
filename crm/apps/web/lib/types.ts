@@ -104,6 +104,7 @@ export interface AiInsight {
   confidence: number | null;
   payload: unknown;
   model: string | null;
+  ticketId?: string | null;
   createdAt: string;
 }
 
@@ -224,4 +225,42 @@ export interface TelephonyStatus {
 export interface OriginateResult {
   uniqueId: string;
   actionId: string;
+}
+
+// ── تیکت‌ها / پشتیبانی ────────────────────────────────────────────────────────
+export interface TicketComment {
+  id: string;
+  body: string;
+  isInternal: boolean;
+  authorId: string | null;
+  authorName: string | null;
+  createdAt: string;
+}
+
+export interface Ticket {
+  id: string;
+  code: string;
+  subject: string;
+  description: string | null;
+  category: string;
+  priority: string;
+  status: string;
+  customerId: string;
+  customerName: string | null;
+  projectId: string | null;
+  projectTitle: string | null;
+  assigneeId: string | null;
+  assigneeName: string | null;
+  slaDueAt: string | null;
+  resolvedAt: string | null;
+  closedAt: string | null;
+  commentsCount: number;
+  comments?: TicketComment[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface TicketStats {
+  byStatus: Record<string, number>;
+  overdue: number;
 }

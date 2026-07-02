@@ -127,5 +127,54 @@ export const BOILER_KIND: Record<string, string> = {
   NONE: 'نامشخص',
 };
 
+// ── تیکت‌ها / پشتیبانی ────────────────────────────────────────────────────────
+export const TICKET_STATUS: Record<string, string> = {
+  OPEN: 'باز',
+  IN_PROGRESS: 'در حال بررسی',
+  WAITING: 'در انتظار مشتری',
+  RESOLVED: 'حل‌شده',
+  CLOSED: 'بسته‌شده',
+};
+
+export const TICKET_STATUS_TONE: Record<string, string> = {
+  OPEN: 'bg-sky-100 text-sky-700',
+  IN_PROGRESS: 'bg-amber-100 text-amber-700',
+  WAITING: 'bg-violet-100 text-violet-700',
+  RESOLVED: 'bg-emerald-100 text-emerald-700',
+  CLOSED: 'bg-steel-100 text-steel-600',
+};
+
+export const TICKET_PRIORITY: Record<string, string> = {
+  LOW: 'کم',
+  MEDIUM: 'متوسط',
+  HIGH: 'زیاد',
+  URGENT: 'فوری',
+};
+
+export const TICKET_PRIORITY_TONE: Record<string, string> = {
+  LOW: 'bg-steel-100 text-steel-600',
+  MEDIUM: 'bg-sky-100 text-sky-700',
+  HIGH: 'bg-amber-100 text-amber-700',
+  URGENT: 'bg-red-100 text-red-700',
+};
+
+export const TICKET_CATEGORY: Record<string, string> = {
+  BREAKDOWN: 'خرابی',
+  INSTALLATION: 'نصب',
+  MAINTENANCE: 'سرویس دوره‌ای',
+  WARRANTY: 'گارانتی',
+  COMPLAINT: 'شکایت',
+  INQUIRY: 'استعلام',
+};
+
+/** انتقال‌های مجاز وضعیت تیکت — هم‌راستا با state machine بک‌اند */
+export const TICKET_TRANSITIONS: Record<string, string[]> = {
+  OPEN: ['IN_PROGRESS', 'WAITING', 'RESOLVED', 'CLOSED'],
+  IN_PROGRESS: ['WAITING', 'RESOLVED', 'CLOSED'],
+  WAITING: ['IN_PROGRESS', 'RESOLVED', 'CLOSED'],
+  RESOLVED: ['CLOSED', 'IN_PROGRESS'],
+  CLOSED: ['IN_PROGRESS'],
+};
+
 export const label = (map: Record<string, string>, key: string | null | undefined): string =>
   (key && map[key]) || key || '—';

@@ -35,12 +35,23 @@ export function RealtimeProvider({ children }: { children: ReactNode }) {
       dismissTimer.current = setTimeout(() => setPopup(null), 15000);
     };
 
+    // رویدادهای تیکت پشتیبانی — به‌روزرسانی زنده‌ی فهرست/جزئیات/آمار بدون polling
+    const refreshTickets = (data?: { ticketId?: string }) => {
+      void qc.invalidateQueries({ queryKey: ['tickets'] });
+      void qc.invalidateQueries({ queryKey: ['ticket-stats'] });
+      if (data?.ticketId) void qc.invalidateQueries({ queryKey: ['ticket', data.ticketId] });
+    };
+
     socket.on('call:incoming', onIncoming);
     socket.on('call:updated', refreshFeeds);
+    socket.on('ticket:created', refreshTickets);
+    socket.on('ticket:updated', refreshTickets);
 
     return () => {
       socket.off('call:incoming', onIncoming);
       socket.off('call:updated', refreshFeeds);
+      socket.off('ticket:created', refreshTickets);
+      socket.off('ticket:updated', refreshTickets);
     };
   }, [user, qc]);
 
