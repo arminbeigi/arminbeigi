@@ -48,7 +48,13 @@ function compare(op: ConditionOp, actual: unknown, expected: unknown): boolean {
   }
 }
 
-/** همه‌ی شرط‌ها باید برقرار باشند (AND). آرایه‌ی خالی ⇒ همیشه برقرار. */
+/**
+ * همه‌ی شرط‌ها باید برقرار باشند (AND). آرایه‌ی خالی ⇒ همیشه برقرار.
+ * شرط بدساخت (بدون field معتبر) ⇒ برقرار نیست (fail-safe، بدون خطا).
+ */
 export function evaluateConditions(conditions: WorkflowCondition[], event: DomainEvent): boolean {
-  return conditions.every((c) => compare(c.op, readField(event, c.field), c.value));
+  if (!Array.isArray(conditions)) return true;
+  return conditions.every(
+    (c) => c && typeof c.field === 'string' && compare(c.op, readField(event, c.field), c.value),
+  );
 }

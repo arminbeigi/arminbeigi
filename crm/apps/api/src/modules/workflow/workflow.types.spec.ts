@@ -57,4 +57,10 @@ describe('evaluateConditions', () => {
   it('فیلد ناموجود ⇒ برقرار نیست', () => {
     expect(evaluateConditions([{ field: 'missing', op: 'eq', value: 'x' }], event)).toBe(false);
   });
+
+  it('شرط بدساخت (field تعریف‌نشده) ⇒ برقرار نیست، بدون خطا', () => {
+    expect(evaluateConditions([{} as never], event)).toBe(false);
+    expect(evaluateConditions([null as never], event)).toBe(false);
+    expect(evaluateConditions(undefined as never, event)).toBe(true); // نبود شرط ⇒ برقرار
+  });
 });
