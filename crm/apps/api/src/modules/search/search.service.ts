@@ -1,4 +1,5 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
+import { PluginRegistry } from '../../plugins/plugin-registry.service';
 import { ISearchProvider, SEARCH_PROVIDERS, SearchHit } from './search-provider.interface';
 
 export interface SearchResult {
@@ -14,14 +15,22 @@ export interface SearchResult {
 export class SearchService {
   private readonly logger = new Logger('Search');
 
-  constructor(@Inject(SEARCH_PROVIDERS) private readonly providers: ISearchProvider[]) {}
+  constructor(
+    @Inject(SEARCH_PROVIDERS) private readonly providers: ISearchProvider[],
+    @Optional() private readonly pluginRegistry?: PluginRegistry,
+  ) {}
+
+  /** provider‌های builtin + provider‌های ثبت‌شده توسط افزونه‌ها. */
+  private allProviders(): ISearchProvider[] {
+    return [...this.providers, ...(this.pluginRegistry?.searchProviders ?? [])];
+  }
 
   async search(query: string, opts: { limit?: number; types?: string[] } = {}): Promise<SearchResult> {
     const q = (query ?? '').trim();
     if (q.length < 2) return { hits: [], groups: [] };
     const perProvider = opts.limit ?? 5;
 
-    const active = this.providers.filter((p) => !opts.types || opts.types.includes(p.entityType));
+    const active = this.allProviders().filter((p) => !opts.types || opts.types.includes(p.entityType));
     const results = await Promise.all(
       active.map((p) =>
         p.search(q, perProvider).catch((err) => {
@@ -32,7 +41,7 @@ export class SearchService {
     );
 
     const hits = results.flat().sort((a, b) => b.score - a.score);
-    const labelByType = new Map(this.providers.map((p) => [p.entityType, p.label]));
+    const labelByType = new Map(this.allProviders().map((p) => [p.entityType, p.label]));
     const counts = new Map<string, number>();
     for (const h of hits) counts.set(h.entityType, (counts.get(h.entityType) ?? 0) + 1);
     const groups = [...counts.entries()].map(([entityType, count]) => ({
@@ -43,8 +52,8 @@ export class SearchService {
     return { hits, groups };
   }
 
-  /** انواع موجودیت‌های قابل‌جست‌وجو (برای UI/عیب‌یابی). */
+  /** انواع موجودیت‌های قابل‌جست‌وجو (builtin + افزونه‌ها). */
   searchableTypes(): { entityType: string; label: string }[] {
-    return this.providers.map((p) => ({ entityType: p.entityType, label: p.label }));
+    return this.allProviders().map((p) => ({ entityType: p.entityType, label: p.label }));
   }
 }

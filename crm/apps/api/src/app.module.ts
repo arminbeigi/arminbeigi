@@ -11,6 +11,8 @@ import { PermissionsGuard } from './common/guards/permissions.guard';
 import { validateEnv } from './config/env.validation';
 import { EventsModule } from './events/events.module';
 import { HealthModule } from './health/health.module';
+import { ENABLED_PLUGINS } from './plugins/enabled';
+import { PluginsModule } from './plugins/plugins.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { RedisModule } from './redis/redis.module';
 import { AuthModule } from './modules/auth/auth.module';
@@ -64,6 +66,8 @@ import { WorkflowModule } from './modules/workflow/workflow.module';
     AssetsModule,
     SearchModule,
     WorkflowModule,
+    // افزونه‌ها — آخر بارگذاری می‌شوند تا نقاط توسعه‌ی هسته آماده باشند
+    PluginsModule.forRoot(ENABLED_PLUGINS),
   ],
   providers: [
     // ترتیب مهم است: ابتدا محدودیت نرخ، سپس احراز هویت، سپس بررسی مجوز

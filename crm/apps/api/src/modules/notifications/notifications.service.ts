@@ -1,5 +1,6 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import { NotificationPriority, Prisma } from '@prisma/client';
+import { PluginRegistry } from '../../plugins/plugin-registry.service';
 import { PrismaService } from '../../prisma/prisma.service';
 import {
   INotificationChannel,
@@ -30,11 +31,19 @@ export class NotificationsService {
   constructor(
     private readonly prisma: PrismaService,
     @Inject(NOTIFICATION_CHANNELS) private readonly channels: INotificationChannel[],
+    @Optional() private readonly pluginRegistry?: PluginRegistry,
   ) {}
+
+  /** کانال‌های builtin + کانال‌های ثبت‌شده توسط افزونه‌ها (PluginRegistry). */
+  private allChannels(): INotificationChannel[] {
+    return [...this.channels, ...(this.pluginRegistry?.notificationChannels ?? [])];
+  }
 
   /** فهرست کانال‌های فعال (برای نمایش/عیب‌یابی). */
   enabledChannels(): string[] {
-    return this.channels.filter((c) => c.isEnabled()).map((c) => c.key);
+    return this.allChannels()
+      .filter((c) => c.isEnabled())
+      .map((c) => c.key);
   }
 
   /** ارسال اعلان از طریق همه‌ی کانال‌های فعال (best-effort per channel). */
@@ -51,7 +60,7 @@ export class NotificationsService {
       expiresAt: input.expiresAt ?? null,
     };
     await Promise.all(
-      this.channels
+      this.allChannels()
         .filter((c) => c.isEnabled())
         .map((c) =>
           c.send(payload).catch((err) =>

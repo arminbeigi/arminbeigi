@@ -1,5 +1,6 @@
-import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, Logger, NotFoundException, Optional } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
+import { PluginRegistry } from '../../plugins/plugin-registry.service';
 import { PrismaService } from '../../prisma/prisma.service';
 import { DomainEvent } from '../../events/domain-event';
 import { DomainEventBus } from '../../events/domain-event-bus';
@@ -22,13 +23,22 @@ export class WorkflowService {
     private readonly prisma: PrismaService,
     private readonly events: DomainEventBus,
     @Inject(WORKFLOW_ACTIONS) actions: IWorkflowAction[],
+    @Optional() private readonly pluginRegistry?: PluginRegistry,
   ) {
     this.actionMap = new Map(actions.map((a) => [a.type, a]));
   }
 
-  /** انواع اکشن‌های در دسترس (برای UI/عیب‌یابی). */
+  /** یافتن اکشن: ابتدا builtin ها، سپس اکشن‌های ثبت‌شده‌ی افزونه‌ها. */
+  private resolveAction(type: string): IWorkflowAction | undefined {
+    return this.actionMap.get(type) ?? this.pluginRegistry?.workflowActions.find((a) => a.type === type);
+  }
+
+  /** انواع اکشن‌های در دسترس (builtin + افزونه‌ها). */
   availableActions(): string[] {
-    return [...this.actionMap.keys()];
+    return [
+      ...this.actionMap.keys(),
+      ...(this.pluginRegistry?.workflowActions.map((a) => a.type) ?? []),
+    ];
   }
 
   /** فراخوانی‌شده از شنونده برای هر رویداد دامنه. */
@@ -75,7 +85,7 @@ export class WorkflowService {
     let failed = false;
 
     for (const action of actions) {
-      const handler = this.actionMap.get(action.type);
+      const handler = this.resolveAction(action.type);
       if (!handler) {
         log.push({ type: action.type, ok: false, detail: 'اکشن ناشناخته', attempts: 0 });
         failed = true;
