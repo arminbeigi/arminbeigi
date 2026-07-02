@@ -30,6 +30,12 @@ export const envSchema = z.object({
   AMI_PORT: z.coerce.number().int().positive().default(5038),
   AMI_USERNAME: z.string().default('crm'),
   AMI_SECRET: z.string().default('change-me'),
+  // Context‌های تماس ورودی (جداشده با کاما). خالی ⇒ تشخیص هوشمند پیش‌فرض
+  // (هر Context شامل trunk/external و پیشوندهای رایج FreePBX/Issabel).
+  // مثال برای شفازح: AMI_INBOUND_CONTEXTS=from-trunk-sip-sip
+  AMI_INBOUND_CONTEXTS: z.string().default(''),
+  // Context تماس خروجی (originate) — پیش‌فرض FreePBX
+  AMI_OUTBOUND_CONTEXT: z.string().default('from-internal'),
   // مسیر فایل‌های ضبط روی سرور Asterisk و مسیر عمومی همگام‌شده
   AMI_RECORDING_DIR: z.string().default('/var/spool/asterisk/monitor'),
   RECORDING_PUBLIC_BASE: z.string().default('/recordings'),

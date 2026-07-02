@@ -48,14 +48,31 @@ export class RealAmiClient implements IAmiClient {
   private loggedIn = false;
   private handler?: (signal: CallSignal) => void | Promise<void>;
   private readonly channels = new Map<string, ChannelState>();
-  private readonly inboundContexts: Set<string>;
+  private readonly inboundContexts: string[];
+  private readonly inboundExplicit: boolean;
   private readonly outboundContext: string;
 
   constructor(private readonly opts: RealAmiOptions) {
-    this.inboundContexts = new Set(
-      opts.inboundContexts ?? ['from-pstn', 'from-trunk', 'from-did-direct', 'from-external'],
-    );
+    const explicit = (opts.inboundContexts ?? []).filter((c) => c.trim().length > 0);
+    this.inboundExplicit = explicit.length > 0;
+    this.inboundContexts = this.inboundExplicit
+      ? explicit
+      : ['from-pstn', 'from-trunk', 'from-did-direct', 'from-external', 'from-sip-external', 'from-zaptel', 'from-analog'];
     this.outboundContext = opts.outboundContext ?? 'from-internal';
+  }
+
+  /**
+   * تشخیص ورودی‌بودن یک تماس از روی Context.
+   * - اگر AMI_INBOUND_CONTEXTS صریح داده شده باشد: تطبیق دقیق یا پیشوندی (مثلاً
+   *   «from-trunk» هم «from-trunk-sip-sip» را می‌گیرد).
+   * - در غیر این صورت: تشخیص سخاوتمندانه‌ی پیش‌فرض (پیشوندهای رایج + شامل trunk/external)
+   *   تا نصب‌های متداول Issabel/FreePBX بدون تنظیم اضافه کار کنند.
+   */
+  private isInboundContext(context: string): boolean {
+    if (!context) return false;
+    const byList = this.inboundContexts.some((c) => context === c || context.startsWith(c));
+    if (this.inboundExplicit) return byList;
+    return byList || context.includes('trunk') || context.includes('external');
   }
 
   mode(): 'mock' | 'real' {
@@ -167,7 +184,7 @@ export class RealAmiClient implements IAmiClient {
     switch (p.Event) {
       case 'Newchannel': {
         const context = p.Context ?? '';
-        const isInbound = this.inboundContexts.has(context);
+        const isInbound = this.isInboundContext(context);
         const direction = isInbound ? CallDirection.INBOUND : CallDirection.OUTBOUND;
         const state: ChannelState = {
           direction,

@@ -18,11 +18,17 @@ const amiClientProvider = {
     if (config.get('AMI_MOCK', { infer: true })) {
       return new MockAmiClient();
     }
+    const inbound = config.get('AMI_INBOUND_CONTEXTS', { infer: true }) ?? '';
     return new RealAmiClient({
       host: config.get('AMI_HOST', { infer: true }),
       port: config.get('AMI_PORT', { infer: true }),
       username: config.get('AMI_USERNAME', { infer: true }),
       secret: config.get('AMI_SECRET', { infer: true }),
+      inboundContexts: inbound
+        .split(',')
+        .map((c) => c.trim())
+        .filter((c) => c.length > 0),
+      outboundContext: config.get('AMI_OUTBOUND_CONTEXT', { infer: true }),
     });
   },
 };

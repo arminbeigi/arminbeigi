@@ -89,6 +89,9 @@ services:
       AMI_PORT: ${AMI_PORT:-5038}
       AMI_USERNAME: ${AMI_USERNAME:-crm}
       AMI_SECRET: ${AMI_SECRET:-change-me}
+      # Context تماس ورودی (خالی ⇒ تشخیص هوشمند). برای شفازح: from-trunk-sip-sip
+      AMI_INBOUND_CONTEXTS: ${AMI_INBOUND_CONTEXTS:-}
+      AMI_OUTBOUND_CONTEXT: ${AMI_OUTBOUND_CONTEXT:-from-internal}
       RECORDING_PUBLIC_BASE: ${RECORDING_PUBLIC_BASE:-/recordings}
       # ── هوش مصنوعی — پیش‌فرض Mock (بدون نیاز به مدل) ──
       AI_MOCK: ${AI_MOCK:-true}
