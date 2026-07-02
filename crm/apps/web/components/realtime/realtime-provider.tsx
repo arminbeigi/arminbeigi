@@ -39,6 +39,7 @@ export function RealtimeProvider({ children }: { children: ReactNode }) {
     const refreshTickets = (data?: { ticketId?: string }) => {
       void qc.invalidateQueries({ queryKey: ['tickets'] });
       void qc.invalidateQueries({ queryKey: ['ticket-stats'] });
+      void qc.invalidateQueries({ queryKey: ['timeline'] });
       if (data?.ticketId) void qc.invalidateQueries({ queryKey: ['ticket', data.ticketId] });
     };
 

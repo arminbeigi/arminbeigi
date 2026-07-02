@@ -264,3 +264,18 @@ export interface TicketStats {
   byStatus: Record<string, number>;
   overdue: number;
 }
+
+// ── تایم‌لاین ─────────────────────────────────────────────────────────────────
+export interface TimelineEntry {
+  id: string;
+  occurredAt: string;
+  eventName: string;
+  entityType: string;
+  entityId: string;
+  actorId: string | null;
+  actorName: string | null;
+  title: string;
+  summary: string | null;
+  meta: unknown;
+  createdAt: string;
+}

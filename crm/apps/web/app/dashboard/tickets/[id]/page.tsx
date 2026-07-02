@@ -29,6 +29,7 @@ import {
 import { faDateTime } from '@/lib/format';
 import { Badge } from '@/components/ui/badge';
 import { Loading, ErrorState } from '@/components/ui/feedback';
+import { TimelineFeed } from '@/components/timeline/timeline-feed';
 import type { AiInsight, Ticket } from '@/lib/types';
 
 export default function TicketDetailPage() {
@@ -263,6 +264,12 @@ export default function TicketDetailPage() {
               </div>
             </div>
           )}
+
+          {/* تایم‌لاین رویدادها */}
+          <div className="card p-5">
+            <div className="mb-3 text-sm font-bold text-steel-900">تایم‌لاین</div>
+            <TimelineFeed entityType="TICKET" entityId={id} limit={15} />
+          </div>
 
           {msg && (
             <div className={clsx('rounded-lg bg-steel-100 px-3 py-2 text-center text-sm text-steel-700')}>

@@ -736,12 +736,24 @@ model CustomerTag {
   @@index([tagId])
 }
 
+enum NotificationPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+// دنباله‌ی ممیزی سازمانی (H7.5) — با oldValue/newValue/ip/reason
 model ActivityLog {
   id         String     @id @default(cuid())
   actorId    String?
   action     String // created, updated, status_changed, ...
   entityType EntityType
   entityId   String
+  oldValue   Json? // مقدار پیشین (برای تغییرات)
+  newValue   Json? // مقدار جدید
+  ip         String? // IP عاملِ رخداد
+  reason     String? // دلیل (اختیاری)
   metadata   Json?
   createdAt  DateTime   @default(now())
 
@@ -749,21 +761,49 @@ model ActivityLog {
 
   @@index([entityType, entityId])
   @@index([actorId])
+  @@index([action])
   @@index([createdAt])
 }
 
+// مرکز اعلان (H7.5) — با اولویت/انقضا/گروه‌بندی
 model Notification {
-  id        String    @id @default(cuid())
+  id        String               @id @default(cuid())
   userId    String
   type      String // call:incoming, ticket:assigned, ai:insight ...
+  priority  NotificationPriority @default(NORMAL)
   title     String
   body      String?
   data      Json?
+  groupKey  String? // برای گروه‌بندی اعلان‌های مشابه
+  link      String? // مسیر مقصد در UI
   readAt    DateTime?
-  createdAt DateTime  @default(now())
+  expiresAt DateTime?
+  createdAt DateTime             @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, readAt])
+  @@index([groupKey])
   @@index([createdAt])
+}
+
+// تایم‌لاین یکپارچه‌ی CRM (H7.5) — append-only، denormalized برای خواندن سریع.
+// از طریق شنونده‌ی رویدادهای دامنه پر می‌شود؛ هیچ FK ندارد تا مستقل و سریع بماند.
+model TimelineEntry {
+  id         String   @id @default(cuid())
+  occurredAt DateTime @default(now())
+  eventName  String // نام رویداد دامنه (مثل ticket.created)
+  entityType String // نوع موجودیت مرجع (رشته، نه enum، برای انعطاف آینده)
+  entityId   String
+  actorId    String? // شناسه‌ی عامل (denormalized)
+  actorName  String? // نام عامل (denormalized برای نمایش بدون join)
+  title      String // عنوان انسان‌خوان فارسی
+  summary    String? // شرح کوتاه
+  meta       Json? // داده‌ی افزوده (لینک‌های مرتبط، پیوست‌ها، …)
+  createdAt  DateTime @default(now())
+
+  @@index([entityType, entityId, occurredAt])
+  @@index([occurredAt])
+  @@index([eventName])
+  @@index([actorId])
 }
