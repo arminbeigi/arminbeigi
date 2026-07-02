@@ -102,7 +102,11 @@ describe('TicketsService', () => {
       repo.update.mockResolvedValue(fullTicket({ status: 'IN_PROGRESS' }));
       await service.changeStatus('t1', 'IN_PROGRESS', 'admin');
       expect(audit.record).toHaveBeenCalledWith(
-        expect.objectContaining({ action: 'status_changed', metadata: { from: 'OPEN', to: 'IN_PROGRESS' } }),
+        expect.objectContaining({
+          action: 'status_changed',
+          oldValue: { status: 'OPEN' },
+          newValue: { status: 'IN_PROGRESS' },
+        }),
       );
     });
 

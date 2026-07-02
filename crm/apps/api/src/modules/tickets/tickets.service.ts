@@ -179,7 +179,8 @@ export class TicketsService {
       action: 'status_changed',
       entityType: 'TICKET',
       entityId: id,
-      metadata: { from: core.status, to: status },
+      oldValue: { status: core.status },
+      newValue: { status },
     });
     this.events.publish({
       name: status === 'CLOSED' ? DomainEvents.TicketClosed : DomainEvents.TicketUpdated,
@@ -209,7 +210,8 @@ export class TicketsService {
       action: 'assigned',
       entityType: 'TICKET',
       entityId: id,
-      metadata: { from: core.assigneeId, to: dto.assigneeId },
+      oldValue: { assigneeId: core.assigneeId },
+      newValue: { assigneeId: dto.assigneeId },
     });
     this.events.publish({
       name: DomainEvents.TicketAssigned,

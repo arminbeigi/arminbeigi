@@ -2,12 +2,20 @@ import { Injectable, Logger } from '@nestjs/common';
 import { EntityType, Prisma } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 
-/** ورودی ثبت یک رویداد ممیزی */
+/** ورودی ثبت یک رویداد ممیزی سازمانی */
 export interface AuditEvent {
   actorId?: string | null;
-  action: string; // login_success، login_failed، account_locked، deleted، …
+  action: string; // login_success، login_failed، account_locked، deleted، updated …
   entityType: EntityType;
   entityId: string;
+  /** مقدار پیشین (برای تغییرات) */
+  oldValue?: Prisma.InputJsonValue;
+  /** مقدار جدید */
+  newValue?: Prisma.InputJsonValue;
+  /** IP عاملِ رخداد */
+  ip?: string | null;
+  /** دلیل تغییر (اختیاری) */
+  reason?: string | null;
   metadata?: Prisma.InputJsonValue;
 }
 
@@ -30,6 +38,10 @@ export class AuditService {
           action: event.action,
           entityType: event.entityType,
           entityId: event.entityId,
+          oldValue: event.oldValue,
+          newValue: event.newValue,
+          ip: event.ip ?? null,
+          reason: event.reason ?? null,
           metadata: event.metadata,
         },
       });

@@ -19,17 +19,35 @@ describe('AuditService', () => {
       action: 'deleted',
       entityType: 'CUSTOMER',
       entityId: 'c1',
-      metadata: { reason: 'test' },
+      metadata: { note: 'test' },
     });
     expect(prisma.activityLog.create).toHaveBeenCalledWith({
-      data: {
+      data: expect.objectContaining({
         actorId: 'u1',
         action: 'deleted',
         entityType: 'CUSTOMER',
         entityId: 'c1',
-        metadata: { reason: 'test' },
-      },
+        metadata: { note: 'test' },
+      }),
     });
+  });
+
+  it('فیلدهای سازمانی (oldValue/newValue/ip/reason) را ثبت می‌کند', async () => {
+    await service.record({
+      actorId: 'u1',
+      action: 'status_changed',
+      entityType: 'TICKET',
+      entityId: 't1',
+      oldValue: { status: 'OPEN' },
+      newValue: { status: 'IN_PROGRESS' },
+      ip: '1.2.3.4',
+      reason: 'پیگیری مشتری',
+    });
+    const data = prisma.activityLog.create.mock.calls[0][0].data;
+    expect(data.oldValue).toEqual({ status: 'OPEN' });
+    expect(data.newValue).toEqual({ status: 'IN_PROGRESS' });
+    expect(data.ip).toBe('1.2.3.4');
+    expect(data.reason).toBe('پیگیری مشتری');
   });
 
   it('actorId نداشته ⇒ null ذخیره می‌شود', async () => {

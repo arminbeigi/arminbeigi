@@ -1,5 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEnum, IsOptional, IsString } from 'class-validator';
+import { IsDateString, IsEnum, IsOptional, IsString } from 'class-validator';
 import { EntityType } from '@prisma/client';
 import { PaginationDto } from '../../../common/dto/pagination.dto';
 
@@ -10,6 +10,11 @@ export class QueryAuditDto extends PaginationDto {
   @IsEnum(EntityType)
   entityType?: EntityType;
 
+  @ApiPropertyOptional({ description: 'فیلتر بر اساس شناسه‌ی موجودیت' })
+  @IsOptional()
+  @IsString()
+  entityId?: string;
+
   @ApiPropertyOptional({ description: 'فیلتر بر اساس شناسه‌ی کاربرِ عامل' })
   @IsOptional()
   @IsString()
@@ -19,4 +24,14 @@ export class QueryAuditDto extends PaginationDto {
   @IsOptional()
   @IsString()
   action?: string;
+
+  @ApiPropertyOptional({ description: 'از تاریخ (ISO)' })
+  @IsOptional()
+  @IsDateString()
+  from?: string;
+
+  @ApiPropertyOptional({ description: 'تا تاریخ (ISO)' })
+  @IsOptional()
+  @IsDateString()
+  to?: string;
 }
