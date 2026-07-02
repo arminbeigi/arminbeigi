@@ -94,3 +94,16 @@
 ### افزوده‌های Medium کشف‌شده حین اجرا
 - **راه‌اندازی ESLint** (flat config) برای api و web + افزودن گام lint به CI
   (اسکریپت lint موجود بود ولی ESLint نصب/پیکربندی نشده بود).
+
+## ۷) فاز H7.5 — قابلیت‌های پلتفرمی (پس از ماژول پشتیبانی)
+- [x] H7.5-1 Domain Event Bus — ✅ (کاتالوگ ۱۹ رویداد، refactor تیکت به event-driven). سند: `architecture-domain-events.md`
+- [x] H7.5-2 Activity Timeline — ✅ (append-only، مهاجرت 0006، فرانت TimelineFeed)
+- [x] H7.5-3 Notification Center — ✅ (چندکاناله + اولویت/انقضا/گروه‌بندی + زنگ فرانت)
+- [x] H7.5-4 Global Search — ✅ (registry هفت provider + Ctrl+K)
+- [x] H7.5-5 Enterprise Audit — ✅ (oldValue/newValue/ip/reason + CSV export)
+- [x] H7.5-6 Workflow Engine — ✅ (trigger/شرط/اکشن/delay/retry، مهاجرت 0009)
+- [x] H7.5-7 Plugin Architecture — ✅ (قرارداد کامل + افزونه‌ی نمونه sms-mock)
+- [x] H7.5-8 HVAC Asset Foundation — ✅ (مهاجرت 0007/0008 + UI تجهیزات)
+- [x] H7.5-9 مستندات معماری — ✅ سند: `architecture-platform-h75.md`
+
+**فاز H7.5 کامل.** ماژول بعدی: نگهداری پیشگیرانه (روی بنیان Asset + رویدادها).
