@@ -2,6 +2,7 @@
 
 import { LogOut, Search } from 'lucide-react';
 import { useAuth } from '@/lib/auth';
+import { NotificationBell } from '@/components/notifications/notification-bell';
 
 export function Topbar({ title }: { title: string }) {
   const { user, logout } = useAuth();
@@ -15,6 +16,8 @@ export function Topbar({ title }: { title: string }) {
           <Search size={16} />
           <span>جست‌وجو…</span>
         </div>
+
+        <NotificationBell />
 
         <div className="flex items-center gap-2 border-r border-steel-100 pr-3">
           <div className="grid h-9 w-9 place-items-center rounded-full bg-steel-700 text-sm font-bold text-white">

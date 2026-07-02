@@ -98,4 +98,9 @@ export class RealtimeGateway
     if (assigneeId) rooms.push(`user:${assigneeId}`);
     this.server.to(rooms).emit(event, data);
   }
+
+  /** ارسال رویداد به یک کاربر خاص (اتاق user:<id>) — برای اعلان‌های درون‌برنامه‌ای. */
+  emitToUser(userId: string, event: string, data: unknown): void {
+    this.server?.to(`user:${userId}`).emit(event, data);
+  }
 }

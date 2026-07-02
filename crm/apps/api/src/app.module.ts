@@ -19,6 +19,7 @@ import { AiModule } from './modules/ai/ai.module';
 import { CallsModule } from './modules/calls/calls.module';
 import { CustomersModule } from './modules/customers/customers.module';
 import { DealsModule } from './modules/deals/deals.module';
+import { NotificationsModule } from './modules/notifications/notifications.module';
 import { ProductsModule } from './modules/products/products.module';
 import { ProjectsModule } from './modules/projects/projects.module';
 import { RealtimeModule } from './modules/realtime/realtime.module';
@@ -56,6 +57,7 @@ import { UsersModule } from './modules/users/users.module';
     RealtimeModule,
     TicketsModule,
     TimelineModule,
+    NotificationsModule,
   ],
   providers: [
     // ترتیب مهم است: ابتدا محدودیت نرخ، سپس احراز هویت، سپس بررسی مجوز
