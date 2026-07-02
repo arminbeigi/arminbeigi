@@ -1,6 +1,7 @@
 import {
   BarChart3,
   Bot,
+  Boxes,
   FolderKanban,
   Headphones,
   LayoutDashboard,
@@ -31,6 +32,7 @@ export const MENU: MenuItem[] = [
   { label: 'مرکز تماس', href: '/dashboard/call-center', icon: Headphones, permission: 'calls:manage' },
   { label: 'محصولات', href: '/dashboard/products', icon: Package, permission: 'products:read' },
   { label: 'تیکت‌ها', href: '/dashboard/tickets', icon: Ticket, permission: 'tickets:read' },
+  { label: 'تجهیزات', href: '/dashboard/assets', icon: Boxes, permission: 'assets:read' },
   { label: 'خدمات', href: '/dashboard/services', icon: Wrench },
   { label: 'گزارش‌ها', href: '/dashboard/reports', icon: BarChart3, permission: 'reports:read' },
   { label: 'تنظیمات', href: '/dashboard/settings', icon: Settings },

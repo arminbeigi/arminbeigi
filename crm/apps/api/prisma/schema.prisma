@@ -165,6 +165,7 @@ enum EntityType {
   AUTH // رویدادهای احراز هویت (ورود/خروج/قفل) — ممیزی امنیتی (H1)
   USER
   ROLE
+  ASSET // تجهیز HVAC (H7.5)
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -297,6 +298,7 @@ model Customer {
   notes     Note[]
   insights  AIInsight[]
   tags      CustomerTag[]
+  assets    Asset[]
 
   @@unique([type, externalRef])
   @@index([type])
@@ -404,6 +406,7 @@ model Product {
   dealItems    DealItem[]
   projectItems ProjectItem[]
   recommended  AIInsight[]   @relation("RecommendedProduct")
+  assets       Asset[]
 
   @@index([category])
   @@index([boilerKind])
@@ -450,6 +453,7 @@ model Project {
   deals    Deal[]
   notes    Note[]
   insights AIInsight[]
+  assets   Asset[]
 
   @@index([customerId])
   @@index([type])
@@ -741,6 +745,61 @@ enum NotificationPriority {
   NORMAL
   HIGH
   URGENT
+}
+
+// نوع تجهیز HVAC (H7.5 — بنیان دارایی برای نگهداری/گارانتی/موجودی/قرارداد)
+enum AssetKind {
+  WALL_BOILER // پکیج دیواری
+  CAST_IRON_BOILER // دیگ چدنی
+  STEEL_BOILER // دیگ فولادی
+  BURNER // مشعل
+  PUMP // پمپ
+  EXPANSION_TANK // منبع انبساط
+  COIL_TANK // منبع کویل‌دار
+  RADIATOR // رادیاتور
+  HEAT_EXCHANGER // مبدل حرارتی
+  OTHER // سایر
+}
+
+enum AssetStatus {
+  ACTIVE // فعال/در حال کار
+  INACTIVE // غیرفعال
+  UNDER_REPAIR // در حال تعمیر
+  DECOMMISSIONED // ازرده‌خارج
+}
+
+// تجهیز فیزیکی نصب‌شده نزد مشتری — منبع واحد حقیقت برای ماژول‌های نگهداری/گارانتی/…
+model Asset {
+  id            String      @id @default(cuid())
+  code          String      @unique @default(cuid()) // کد دارایی قابل‌نمایش
+  name          String // نام/توضیح کوتاه
+  kind          AssetKind
+  status        AssetStatus @default(ACTIVE)
+  serialNumber  String? // شماره سریال
+  brandName     String? // برند (متن آزاد؛ یا از productId)
+  modelName     String? // مدل
+  customerId    String
+  projectId     String?
+  productId     String? // پیوند به کاتالوگ محصول (اختیاری)
+  installedAt   DateTime? // تاریخ نصب
+  warrantyUntil DateTime? // پایان گارانتی
+  location      String? // محل نصب (موتورخانه، پشت‌بام، …)
+  notes         String?
+  meta          Json? // اسناد/عکس‌ها: { documents: [{name,url}], photos: [url] }
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  project  Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  product  Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  @@index([customerId])
+  @@index([projectId])
+  @@index([kind])
+  @@index([status])
+  @@index([serialNumber])
+  @@index([warrantyUntil])
 }
 
 // دنباله‌ی ممیزی سازمانی (H7.5) — با oldValue/newValue/ip/reason

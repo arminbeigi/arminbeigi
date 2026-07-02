@@ -16,6 +16,7 @@ import { RedisModule } from './redis/redis.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { AuditModule } from './modules/audit/audit.module';
 import { AiModule } from './modules/ai/ai.module';
+import { AssetsModule } from './modules/assets/assets.module';
 import { CallsModule } from './modules/calls/calls.module';
 import { CustomersModule } from './modules/customers/customers.module';
 import { DealsModule } from './modules/deals/deals.module';
@@ -58,6 +59,7 @@ import { UsersModule } from './modules/users/users.module';
     TicketsModule,
     TimelineModule,
     NotificationsModule,
+    AssetsModule,
   ],
   providers: [
     // ترتیب مهم است: ابتدا محدودیت نرخ، سپس احراز هویت، سپس بررسی مجوز

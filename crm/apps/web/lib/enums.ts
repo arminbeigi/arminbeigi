@@ -178,3 +178,31 @@ export const TICKET_TRANSITIONS: Record<string, string[]> = {
 
 export const label = (map: Record<string, string>, key: string | null | undefined): string =>
   (key && map[key]) || key || '—';
+
+// ── تجهیزات (Assets) ──────────────────────────────────────────────────────────
+export const ASSET_KIND: Record<string, string> = {
+  WALL_BOILER: 'پکیج دیواری',
+  CAST_IRON_BOILER: 'دیگ چدنی',
+  STEEL_BOILER: 'دیگ فولادی',
+  BURNER: 'مشعل',
+  PUMP: 'پمپ',
+  EXPANSION_TANK: 'منبع انبساط',
+  COIL_TANK: 'منبع کویل‌دار',
+  RADIATOR: 'رادیاتور',
+  HEAT_EXCHANGER: 'مبدل حرارتی',
+  OTHER: 'سایر',
+};
+
+export const ASSET_STATUS: Record<string, string> = {
+  ACTIVE: 'فعال',
+  INACTIVE: 'غیرفعال',
+  UNDER_REPAIR: 'در حال تعمیر',
+  DECOMMISSIONED: 'ازرده‌خارج',
+};
+
+export const ASSET_STATUS_TONE: Record<string, string> = {
+  ACTIVE: 'bg-emerald-100 text-emerald-700',
+  INACTIVE: 'bg-steel-100 text-steel-600',
+  UNDER_REPAIR: 'bg-amber-100 text-amber-700',
+  DECOMMISSIONED: 'bg-red-100 text-red-700',
+};

@@ -28,6 +28,9 @@ const PERMISSIONS: { key: string; group: string; name: string }[] = [
   { key: 'tickets:read', group: 'تیکت‌ها', name: 'مشاهده تیکت‌ها' },
   { key: 'tickets:write', group: 'تیکت‌ها', name: 'ایجاد/ویرایش تیکت' },
   { key: 'tickets:delete', group: 'تیکت‌ها', name: 'حذف تیکت' },
+  { key: 'assets:read', group: 'تجهیزات', name: 'مشاهده تجهیزات' },
+  { key: 'assets:write', group: 'تجهیزات', name: 'ایجاد/ویرایش تجهیز' },
+  { key: 'assets:delete', group: 'تجهیزات', name: 'حذف تجهیز' },
   { key: 'reports:read', group: 'گزارش‌ها', name: 'مشاهده گزارش‌ها' },
   { key: 'ai:use', group: 'دستیار هوشمند', name: 'استفاده از دستیار هوشمند' },
   { key: 'users:manage', group: 'تنظیمات', name: 'مدیریت کاربران و نقش‌ها' },
@@ -66,7 +69,14 @@ const ROLES: { key: string; name: string; permissions: string[] }[] = [
   {
     key: 'technician',
     name: 'تکنسین خدمات',
-    permissions: ['customers:read', 'projects:read', 'tickets:read', 'tickets:write'],
+    permissions: [
+      'customers:read',
+      'projects:read',
+      'tickets:read',
+      'tickets:write',
+      'assets:read',
+      'assets:write',
+    ],
   },
   { key: 'viewer', name: 'فقط مشاهده', permissions: ['customers:read', 'deals:read', 'reports:read'] },
 ];

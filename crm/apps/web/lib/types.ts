@@ -279,3 +279,26 @@ export interface TimelineEntry {
   meta: unknown;
   createdAt: string;
 }
+
+// ── تجهیزات ───────────────────────────────────────────────────────────────────
+export interface Asset {
+  id: string;
+  code: string;
+  name: string;
+  kind: string;
+  status: string;
+  serialNumber: string | null;
+  brandName: string | null;
+  modelName: string | null;
+  customerId: string;
+  projectId: string | null;
+  productId: string | null;
+  installedAt: string | null;
+  warrantyUntil: string | null;
+  location: string | null;
+  notes: string | null;
+  customer?: { id: string; displayName: string } | null;
+  project?: { id: string; title: string } | null;
+  createdAt: string;
+  updatedAt: string;
+}
