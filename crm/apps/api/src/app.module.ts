@@ -9,6 +9,7 @@ import { buildLoggerParams } from './config/logger.config';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 import { PermissionsGuard } from './common/guards/permissions.guard';
 import { validateEnv } from './config/env.validation';
+import { EventsModule } from './events/events.module';
 import { HealthModule } from './health/health.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { RedisModule } from './redis/redis.module';
@@ -39,6 +40,7 @@ import { UsersModule } from './modules/users/users.module';
     ThrottlerModule.forRoot([{ name: 'default', ttl: 60_000, limit: 100 }]),
     PrismaModule,
     RedisModule,
+    EventsModule,
     AuditModule,
     HealthModule,
     UsersModule,

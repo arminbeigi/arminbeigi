@@ -7,7 +7,8 @@ import { Prisma, TicketStatus } from '@prisma/client';
 import { PaginatedResult } from '../../common/dto/pagination.dto';
 import { AuditService } from '../../modules/audit/audit.service';
 import { AiService } from '../../modules/ai/ai.service';
-import { RealtimeGateway } from '../../modules/realtime/realtime.gateway';
+import { DomainEventBus } from '../../events/domain-event-bus';
+import { DomainEvents } from '../../events/event-names';
 import { TicketsRepository } from './tickets.repository';
 import { AssignTicketDto } from './dto/assign-ticket.dto';
 import { CreateCommentDto } from './dto/create-comment.dto';
@@ -31,7 +32,7 @@ export class TicketsService {
     private readonly repo: TicketsRepository,
     private readonly audit: AuditService,
     private readonly ai: AiService,
-    private readonly realtime: RealtimeGateway,
+    private readonly events: DomainEventBus,
   ) {}
 
   async create(dto: CreateTicketDto, actorId: string): Promise<TicketResponseDto> {
@@ -69,11 +70,22 @@ export class TicketsService {
       entityId: ticket.id,
       metadata: { code: ticket.code, autoCategory: !dto.category, autoPriority: !dto.priority },
     });
-    this.realtime.emitTicketEvent(
-      'ticket:created',
-      { ticketId: ticket.id, code: ticket.code, subject: ticket.subject, priority: ticket.priority },
-      ticket.assigneeId,
-    );
+    this.events.publish({
+      name: DomainEvents.TicketCreated,
+      actorId,
+      entityType: 'TICKET',
+      entityId: ticket.id,
+      title: `تیکت «${ticket.subject}» ایجاد شد`,
+      payload: {
+        code: ticket.code,
+        subject: ticket.subject,
+        priority: ticket.priority,
+        category: ticket.category,
+        status: ticket.status,
+        customerId: ticket.customerId,
+        assigneeId: ticket.assigneeId,
+      },
+    });
     return TicketResponseDto.from(ticket);
   }
 
@@ -133,7 +145,13 @@ export class TicketsService {
     };
 
     const ticket = await this.repo.update(id, data);
-    this.realtime.emitTicketEvent('ticket:updated', { ticketId: id }, ticket.assigneeId);
+    this.events.publish({
+      name: DomainEvents.TicketUpdated,
+      entityType: 'TICKET',
+      entityId: id,
+      title: `تیکت «${ticket.subject}» ویرایش شد`,
+      payload: { assigneeId: ticket.assigneeId },
+    });
     return TicketResponseDto.from(ticket);
   }
 
@@ -163,7 +181,14 @@ export class TicketsService {
       entityId: id,
       metadata: { from: core.status, to: status },
     });
-    this.realtime.emitTicketEvent('ticket:updated', { ticketId: id, status }, ticket.assigneeId);
+    this.events.publish({
+      name: status === 'CLOSED' ? DomainEvents.TicketClosed : DomainEvents.TicketUpdated,
+      actorId,
+      entityType: 'TICKET',
+      entityId: id,
+      title: `وضعیت تیکت «${ticket.subject}» به «${status}» تغییر کرد`,
+      payload: { from: core.status, to: status, status, assigneeId: ticket.assigneeId },
+    });
     return TicketResponseDto.from(ticket);
   }
 
@@ -186,7 +211,16 @@ export class TicketsService {
       entityId: id,
       metadata: { from: core.assigneeId, to: dto.assigneeId },
     });
-    this.realtime.emitTicketEvent('ticket:updated', { ticketId: id }, dto.assigneeId ?? core.assigneeId);
+    this.events.publish({
+      name: DomainEvents.TicketAssigned,
+      actorId,
+      entityType: 'TICKET',
+      entityId: id,
+      title: dto.assigneeId
+        ? `تیکت «${ticket.subject}» واگذار شد`
+        : `تخصیص تیکت «${ticket.subject}» لغو شد`,
+      payload: { from: core.assigneeId, to: dto.assigneeId, assigneeId: dto.assigneeId ?? core.assigneeId },
+    });
     return TicketResponseDto.from(ticket);
   }
 
@@ -206,7 +240,14 @@ export class TicketsService {
     });
 
     const ticket = await this.repo.findById(id);
-    this.realtime.emitTicketEvent('ticket:updated', { ticketId: id, event: 'comment' }, core.assigneeId);
+    this.events.publish({
+      name: DomainEvents.TicketUpdated,
+      actorId: authorId,
+      entityType: 'TICKET',
+      entityId: id,
+      title: `پاسخ جدید روی تیکت «${ticket!.subject}»`,
+      payload: { event: 'comment', isInternal: dto.isInternal ?? false, assigneeId: core.assigneeId },
+    });
     return TicketResponseDto.from(ticket!);
   }
 
@@ -215,7 +256,14 @@ export class TicketsService {
     if (!core) throw new NotFoundException('تیکت یافت نشد');
     await this.repo.delete(id);
     await this.audit.record({ actorId, action: 'deleted', entityType: 'TICKET', entityId: id });
-    this.realtime.emitTicketEvent('ticket:updated', { ticketId: id, deleted: true }, core.assigneeId);
+    this.events.publish({
+      name: DomainEvents.TicketUpdated,
+      actorId,
+      entityType: 'TICKET',
+      entityId: id,
+      title: 'تیکت حذف شد',
+      payload: { deleted: true, assigneeId: core.assigneeId },
+    });
     return { success: true };
   }
 

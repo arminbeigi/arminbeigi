@@ -11,7 +11,7 @@ describe('TicketsService', () => {
   let repo: Record<string, jest.Mock>;
   let audit: { record: jest.Mock };
   let ai: { classifyTicketText: jest.Mock; recordTicketInsight: jest.Mock };
-  let realtime: { emitTicketEvent: jest.Mock };
+  let events: { publish: jest.Mock };
 
   const fullTicket = (over: Record<string, unknown> = {}) => ({
     id: 't1',
@@ -58,12 +58,12 @@ describe('TicketsService', () => {
         .mockReturnValue({ category: 'BREAKDOWN', priority: 'HIGH', component: 'BOILER', confidence: 0.8, scores: {} }),
       recordTicketInsight: jest.fn().mockResolvedValue(undefined),
     };
-    realtime = { emitTicketEvent: jest.fn() };
+    events = { publish: jest.fn() };
     service = new TicketsService(
       repo as unknown as TicketsRepository,
       audit as never,
       ai as never,
-      realtime as never,
+      events as never,
     );
   });
 
@@ -76,10 +76,8 @@ describe('TicketsService', () => {
       expect(created.category).toBe('BREAKDOWN');
       expect(created.priority).toBe('HIGH');
       expect(ai.recordTicketInsight).toHaveBeenCalledWith('t1', 'c1', expect.any(Object));
-      expect(realtime.emitTicketEvent).toHaveBeenCalledWith(
-        'ticket:created',
-        expect.objectContaining({ ticketId: 't1' }),
-        null,
+      expect(events.publish).toHaveBeenCalledWith(
+        expect.objectContaining({ name: 'ticket.created', entityId: 't1' }),
       );
       expect(res.category).toBe('BREAKDOWN');
     });
@@ -146,10 +144,11 @@ describe('TicketsService', () => {
       repo.findById.mockResolvedValue(fullTicket());
       await service.addComment('t1', { body: 'سلام' }, 'u1');
       expect(repo.addComment).toHaveBeenCalled();
-      expect(realtime.emitTicketEvent).toHaveBeenCalledWith(
-        'ticket:updated',
-        expect.objectContaining({ event: 'comment' }),
-        null,
+      expect(events.publish).toHaveBeenCalledWith(
+        expect.objectContaining({
+          name: 'ticket.updated',
+          payload: expect.objectContaining({ event: 'comment' }),
+        }),
       );
     });
   });
